@@ -1,0 +1,41 @@
+name: publish-documentation
+on:
+  push:
+    branches:
+      master
+
+jobs:
+
+  build_documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the master branch
+        uses: actions/checkout@v3
+
+      - name: Install Doxygen
+        run: sudo apt-get install doxygen -y
+
+      - name: Install Sphinx
+        run: pip3 install sphinx sphinx-rtd-theme sphinx-rtd-dark-mode breathe exhale
+
+      - name: Build Documentation
+        run: sh ./scripts/build/build_docs.sh
+
+      - name: Setup documentation git repository
+        run: |
+          cd docs/
+          touch .nojekyll
+          rm .gitignore
+          git init
+          git add .
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m 'deploy'
+
+      - name: Push to github pages
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          force: true
+          directory: ./docs/
