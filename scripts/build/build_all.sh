@@ -5,7 +5,8 @@ cd build
 cmake ..
 cmake --build . -j8
 cp compile_commands.json ..
-cd ../docs
+cd ../documentation
 doxygen Doxyfile
 make html
 cd ..
+cp -R documentation/build/html/ docs/documentation
