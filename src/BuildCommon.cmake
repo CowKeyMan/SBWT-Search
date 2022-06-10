@@ -2,8 +2,7 @@
 # Usually these are classes and files which are used by the main program but
 # are also tested individually
 
-include_directories(BEFORE ${PROJECT_SOURCE_DIR}/Global)
-
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "--coverage")
 
 add_library(
   functions

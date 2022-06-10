@@ -2,7 +2,7 @@
 
 mkdir -p build
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 cmake --build . -j8
 cp compile_commands.json ..
 cd ../documentation

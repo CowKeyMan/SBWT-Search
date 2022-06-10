@@ -20,10 +20,6 @@ target_link_libraries(
   gmock_main
   gcov
 )
-target_compile_options(
-  test_lib INTERFACE
-  "--coverage"
-)
 
 set(
   functions_test_sources
