@@ -23,3 +23,4 @@ add_library(common_options INTERFACE)
 enable_warnings(common_options "INTERFACE")
 
 add_subdirectory(src)
+add_subdirectory (docs)
