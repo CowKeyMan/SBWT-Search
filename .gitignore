@@ -4,6 +4,8 @@
 build/
 build_windows/
 
+!scripts/build
+
 compile_commands.json
 
 tmp
