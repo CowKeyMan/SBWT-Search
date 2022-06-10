@@ -12,14 +12,20 @@ jobs:
       - name: Checkout the master branch
         uses: actions/checkout@v3
 
-      - name: Install Doxygen
-        run: sudo apt-get install doxygen -y
+      - name: Install Doxygen and lcov
+        run: sudo apt-get install doxygen lcov -y
 
       - name: Install Sphinx
         run: pip3 install sphinx sphinx-rtd-theme sphinx-rtd-dark-mode breathe exhale
 
       - name: Build Documentation
         run: sh ./scripts/build/build_docs.sh
+
+      - name: Build tests
+        run: sh ./scripts/build/build_test.sh
+
+      - name: Run tests
+        run: sh ./scripts/standalone/run_tests.sh
 
       - name: Setup documentation git repository
         run: |
