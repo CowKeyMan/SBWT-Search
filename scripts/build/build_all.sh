@@ -1,4 +1,4 @@
-# Build the main executable, tests as well as documentation
+# Build the main executable, tests as well as documentation in debug mode
 
 mkdir -p build
 cd build

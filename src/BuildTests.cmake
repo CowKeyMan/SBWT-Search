@@ -40,5 +40,9 @@ target_link_libraries(
   functions
   # other libraries
 )
+target_compile_options(
+  test_main PRIVATE
+  "$<$<CONFIG:Debug>:--coverage>"
+)
 add_test(NAME test_main COMMAND test_main)
 enable_warnings(test_main PRIVATE)
