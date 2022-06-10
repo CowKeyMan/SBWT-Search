@@ -1,0 +1,9 @@
+*.obj
+*.o
+
+build/
+build_windows/
+
+compile_commands.json
+
+tmp
