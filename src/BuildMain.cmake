@@ -8,4 +8,4 @@ target_link_libraries(
   PRIVATE
   functions
 )
-enable_warnings(main PRIVATE)
+target_link_libraries(main PUBLIC common_options)

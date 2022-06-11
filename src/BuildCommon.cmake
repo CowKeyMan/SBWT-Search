@@ -6,10 +6,17 @@
 # rather than putting it with each file individually
 add_library(common_options INTERFACE)
 enable_warnings(common_options "INTERFACE")
-# Turn on coverage generation when in debug mode
 target_compile_options(
   common_options INTERFACE
   "$<$<CONFIG:Debug>:--coverage>"
+)
+target_compile_options(
+  common_options INTERFACE
+  "$<$<CONFIG:Release>:-O3>"
+)
+target_link_libraries(
+  common_options INTERFACE
+  gcov
 )
 
 add_library(
@@ -17,6 +24,6 @@ add_library(
   "${PROJECT_SOURCE_DIR}/Functions/Functions.cpp"
 )
 target_include_directories(functions PUBLIC ${PROJECT_SOURCE_DIR}/Functions)
-target_link_libraries(functions PRIVATE common_options)
+target_link_libraries(functions PUBLIC common_options)
 
 # TODO: Add more libraries here

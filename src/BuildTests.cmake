@@ -35,14 +35,10 @@ add_executable(
   "${functions_test_sources}"
   # "${other test sources}"
 )
-target_compile_options(
-  test_main PRIVATE
-  "$<$<CONFIG:Debug>:--coverage>"
-)
 add_test(NAME test_main COMMAND test_main)
-enable_warnings(test_main PRIVATE)
+target_link_libraries(test_main PRIVATE common_options)
 
-# TODO: Link the new libraries with the test_main
+# TODO: Link new libraries with test_main
 target_link_libraries(
   test_main
   PRIVATE
