@@ -15,6 +15,12 @@ Installation
 
   sudo apt install build-essential
 
+We also use ccache as a tool with cmake, to cache results of previous compilations and make future compilations run faster, so it is probably worth installing that as well.
+
+.. code-block:: bash
+
+  sudo apt install ccache
+
 Doxygen
 +++++++
 
