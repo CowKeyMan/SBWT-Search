@@ -21,24 +21,19 @@ target_link_libraries(
   gcov
 )
 
+# TODO: Add more sources here
 set(
   functions_test_sources
   "${PROJECT_SOURCE_DIR}/Functions/Functions_test.cpp"
   # "${PROJECT_SOURCE_DIR}/others.cpp"
 )
 
+# TODO: Link the sources to the executable
 add_executable(
   test_main
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
   "${functions_test_sources}"
   # "${other test sources}"
-)
-target_link_libraries(
-  test_main
-  PRIVATE
-  test_lib
-  functions
-  # other libraries
 )
 target_compile_options(
   test_main PRIVATE
@@ -46,3 +41,12 @@ target_compile_options(
 )
 add_test(NAME test_main COMMAND test_main)
 enable_warnings(test_main PRIVATE)
+
+# TODO: Link the new libraries with the test_main
+target_link_libraries(
+  test_main
+  PRIVATE
+  test_lib
+  functions
+  # other libraries
+)

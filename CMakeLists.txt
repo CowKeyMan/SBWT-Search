@@ -19,12 +19,5 @@ include(cmake/Options.cmake)
 include(cmake/CCache.cmake)
 include(cmake/StaticAnalyzers.cmake)
 
-add_library(common_options INTERFACE)
-enable_warnings(common_options "INTERFACE")
-target_compile_options(
-  common_options INTERFACE
-  "$<$<CONFIG:Debug>:--coverage>"
-)
-
 add_subdirectory(src)
 add_subdirectory (documentation)

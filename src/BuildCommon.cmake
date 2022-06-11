@@ -1,8 +1,16 @@
 # Builds items which are commonly used between the main program and the tests.
-# Usually these are classes and files which are used by the main program but
+# Usually these are classes, files and options which are used by the main program but
 # are also tested individually
 
-set(CMAKE_CXX_FLAGS_DEBUG_INIT "--coverage")
+# Any common options are put as an interface
+# rather than putting it with each file individually
+add_library(common_options INTERFACE)
+enable_warnings(common_options "INTERFACE")
+# Turn on coverage generation when in debug mode
+target_compile_options(
+  common_options INTERFACE
+  "$<$<CONFIG:Debug>:--coverage>"
+)
 
 add_library(
   functions
@@ -11,4 +19,4 @@ add_library(
 target_include_directories(functions PUBLIC ${PROJECT_SOURCE_DIR}/Functions)
 target_link_libraries(functions PRIVATE common_options)
 
-# Add more libraries here
+# TODO: Add more libraries here
