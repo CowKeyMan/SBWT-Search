@@ -34,7 +34,7 @@ if(ENABLE_HEADER_GUARDS_CHECK)
   message("")
 endif()
 
-if(ENABLE_CLANG_TIDY)
+if(ENABLE_CLANG_FORMAT_CHECK)
   find_program(CLANGFORMAT clang-format)
   if(CLANGFORMAT)
     message("\nRunning clang-format checks...")
