@@ -132,3 +132,8 @@ Installation
 .. code-block:: bash
 
   sudo apt install lcov
+
+Github pages
+++++++++++++
+
+We use github pages to publish the documentation and code coverage. To set this up, we must have a separate branch called *gh-pages*. Then go to github, and in your repository's settings you can find the settings for the pages. Set this up so that it uses the root folder of your gh-pages branch.

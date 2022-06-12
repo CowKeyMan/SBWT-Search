@@ -43,7 +43,7 @@ This page will go through every file which is not part of the code base but is p
     * `index.rst.in`: This is the index.html for our documentation site. Inside it we create a table of contents tree with the contents of our website. Each document we add we will need to add here. We can also have sub-trees, so that our documents form a hierarchy.
     * `make.bat`: Windows equivalent of the Makefile
 
-  * **scripts**: This folder contains scripts written in multiple languages which are used to combine multiple commands into a single file. It is advised to only build using these scripts rather than using the individual `Tools` directly.
+  * **scripts**: This folder contains scripts written in multiple languages which are used to combine multiple commands into a single file. It is advised to only build using these scripts rather than using the individual :ref:`Tools` directly.
 
     * **build**: Scripts used to build executables and documentation
 
