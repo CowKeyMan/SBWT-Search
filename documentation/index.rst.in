@@ -6,8 +6,9 @@ Welcome to @CMAKE_PROJECT_NAME@'s documentation!
    :caption: Contents:
 
    documents/Introduction
-   documents/GettingsStarted.rst
+   documents/GettingsStarted
    documents/Tools
+   documents/WorkflowFiles
    documents/Practices
 
    RST/modules

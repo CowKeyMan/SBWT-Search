@@ -60,6 +60,12 @@ Sphinx
 
 Sphinx is a layer over Doxygen to generate more beautiful documentation. It reads the doxygen outputs and incorporates them into its own documentation. It also allows us to easily add more pages to the documentation, such as this page itself! We can use latex easily as well within our documentation with this tool. Traditionally it is used for Python documentation.
 
+We use the some extensions with Sphinx:
+  * sphinx-rtd-theme: read the docs theme is used since it is great for documentation.
+  * sphinx-rtd-dark-mode: dark mode for users which prefer this. It is easily togglable in the webpage
+  * breathe: For reading doxygen output and parsing it
+  * exhale: For outputting the doxygen content into Sphinx format
+
 Installation
 ------------
 

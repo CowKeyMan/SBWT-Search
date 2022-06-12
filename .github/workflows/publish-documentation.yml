@@ -1,9 +1,15 @@
+# Build documentation and test reports and publish them on
+# github pages
+
 name: publish-documentation
 on:
   push:
     branches:
       master
 
+# While some jobs should be parallisable, it was opted not to parallelise
+# since jobs run on different machines on github actions, and there is
+# no build in support for paralellising steps.
 jobs:
 
   build_documentation:

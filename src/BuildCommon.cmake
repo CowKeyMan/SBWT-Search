@@ -8,11 +8,11 @@ add_library(common_options INTERFACE)
 enable_warnings(common_options "INTERFACE")
 target_compile_options(
   common_options INTERFACE
-  "$<$<CONFIG:Debug>:--coverage>"
+  "$<$<CONFIG:Debug>:--coverage>" # only in debug mode
 )
 target_compile_options(
   common_options INTERFACE
-  "$<$<CONFIG:Release>:-O3>"
+  "$<$<CONFIG:Release>:-O3>" # only in release mode
 )
 target_link_libraries(
   common_options INTERFACE
