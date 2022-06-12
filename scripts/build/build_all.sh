@@ -9,4 +9,4 @@ cd ../documentation
 doxygen Doxyfile
 make html
 cd ..
-cp -R documentation/build/html/ docs/documentation
+cp -R documentation/build/html/. docs/documentation
