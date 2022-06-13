@@ -50,7 +50,6 @@ This page will go through every file which is not part of the code base but is p
       * `build_all.sh`: Builds the main, the tests (which need to be run!) and the documentation (in Debug mode). We can change the settings here to switch off CUDA or CPU builds
       * `build_docs.sh`: Builds documentation only
       * `build_release.sh`: Builds only the main (in Release mode). We can change the settings here to switch off CUDA or CPU builds
-      * `build_tests.sh`: Builds only the tests (in Debug mode). We can change the settings here to switch off CUDA or CPU builds
 
     * **cmake_checks**
 
