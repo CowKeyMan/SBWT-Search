@@ -16,23 +16,29 @@ The steps are:
     * capitalize everything
     * add a _H at the end
 
+If the file is a cuh file, it is the same as above
+but it will have _CUH at the end
+
 This script is executed automatically by cmake when building
 """
 
+
 from pathlib import Path
-import sys
 
-file_names = list(Path('src').glob('**/*.h')) \
+file_names = (
+    list(Path('src').glob('**/*.h'))
     + list(Path('src').glob('**/*.hpp'))
+    + list(Path('src').glob('**/*.cuh'))
+)
 
 
-def capitalize(s: str) -> str:
-    result = s[0]
-    for char in s[1:]:
+def capitalize(name: str, suffix: str) -> str:
+    result = name[0]
+    for char in name[1:]:
         if char.isupper() or not char.isalpha():
             result += '_'
         result += char.upper()
-    result += '_H'
+    result += '_' + suffix.upper()
     return result
 
 
@@ -41,7 +47,7 @@ first_time = True
 for file_name in file_names:
     with open(file_name, 'r') as f:
         lines = f.readlines()
-    header_capitalized = capitalize(file_name.stem)
+    header_capitalized = capitalize(file_name.stem, file_name.suffix[1:])
     if not(
         lines[0].strip() == '#ifndef ' + header_capitalized
         and lines[1].strip() == '#define ' + header_capitalized

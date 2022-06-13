@@ -17,6 +17,10 @@ for fname in Path('src').glob('**/*.h'):
     file_names.append(fname)
 for fname in Path('src').glob('**/*.cpp'):
     file_names.append(fname)
+for fname in Path('src').glob('**/*.cu'):
+    file_names.append(fname)
+for fname in Path('src').glob('**/*.cuh'):
+    file_names.append(fname)
 
 Path('tmp').mkdir(exist_ok=True)
 

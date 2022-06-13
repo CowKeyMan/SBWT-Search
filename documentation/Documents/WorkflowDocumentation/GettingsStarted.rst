@@ -14,7 +14,7 @@ This section will describe a typical workflow from writing a new piece of code, 
 #. Write a new header file template
 #. Write a new cpp file for it
 #. Write a test for it to test that the new functions work
-#. Run `./scripts/build/build_test.sh` to build the testing executable
+#. Run `./scripts/build/build_tests.sh` to build the testing executable
 #. If clang-tidy or clang-format say that there is some misformatted code or if there are errors in the build, then fix them and run again.
 
    #. At this point you may want to consider running `./scripts/standalone/apply_clang_format.py` if you agree with the changes proposed by clang-format

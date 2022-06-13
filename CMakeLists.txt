@@ -2,7 +2,7 @@
 # Different CMake versions have more features.
 # Since we will be using CUDA, we want a pretty high version
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.19)
 
 project(
   CPP_github_workflow
@@ -12,12 +12,19 @@ project(
   LANGUAGES CXX
 )
 
+include(CheckLanguage)
+check_language(CUDA)
+if (CMAKE_CUDA_COMPILER)
+  enable_language(CUDA)
+endif()
+
 include(cmake/ExportCompileCommands.cmake)
 include(cmake/PreventBuildingInCmakeDirectory.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Options.cmake)
 include(cmake/CCache.cmake)
 include(cmake/StaticAnalyzers.cmake)
+
 
 add_subdirectory(src)
 add_subdirectory (documentation)

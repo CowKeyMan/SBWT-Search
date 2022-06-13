@@ -124,7 +124,9 @@ Installation will be automatic when you run cmake as it will be done using Fetch
 lcov
 ++++
 
-This is the tool to display code coverage after running googletest.
+This is the tool to display code coverage after running googletest. This tool was very difficult to set up on native Windows, hence for any Windows users, it is recommended to use WSL for code coverage, or else remove the parts of the scripts which use it (found in `scripts/standalone/run_tests.sh`)
+
+Unfortunately lcov does not capture CUDA `__device__` functions, hence we put these functions in separate *.cuh* files.
 
 Installation
 ------------
@@ -137,3 +139,10 @@ Github pages
 ++++++++++++
 
 We use github pages to publish the documentation and code coverage. To set this up, we must have a separate branch called *gh-pages*. Then go to github, and in your repository's settings you can find the settings for the pages. Set this up so that it uses the root folder of your gh-pages branch.
+
+CUDA
+++++
+
+This template also supports CUDA. Check the official installation guides for more info, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can turn the build off. For more information look at the **build** folder section in :ref:`Workflow Files`.
+
+On github actions we do not have GPUs, but we can still compile and test our code. Thus, our tests will fail but we will still have the code coverage report on the site.

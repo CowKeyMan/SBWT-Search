@@ -1,5 +1,7 @@
 # Builds the testing program. We use googletest as a testing framework
 
+if (BUILD_TESTS)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -28,21 +30,38 @@ set(
   # "${PROJECT_SOURCE_DIR}/others.cpp"
 )
 
-# TODO: Link the sources to the executable
-add_executable(
-  test_main
-  "${PROJECT_SOURCE_DIR}/test_main.cpp"
-  "${functions_test_sources}"
-  # "${other test sources}"
-)
-add_test(NAME test_main COMMAND test_main)
-target_link_libraries(test_main PRIVATE common_options)
+# Create cpu test executable
+if (BUILD_CPU)
+  add_executable(
+    test_main_cpu
+    "${PROJECT_SOURCE_DIR}/test_main.cpp"
+    "${functions_test_sources}"
+    # "${other test sources}"
+  )
+  add_test(NAME test_main_cpu COMMAND test_main_cpu)
+  target_link_libraries(
+    test_main_cpu
+    PRIVATE common_options
+    PRIVATE test_lib
+    PRIVATE libraries_cpu
+  )
+endif()
 
-# TODO: Link new libraries with test_main
-target_link_libraries(
-  test_main
-  PRIVATE
-  test_lib
-  functions
-  # other libraries
-)
+if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
+# Create cuda test executable
+  add_executable(
+    test_main_cuda
+    "${PROJECT_SOURCE_DIR}/test_main.cpp"
+    "${functions_test_sources}"
+    # "${other test sources}"
+  )
+  add_test(NAME all_tests COMMAND test_main_cuda)
+  target_link_libraries(
+    test_main_cuda
+    PRIVATE common_options
+    PRIVATE test_lib
+    PRIVATE libraries_cuda
+  )
+endif()
+
+endif()

@@ -1,10 +1,21 @@
 # This enables or disables several CMake options
 
-# Shared libraries
 option(
   BUILD_SHARED_LIBS
   "Build shared libraries. Off by default (ie static is the default)"
   OFF
+)
+
+option(
+  BUILD_CUDA
+  "Build CUDA version of the program"
+  ON
+)
+
+option(
+  BUILD_CPU
+  "Build CPU version of the program"
+  ON
 )
 
 # suitable for shared libraries to make them executable from anywhere in memory

@@ -47,10 +47,10 @@ This page will go through every file which is not part of the code base but is p
 
     * **build**: Scripts used to build executables and documentation
 
-      * `build_all.sh`: Builds the main, the tests (which need to be run!) and the documentation (in Debug mode)
+      * `build_all.sh`: Builds the main, the tests (which need to be run!) and the documentation (in Debug mode). We can change the settings here to switch off CUDA or CPU builds
       * `build_docs.sh`: Builds documentation only
-      * `build_release.sh`: Builds only the main (in Release mode)
-      * `build_test.sh`: Builds only the tests (which need to be run!)
+      * `build_release.sh`: Builds only the main (in Release mode). We can change the settings here to switch off CUDA or CPU builds
+      * `build_tests.sh`: Builds only the tests (in Debug mode). We can change the settings here to switch off CUDA or CPU builds
 
     * **cmake_checks**
 
@@ -68,6 +68,6 @@ This page will go through every file which is not part of the code base but is p
     * `main.cpp`: Where the main function of the actual program executable resides.
     * `test_main.cpp`: There main function for the googletest's executable resides. Usually this file is not modified
     * `BuildCommon.cmake`: Builds any files which will be used by both the main program and the tests
-    * `BuildMain.cmake`: Builds the main executable, linking other libraries and setting options along the way
-    * `BuildTests.cmake`: Loads googletest into the repository as a dependency and builds the test executable, linking other libraries and setting options along the way
+    * `BuildMain.cmake`: Builds the main executable for all platforms (CUDA, CPU, etc, linking other libraries and setting options along the way
+    * `BuildTests.cmake`: Loads googletest into the repository as a dependency and builds the test executable for all platforms (CUDA, CPU, etc), linking other libraries and setting options along the way
     * `CMakeLists.txt`: Tells cmake to execute the other *.cmake* files in this folder in sequential order.

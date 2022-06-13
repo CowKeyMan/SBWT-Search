@@ -12,10 +12,10 @@ from subprocess import Popen
 
 file_names = ""
 folders = set()
-for fname in Path('src').glob('**/*.h'):
+for fname in Path('src').rglob('*.h'):
     file_names += str(fname) + " "
     folders.add(str(fname.parent))
-for fname in Path('src').glob(r'**/[!(test)]*[!(test)].cpp'):
+for fname in Path('src').rglob('[!(test)]*[!(test)].cpp'):
     file_names += str(fname) + " "
 
 folders_string = ""
