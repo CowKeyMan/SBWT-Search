@@ -1,17 +1,12 @@
-# CPP_github_workflow
+# SBWT Search
 
-This repository contains a workflow for any C++ project with examples inside and the tools necessary for
-* Building the executables
-* Testing
-* Automating documentation generation
-* Ensuring code consistency among the repository
+An application to search for k-mers in a genome given an SBWT index
+
+The CUDA search function is based on this repository: <https://version.helsinki.fi/harrikah/gpu-computing>
+The API is based on this repository: <https://github.com/algbio/SBWT>
 
 ## For Users
-
-This section is meant for the actual README. Put things that the users of the repository need to know here.
 
 ## For Developers
 
 The documentation for developing this code base lies in the github pages: <https://cowkeyman.github.io/CPP_github_workflow/>. The pages are built using the documentation of the repository itself using gitgub actions.
-
-If you wish to request a change or addition to this repository, create a github issue or make a pull request.

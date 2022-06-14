@@ -5,10 +5,10 @@
 cmake_minimum_required(VERSION 3.19)
 
 project(
-  CPP_github_workflow
-  VERSION 1.0
-  DESCRIPTION "A workflow base for any C++ project"
-  HOMEPAGE_URL https://github.com/CowKeyMan/CPP_github_workflow
+  "SBWT Search"
+  VERSION 0.0.1
+  DESCRIPTION "An application to search for k-mers in a genome given an SBWT index"
+  HOMEPAGE_URL https://github.com/CowKeyMan/SBWT-Search
   LANGUAGES CXX
 )
 
@@ -23,8 +23,9 @@ include(cmake/PreventBuildingInCmakeDirectory.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/Options.cmake)
 include(cmake/CCache.cmake)
-include(cmake/StaticAnalyzers.cmake)
 
 
 add_subdirectory(src)
 add_subdirectory (documentation)
+
+include(cmake/StaticAnalyzers.cmake)

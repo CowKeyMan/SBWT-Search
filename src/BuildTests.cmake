@@ -24,18 +24,11 @@ target_link_libraries(
 )
 
 # TODO: Add more sources here
-set(
-  functions_test_sources
-  "${PROJECT_SOURCE_DIR}/Functions/Functions_test.cpp"
-  # "${PROJECT_SOURCE_DIR}/others.cpp"
-)
-
 # Create cpu test executable
 if (BUILD_CPU)
   add_executable(
     test_main_cpu
     "${PROJECT_SOURCE_DIR}/test_main.cpp"
-    "${functions_test_sources}"
     # "${other test sources}"
   )
   add_test(NAME test_main_cpu COMMAND test_main_cpu)
@@ -52,7 +45,6 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
   add_executable(
     test_main_cuda
     "${PROJECT_SOURCE_DIR}/test_main.cpp"
-    "${functions_test_sources}"
     # "${other test sources}"
   )
   add_test(NAME all_tests COMMAND test_main_cuda)

@@ -1,5 +1,8 @@
 #include <iostream>
+#include <string>
 
-#include "Functions.h"
+#include "ArgumentParser.hpp"
 
-auto main() -> int { std::cout << functions::add(1, 2) << '\n'; }
+using sbwt_search::parse_arguments;
+
+auto main(int argc, char **argv) -> int { parse_arguments(argc, argv); }
