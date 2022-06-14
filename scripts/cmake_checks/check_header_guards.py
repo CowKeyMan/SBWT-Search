@@ -56,6 +56,7 @@ for file_name in file_names:
         if first_time:
             first_time = False
             print(
+                '\n'
                 '####################### ERROR ########################\n'
                 'Some files are missing header guards. Please include these!\n'
                 '######################################################',
