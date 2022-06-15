@@ -92,9 +92,8 @@ If you get the following error: *warning: LF will be replaced by CRLF in tmp/Fun
 Installation
 ------------
 
-.. code-block:: bash
+See clang-format's installation, it is the same
 
-  sudo apt install clang-tidy
 
 clang-format
 ++++++++++++
@@ -103,12 +102,20 @@ This tool is used for ensuring a consistent language format across developers. T
 
 **Official Documentation for Options**: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 
+At the time of writing, this repository is using version 14 of clang-format
+
 Installation
 ------------
 
+Go to https://github.com/llvm/llvm-project/releases and download the latest version for your system. Note, the latest version might not have a build for your system, so go look for ones which do have a version for your system.
+
 .. code-block:: bash
 
-  sudo apt install clang-format
+  cd /opt # This is the folder where we will put the executables
+  sudo wget https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.0/clang+llvm-14.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz -O clang+llvm.tar.xz # download your version (make sure to change the link!) and save it as a file named clang+llvm.tar.xz
+  sudo tar xf clang+llvm.tar.xz # extract it
+  sudo printf "\n#add clang to path\nexport PATH=\"/opt/clang+llvm-14.0.0-x86_64-linux-gnu-ubuntu-18.04/bin:\${PATH}\"" >> ~/.bashrc # Add to PATH (make sure to change the folder name version!)
+
 
 
 googletest
@@ -146,3 +153,21 @@ CUDA
 This template also supports CUDA. Check the official installation guides for more info, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can turn the build off. For more information look at the **build** folder section in :ref:`Workflow Files`.
 
 On github actions we do not have GPUs, but we can still compile and test our code. Thus, our tests will fail but we will still have the code coverage report on the site.
+
+kseq++
+++++++
+
+kseq++ is a program to read FASTA/Q files. Its repository is at https://github.com/cartoonist/kseqpp and it needs to be installed. Unfortunately we cannot simply include it.
+
+Installation
+------------
+
+.. code-block:: bash
+
+  git clone https://github.com/cartoonist/kseqpp
+  cd kseqpp
+  mkdir build
+  cd build
+  cmake ..
+  sudo make install
+  # afterwards you can delete the cloned folder
