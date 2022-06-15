@@ -25,12 +25,14 @@ target_link_libraries(
 
 set(
   test_common_sources
-  "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
+  "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
+  "${PROJECT_SOURCE_DIR}/QueryReader/QueryReader_test.cpp"
 )
 set(
   test_common_include_dirs
   "${PROJECT_SOURCE_DIR}/Utils/"
+  "${PROJECT_SOURCE_DIR}/Global/"
 )
 
 
@@ -48,8 +50,9 @@ if (BUILD_CPU)
   add_test(NAME test_main_cpu COMMAND test_main_cpu)
   target_link_libraries(
     test_main_cpu
-    PRIVATE test_lib
+    PRIVATE common_options
     PRIVATE libraries_cpu
+    PRIVATE test_lib
   )
 
 endif()
@@ -63,7 +66,7 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
     # "${other test sources}"
   )
   target_include_directories(
-    test_main_cpu
+    test_main_cuda
     PRIVATE
     ${test_common_include_dirs}
   )
@@ -71,8 +74,8 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
   target_link_libraries(
     test_main_cuda
     PRIVATE common_options
-    PRIVATE test_lib
     PRIVATE libraries_cuda
+    PRIVATE test_lib
   )
 endif()
 

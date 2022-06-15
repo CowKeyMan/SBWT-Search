@@ -16,6 +16,33 @@ target_compile_options(
 )
 target_link_libraries(common_options INTERFACE gcov)
 
+
+# Query Reader Library
+find_package(ZLIB)
+add_library(
+  query_reader
+  "${PROJECT_SOURCE_DIR}/QueryReader/QueryReader.cpp"
+)
+target_link_libraries(
+  query_reader
+  PRIVATE
+  common_options
+  ZLIB::ZLIB
+)
+target_include_directories(
+  query_reader
+  PRIVATE
+  "${PROJECT_SOURCE_DIR}/QueryReader"
+  "${PROJECT_SOURCE_DIR}/Global"
+)
+
+add_library(common_libraries INTERFACE)
+target_link_libraries(
+  common_libraries
+  INTERFACE query_reader
+)
+
+
 # Build Cpu Libraries
 if (BUILD_CPU)
   # Combine Libaries
@@ -23,6 +50,7 @@ if (BUILD_CPU)
   target_link_libraries(
     libraries_cpu
     INTERFACE common_options
+    INTERFACE common_libraries
     # TODO: Combine more libraries that you create
   )
 endif()
@@ -34,6 +62,7 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
   target_link_libraries(
     libraries_cuda
     INTERFACE common_options
+    INTERFACE common_libraries
     # TODO: Combine more libraries that you create
   )
 endif()
