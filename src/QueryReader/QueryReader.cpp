@@ -21,13 +21,8 @@ QueryReader QueryReader::read() {
     string read = record.seq;
     reads.push_back(read);
     total_letters += read.length();
-    /* total_positions += read.length() - kmer_size + 1; */
   }
-  total_positions = (
-    total_letters
-    - kmer_size * reads.size()
-    + 1 * reads.size()
-  );
+  total_positions = total_letters - kmer_size * reads.size() + 1 * reads.size();
   return *this;
 }
 
