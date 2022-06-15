@@ -1,5 +1,5 @@
-#ifndef ARGUMENT_PARSER_H
-#define ARGUMENT_PARSER_H
+#ifndef ARGUMENT_PARSER_HPP
+#define ARGUMENT_PARSER_HPP
 
 #include "cxxopts.hpp"
 
