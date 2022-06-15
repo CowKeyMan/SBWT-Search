@@ -27,7 +27,7 @@ command = (
     "clang-tidy --quiet "
     + file_names
     + " -- -x c++"
-    + "-p build"
+    + " -p build"
     + folders_string
 )
 print('Running: ' + command, flush=True)

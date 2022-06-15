@@ -2,7 +2,7 @@
 Language: Cpp
 IndentWidth: 2
 
-AlignAfterOpenBracket: false
+AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Left
@@ -32,7 +32,7 @@ ColumnLimit: 80
 CompactNamespaces: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 2
-ContinuationIndentWidth: 2
+ContinuationIndentWidth: 0
 Cpp11BracedListStyle: true
 DeriveLineEnding: false
 FixNamespaceComments: false
