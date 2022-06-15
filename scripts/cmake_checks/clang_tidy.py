@@ -25,9 +25,9 @@ for folder in folders:
 
 command = (
     "clang-tidy --quiet "
+    + "-p build "
     + file_names
     + " -- -x c++"
-    + " -p build"
     + folders_string
 )
 print('Running: ' + command, flush=True)
