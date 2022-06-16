@@ -46,3 +46,16 @@ Each header file should be in the following format:
     #endif
 
 Above, *FILE_NAME* will be the name of the file but we switch from SnakeCase to ALL_CAPS_SNAKE_CASE and we add the *_H* at the end. So a file named 'HelloWorld_test.' should have a header guard defining 'HELLO_WORLD_TEST_H'
+
+In-code comments
+++++++++++++++++
+
+To keep the codebase clean of redundant comments, we try to use clear naming conventions to beging with. When something needs to be non-clean, only then do we put a comment next to it.
+
+Furthermore, every header file should have a comment after the header guards, defining what it does. Look at an existing header file for the correct format, as they all should follow that structure to be recognised by doxygen.
+
+Testing
++++++++
+
+* Executables with main functions are not tested
+* Prefer constructors and destructors over `virtual void SetUp()` and `virtual void TearDown()`. The latter may be necessary in some cases such as when inheritance is needed or when the destructor code can throw exceptions.
