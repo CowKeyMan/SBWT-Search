@@ -10,6 +10,8 @@ using std::cout;
 auto QueryReader_parse_kseqpp_streams() -> void;
 auto QueryReader_parse_kseqpp_read() -> void;
 
+const auto fna_filename = "benchmark_objects/GRCh38_latest_genomic.fna";
+
 int main() {
 #ifndef BENCHMARK_QUERY_READER
 #define BENCHMARK_QUERY_READER
@@ -24,11 +26,11 @@ int main() {
 }
 
 auto QueryReader_parse_kseqpp_streams() -> void {
-  auto query_reader = QueryReader("data/QueryData/365.fna", 30);
+  auto query_reader = QueryReader(fna_filename, 30);
   TIME_IT(query_reader.parse_kseqpp_streams());
 }
 
 auto QueryReader_parse_kseqpp_read() -> void {
-  auto query_reader = QueryReader("data/QueryData/365.fna", 30);
+  auto query_reader = QueryReader(fna_filename, 30);
   TIME_IT(query_reader.parse_kseqpp_read());
 }

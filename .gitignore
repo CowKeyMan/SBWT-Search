@@ -13,3 +13,4 @@ data
 
 .cache
 benchmark_results/
+benchmark_objects/
