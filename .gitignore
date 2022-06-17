@@ -12,3 +12,4 @@ tmp
 data
 
 .cache
+benchmark_results/
