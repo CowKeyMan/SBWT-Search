@@ -29,10 +29,6 @@ target_link_libraries(
   INTERFACE common_options
   INTERFACE cxxopts
 )
-target_include_directories(
-  libraries_main
-  INTERFACE "${PROJECT_SOURCE_DIR}/Global"
-)
 
 if (BUILD_CPU)
   add_executable(main_cpu main.cpp)

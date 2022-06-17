@@ -12,7 +12,7 @@ target_compile_options(
 )
 target_compile_options(
   common_options
-  INTERFACE "$<$<CONFIG:Release>:-03>" # only in release mode
+  INTERFACE "$<$<CONFIG:Release>:-O3>" # only in release mode
 )
 target_link_libraries(common_options INTERFACE gcov)
 
@@ -31,9 +31,8 @@ target_link_libraries(
 )
 target_include_directories(
   query_reader
-  PRIVATE
-  "${PROJECT_SOURCE_DIR}/QueryReader"
-  "${PROJECT_SOURCE_DIR}/Global"
+  PUBLIC "${PROJECT_SOURCE_DIR}/QueryReader"
+  PUBLIC "${PROJECT_SOURCE_DIR}/Global"
 )
 
 add_library(common_libraries INTERFACE)
