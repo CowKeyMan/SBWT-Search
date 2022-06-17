@@ -17,6 +17,17 @@ target_compile_options(
 target_link_libraries(common_options INTERFACE gcov)
 
 
+include(ExternalProject)
+ExternalProject_Add(
+  kseqpp
+  GIT_REPOSITORY https://github.com/cartoonist/kseqpp
+  GIT_TAG        v0.2.1
+  PREFIX         "${CMAKE_BINARY_DIR}/external/kseqpp"
+  CMAKE_ARGS
+		-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+)
+
+
 # Query Reader Library
 find_package(ZLIB)
 add_library(
@@ -33,14 +44,16 @@ target_include_directories(
   query_reader
   PUBLIC "${PROJECT_SOURCE_DIR}/QueryReader"
   PUBLIC "${PROJECT_SOURCE_DIR}/Global"
+  PRIVATE "${CMAKE_BINARY_DIR}/external/kseqpp/include"
 )
+add_dependencies(query_reader kseqpp)
 
+# Common libraries
 add_library(common_libraries INTERFACE)
 target_link_libraries(
   common_libraries
   INTERFACE query_reader
 )
-
 
 # Build Cpu Libraries
 if (BUILD_CPU)

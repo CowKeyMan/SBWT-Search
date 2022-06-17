@@ -30,17 +30,8 @@ jobs:
       - name: Install Sphinx
         run: pip3 install breathe exhale sphinx sphinx-rtd-theme sphinx-rtd-dark-mode
 
-      - name: Install kseqpp
-        run: |
-          sudo apt install zlib1g-dev # a dependency
-          git clone https://github.com/cartoonist/kseqpp
-          cd kseqpp
-          mkdir build
-          cd build
-          cmake ..
-          sudo make install
-          cd ..
-          rm -rf kseqpp
+      - name: Install kseqpp dependencies
+        run: sudo apt install zlib1g-dev # a dependency
 
       - name: Build all main, tests and documentation
         run: |

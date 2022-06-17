@@ -157,7 +157,7 @@ On github actions we do not have GPUs, but we can still compile and test our cod
 kseq++
 ++++++
 
-kseq++ is a program to read FASTA/Q files. Its repository is at https://github.com/cartoonist/kseqpp and it needs to be installed. Unfortunately we cannot simply include it.
+kseq++ is a program to read FASTA/Q files. Its repository is at https://github.com/cartoonist/kseqpp and we install it directly using cmake. However, it may neeed a dependency which is zlib.
 
 Installation
 ------------
@@ -165,10 +165,3 @@ Installation
 .. code-block:: bash
 
   sudo apt install zlib1g-dev # a dependency
-  git clone https://github.com/cartoonist/kseqpp
-  cd kseqpp
-  mkdir build
-  cd build
-  cmake ..
-  sudo make install
-  # afterwards you can delete the cloned folder
