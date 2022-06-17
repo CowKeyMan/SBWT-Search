@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <zlib.h>
@@ -14,16 +15,35 @@ using std::vector;
 
 namespace sbwt_search {
 
-QueryReader QueryReader::read() {
+auto QueryReader::check_if_has_parsed() -> void {
+  if (has_parsed) {
+    throw std::logic_error("QueryReader has already parsed a file");
+  }
+  has_parsed = true;
+}
+
+auto QueryReader::parse_kseqpp_streams() -> void {
+  check_if_has_parsed();
   KSeq record;
   SeqStreamIn stream(filename.c_str());
   while (stream >> record) {
-    string read = record.seq;
-    reads.push_back(read);
-    total_letters += read.length();
+    string seq = record.seq;
+    seqs.push_back(seq);
+    total_letters += seq.length();
   }
-  total_positions = total_letters - kmer_size * reads.size() + 1 * reads.size();
-  return *this;
+  total_positions = total_letters - kmer_size * seqs.size() + 1 * seqs.size();
+}
+
+auto QueryReader::parse_kseqpp_read() -> void {
+  check_if_has_parsed();
+  auto iss = SeqStreamIn(filename.c_str());
+  auto records = iss.read();
+  for (auto &record: records) {
+    string seq = record.seq;
+    seqs.push_back(seq);
+    total_letters += seq.length();
+  }
+  total_positions = total_letters - kmer_size * seqs.size() + 1 * seqs.size();
 }
 
 }
