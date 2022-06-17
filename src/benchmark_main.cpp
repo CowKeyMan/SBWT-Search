@@ -16,6 +16,7 @@ int main() {
 
   TIME_IT(QueryReader_parse_kseqpp_streams());
   cout << "QueryReader_read_kseqpp_streams: " << TIME_IT_TOTAL << '\n';
+
   TIME_IT(QueryReader_parse_kseqpp_read());
   cout << "QueryReader_read_kseqpp_read: " << TIME_IT_TOTAL << '\n';
 
