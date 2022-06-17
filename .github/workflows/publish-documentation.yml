@@ -38,7 +38,7 @@ jobs:
           mkdir build
           cd build
           cmake ..
-          make install
+          sudo make install
           cd ..
           rm -rf kseqpp
 
