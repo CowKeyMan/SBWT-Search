@@ -164,6 +164,7 @@ Installation
 
 .. code-block:: bash
 
+  sudo apt install zlib1g-dev # a dependency
   git clone https://github.com/cartoonist/kseqpp
   cd kseqpp
   mkdir build
