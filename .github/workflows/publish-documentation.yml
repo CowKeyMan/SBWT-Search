@@ -43,7 +43,11 @@ jobs:
           rm -rf kseqpp
 
       - name: Build all main, tests and documentation
-        run: sh ./scripts/build/build_all.sh
+        run: |
+          sh ./scripts/build/build_benchmarks.sh
+          sh ./scripts/build/build_release.sh
+          sh ./scripts/build/build_docs.sh
+          sh ./scripts/build/build_tests.sh
 
       - name: Run tests
         run: sh ./scripts/standalone/run_tests.sh
