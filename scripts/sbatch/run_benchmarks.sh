@@ -2,10 +2,10 @@
 #SBATCH --job-name=BenchmarkQueryReader
 
 ## The account to charge. Look at the unix group from https://my.csc.fi/myProjects
-#SBATCH --account=${PROJECT}
+#SBATCH --account=dongelr1
 
 ## Maximum time
-#SBATCH --time=02:00:00
+#SBATCH --time=00:15:00
 
 ## put stderr to err.txt
 #SBATCH --error err.txt
@@ -28,8 +28,8 @@
 ## This partition on mahti has NVME
 #SBATCH --partition=gpusmall
 
-## We only want a single a100 gpu and 4GB of NVME storage
-#SBATCH --gres=gpu:a100:1,nvme:4
+## We only want a single a100 gpu and 10GB of NVME storage
+#SBATCH --gres=gpu:a100:0,nvme:10
 
 ## Remove unnecessary modules
 module purge
@@ -41,14 +41,21 @@ module load cuda
 module load python-data
 module load bzip2
 
-mv ../SBWT-Search/ "${LOCAL_SCRATCH}"
+export OLD_PWD="${PWD}"
+
+cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
+
+rm "build/CMakeCache.txt"
+
+rm -rf build
 
 sh scripts/build/build_benchmarks.sh
 sh scripts/standalone/run_benchmarks.sh
-python3 scripts/standalone/print_benchmark_averages.py
 
-cd -
-cp "${LOCAL_SCRATCH}/out.txt" .
-cp "${LOCAL_SCRATCH}/err.txt" .
-cp "${LOCAL_SCRATCH}/benchmark_results/*" benchmark_results/
+cd "${OLD_PWD}"
+
+mkdir -p "benchmark_results"
+cat "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results/averages.txt" >> "benchmark_results/averages.txt"
+rm  "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results/averages.txt"
+cp  "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results/"* "benchmark_results"
