@@ -19,23 +19,20 @@ namespace sbwt_search {
 class QueryReader {
 private:
   string filename;
-  vector<string> seqs;
-  u64 total_letters = 0;
-  u64 total_positions = 0;
   uint kmer_size;
   bool has_parsed = false;
   void check_if_has_parsed();
   void add_sequence(const string &seq);
+  vector<string> seqs;
+  u64 total_letters = 0;
+  u64 total_positions = 0;
 
 public:
   QueryReader(const string &filename, const uint kmer_size):
     filename(filename), kmer_size(kmer_size){};
-  const vector<string> &get_seqs() { return seqs; };
-  const size_t &get_total_letters() { return total_letters; };
-  const size_t &get_total_positions() { return total_positions; };
-  // Different types of seqs for benchmarking purposes
-  // The clean way to do this would be to use virtual functions
-  // But we want to avoid virtual function calls
+  auto &get_seqs() { return seqs; };
+  auto get_total_letters() { return total_letters; };
+  auto get_total_positions() { return total_positions; };
   void parse_kseqpp_streams();
   void parse_kseqpp_read();
 };
