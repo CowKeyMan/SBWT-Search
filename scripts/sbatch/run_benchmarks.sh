@@ -41,6 +41,14 @@ module load cuda
 module load python-data
 module load bzip2
 
+mv ../SBWT-Search/ "${LOCAL_SCRATCH}"
+cd "${LOCAL_SCRATCH}/SBWT-Search"
+
 sh scripts/build/build_benchmarks.sh
 sh scripts/standalone/run_benchmarks.sh
-sh scripts/standalone/print_benchmark_averages.py
+python3 scripts/standalone/print_benchmark_averages.py
+
+cd -
+cp "${LOCAL_SCRATCH}/out.txt" .
+cp "${LOCAL_SCRATCH}/err.txt" .
+cp "${LOCAL_SCRATCH}/benchmark_results/*" benchmark_results/
