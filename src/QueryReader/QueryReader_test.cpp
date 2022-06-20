@@ -30,13 +30,18 @@ protected:
   }
 };
 
-TEST_F(QueryReaderTest, ReadKseqppStreams) {
+TEST_F(QueryReaderTest, ParseKseqppStreams) {
   host->parse_kseqpp_streams();
   shared_tests();
 }
 
-TEST_F(QueryReaderTest, ReadKseqppRead) {
+TEST_F(QueryReaderTest, ParseKseqppRead) {
   host->parse_kseqpp_read();
+  shared_tests();
+}
+
+TEST_F(QueryReaderTest, ParseKseqppGzStream) {
+  host->parse_kseqpp_gz_stream();
   shared_tests();
 }
 

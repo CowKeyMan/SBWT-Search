@@ -35,6 +35,7 @@ public:
   auto get_total_positions() { return total_positions; };
   void parse_kseqpp_streams();
   void parse_kseqpp_read();
+  void parse_kseqpp_gz_stream();
 };
 
 }

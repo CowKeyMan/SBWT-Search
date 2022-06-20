@@ -9,6 +9,7 @@
 #include "kseq++/kseq++.hpp"
 
 using klibpp::KSeq;
+using klibpp::make_kstream;
 using klibpp::SeqStreamIn;
 using std::string;
 using std::vector;
@@ -32,6 +33,14 @@ auto QueryReader::parse_kseqpp_streams() -> void {
   }
 }
 
+auto QueryReader::add_sequence(const string &seq) -> void {
+  seqs.push_back(seq);
+  total_letters += seq.length();
+  if (seq.length() >= kmer_size) {
+    total_positions += seq.length() - kmer_size + 1;
+  }
+}
+
 auto QueryReader::parse_kseqpp_read() -> void {
   check_if_has_parsed();
   auto iss = SeqStreamIn(filename.c_str());
@@ -42,12 +51,13 @@ auto QueryReader::parse_kseqpp_read() -> void {
   }
 }
 
-auto QueryReader::add_sequence(const string &seq) -> void {
-  seqs.push_back(seq);
-  total_letters += seq.length();
-  if (seq.length() >= kmer_size) {
-    total_positions += seq.length() - kmer_size + 1;
-  }
+auto QueryReader::parse_kseqpp_gz_stream() -> void {
+  check_if_has_parsed();
+  KSeq record;
+  gzFile fp = gzopen(filename.c_str(), "r");
+  auto stream = make_kstream(fp, gzread, klibpp::mode::in);
+  while (stream >> record) { add_sequence(record.seq); }
+  gzclose(fp);
 }
 
 }
