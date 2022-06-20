@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 #SBATCH --job-name=BenchmarkQueryReader
 
 ## The account to charge. Look at the unix group from https://my.csc.fi/myProjects
