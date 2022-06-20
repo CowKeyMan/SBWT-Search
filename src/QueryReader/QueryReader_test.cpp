@@ -45,6 +45,11 @@ TEST_F(QueryReaderTest, ParseKseqppGzStream) {
   shared_tests();
 }
 
+TEST_F(QueryReaderTest, ParseKseqppGzRead) {
+  host->parse_kseqpp_gz_read();
+  shared_tests();
+}
+
 TEST_F(QueryReaderTest, AlreadyParsed) {
   const auto assertion_string = "QueryReader has already parsed a file";
   host->parse_kseqpp_read();

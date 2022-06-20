@@ -10,6 +10,7 @@
 
 using klibpp::KSeq;
 using klibpp::make_kstream;
+using klibpp::make_ikstream;
 using klibpp::SeqStreamIn;
 using std::string;
 using std::vector;
@@ -45,10 +46,7 @@ auto QueryReader::parse_kseqpp_read() -> void {
   check_if_has_parsed();
   auto iss = SeqStreamIn(filename.c_str());
   auto records = iss.read();
-  for (auto &record: records) {
-    string seq = record.seq;
-    add_sequence(seq);
-  }
+  for (auto &record: records) { add_sequence(record.seq); }
 }
 
 auto QueryReader::parse_kseqpp_gz_stream() -> void {
@@ -58,6 +56,14 @@ auto QueryReader::parse_kseqpp_gz_stream() -> void {
   auto stream = make_kstream(fp, gzread, klibpp::mode::in);
   while (stream >> record) { add_sequence(record.seq); }
   gzclose(fp);
+}
+
+auto QueryReader::parse_kseqpp_gz_read() -> void {
+  check_if_has_parsed();
+  gzFile fp = gzopen(filename.c_str(), "r");
+  auto records = make_ikstream(fp, gzread).read();
+  gzclose(fp);
+  for (auto &record: records) { add_sequence(record.seq); }
 }
 
 }

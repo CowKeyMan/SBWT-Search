@@ -36,6 +36,7 @@ public:
   void parse_kseqpp_streams();
   void parse_kseqpp_read();
   void parse_kseqpp_gz_stream();
+  void parse_kseqpp_gz_read();
 };
 
 }
