@@ -4,7 +4,7 @@
 mkdir -p benchmark_results
 mkdir -p tmp
 
-DATETIME="$(date +"%Y_%m_%d_%I:%M:%S_%p")"
+DATETIME="$(date +"%Y-%m-%d_%I-%M-%S_%p")"
 OUTPUT_FILE_NAME="benchmark_results/${DATETIME}_benchmark.txt"
 TEMP_FILE_NAME="tmp/current_benchmark.txt"
 BENCHMARK_AVERAGES_FILE_NAME="benchmark_results/averages.txt"
