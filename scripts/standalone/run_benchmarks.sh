@@ -22,4 +22,4 @@ rm "${TEMP_FILE_NAME}"
 
 echo "${DATETIME}" >> "${BENCHMARK_AVERAGES_FILE_NAME}"
 python3 scripts/standalone/print_benchmark_averages.py "${OUTPUT_FILE_NAME}" >> "${BENCHMARK_AVERAGES_FILE_NAME}"
-printf '/n' >> "${BENCHMARK_AVERAGES_FILE_NAME}"
+printf '\n' >> "${BENCHMARK_AVERAGES_FILE_NAME}"
