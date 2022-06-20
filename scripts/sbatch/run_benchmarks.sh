@@ -43,3 +43,4 @@ module load bzip2
 
 sh scripts/build/build_benchmarks.sh
 sh scripts/standalone/run_benchmarks.sh
+sh scripts/standalone/print_benchmark_averages.py
