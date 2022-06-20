@@ -28,10 +28,8 @@ auto QueryReader::parse_kseqpp_streams() -> void {
   SeqStreamIn stream(filename.c_str());
   while (stream >> record) {
     string seq = record.seq;
-    seqs.push_back(seq);
-    total_letters += seq.length();
+    add_sequence(seq);
   }
-  total_positions = total_letters - kmer_size * seqs.size() + 1 * seqs.size();
 }
 
 auto QueryReader::parse_kseqpp_read() -> void {
@@ -40,10 +38,16 @@ auto QueryReader::parse_kseqpp_read() -> void {
   auto records = iss.read();
   for (auto &record: records) {
     string seq = record.seq;
-    seqs.push_back(seq);
-    total_letters += seq.length();
+    add_sequence(seq);
   }
-  total_positions = total_letters - kmer_size * seqs.size() + 1 * seqs.size();
+}
+
+auto QueryReader::add_sequence(const string &seq) -> void {
+  seqs.push_back(seq);
+  total_letters += seq.length();
+  if (seq.length() >= kmer_size) {
+    total_positions += seq.length() - kmer_size + 1;
+  }
 }
 
 }

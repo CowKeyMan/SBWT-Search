@@ -10,27 +10,23 @@ using std::unique_ptr;
 
 namespace sbwt_search {
 
-const auto seq_0
-  = "GACTGCAATGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTCTCTGACAGCAGCTTCTGAACTGGT"
-    "TACCTGCCGTGAGTAAATTAAAATTTTATTG";
-const auto seq_6
-  = "GTTTCATGGATGTTGTGTACTCTGTAATTTTTATCTGTCTGTGCGCTATGCCTATATTGGTTAAAGTAT"
-    "TTAGTGACCTAAGTCAATAAAATTTTAATTT";
+const auto seq_0 = "GACTG";
+const auto seq_3 = "TA";
 
 class QueryReaderTest: public ::testing::Test {
 protected:
   unique_ptr<QueryReader> host;
 
   QueryReaderTest() {
-    host = make_unique<QueryReader>("test_objects/test_query.fna", 30);
+    host = make_unique<QueryReader>("test_objects/test_query.fna", 3);
   }
 
   void shared_tests() {
     ASSERT_EQ(seq_0, host->get_seqs()[0]);
-    ASSERT_EQ(seq_6, host->get_seqs()[6]);
-    ASSERT_EQ(7, host->get_seqs().size());
-    ASSERT_EQ(700, host->get_total_letters());
-    ASSERT_EQ(497, host->get_total_positions());
+    ASSERT_EQ(seq_3, host->get_seqs()[3]);
+    ASSERT_EQ(4, host->get_seqs().size());
+    ASSERT_EQ(15, host->get_total_letters());
+    ASSERT_EQ(7, host->get_total_positions());
   }
 };
 

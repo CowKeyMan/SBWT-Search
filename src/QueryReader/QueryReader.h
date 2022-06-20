@@ -25,9 +25,10 @@ private:
   uint kmer_size;
   bool has_parsed = false;
   void check_if_has_parsed();
+  void add_sequence(const string &seq);
 
 public:
-  QueryReader(const string filename, const uint kmer_size):
+  QueryReader(const string &filename, const uint kmer_size):
     filename(filename), kmer_size(kmer_size){};
   const vector<string> &get_seqs() { return seqs; };
   const size_t &get_total_letters() { return total_letters; };
