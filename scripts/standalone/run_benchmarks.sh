@@ -23,10 +23,12 @@ done
 
 # Run once so that we do not get any weird items taking longer than they should
 build/src/benchmark_main ${ARGUMENTS} > /dev/null 2>/dev/null
+echo "Finished dummy benchmark run"
 for i in {1..7}
 do
   build/src/benchmark_main >> "${TEMP_FILE_NAME}" 2>/dev/null
   printf '\n' >> "${TEMP_FILE_NAME}"
+  echo "Finished benchmark run ${i}"
 done
 
 cat "${TEMP_FILE_NAME}" > "${OUTPUT_FILE_NAME}"
