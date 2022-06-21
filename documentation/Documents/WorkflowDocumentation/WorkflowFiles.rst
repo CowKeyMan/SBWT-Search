@@ -5,11 +5,11 @@ This page will go through every file which is not part of the code base but is p
 
 * **root**:
 
-  * `.clang-format`: This is the file used by the clang-format tool, which makes sure that the code base follows a consistent coding style. For those familiar, it is similar to python's flake8. Inside the file we specify how we want our codebase to look. For detailed explanation of each option, the reader is referred to the official documentation which also contains a lot of examples for each option: https://clang.llvm.org/docs/ClangFormatStyleOptions.html.
-  * `.clang-tidy`: This is the file used by the clang-tidy tool, which performs static analysis. Inside the file we specify which files to ignore when going through the codebase.
+  * `.clang-format`: This is the file used by the clang-format tool, which makes sure that the code base follows a consistent coding style. For those familiar, it is similar to python's flake8. Inside the file we specify how we want our codebase to look. For detailed explanation of each option, the reader is referred to the official documentation which also contains a lot of examples for each option: https://clang.llvm.org/docs/ClangFormatStyleOptions.html. Rather than running clang-format directly, we make use of 2 python scripts: `scripts/cmake_checks/check_clang_format.py` and `scripts/standalone/apply_clang_format.py`.
+  * `.clang-tidy`: This is the file used by the clang-tidy tool, which performs static analysis. Inside the file we specify which files to ignore when going through the codebase. Rather than using clang-tidy directly, we make use of a python script: `scripts/cmake_checks/clang_tidy.py`. Note: clang-tidy may fail the first time we run `scripts/build/build_all.sh` since the compilation database would not have been built by then. So when we run it afterwards it will be successful.
   * `.gitignore`: Specifies which files should be ignored by our git repository
   * `CMakeLists.txt`: This is the root CMakeLists which calls all other cmake files. It is used by the cmake tool to build the Makefile which would then be used to compile our program. Inside it, we specify the project name and details, we load all files within the *cmake* folder and then add the src and documentation folder, which also contain a CMakeLists.txt file, as subdirectories, so that the CMakeLists.txt file within them is also executed (sequentially).
-  * `README.md`: Opening statement to get users and developers started when using this repository. Everything that simple users need to know should be in the README so that they do not have to go digging elsewhere.
+  * `README.md`: Opening statement to get users and developers started when using this repository. Everything that normal users need to know should be in the README so that they do not have to go digging elsewhere.
   * **.github/workflows**: A folder required by github to perform github actions
 
     * `publish-documentation.yml`: This is the file responsible for building the documentation and tests on github and then publishing both the documentation and test results + code coverage as a github page. Within the file, each step has a name which describes its purpose. The website is put inside the docs folder, which is why the `.gitignore` within that folder is removed when we push to github pages since otherwise the website would not be pushed to the *gh-pages* branch.
@@ -18,7 +18,7 @@ This page will go through every file which is not part of the code base but is p
 
     * `CCache.cmake`: Use ccache if available, which is a tool for caching compilation results
     * `CompilerWarnings.cmake`: Enable a lot of useful compiler warnings based on platform (Windows or Unix)
-    * `ExportCompileCommands.cmake`: Generate a file called `compile_command.json` which are the commands used to compile the program. This is used by some language servers to provide autocompletion and code navigation capabilities.
+    * `ExportCompileCommands.cmake`: Generate a file called `compile_command.json` which are the commands used to compile the program. This is used by some language servers to provide autocompletion and code navigation capabilities. We only enable this to be on when we build everything, so that it contains our full compilation database.
     * `Options.cmake`: Contains general compilation options. These include working with Shared Libraries and using Interprocedural Optimisation
     * `PreventBuildingInCmakeDirectory.cmake`: As the name says, this will halt cmake if it realises that it is running within a folder which contains a `CMakeLists.txt`. This makes sure that the developers do not make a mistake when running cmake, since it produces a lot of files. Thus, it makes sure that we are running within some sort of build directory.
     * `StaticAnalyzers.cmake`: Runs the static analysers which are *clang-format* and *clang-tidy*. Does not actually run *cmake-format*, it only shows the user the diff between the files, to prevent any unwanted changes. It also runs a python script which makes sure that there are header guards in the CPP header files.
@@ -45,28 +45,39 @@ This page will go through every file which is not part of the code base but is p
 
   * **scripts**: This folder contains scripts written in multiple languages which are used to combine multiple commands into a single file. It is advised to only build using these scripts rather than using the individual :ref:`Tools` directly.
 
-    * **build**: Scripts used to build executables and documentation
+    * **build**: Scripts used to build executables and documentation. Within this script, cmake configuration options are set. Change these if you wish to set different options.
 
-      * `build_all.sh`: Builds the main, the tests (which need to be run!) and the documentation (in Debug mode). We can change the settings here to switch off CUDA or CPU builds
-      * `build_docs.sh`: Builds documentation only
-      * `build_release.sh`: Builds only the main (in Release mode). We can change the settings here to switch off CUDA or CPU builds
+      * `build_all.sh`: Generates compilation database and then calls all other build scripts except for `scripts/build/build_debug.sh`.
+      * `build_docs.sh`: Builds documentation
+      * `build_release.sh`: Builds the main program in release mode
+      * `build_debug.sh`: Builds the main program in debug mode
+      * `build_tests.sh`: Builds the testing executable
+      * `build_benchmarks.sh`: Builds the benchmarking executable
 
     * **cmake_checks**
 
       * `check_clang_format.py`: Clang format by default edits the file that you run it on. Therefore I created this python script which executes clang format on temporary files and then returns the difference between them using git diff. This way no file is changed without
       * `check_header_guards.py`: Clang format by default edits the file that you run it on. Therefore I created this python script which executes clang format on temporary files and then returns the difference between them using git diff. This way no file is changed without
-      * `clang-tidy.py`: clang-tidy needs us to input files to its command manually, therefore this script handles that. It will run over all our non-test and point out any potential unsafe code in the shell output.
+      * `clang-tidy.py`: clang-tidy needs us to input files to its command manually, therefore this script handles that. It will run over all our non-test and point out any potential unsafe code in the shell output. It uses the compilation commands `compile_commands.json` in the root directory, which are generated when we run `scripts/build/build_all.sh`.
+
+    * **sbatch**: Scripts which are meant to be run using slurm configured systems.
+
+      * `run_benchmarks.sbatch`: Build and run the benchmark main. It calls `scripts/standalone/run_benchmarks.sh` to do the actual benchmarking work
 
     * **standalone**: These are scripts that run things and generate outputs
 
       * `apply_clang_format.py`: Applies the changes proposed by clang format. Warning: This actually changes the source code. While it would not change the contents, make sure that you agree with the changes (you can check what changes will be applied if you run `scripts/cmake_checks/check_clang_format.py`
       * `run_tests.sh`: Runs the tests and generates html so that code coverage can easily be seen in the docs.
+      * `run_benchmarks.sh`: Script called by `scripts/sbatch/run_benchmarks.sbatch` to actually do the work of running the benchmarks. The benchmarks are run once with no output, and then 7 times recording their output. `print_benchmark_averages.py` is then called on the resulting file.
+      * `print_benchmark_averages.py`: Takes a file containing results of several benchmarking runs and prints out the average of all the runs for each 'key: value' pair.
 
   * **src**:
 
     * `main.cpp`: Where the main function of the actual program executable resides.
-    * `test_main.cpp`: There main function for the googletest's executable resides. Usually this file is not modified
-    * `BuildCommon.cmake`: Builds any files which will be used by both the main program and the tests
-    * `BuildMain.cmake`: Builds the main executable for all platforms (CUDA, CPU, etc, linking other libraries and setting options along the way
+    * `test_main.cpp`: Where main function for the googletest's executable resides. Usually this file is not modified
+    * `benchmark_main.cpp`: Where the main function for benchmarking is. Here we take command line arguments which tell us which benchmarks we want to run. This script is preferably run from `scripts/standalone/run_benchmarks.sh`, which also specifies all the available arguments.
+    * `BuildCommon.cmake`: Builds any files which will be used by multiple programs
+    * `BuildMain.cmake`: Builds the main executable for all platforms (CUDA, CPU, etc), linking other libraries and setting options along the way
     * `BuildTests.cmake`: Loads googletest into the repository as a dependency and builds the test executable for all platforms (CUDA, CPU, etc), linking other libraries and setting options along the way
+    * `BuildBenchmark.cmake`: Builds the benchmark executable for all platforms (CUDA, CPU, etc), linking other libraries and setting options along the way
     * `CMakeLists.txt`: Tells cmake to execute the other *.cmake* files in this folder in sequential order.

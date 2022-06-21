@@ -165,3 +165,13 @@ Installation
 .. code-block:: bash
 
   sudo apt install zlib1g-dev # a dependency
+
+cxxopts
++++++++
+
+To parse command line arguments it is handy to have a tool to do that for us rather than creating a command line parser for ourselves, as such we use cxxopts to help us, which is based here: https://github.com/jarro2783/cxxopts.
+
+Installation
+------------
+
+Installation will be automatic when you run cmake as it will be done using FetchContect.

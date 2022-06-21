@@ -1,4 +1,7 @@
 #!/bin/bash
+
+## Meant to be run on Mahti supercomputer by CSC: https://research.csc.fi/-/mahti
+
 #SBATCH --job-name=Benchmark
 
 ## The account to charge. Look at the unix group from https://my.csc.fi/myProjects
