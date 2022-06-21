@@ -11,8 +11,8 @@ BENCHMARK_AVERAGES_FILE_NAME="benchmark_results/averages.txt"
 
 # Add or comment arguments from here
 ARGUMENTS_LIST=(
-  "-QUERY_READER_FASTA"
-  "-QUERY_READER_FASTA_ZIP"
+  "-QUERY_FILE_PARSER_FASTA"
+  "-QUERY_FILE_PARSER_FASTA_ZIP"
 )
 ARGUMENTS=""
 for ARGUMENT in ${ARGUMENTS_LIST[@]};

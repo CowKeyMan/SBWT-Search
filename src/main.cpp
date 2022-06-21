@@ -2,16 +2,21 @@
 #include <string>
 
 #include "ArgumentParser.hpp"
-#include "QueryReader.h"
+#include "QueryFileParser.h"
+/* #include "RawSequencesParser.h" */
 
 using sbwt_search::parse_arguments;
-using sbwt_search::QueryReader;
+using sbwt_search::QueryFileParser;
 using std::string;
 
 const auto kmer_size = 30;
 
 auto main(int argc, char **argv) -> int {
   auto args = parse_arguments(argc, argv);
-  auto query_reader = QueryReader(args["q"].as<string>(), kmer_size);
-  query_reader.parse_kseqpp_streams();
+  auto query_file_parser = QueryFileParser(args["q"].as<string>(), kmer_size);
+  query_file_parser.parse_kseqpp_streams();
+  /* auto sequences_parser = RawSequencesParser( */
+  /*   query_file_parser.get_seqs(), query_file_parser.get_total_positions() */
+  /* ); */
+  /* sequences_parser.parse(); */
 }

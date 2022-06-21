@@ -12,8 +12,12 @@ if (BUILD_MAIN)
 add_library(libraries_main INTERFACE)
 target_link_libraries(
   libraries_main
-  INTERFACE common_options
   INTERFACE cxxopts
+  INTERFACE common_options
+)
+target_include_directories(
+  libraries_main
+  INTERFACE "${PROJECT_SOURCE_DIR}/ArgumentParser"
 )
 
 if (BUILD_CPU)

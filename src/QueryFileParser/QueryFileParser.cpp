@@ -5,7 +5,7 @@
 
 #include <kseq++/seqio.hpp>
 
-#include "QueryReader.h"
+#include "QueryFileParser.h"
 #include "kseq++/kseq++.hpp"
 
 using klibpp::KSeq;
@@ -17,14 +17,14 @@ using std::vector;
 
 namespace sbwt_search {
 
-auto QueryReader::check_if_has_parsed() -> void {
+auto QueryFileParser::check_if_has_parsed() -> void {
   if (has_parsed) {
-    throw std::logic_error("QueryReader has already parsed a file");
+    throw std::logic_error("QueryFileParser has already parsed a file");
   }
   has_parsed = true;
 }
 
-auto QueryReader::add_sequence(const string &seq) -> void {
+auto QueryFileParser::add_sequence(const string &seq) -> void {
   seqs.push_back(seq);
   total_letters += seq.length();
   if (seq.length() >= kmer_size) {
@@ -32,21 +32,21 @@ auto QueryReader::add_sequence(const string &seq) -> void {
   }
 }
 
-auto QueryReader::parse_kseqpp_streams() -> void {
+auto QueryFileParser::parse_kseqpp_streams() -> void {
   check_if_has_parsed();
   KSeq record;
   SeqStreamIn stream(filename.c_str());
   while (stream >> record) { add_sequence(record.seq); }
 }
 
-auto QueryReader::parse_kseqpp_read() -> void {
+auto QueryFileParser::parse_kseqpp_read() -> void {
   check_if_has_parsed();
   auto iss = SeqStreamIn(filename.c_str());
   auto records = iss.read();
   for (auto &record: records) { add_sequence(record.seq); }
 }
 
-auto QueryReader::parse_kseqpp_gz_stream() -> void {
+auto QueryFileParser::parse_kseqpp_gz_stream() -> void {
   check_if_has_parsed();
   KSeq record;
   gzFile fp = gzopen(filename.c_str(), "r");
@@ -55,7 +55,7 @@ auto QueryReader::parse_kseqpp_gz_stream() -> void {
   gzclose(fp);
 }
 
-auto QueryReader::parse_kseqpp_gz_read() -> void {
+auto QueryFileParser::parse_kseqpp_gz_read() -> void {
   check_if_has_parsed();
   gzFile fp = gzopen(filename.c_str(), "r");
   auto records = make_ikstream(fp, gzread).read();

@@ -27,7 +27,7 @@ set(
   test_common_sources
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
   "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
-  "${PROJECT_SOURCE_DIR}/QueryReader/QueryReader_test.cpp"
+  "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser_test.cpp"
 )
 set(
   test_common_include_dirs

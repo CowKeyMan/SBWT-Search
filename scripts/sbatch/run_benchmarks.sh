@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=BenchmarkQueryReader
+#SBATCH --job-name=Benchmark
 
 ## The account to charge. Look at the unix group from https://my.csc.fi/myProjects
 #SBATCH --account=dongelr1

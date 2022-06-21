@@ -1,8 +1,8 @@
-#ifndef QUERY_READER_H
-#define QUERY_READER_H
+#ifndef QUERY_FILE_PARSER_H
+#define QUERY_FILE_PARSER_H
 
 /**
- * @file QueryReader.h
+ * @file QueryFileParser.h
  * @brief Contains functions for reading from FASTA or FASTQ files
  * */
 
@@ -16,7 +16,7 @@ using std::vector;
 
 namespace sbwt_search {
 
-class QueryReader {
+class QueryFileParser {
 private:
   string filename;
   uint kmer_size;
@@ -28,7 +28,7 @@ private:
   u64 total_positions = 0;
 
 public:
-  QueryReader(const string &filename, const uint kmer_size):
+  QueryFileParser(const string &filename, const uint kmer_size):
     filename(filename), kmer_size(kmer_size){};
   auto &get_seqs() { return seqs; };
   auto get_total_letters() { return total_letters; };

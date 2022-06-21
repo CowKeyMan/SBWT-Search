@@ -42,31 +42,31 @@ set(CXXOPTS_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(cxxopts)
 
-# Query Reader Library
+# QueryFileParser Library
 find_package(ZLIB)
 add_library(
-  query_reader
-  "${PROJECT_SOURCE_DIR}/QueryReader/QueryReader.cpp"
+  query_file_parser
+  "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser.cpp"
 )
 target_link_libraries(
-  query_reader
+  query_file_parser
   PRIVATE
   common_options
   ZLIB::ZLIB
 )
 target_include_directories(
-  query_reader
-  PUBLIC "${PROJECT_SOURCE_DIR}/QueryReader"
+  query_file_parser
+  PUBLIC "${PROJECT_SOURCE_DIR}/QueryFileParser"
   PUBLIC "${PROJECT_SOURCE_DIR}/Global"
   PRIVATE "${CMAKE_BINARY_DIR}/external/kseqpp/include"
 )
-add_dependencies(query_reader kseqpp)
+add_dependencies(query_file_parser kseqpp)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
 target_link_libraries(
   common_libraries
-  INTERFACE query_reader
+  INTERFACE query_file_parser
 )
 
 # Build Cpu Libraries
