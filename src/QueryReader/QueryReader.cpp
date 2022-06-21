@@ -9,8 +9,8 @@
 #include "kseq++/kseq++.hpp"
 
 using klibpp::KSeq;
-using klibpp::make_kstream;
 using klibpp::make_ikstream;
+using klibpp::make_kstream;
 using klibpp::SeqStreamIn;
 using std::string;
 using std::vector;
@@ -24,22 +24,19 @@ auto QueryReader::check_if_has_parsed() -> void {
   has_parsed = true;
 }
 
-auto QueryReader::parse_kseqpp_streams() -> void {
-  check_if_has_parsed();
-  KSeq record;
-  SeqStreamIn stream(filename.c_str());
-  while (stream >> record) {
-    string seq = record.seq;
-    add_sequence(seq);
-  }
-}
-
 auto QueryReader::add_sequence(const string &seq) -> void {
   seqs.push_back(seq);
   total_letters += seq.length();
   if (seq.length() >= kmer_size) {
     total_positions += seq.length() - kmer_size + 1;
   }
+}
+
+auto QueryReader::parse_kseqpp_streams() -> void {
+  check_if_has_parsed();
+  KSeq record;
+  SeqStreamIn stream(filename.c_str());
+  while (stream >> record) { add_sequence(record.seq); }
 }
 
 auto QueryReader::parse_kseqpp_read() -> void {
