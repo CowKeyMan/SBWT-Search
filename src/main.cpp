@@ -9,9 +9,9 @@ using sbwt_search::parse_arguments;
 using sbwt_search::QueryFileParser;
 using std::string;
 
-const auto kmer_size = 30;
 
 auto main(int argc, char **argv) -> int {
+  const auto kmer_size = 30;
   auto args = parse_arguments(argc, argv);
   auto query_file_parser = QueryFileParser(args["q"].as<string>(), kmer_size);
   query_file_parser.parse_kseqpp_streams();
