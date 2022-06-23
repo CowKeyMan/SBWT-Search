@@ -9,7 +9,6 @@ using sbwt_search::parse_arguments;
 using sbwt_search::QueryFileParser;
 using std::string;
 
-
 auto main(int argc, char **argv) -> int {
   const auto kmer_size = 30;
   auto args = parse_arguments(argc, argv);

@@ -2,6 +2,7 @@
 Language: Cpp
 IndentWidth: 2
 
+AlwaysBreakTemplateDeclarations: Yes
 AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
@@ -9,7 +10,6 @@ AlignEscapedNewlines: Left
 AlignOperands: false
 AlignTrailingComments: false
 AllowAllArgumentsOnNextLine: true
-AllowAllConstructorInitializersOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Always
 AllowShortCaseLabelsOnASingleLine: true
@@ -19,11 +19,11 @@ AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
-AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBinaryOperators: true
 BreakBeforeBraces: Attach
+BreakBeforeConceptDeclarations: true
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
@@ -37,6 +37,7 @@ Cpp11BracedListStyle: true
 DeriveLineEnding: false
 FixNamespaceComments: false
 IncludeBlocks: Regroup
+EmptyLineBeforeAccessModifier: Never
 IncludeCategories:
   - Regex:           '<[[:alnum:].]+>'
     Priority:        1
