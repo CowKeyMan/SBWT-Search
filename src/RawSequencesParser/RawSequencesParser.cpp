@@ -6,21 +6,35 @@
 
 namespace sbwt_search {
 
-auto build_bits_hash_map() -> vector<u64> {
-  auto bits_hash_map = vector<u64>(256, default_bits_hash_map_value);
-  bits_hash_map['A'] = bits_hash_map['a'] = 0;
-  bits_hash_map['C'] = bits_hash_map['c'] = 1;
-  bits_hash_map['G'] = bits_hash_map['g'] = 2;
-  bits_hash_map['T'] = bits_hash_map['t'] = 3;
-  return bits_hash_map;
+auto build_char_to_bits() -> vector<u64> {
+  auto char_to_bits = vector<u64>(256, default_char_to_bits_value);
+  char_to_bits['A'] = char_to_bits['a'] = 0;
+  char_to_bits['C'] = char_to_bits['c'] = 1;
+  char_to_bits['G'] = char_to_bits['g'] = 2;
+  char_to_bits['T'] = char_to_bits['t'] = 3;
+  return char_to_bits;
 }
 
-RawSequencesParser::PositionsGenerator::PositionsGenerator(
+auto RawSequencesParser::parse_serial() -> void {
+  check_if_has_parsed();
+  for (auto &seq: string_seqs) {
+    for (auto seq_index = 0; seq_index < seq.length(); ++seq_index) {
+      positions_builder.add_position(seq.length(), seq_index);
+      bit_seqs_builder.add_character(seq[seq_index]);
+    }
+    positions_builder.add_to_global_index(seq.length());
+  }
+}
+
+RawSequencesParser::PositionsBuilder::PositionsBuilder(
   u64 kmer_size, size_t total_positions
 ):
   kmer_size(kmer_size),
-  positions(size_t(ceil(total_positions / 64.0)) * 64, 0)
-{}
+  positions(size_t(ceil(total_positions / 64.0)) * 64, 0) {}
+
+RawSequencesParser::BitSeqsBuilder::BitSeqsBuilder(size_t total_letters):
+  bit_seqs(size_t(ceil(total_letters / 64.0)) * 2, 0),
+  char_to_bits(build_char_to_bits()) {}
 
 RawSequencesParser::RawSequencesParser(
   const vector<string> &seqs_strings,
@@ -28,48 +42,28 @@ RawSequencesParser::RawSequencesParser(
   const size_t total_letters,
   const u64 kmer_size
 ):
-  seqs_strings(seqs_strings),
-  bits_hash_map(build_bits_hash_map()),
-  positions_generator(kmer_size, total_positions)
-{
-  seqs_bits.resize(size_t(ceil(total_letters / 64.0)) * 2, 0);
-}
+  string_seqs(seqs_strings),
+  positions_builder(kmer_size, total_positions),
+  bit_seqs_builder(total_letters) {}
 
-auto RawSequencesParser::parse_serial() -> void{
-  check_if_has_parsed();
-  auto vector_index = size_t(0);
-  auto internal_shift = 62;
-  for (auto &seq: seqs_strings) {
-    for (auto seq_index = 0; seq_index < seq.length(); ++seq_index) {
-      positions_generator.add_position(seq.length(), seq_index);
-      add_bits(seq, seq_index, internal_shift, vector_index);
-    }
-    positions_generator.add_to_global_index(seq.length());
-  }
-}
-
-auto RawSequencesParser::PositionsGenerator::add_position(
-  const size_t sequence_length,
-  const u64 sequence_index
+auto RawSequencesParser::PositionsBuilder::add_position(
+  const size_t seq_length, const u64 seq_index
 ) -> void {
-  if (sequence_index <= sequence_length - kmer_size * 1.0) {
-    positions[positions_index] = global_index + sequence_index;
+  if (
+    // First check is to make sure we do not get underflow
+    seq_length >= kmer_size && seq_index <= seq_length - kmer_size
+  ) {
+    positions[positions_index] = global_index + seq_index;
     ++positions_index;
   }
 }
 
-auto RawSequencesParser::add_bits(
-  const string &sequence,
-  const u64 sequence_index,
-  int &internal_shift,
-  size_t &vector_index
-) -> void {
-  auto character = sequence[sequence_index];
-  auto bits = bits_hash_map[character];
+auto RawSequencesParser::BitSeqsBuilder::add_character(char c) -> void {
+  auto bits = char_to_bits[c];
   bits <<= internal_shift;
-  seqs_bits[vector_index] |= bits;
+  bit_seqs[vector_index] |= bits;
   internal_shift -= 2;
-  if (internal_shift < 0) {
+  if (internal_shift > 64) {
     internal_shift = 62;
     ++vector_index;
   }

@@ -53,6 +53,7 @@ IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
+PackConstructorInitializers: NextLine
 PointerAlignment: Right
 ReflowComments: true
 SortIncludes: true

@@ -1,21 +1,23 @@
-#include <memory>
-#include <stdexcept>
 #include <cmath>
 #include <cstdlib>
+#include <memory>
+#include <stdexcept>
 #include <vector>
 
 #include <gtest/gtest.h>
 
-#include "RawSequencesParser.h"
 #include "GlobalDefinitions.h"
+#include "RawSequencesParser.h"
 
-using std::unique_ptr;
 using std::make_unique;
+using std::unique_ptr;
 
 namespace sbwt_search {
 
 auto bit_string_to_vector(string s) -> vector<u64> {
-  s.resize(size_t(ceil(s.size() / 64.0)) * 64, '0'); // resize to next multiple of 64 and pad with 0s
+  s.resize(
+    size_t(ceil(s.size() / 64.0)) * 64, '0'
+  );  // resize to next multiple of 64 and pad with 0s
   auto bits = vector<uint64_t>();
   for (auto i = 0; i < s.size() / 64; ++i) {
     string sub = s.substr(64 * i, 64 * (i + 1));
@@ -29,15 +31,14 @@ const auto raw_sequences = vector<string>{
   "gA",
   "GAT",
   "GtCa",
-  "AAAAaAAaAAAAAAAaAAAAAAAAAAAAAAAA", // 32 As
-  "GC"
-};
+  "AAAAaAAaAAAAAAAaAAAAAAAAAAAAAAAA",  // 32 As
+  "GC"};
 const auto bit_string = string(
   "00011011"
   "1000"
   "100011"
   "10110100"
-  "0000000000000000000000000000000000000000000000000000000000000000" // 32 00s
+  "0000000000000000000000000000000000000000000000000000000000000000"  // 32 00s
   "1001"
 );
 
@@ -53,7 +54,7 @@ protected:
   }
 
   void shared_tests() {
-    ASSERT_EQ(bits, host->get_seqs_bits());
+    ASSERT_EQ(bits, host->get_bit_seqs());
     ASSERT_EQ(0, host->get_positions()[0]);
     ASSERT_EQ(6, host->get_positions()[2]);
     ASSERT_EQ(42, host->get_positions()[34]);
@@ -64,7 +65,6 @@ TEST_F(RawSequencesParserTest, ParseSerial) {
   host->parse_serial();
   shared_tests();
 }
-
 
 TEST_F(RawSequencesParserTest, AlreadyParsed) {
   const auto assertion_string = "RawSequencesParser has already parsed a file";
