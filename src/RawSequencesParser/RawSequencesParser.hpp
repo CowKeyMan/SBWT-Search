@@ -16,6 +16,7 @@
 #include <cmath>
 
 #include "GlobalDefinitions.h"
+#include "MathUtils.hpp"
 
 using std::string;
 using std::vector;
@@ -97,7 +98,7 @@ private:
   public:
     PositionsBuilder(u64 kmer_size, size_t total_positions):
       kmer_size(kmer_size),
-      positions(size_t(ceil(total_positions / 64.0)) * 64, 0) {}
+      positions(round_up<u64>(total_positions, 64), 0) {}
     void add_position(const size_t seq_length, const u64 seq_index) {
       if (
         // First check is to make sure we do not get underflow
@@ -122,7 +123,7 @@ private:
     CharToBits char_to_bits;
   public:
     BitSeqsBuilder(size_t total_letters):
-      bit_seqs(size_t(ceil(total_letters / 64.0)) * 2, 0) {}
+      bit_seqs(round_up<u64>(total_letters, 64) / 64 * 2, 0) {}
     void add_character(char c) {
       auto bits = char_to_bits(c);
       bits <<= internal_shift;

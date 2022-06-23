@@ -27,6 +27,7 @@ set(
   test_common_sources
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
   "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
+  "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
   "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
 )

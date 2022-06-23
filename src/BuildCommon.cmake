@@ -15,7 +15,6 @@ target_compile_options(
   INTERFACE "$<$<CONFIG:Release>:-O3>" # only in release mode
 )
 target_link_libraries(common_options INTERFACE gcov)
-enable_warnings(common_options "INTERFACE")
 
 
 include(ExternalProject)
@@ -59,7 +58,7 @@ target_include_directories(
   query_file_parser
   PUBLIC "${PROJECT_SOURCE_DIR}/QueryFileParser"
   PUBLIC "${PROJECT_SOURCE_DIR}/Global"
-  PRIVATE "${CMAKE_BINARY_DIR}/external/kseqpp/include"
+  PRIVATE SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include"
 )
 add_dependencies(query_file_parser kseqpp)
 
