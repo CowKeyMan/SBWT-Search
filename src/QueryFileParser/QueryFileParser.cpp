@@ -26,11 +26,11 @@ auto QueryFileParser::check_if_has_parsed() -> void {
 }
 
 auto QueryFileParser::add_sequence(const string &seq) -> void {
-  seqs.push_back(std::move(seq));
   total_letters += seq.length();
   if (seq.length() >= kmer_size) {
     total_positions += seq.length() - kmer_size + 1;
   }
+  seqs.push_back(std::move(seq));
 }
 
 auto QueryFileParser::parse_kseqpp_streams() -> void {
