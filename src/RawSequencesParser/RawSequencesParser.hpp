@@ -13,6 +13,7 @@
 #include <vector>
 #include <array>
 #include <algorithm>
+#include <cmath>
 
 #include "GlobalDefinitions.h"
 
@@ -20,6 +21,7 @@ using std::string;
 using std::vector;
 using std::array;
 using std::fill;
+using std::ceil;
 
 namespace sbwt_search {
 
@@ -148,7 +150,7 @@ public:
   void parse_serial(){
     check_if_has_parsed();
     for (auto &seq: string_seqs) {
-      for (auto seq_index = 0; seq_index < seq.length(); ++seq_index) {
+      for (size_t seq_index = 0; seq_index < seq.length(); ++seq_index) {
         positions_builder.add_position(seq.length(), seq_index);
         bit_seqs_builder.add_character(seq[seq_index]);
       }

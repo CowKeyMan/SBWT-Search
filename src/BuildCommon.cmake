@@ -15,6 +15,7 @@ target_compile_options(
   INTERFACE "$<$<CONFIG:Release>:-O3>" # only in release mode
 )
 target_link_libraries(common_options INTERFACE gcov)
+enable_warnings(common_options "INTERFACE")
 
 
 include(ExternalProject)
