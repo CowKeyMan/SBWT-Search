@@ -15,48 +15,42 @@ auto build_bits_hash_map() -> vector<u64> {
   return bits_hash_map;
 }
 
+RawSequencesParser::PositionsGenerator::PositionsGenerator(
+  u64 kmer_size, size_t total_positions
+):
+  kmer_size(kmer_size),
+  positions(size_t(ceil(total_positions / 64.0)) * 64, 0)
+{}
+
 RawSequencesParser::RawSequencesParser(
   const vector<string> &seqs_strings,
-  const u64 total_positions,
-  const u64 total_letters,
+  const size_t total_positions,
+  const size_t total_letters,
   const u64 kmer_size
 ):
   seqs_strings(seqs_strings),
   bits_hash_map(build_bits_hash_map()),
-  kmer_size(kmer_size)
+  positions_generator(kmer_size, total_positions)
 {
   seqs_bits.resize(size_t(ceil(total_letters / 64.0)) * 2, 0);
-  positions.resize(size_t(ceil(total_positions / 64.0)) * 64, 0);
 }
 
 auto RawSequencesParser::parse_serial() -> void{
   check_if_has_parsed();
-  auto positions_index = size_t(0);
-  auto global_index = size_t(0);
   auto vector_index = size_t(0);
   auto internal_shift = 62;
-  for (auto &sequence: seqs_strings) {
-    for (
-      auto sequence_index = 0;
-      sequence_index < sequence.length();
-      ++sequence_index
-    ) {
-      add_position(
-        sequence.length(), sequence_index, positions_index, global_index
-      );
-      add_bits(sequence, sequence_index, internal_shift, vector_index);
+  for (auto &seq: seqs_strings) {
+    for (auto seq_index = 0; seq_index < seq.length(); ++seq_index) {
+      positions_generator.add_position(seq.length(), seq_index);
+      add_bits(seq, seq_index, internal_shift, vector_index);
     }
-    global_index += sequence.length();
+    positions_generator.add_to_global_index(seq.length());
   }
 }
 
-auto RawSequencesParser::parse_parallel() -> void {}
-
-auto RawSequencesParser::add_position(
+auto RawSequencesParser::PositionsGenerator::add_position(
   const size_t sequence_length,
-  const u64 sequence_index,
-  size_t &positions_index,
-  const size_t global_index
+  const u64 sequence_index
 ) -> void {
   if (sequence_index <= sequence_length - kmer_size * 1.0) {
     positions[positions_index] = global_index + sequence_index;
