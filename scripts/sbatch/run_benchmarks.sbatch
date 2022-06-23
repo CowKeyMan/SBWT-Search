@@ -49,7 +49,7 @@ export OLD_PWD="${PWD}"
 cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
 
-rm "build/CMakeCache.txt"
+rm -f "build/CMakeCache.txt"
 
 rm -rf build
 
