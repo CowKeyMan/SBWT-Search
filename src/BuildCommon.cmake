@@ -65,16 +65,16 @@ add_dependencies(query_file_parser kseqpp)
 # RawSequenceParser Library
 add_library(
   raw_sequences_parser
-  "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser.cpp"
+  INTERFACE
 )
 target_link_libraries(
   raw_sequences_parser
-  PRIVATE common_options
+  INTERFACE common_options
 )
 target_include_directories(
   raw_sequences_parser
-  PUBLIC "${PROJECT_SOURCE_DIR}/RawSequencesParser"
-  PUBLIC "${PROJECT_SOURCE_DIR}/Global"
+  INTERFACE "${PROJECT_SOURCE_DIR}/RawSequencesParser"
+  INTERFACE "${PROJECT_SOURCE_DIR}/Global"
 )
 
 # Common libraries

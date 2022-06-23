@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 
 #include "GlobalDefinitions.h"
-#include "RawSequencesParser.h"
+#include "RawSequencesParser.hpp"
 
 using std::make_unique;
 using std::unique_ptr;
@@ -44,11 +44,11 @@ const auto bit_string = string(
 
 class RawSequencesParserTest: public ::testing::Test {
 protected:
-  unique_ptr<RawSequencesParser> host;
+  unique_ptr<RawSequencesParser<CharToBitsMap>> host;
   const vector<u64> bits = bit_string_to_vector(bit_string);
 
   RawSequencesParserTest() {
-    host = make_unique<RawSequencesParser>(
+    host = make_unique<RawSequencesParser<CharToBitsMap>>(
       raw_sequences, (2 + 0 + 1 + 2 + 30 + 0), (4 + 2 + 3 + 4 + 32 + 2), 3
     );
   }
