@@ -17,3 +17,5 @@ benchmark_objects/
 
 out.txt
 err.txt
+
+.ycm_extra_conf.py
