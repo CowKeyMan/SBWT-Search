@@ -1,8 +1,8 @@
-#ifndef BENCHMARK_UTILS_H
-#define BENCHMARK_UTILS_H
+#ifndef BENCHMARK_UTILS_HPP
+#define BENCHMARK_UTILS_HPP
 
 /**
- * @file BenchmarkUtils.h
+ * @file BenchmarkUtils.hpp
  * @brief A collection of utility scripts used for benchmarking
  * */
 

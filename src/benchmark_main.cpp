@@ -3,7 +3,7 @@
 
 #include <unordered_set>
 
-#include "BenchmarkUtils.h"
+#include "BenchmarkUtils.hpp"
 #include "QueryFileParser.h"
 #include "RawSequencesParser.hpp"
 #include "cxxopts.hpp"
