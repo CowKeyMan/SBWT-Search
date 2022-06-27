@@ -6,3 +6,5 @@ This part of the documentation will describe the project documentation, which is
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
+
+   BenchmarkingNotes

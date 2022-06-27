@@ -66,3 +66,22 @@ This means that when adding a new module, we will follow the following steps:
 #. If you also have a test file, add the test source file to the `test_common_sources` found in `BuildTests.cmake`. You will find a *TODO* in this file with the message *add more source files here*.
 
 There may be some special cases apart from the ones mentioned above, in which case you will need to do some research how to get started, however this should cover the most general use case.
+
+CMake Options
++++++++++++++
+
+The following section describes the available options I created and what each of them does:
+
+* `CMAKE_EXPORT_COMPILE_COMMANDS`: Export `compile_command.json`
+* `BUILD_SHARED_LIBS`: Use shared (on) vs static libraries (off)
+* `CMAKE_POSITION_INDEPENDENT_CODE`: Make libraries executale from anywhere in memory
+* `DCMAKE_BUILD_TYPE`: (Options: Debug/Release). Debug mode does not do optimisations
+* `DENABLE_CLANG_TIDY`: Run clang-tidy check
+* `DENABLE_HEADER_GUARDS_CHECK`: Run header guards check
+* `DENABLE_CLANG_FORMAT_CHECK`: Run clang-format check
+* `BUILD_CPU`: Build the CPU version of the programs
+* `BUILD_CUDA`: Build the CUDA version of the programs
+* `DBUILD_MAIN`: Build the main target
+* `DBUILD_TESTS`: Build the test target
+* `DBUILD_BENCHMARKS`: Build the benchmarks target
+* `DBUILD_DOCS`: Build the documentation
