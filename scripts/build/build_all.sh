@@ -12,6 +12,7 @@ cmake \
   -DBUILD_CUDA=ON \
   -DBUILD_MAIN=ON \
   -DBUILD_TESTS=ON \
+  -DBUILD_DOCS=OFF \
   -DBUILD_BENCHMARKS=ON \
   ..
 cp compile_commands.json ..
@@ -25,6 +26,7 @@ cmake \
   -DBUILD_CUDA=OFF \
   -DBUILD_MAIN=OFF \
   -DBUILD_TESTS=OFF \
+  -DBUILD_DOCS=OFF \
   -DBUILD_BENCHMARKS=OFF \
   ..
 cd ..

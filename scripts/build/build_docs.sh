@@ -13,6 +13,7 @@ cmake \
   -DBUILD_MAIN=OFF \
   -DBUILD_TESTS=OFF \
   -DBUILD_BENCHMARKS=OFF \
+  -DBUILD_DOCS=ON \
   ..
 cmake --build . -j8
 cd ../documentation
