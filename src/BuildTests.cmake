@@ -34,7 +34,7 @@ set(
 set(
   test_common_include_dirs
   "${PROJECT_SOURCE_DIR}/Utils/"
-  "${PROJECT_SOURCE_DIR}/Global/"
+  "${PROJECT_SOURCE_DIR}/Utils/"
 )
 
 

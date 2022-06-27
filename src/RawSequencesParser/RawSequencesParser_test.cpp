@@ -6,7 +6,7 @@
 
 #include <gtest/gtest.h>
 
-#include "GlobalDefinitions.h"
+#include "TypeDefinitionUtils.h"
 #include "RawSequencesParser.hpp"
 
 using std::make_unique;

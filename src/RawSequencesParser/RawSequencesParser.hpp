@@ -14,8 +14,9 @@
 #include <array>
 #include <algorithm>
 #include <cmath>
+#include <stdexcept>
 
-#include "GlobalDefinitions.h"
+#include "TypeDefinitionUtils.h"
 #include "MathUtils.hpp"
 
 using std::string;

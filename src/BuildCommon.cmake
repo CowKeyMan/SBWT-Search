@@ -57,7 +57,7 @@ target_link_libraries(
 target_include_directories(
   query_file_parser
   PUBLIC "${PROJECT_SOURCE_DIR}/QueryFileParser"
-  PUBLIC "${PROJECT_SOURCE_DIR}/Global"
+  PUBLIC "${PROJECT_SOURCE_DIR}/Utils"
   PRIVATE SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include"
 )
 add_dependencies(query_file_parser kseqpp)
@@ -74,7 +74,7 @@ target_link_libraries(
 target_include_directories(
   raw_sequences_parser
   INTERFACE "${PROJECT_SOURCE_DIR}/RawSequencesParser"
-  INTERFACE "${PROJECT_SOURCE_DIR}/Global"
+  INTERFACE "${PROJECT_SOURCE_DIR}/Utils"
 )
 
 # Common libraries

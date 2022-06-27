@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "GlobalDefinitions.h"
+#include "TypeDefinitionUtils.h"
 
 using std::string;
 using std::vector;

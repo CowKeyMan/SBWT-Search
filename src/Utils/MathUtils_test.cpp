@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "GlobalDefinitions.h"
+#include "TypeDefinitionUtils.h"
 #include "MathUtils.hpp"
 
 using sbwt_search::u64;

@@ -1,9 +1,9 @@
-#ifndef GLOBAL_DEFINITIONS_H
-#define GLOBAL_DEFINITIONS_H
+#ifndef TYPE_DEFINITION_UTILS_H
+#define TYPE_DEFINITION_UTILS_H
 
 /**
- * @file GlobalDefinitions.h
- * @brief Contains global using values
+ * @file TypeDefinitionUtils.h
+ * @brief Contains type definitions created for convenience
  * */
 
 #include <cstdint>
