@@ -9,6 +9,20 @@ option(
 if (BUILD_MAIN)
 
 # Common Libraries
+## Fetch cxxopts
+include(FetchContent)
+FetchContent_Declare(
+  cxxopts
+  GIT_REPOSITORY       https://github.com/jarro2783/cxxopts
+  GIT_TAG              v3.0.0
+  GIT_SHALLOW          TRUE
+)
+set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(CXXOPTS_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(cxxopts)
+
 add_library(libraries_main INTERFACE)
 target_link_libraries(
   libraries_main
@@ -40,4 +54,4 @@ if (BUILD_CUDA)
   set_target_properties(main_cuda PROPERTIES CUDA_ARCHITECTURES "60;70;80")
 endif()
 
-endif()
+endif() # BUILD_MAIN

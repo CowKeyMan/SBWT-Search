@@ -19,4 +19,4 @@ target_include_directories(
 )
 enable_warnings(benchmark_main "PRIVATE")
 
-endif()
+endif() # BUILD_BENCHMARKS

@@ -18,7 +18,8 @@ target_link_libraries(common_options INTERFACE gcov)
 
 
 include(ExternalProject)
-# Fetch kseqpp
+# QueryFileParser Library
+## Fetch kseqpp
 ExternalProject_Add(
   kseqpp
   GIT_REPOSITORY https://github.com/cartoonist/kseqpp
@@ -27,22 +28,7 @@ ExternalProject_Add(
   CMAKE_ARGS
 		-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 )
-
-include(FetchContent)
-# Fetch cxxopts
-FetchContent_Declare(
-  cxxopts
-  GIT_REPOSITORY       https://github.com/jarro2783/cxxopts
-  GIT_TAG              v3.0.0
-  GIT_SHALLOW          TRUE
-)
-set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(CXXOPTS_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
-set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(cxxopts)
-
-# QueryFileParser Library
+## Fetch ZLIB
 find_package(ZLIB)
 add_library(
   query_file_parser
@@ -77,12 +63,15 @@ target_include_directories(
   INTERFACE "${PROJECT_SOURCE_DIR}/Utils"
 )
 
+# TODO: Add more libraries here
+
 # Common libraries
 add_library(common_libraries INTERFACE)
 target_link_libraries(
   common_libraries
   INTERFACE query_file_parser
   INTERFACE raw_sequences_parser
+  # TODO: Link more libraries here
 )
 
 # Build Cpu Libraries
@@ -93,7 +82,7 @@ if (BUILD_CPU)
     libraries_cpu
     INTERFACE common_options
     INTERFACE common_libraries
-    # TODO: Combine more libraries that you create
+    # TODO: Combine more libraries here which are cpu specific
   )
 endif()
 
@@ -105,6 +94,6 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
     libraries_cuda
     INTERFACE common_options
     INTERFACE common_libraries
-    # TODO: Combine more libraries that you create
+    # TODO: Combine more libraries here which are cuda specific
   )
 endif()

@@ -2,8 +2,8 @@
 
 #!/bin/sh
 echo "\nRunning Tests:"
-./build/src/test_main_cuda
-./build/src/test_main_cpu
+./build/bin/test_main_cuda
+./build/bin/test_main_cpu
 echo "\nRunning Lcov:"
 lcov --directory . --capture --output-file build/code_coverage.info --exclude "*/usr/**/*" --exclude "*_deps/**/*" --exclude "*main.cpp" --exclude "/tmp/*" --exclude "*.cuh" --exclude "*/external/*"
 echo "\nRunning genhtml:"
