@@ -3,4 +3,6 @@
 # It can be used by some language servers to retrace the commands issued by
 # cmake to be able to do proper file linking and detect proper header includes, etc
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# This had to be turned off as it then cannot be overriden by the user at configuration time

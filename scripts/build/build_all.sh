@@ -15,7 +15,6 @@ cmake \
   -DBUILD_DOCS=OFF \
   -DBUILD_BENCHMARKS=ON \
   ..
-cp compile_commands.json ..
 cmake \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=OFF \
   -DCMAKE_BUILD_TYPE=Debug \

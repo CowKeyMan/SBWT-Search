@@ -6,7 +6,6 @@ option(
   ON
 )
 
-if (BUILD_MAIN)
 
 # Common Libraries
 ## Fetch cxxopts
@@ -23,6 +22,7 @@ set(CXXOPTS_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(cxxopts)
 
+if (BUILD_MAIN)
 add_library(libraries_main INTERFACE)
 target_link_libraries(
   libraries_main

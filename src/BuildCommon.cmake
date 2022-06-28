@@ -34,6 +34,7 @@ add_library(
   query_file_parser
   "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser.cpp"
 )
+## The library itself
 target_link_libraries(
   query_file_parser
   PRIVATE
@@ -63,6 +64,38 @@ target_include_directories(
   INTERFACE "${PROJECT_SOURCE_DIR}/Utils"
 )
 
+# IndexFileParser library
+## Get sdsl dependency
+include(ExternalProject)
+ExternalProject_Add(
+  sdsl
+  GIT_REPOSITORY  https://github.com/simongog/sdsl-lite/
+  GIT_TAG         v2.1.1
+  PREFIX          "${CMAKE_BINARY_DIR}/external/sdsl"
+  CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+)
+add_library(libsdsl SHARED IMPORTED)
+set_target_properties(libsdsl PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/external/sdsl/lib/libsdsl.a")
+ExternalProject_Get_Property(sdsl SOURCE_DIR)
+set (sdsl_SOURCE_DIR "${SOURCE_DIR}")
+## The library itself
+add_library(
+  index_file_parser
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
+)
+target_link_libraries(
+  index_file_parser
+  PRIVATE common_options
+  PRIVATE libsdsl
+)
+target_include_directories(
+  index_file_parser
+  PUBLIC "${PROJECT_SOURCE_DIR}/IndexFileParser"
+  PRIVATE SYSTEM "${sdsl_SOURCE_DIR}/include"
+)
+add_dependencies(index_file_parser sdsl)
+
 # TODO: Add more libraries here
 
 # Common libraries
@@ -71,6 +104,7 @@ target_link_libraries(
   common_libraries
   INTERFACE query_file_parser
   INTERFACE raw_sequences_parser
+  INTERFACE index_file_parser
   # TODO: Link more libraries here
 )
 
