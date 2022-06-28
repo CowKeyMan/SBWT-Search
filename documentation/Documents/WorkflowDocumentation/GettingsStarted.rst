@@ -31,9 +31,9 @@ Working with CMake
 
 This section will describe the cmake configuration of this project and how it all comes together to build the executable. Furthermore I will advise how one needs to add new libraries easily.
 
-.. _label: CMakeHierarchy
 .. figure:: CMakeHierarchy.png
   :align: center
+  :name: CMakeHierarchy
 
   Hierarchy of CMake Outputs
 

@@ -101,3 +101,4 @@ primary_domain = 'cpp'
 suppress_warnings = ['autosectionlabel.*']
 
 default_dark_mode = False
+numref = True
