@@ -13,6 +13,9 @@ BENCHMARK_AVERAGES_FILE_NAME="benchmark_results/averages.txt"
 ARGUMENTS_LIST=(
   "-QUERY_FILE_PARSER_FASTA"
   "-QUERY_FILE_PARSER_FASTA_ZIP"
+  "-QUERY_FILE_PARSER_FASTQ"
+  "-QUERY_FILE_PARSER_FASTQ_ZIP"
+  "-RAW_SEQUENCE_PARSER_CHAR_TO_BITS"
 )
 ARGUMENTS=""
 for ARGUMENT in ${ARGUMENTS_LIST[@]};
@@ -24,7 +27,7 @@ done
 # Run once so that we do not get any weird items taking longer than they should
 build/bin/benchmark_main ${ARGUMENTS} > /dev/null 2>/dev/null
 echo "Finished dummy benchmark run"
-for i in {1..7}
+for i in {1..4}
 do
   build/bin/benchmark_main ${ARGUMENTS} >> "${TEMP_FILE_NAME}" 2>/dev/null
   printf '\n' >> "${TEMP_FILE_NAME}"
