@@ -16,6 +16,16 @@ target_compile_options(
 )
 target_link_libraries(common_options INTERFACE gcov)
 
+# Parser Library
+add_library(
+  parser
+  "${PROJECT_SOURCE_DIR}/Parser/Parser.cpp"
+)
+target_include_directories(
+  parser
+  PUBLIC
+  "${CMAKE_BINARY_DIR}/Parser"
+)
 
 include(ExternalProject)
 # QueryFileParser Library
@@ -37,15 +47,17 @@ add_library(
 ## The library itself
 target_link_libraries(
   query_file_parser
-  PRIVATE
-  common_options
-  ZLIB::ZLIB
+  PRIVATE common_options
+  PRIVATE ZLIB::ZLIB
+  PUBLIC parser
 )
 target_include_directories(
   query_file_parser
-  PUBLIC "${PROJECT_SOURCE_DIR}/QueryFileParser"
-  PUBLIC "${PROJECT_SOURCE_DIR}/Utils"
-  PRIVATE SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include"
+  PUBLIC
+  "${PROJECT_SOURCE_DIR}/QueryFileParser"
+  "${PROJECT_SOURCE_DIR}/Utils"
+  SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include"
+  "${PROJECT_SOURCE_DIR}/Parser"
 )
 add_dependencies(query_file_parser kseqpp)
 
@@ -60,8 +72,10 @@ target_link_libraries(
 )
 target_include_directories(
   raw_sequences_parser
-  INTERFACE "${PROJECT_SOURCE_DIR}/RawSequencesParser"
-  INTERFACE "${PROJECT_SOURCE_DIR}/Utils"
+  INTERFACE
+  "${PROJECT_SOURCE_DIR}/RawSequencesParser"
+  "${PROJECT_SOURCE_DIR}/Utils"
+  "${PROJECT_SOURCE_DIR}/Parser"
 )
 
 # IndexFileParser library
@@ -86,13 +100,17 @@ add_library(
 )
 target_link_libraries(
   index_file_parser
+	PUBLIC parser
   PRIVATE common_options
-  PRIVATE libsdsl
+  PUBLIC libsdsl
 )
 target_include_directories(
   index_file_parser
-  PUBLIC "${PROJECT_SOURCE_DIR}/IndexFileParser"
-  PRIVATE SYSTEM "${sdsl_SOURCE_DIR}/include"
+  PUBLIC SYSTEM "${sdsl_SOURCE_DIR}/include"
+  PUBLIC
+  "${PROJECT_SOURCE_DIR}/IndexFileParser"
+  "${PROJECT_SOURCE_DIR}/Utils"
+  "${PROJECT_SOURCE_DIR}/Parser"
 )
 add_dependencies(index_file_parser sdsl)
 

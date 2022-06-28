@@ -50,19 +50,4 @@ TEST_F(QueryFileParserTest, ParseKseqppGzRead) {
   shared_tests();
 }
 
-TEST_F(QueryFileParserTest, AlreadyParsed) {
-  const auto assertion_string = "QueryFileParser has already parsed a file";
-  host->parse_kseqpp_read();
-  try {
-    host->parse_kseqpp_read();
-  } catch (std::logic_error &e) {
-    ASSERT_EQ(string(e.what()), assertion_string);
-  }
-  try {
-    host->parse_kseqpp_streams();
-  } catch (std::logic_error &e) {
-    ASSERT_EQ(string(e.what()), assertion_string);
-  }
-}
-
 }

@@ -18,13 +18,6 @@ using std::vector;
 
 namespace sbwt_search {
 
-auto QueryFileParser::check_if_has_parsed() -> void {
-  if (has_parsed) {
-    throw std::logic_error("QueryFileParser has already parsed a file");
-  }
-  has_parsed = true;
-}
-
 auto QueryFileParser::add_sequence(const string &seq) -> void {
   total_letters += seq.length();
   if (seq.length() >= kmer_size) {

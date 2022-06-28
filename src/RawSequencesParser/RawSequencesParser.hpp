@@ -18,6 +18,7 @@
 
 #include "TypeDefinitionUtils.h"
 #include "MathUtils.hpp"
+#include "Parser.h"
 
 using std::string;
 using std::vector;
@@ -79,15 +80,8 @@ public:
 };
 
 template <class CharToBits = CharToBitsVector>
-class RawSequencesParser {
+class RawSequencesParser: Parser {
 private:
-  bool has_parsed = false;
-  void check_if_has_parsed(){
-    if (has_parsed) {
-      throw std::logic_error("RawSequencesParser has already parsed a file");
-    }
-    has_parsed = true;
-  }
   const vector<string> &string_seqs;
 
   class PositionsBuilder {

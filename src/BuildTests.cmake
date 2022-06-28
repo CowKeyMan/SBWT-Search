@@ -27,8 +27,10 @@ set(
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
   "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
   "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
+  "${PROJECT_SOURCE_DIR}/Parser/Parser_test.cpp"
   "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser_test.cpp"
   # TODO: add more source files here
 )
 

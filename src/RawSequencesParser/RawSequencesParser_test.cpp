@@ -52,21 +52,6 @@ TEST_F(RawSequencesParserTest, ParseSerial) {
   shared_tests();
 }
 
-TEST_F(RawSequencesParserTest, AlreadyParsed) {
-  const auto assertion_string = "RawSequencesParser has already parsed a file";
-  host.parse_serial();
-  try {
-    host.parse_serial();
-  } catch (std::logic_error &e) {
-    ASSERT_EQ(string(e.what()), assertion_string);
-  }
-  try {
-    host.parse_serial();
-  } catch (std::logic_error &e) {
-    ASSERT_EQ(string(e.what()), assertion_string);
-  }
-}
-
 TEST(RawSequencesParserTestCharToBits, CharToBitsArray) {
   auto host = RawSequencesParser<CharToBitsArray>(
     raw_sequences, (2 + 0 + 1 + 2 + 30 + 0), (4 + 2 + 3 + 4 + 32 + 2), kmer_size

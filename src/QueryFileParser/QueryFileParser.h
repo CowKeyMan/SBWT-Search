@@ -10,18 +10,17 @@
 #include <vector>
 
 #include "TypeDefinitionUtils.h"
+#include "Parser.h"
 
 using std::string;
 using std::vector;
 
 namespace sbwt_search {
 
-class QueryFileParser {
+class QueryFileParser: Parser {
 private:
   string filename;
   u64 kmer_size;
-  bool has_parsed = false;
-  void check_if_has_parsed();
   void add_sequence(const string &seq);
   vector<string> seqs;
   u64 total_letters = 0;
