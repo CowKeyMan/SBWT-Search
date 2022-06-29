@@ -25,9 +25,7 @@ for folder in folders:
 
 command = (
     "clang-tidy --quiet "
-    # we run it in root folder because unmodified compilation
-    # commands is placed here
-    + "-p . "
+    + "-p ./build "
     + file_names
 )
 print('Running: ' + command, flush=True)

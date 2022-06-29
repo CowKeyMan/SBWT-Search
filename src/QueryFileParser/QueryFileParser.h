@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 
-#include "TypeDefinitionUtils.h"
 #include "Parser.h"
+#include "TypeDefinitionUtils.h"
 
 using std::string;
 using std::vector;

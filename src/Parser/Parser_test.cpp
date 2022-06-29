@@ -1,5 +1,6 @@
-#include <string>
 #include <stdexcept>
+#include <string>
+
 #include <gtest/gtest.h>
 
 #include "Parser.h"
@@ -12,7 +13,6 @@ class ParserDummy: public Parser {
 public:
   void check() { check_if_has_parsed(); }
 };
-
 
 TEST(ParserTest, AlreadyParsed) {
   auto host = ParserDummy();

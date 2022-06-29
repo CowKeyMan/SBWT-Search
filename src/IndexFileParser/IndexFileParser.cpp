@@ -1,16 +1,16 @@
-#include <vector>
 #include <array>
+#include <vector>
+
+#include <sdsl/bit_vectors.hpp>
 
 #include "IndexFileParser.h"
-#include "IndexFileParser.h"
-#include <sdsl/bit_vectors.hpp>
-#include "TypeDefinitionUtils.h"
 #include "MathUtils.hpp"
+#include "TypeDefinitionUtils.h"
 
 using sdsl::bit_vector;
-using std::vector;
 using std::begin;
 using std::end;
+using std::vector;
 
 namespace sbwt_search {
 
@@ -26,9 +26,12 @@ using std::cout;
 
 void IndexFileParser::parse_bit_vectors() {
   std::ifstream file(filename, std::ios::in | std::ios::binary);
-  file.read(reinterpret_cast<char*>(&bit_vector_size), sizeof(u64));
+  file.read(reinterpret_cast<char *>(&bit_vector_size), sizeof(u64));
   custom_bit_vector.resize(bit_vector_size, 0);
-  file.read(reinterpret_cast<char*>(&custom_bit_vector[0]), sizeof(u64) * bit_vector_size);
+  file.read(
+    reinterpret_cast<char *>(&custom_bit_vector[0]),
+    sizeof(u64) * bit_vector_size
+  );
   bit_vector_pointer = &custom_bit_vector[0];
 }
 
