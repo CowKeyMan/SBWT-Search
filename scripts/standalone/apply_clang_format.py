@@ -8,10 +8,11 @@ from subprocess import Popen
 
 suffixes = 'h cpp cu cuh'.split()
 file_names = [
-    str(x)
+    x
     for x in Path('src').rglob('*')
-    if x.suffix[1:] in suffixes
+    if x.suffix[1:] in suffixes and 'main' not in str(x)
 ]
 
+
 for file_name in file_names:
-    Popen("clang-format -i " + file_name, shell=True).wait()
+    Popen("clang-format -i " + str(file_name), shell=True).wait()

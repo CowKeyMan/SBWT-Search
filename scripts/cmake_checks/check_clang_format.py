@@ -12,15 +12,12 @@ This script is executed automatically by cmake when building
 from pathlib import Path
 from subprocess import Popen
 
-file_names = []
-for fname in Path('src').glob('**/*.h'):
-    file_names.append(fname)
-for fname in Path('src').glob('**/*.cpp'):
-    file_names.append(fname)
-for fname in Path('src').glob('**/*.cu'):
-    file_names.append(fname)
-for fname in Path('src').glob('**/*.cuh'):
-    file_names.append(fname)
+suffixes = 'h cpp cu cuh'.split()
+file_names = [
+    x
+    for x in Path('src').rglob('*')
+    if x.suffix[1:] in suffixes and 'main' not in str(x)
+]
 
 Path('tmp').mkdir(exist_ok=True)
 
