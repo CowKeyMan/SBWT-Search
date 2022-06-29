@@ -14,6 +14,7 @@
 
 #include "Parser.h"
 #include "TypeDefinitionUtils.h"
+#include "IOUtils.hpp"
 
 using sdsl::bit_vector;
 using std::string;
@@ -30,7 +31,9 @@ private:
   u64 *bit_vector_pointer;
   size_t bit_vector_size;
 public:
-  IndexFileParser(string filename): filename(filename) {}
+  IndexFileParser(string filename): filename(filename) {
+		check_file_exists(filename.c_str());
+	}
   void parse_sdsl();
   void parse_bit_vectors();
   auto get_bit_vector_pointer() { return bit_vector_pointer; }

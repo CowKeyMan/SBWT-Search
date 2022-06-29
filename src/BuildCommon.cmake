@@ -23,8 +23,16 @@ add_library(
 )
 target_include_directories(
   parser
-  PUBLIC
-  "${CMAKE_BINARY_DIR}/Parser"
+  PUBLIC "${CMAKE_BINARY_DIR}/Parser"
+)
+
+# Parser Library
+add_library(io_utils
+  "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
+)
+target_include_directories(
+  io_utils
+  INTERFACE "${CMAKE_BINARY_DIR}/Utils"
 )
 
 include(ExternalProject)
@@ -40,11 +48,11 @@ ExternalProject_Add(
 )
 ## Fetch ZLIB
 find_package(ZLIB)
+## The library itself
 add_library(
   query_file_parser
   "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser.cpp"
 )
-## The library itself
 target_link_libraries(
   query_file_parser
   PRIVATE common_options
@@ -120,9 +128,11 @@ add_dependencies(index_file_parser sdsl)
 add_library(common_libraries INTERFACE)
 target_link_libraries(
   common_libraries
-  INTERFACE query_file_parser
-  INTERFACE raw_sequences_parser
-  INTERFACE index_file_parser
+  INTERFACE
+  io_utils
+  query_file_parser
+  raw_sequences_parser
+  index_file_parser
   # TODO: Link more libraries here
 )
 
