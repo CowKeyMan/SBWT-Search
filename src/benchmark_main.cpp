@@ -57,70 +57,46 @@ auto parse_arguments(int argc, char **argv) -> unordered_set<string> {
 }
 
 auto query_file_parser_fasta() -> void {
-  TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_streams(); }
-  )
+  TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_streams(); })
   cout << "QueryFileParser_kseqpp_streams: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_read(); })
   cout << "QueryFileParser_kseqpp_read: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_stream();
-  })
+  TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_stream(); })
   cout << "QueryFileParser_kseqpp_gz_stream: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_read(); }
-  )
+  TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_read(); })
   cout << "QueryFileParser_kseqpp_gz_read: " << TIME_IT_TOTAL << '\n';
 }
 
 auto query_file_parser_fasta_zip() -> void {
-  TIME_IT({
-    QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_streams();
-  })
+  TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_streams(); })
   cout << "QueryFileParser_kseqpp_streams_zip: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_read();
-  })
+  TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_read(); })
   cout << "QueryFileParser_kseqpp_read_zip: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_gz_stream();
-  })
+  TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_gz_stream(); })
   cout << "QueryFileParser_kseqpp_gz_stream_zip: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read();
-  })
+  TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read(); })
   cout << "QueryFileParser_kseqpp_gz_read_zip: " << TIME_IT_TOTAL << '\n';
 }
 
 auto query_file_parser_fastq() -> void {
-  TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_streams(); }
-  )
+  TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_streams(); })
   cout << "QueryFileParser_kseqpp_streams: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_read(); })
   cout << "QueryFileParser_kseqpp_read: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_stream();
-  })
+  TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_stream(); })
   cout << "QueryFileParser_kseqpp_gz_stream: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_read(); }
-  )
+  TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_read(); })
   cout << "QueryFileParser_kseqpp_gz_read: " << TIME_IT_TOTAL << '\n';
 }
 
 auto query_file_parser_fastq_zip() -> void {
-  TIME_IT({
-    QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_streams();
-  })
+  TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_streams(); })
   cout << "QueryFileParser_kseqpp_streams_zip: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_read();
-  })
+  TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_read(); })
   cout << "QueryFileParser_kseqpp_read_zip: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_gz_stream();
-  })
+  TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_gz_stream(); })
   cout << "QueryFileParser_kseqpp_gz_stream_zip: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read();
-  })
+  TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read(); })
   cout << "QueryFileParser_kseqpp_gz_read_zip: " << TIME_IT_TOTAL << '\n';
 }
 
@@ -131,25 +107,12 @@ auto raw_sequence_parser_char_to_bits() -> void {
   auto total_positions = query_file_parser.get_total_positions();
   auto total_letters = query_file_parser.get_total_letters();
 
-  TIME_IT({
-    RawSequencesParser<CharToBitsVector>(
-      seqs, total_positions, total_letters, kmer_size
-    )
-      .parse_serial();
-  })
+  TIME_IT({ RawSequencesParser<CharToBitsVector>(seqs, total_positions, total_letters, kmer_size).parse_serial(); })
   cout << "RawSequencesParser_CharToBits_Vector: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    RawSequencesParser<CharToBitsArray>(
-      seqs, total_positions, total_letters, kmer_size
-    )
-      .parse_serial();
-  })
+  TIME_IT({ RawSequencesParser<CharToBitsArray>(seqs, total_positions, total_letters, kmer_size).parse_serial(); })
   cout << "RawSequencesParser_CharToBits_Array: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    RawSequencesParser<CharToBitsSwitch>(
-      seqs, total_positions, total_letters, kmer_size
-    )
-      .parse_serial();
-  })
+  TIME_IT({ RawSequencesParser<CharToBitsCArray>(seqs, total_positions, total_letters, kmer_size).parse_serial(); })
+  cout << "RawSequencesParser_CharToBits_CArray: " << TIME_IT_TOTAL << '\n';
+  TIME_IT({ RawSequencesParser<CharToBitsSwitch>(seqs, total_positions, total_letters, kmer_size).parse_serial(); })
   cout << "RawSequencesParser_CharToBits_Switch: " << TIME_IT_TOTAL << '\n';
 }
