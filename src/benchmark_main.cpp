@@ -58,46 +58,46 @@ auto parse_arguments(int argc, char **argv) -> unordered_set<string> {
 
 auto query_file_parser_fasta() -> void {
   TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_streams(); })
-  cout << "QueryFileParser_kseqpp_streams: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_streams_fasta: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_read(); })
-  cout << "QueryFileParser_kseqpp_read: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_read_fasta: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_stream(); })
-  cout << "QueryFileParser_kseqpp_gz_stream: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_stream_fasta: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_read(); })
-  cout << "QueryFileParser_kseqpp_gz_read: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_read_fasta: " << TIME_IT_TOTAL << '\n';
 }
 
 auto query_file_parser_fasta_zip() -> void {
   TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_streams(); })
-  cout << "QueryFileParser_kseqpp_streams_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_streams_zip_fasta: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_read(); })
-  cout << "QueryFileParser_kseqpp_read_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_read_zip_fasta: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_gz_stream(); })
-  cout << "QueryFileParser_kseqpp_gz_stream_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_stream_zip_fasta: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read(); })
-  cout << "QueryFileParser_kseqpp_gz_read_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_read_zip_fasta: " << TIME_IT_TOTAL << '\n';
 }
 
 auto query_file_parser_fastq() -> void {
   TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_streams(); })
-  cout << "QueryFileParser_kseqpp_streams: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_streams_fastq: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_read(); })
-  cout << "QueryFileParser_kseqpp_read: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_read_fastq: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_stream(); })
-  cout << "QueryFileParser_kseqpp_gz_stream: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_stream_fastq: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_read(); })
-  cout << "QueryFileParser_kseqpp_gz_read: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_read_fastq: " << TIME_IT_TOTAL << '\n';
 }
 
 auto query_file_parser_fastq_zip() -> void {
   TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_streams(); })
-  cout << "QueryFileParser_kseqpp_streams_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_streams_zip_fastq: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_read(); })
-  cout << "QueryFileParser_kseqpp_read_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_read_zip_fastq: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_gz_stream(); })
-  cout << "QueryFileParser_kseqpp_gz_stream_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_stream_zip_fastq: " << TIME_IT_TOTAL << '\n';
   TIME_IT({ QueryFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read(); })
-  cout << "QueryFileParser_kseqpp_gz_read_zip: " << TIME_IT_TOTAL << '\n';
+  cout << "QueryFileParser_kseqpp_gz_read_zip_fastq: " << TIME_IT_TOTAL << '\n';
 }
 
 auto raw_sequence_parser_char_to_bits() -> void {
