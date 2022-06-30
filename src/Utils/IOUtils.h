@@ -1,6 +1,12 @@
 #ifndef I_O_UTILS_H
 #define I_O_UTILS_H
 
+/**
+ * @file IOUtils.h
+ * @brief Contains utilities to ease interacting with IO streams
+ *        such as check if a file exists
+ * */
+
 #include <fstream>
 #include <iostream>
 #include <stdexcept>

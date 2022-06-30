@@ -1,6 +1,11 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+/**
+ * @file Parser.h
+ * @brief A parent class which contains methods common to all parsers
+ * */
+
 namespace sbwt_search {
 
 class Parser {
