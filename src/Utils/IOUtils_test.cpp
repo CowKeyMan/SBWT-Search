@@ -1,11 +1,12 @@
-#include <gtest/gtest.h>
 #include <stdexcept>
 #include <string>
 
+#include <gtest/gtest.h>
+
 #include "IOUtils.hpp"
 
-using std::string;
 using std::runtime_error;
+using std::string;
 
 namespace sbwt_search {
 
@@ -15,7 +16,9 @@ TEST(IOUtilsTest, TestFileExists) {
   try {
     check_file_exists(random_file_name.c_str());
   } catch (runtime_error &e) {
-    ASSERT_EQ(string(e.what()), "The file " + random_file_name + " cannot be opened");
+    ASSERT_EQ(
+      string(e.what()), "The file " + random_file_name + " cannot be opened"
+    );
   }
 }
 

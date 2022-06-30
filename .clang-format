@@ -7,7 +7,7 @@ AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Left
-AlignOperands: false
+AlignOperands: Align
 AlignTrailingComments: false
 AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
@@ -21,7 +21,7 @@ AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 BinPackArguments: false
 BinPackParameters: false
-BreakBeforeBinaryOperators: true
+BreakBeforeBinaryOperators: false
 BreakBeforeBraces: Attach
 BreakBeforeConceptDeclarations: true
 BreakBeforeTernaryOperators: false

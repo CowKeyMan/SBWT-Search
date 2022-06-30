@@ -12,9 +12,9 @@
 
 #include <sdsl/bit_vectors.hpp>
 
+#include "IOUtils.hpp"
 #include "Parser.h"
 #include "TypeDefinitionUtils.h"
-#include "IOUtils.hpp"
 
 using sdsl::bit_vector;
 using std::string;
@@ -33,8 +33,8 @@ private:
   size_t bits_total;
 public:
   IndexFileParser(string filename): filename(filename) {
-		check_file_exists(filename.c_str());
-	}
+    check_file_exists(filename.c_str());
+  }
   void parse_sdsl();
   void parse_c_bit_vector();
   void parse_sbwt_bit_vector();

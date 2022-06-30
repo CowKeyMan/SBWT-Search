@@ -46,5 +46,4 @@ TEST_F(IndexFileParserTest, TestParseBitVectorsBwtFile) {
   assert_bwt_file_correct(host);
 }
 
-
 }

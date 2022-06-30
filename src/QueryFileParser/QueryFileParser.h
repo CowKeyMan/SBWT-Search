@@ -9,9 +9,9 @@
 #include <string>
 #include <vector>
 
+#include "IOUtils.hpp"
 #include "Parser.h"
 #include "TypeDefinitionUtils.h"
-#include "IOUtils.hpp"
 
 using std::string;
 using std::vector;
@@ -28,9 +28,9 @@ private:
   u64 total_positions = 0;
 public:
   QueryFileParser(const string &filename, const u64 kmer_size):
-    filename(filename), kmer_size(kmer_size){
-			check_file_exists(filename.c_str());
-		}
+    filename(filename), kmer_size(kmer_size) {
+    check_file_exists(filename.c_str());
+  }
   auto &get_seqs() { return seqs; };
   auto get_total_letters() { return total_letters; };
   auto get_total_positions() { return total_positions; };
