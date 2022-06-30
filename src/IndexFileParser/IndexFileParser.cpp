@@ -14,14 +14,14 @@ using std::vector;
 
 namespace sbwt_search {
 
-void IndexFileParser::parse_sdsl() {
+auto IndexFileParser::parse_sdsl() -> void {
   bit_vector sdsl_vector;
   load_from_file(sdsl_vector, filename.c_str());
   bit_vector_size = round_up<u64>(sdsl_vector.size(), 64) / 64;
   bit_vector_pointer = sdsl_vector.data();
 }
 
-void IndexFileParser::parse_c_bit_vector() {
+auto IndexFileParser::parse_c_bit_vector() -> void{
   std::ifstream file(filename, std::ios::in | std::ios::binary);
   file.read(reinterpret_cast<char *>(&bit_vector_size), sizeof(u64));
   custom_bit_vector.resize(bit_vector_size, 0);
@@ -32,7 +32,7 @@ void IndexFileParser::parse_c_bit_vector() {
   bit_vector_pointer = &custom_bit_vector[0];
 }
 
-void IndexFileParser::parse_sbwt_bit_vector() {
+auto IndexFileParser::parse_sbwt_bit_vector() -> void{
   std::ifstream file(filename, std::ios::in | std::ios::binary);
   file.read(reinterpret_cast<char *>(&bits_total), sizeof(u64));
   bit_vector_size = round_up<u64>(bits_total, 64) / 64;

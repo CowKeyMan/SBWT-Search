@@ -6,13 +6,14 @@
  * @brief Contains functions for interacting and reading SBWT index files
  * */
 
+#include <cstddef>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include <sdsl/bit_vectors.hpp>
 
-#include "IOUtils.hpp"
+#include "IOUtils.h"
 #include "Parser.h"
 #include "TypeDefinitionUtils.h"
 
@@ -28,7 +29,7 @@ private:
   string filename;
   unique_ptr<bit_vector> sdsl_vector;
   vector<u64> custom_bit_vector;
-  u64 *bit_vector_pointer;
+  const u64 *bit_vector_pointer;
   size_t bit_vector_size;
   size_t bits_total;
 public:

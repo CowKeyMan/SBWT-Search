@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "IOUtils.hpp"
+#include "IOUtils.h"
 
 namespace sbwt_search {
 
