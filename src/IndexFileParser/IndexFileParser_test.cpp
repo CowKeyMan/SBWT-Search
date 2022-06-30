@@ -14,9 +14,12 @@ using std::unique_ptr;
 
 namespace sbwt_search {
 
+#include <iostream>
+using std::cout;
+
 class IndexFileParserTest: public ::testing::Test {
 protected:
-  void shared_tests(IndexFileParser &host) {
+  void assert_c_file_correct(IndexFileParser &host) {
     vector<u64> bits = {1, 65564098, 127380657, 188944656};
     ASSERT_EQ(bits.size(), host.get_bit_vector_size());
     for (size_t i = 0; i < bits.size(); ++i) {
@@ -24,12 +27,24 @@ protected:
         << " unequal at index " << i;
     }
   }
+  void assert_bwt_file_correct(IndexFileParser &host) {
+    ASSERT_EQ(254572979, host.get_bits_total());
+    ASSERT_EQ(3977703, host.get_bit_vector_size());
+    ASSERT_EQ(18446744073709522218ULL, host.get_bit_vector_pointer()[0]);
+  }
 };
 
-TEST_F(IndexFileParserTest, TestParseBitVectors) {
+TEST_F(IndexFileParserTest, TestParseBitVectorsCFile) {
   auto host = IndexFileParser("test_objects/C.bit_vector");
-  host.parse_bit_vectors();
-  shared_tests(host);
+  host.parse_c_bit_vector();
+  assert_c_file_correct(host);
 }
+
+TEST_F(IndexFileParserTest, TestParseBitVectorsBwtFile) {
+  auto host = IndexFileParser("test_objects/BWT_A.bit_vector");
+  host.parse_sbwt_bit_vector();
+  assert_bwt_file_correct(host);
+}
+
 
 }
