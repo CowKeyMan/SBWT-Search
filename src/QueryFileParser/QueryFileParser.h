@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "IOUtils.h"
+#include "IOUtils.hpp"
 #include "Parser.h"
 #include "TypeDefinitionUtils.h"
 
