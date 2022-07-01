@@ -21,7 +21,7 @@ auto IndexFileParser::parse_sdsl() -> void {
   bit_vector_pointer = sdsl_vector.data();
 }
 
-auto IndexFileParser::parse_c_bit_vector() -> void{
+auto IndexFileParser::parse_c_bit_vector() -> void {
   std::ifstream file(filename, std::ios::in | std::ios::binary);
   file.read(reinterpret_cast<char *>(&bit_vector_size), sizeof(u64));
   custom_bit_vector.resize(bit_vector_size, 0);
@@ -32,7 +32,7 @@ auto IndexFileParser::parse_c_bit_vector() -> void{
   bit_vector_pointer = &custom_bit_vector[0];
 }
 
-auto IndexFileParser::parse_sbwt_bit_vector() -> void{
+auto IndexFileParser::parse_sbwt_bit_vector() -> void {
   std::ifstream file(filename, std::ios::in | std::ios::binary);
   file.read(reinterpret_cast<char *>(&bits_total), sizeof(u64));
   bit_vector_size = round_up<u64>(bits_total, 64) / 64;
@@ -41,11 +41,11 @@ auto IndexFileParser::parse_sbwt_bit_vector() -> void{
   file.read(reinterpret_cast<char *>(&custom_bit_vector[0]), total_characters);
   for (auto i = size_t(0); i < bit_vector_size; ++i) {
     char *char_buffer = (char *)(&custom_bit_vector[i]);
-    custom_bit_vector[i] =
-      u64(char_buffer[0]) << (8 * 7) | u64(char_buffer[1]) << (8 * 6) |
-      u64(char_buffer[2]) << (8 * 5) | u64(char_buffer[3]) << (8 * 4) |
-      u64(char_buffer[4]) << (8 * 3) | u64(char_buffer[5]) << (8 * 2) |
-      u64(char_buffer[6]) << (8 * 1) | u64(char_buffer[7]) << (8 * 0);
+    custom_bit_vector[i]
+      = u64(char_buffer[0]) << (8 * 7) | u64(char_buffer[1]) << (8 * 6)
+      | u64(char_buffer[2]) << (8 * 5) | u64(char_buffer[3]) << (8 * 4)
+      | u64(char_buffer[4]) << (8 * 3) | u64(char_buffer[5]) << (8 * 2)
+      | u64(char_buffer[6]) << (8 * 1) | u64(char_buffer[7]) << (8 * 0);
   }
   bit_vector_pointer = &custom_bit_vector[0];
 }

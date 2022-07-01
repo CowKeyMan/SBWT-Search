@@ -26,7 +26,7 @@ const vector<string> raw_sequences = {
 // 2nd 64b: 0000000000000000000000000010010000000000000000000000000000000000
 // We apply 0 padding to the right
 // Using some online converter, we get the following decimal equivalents:
-const vector<u64> bits = {1984096220112486400, 154618822656};
+const vector<u64> bits = { 1984096220112486400, 154618822656 };
 const int kmer_size = 3;
 
 class RawSequencesParserTest: public ::testing::Test {
