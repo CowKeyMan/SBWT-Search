@@ -3,9 +3,9 @@
 
 #include <unordered_set>
 
-#include "BenchmarkUtils.hpp"
-#include "QueryFileParser.h"
-#include "RawSequencesParser.hpp"
+#include "Utils/BenchmarkUtils.hpp"
+#include "QueryFileParser/QueryFileParser.h"
+#include "RawSequencesParser/RawSequencesParser.hpp"
 #include "cxxopts.hpp"
 
 using std::cerr;

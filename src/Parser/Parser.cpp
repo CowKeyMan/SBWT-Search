@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "Parser.h"
+#include "Parser/Parser.h"
 
 using std::string;
 

@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "QueryFileParser.h"
+#include "QueryFileParser/QueryFileParser.h"
 
 using std::make_unique;
 using std::unique_ptr;

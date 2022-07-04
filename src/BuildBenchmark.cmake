@@ -13,10 +13,6 @@ target_link_libraries(
   PRIVATE libraries_cpu
   PRIVATE libraries_cuda
 )
-target_include_directories(
-  benchmark_main
-  PUBLIC "${PROJECT_SOURCE_DIR}/Utils"
-)
 enable_warnings(benchmark_main "PRIVATE")
 
 endif() # BUILD_BENCHMARKS

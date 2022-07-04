@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "IOUtils.hpp"
+#include "Utils/IOUtils.hpp"
 
 using std::runtime_error;
 using std::string;

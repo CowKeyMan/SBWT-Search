@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "MathUtils.hpp"
-#include "TypeDefinitionUtils.h"
+#include "Utils/MathUtils.hpp"
+#include "Utils/TypeDefinitionUtils.h"
 
 using sbwt_search::u64;
 

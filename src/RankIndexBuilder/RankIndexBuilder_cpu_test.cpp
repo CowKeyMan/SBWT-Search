@@ -3,8 +3,8 @@
 
 #include <gtest/gtest.h>
 
-#include "RankIndexBuilder.h"
-#include "TestUtils.hpp"
+#include "RankIndexBuilder/RankIndexBuilder.h"
+#include "Utils/TestUtils.hpp"
 
 using std::vector;
 

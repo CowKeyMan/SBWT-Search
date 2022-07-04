@@ -6,9 +6,9 @@
 #include <numeric>
 #include <vector>
 
-#include "MathUtils.hpp"
-#include "RankIndexBuilder.h"
-#include "TypeDefinitionUtils.h"
+#include "RankIndexBuilder/RankIndexBuilder.h"
+#include "Utils/MathUtils.hpp"
+#include "Utils/TypeDefinitionUtils.h"
 
 using std::accumulate;
 using std::fill;

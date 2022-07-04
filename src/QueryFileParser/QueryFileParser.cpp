@@ -6,7 +6,7 @@
 
 #include <kseq++/seqio.hpp>
 
-#include "QueryFileParser.h"
+#include "QueryFileParser/QueryFileParser.h"
 #include "kseq++/kseq++.hpp"
 
 using klibpp::KSeq;

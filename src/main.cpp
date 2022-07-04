@@ -1,8 +1,8 @@
 #include <iostream>
 #include <string>
 
-#include "ArgumentParser.hpp"
-#include "QueryFileParser.h"
+#include "ArgumentParser/ArgumentParser.hpp"
+#include "QueryFileParser/QueryFileParser.h"
 /* #include "RawSequencesParser.h" */
 
 using sbwt_search::parse_arguments;

@@ -3,9 +3,9 @@
 
 #include <sdsl/bit_vectors.hpp>
 
-#include "IndexFileParser.h"
-#include "MathUtils.hpp"
-#include "TypeDefinitionUtils.h"
+#include "IndexFileParser/IndexFileParser.h"
+#include "Utils/MathUtils.hpp"
+#include "Utils/TypeDefinitionUtils.h"
 
 using sdsl::bit_vector;
 using std::begin;

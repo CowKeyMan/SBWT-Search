@@ -29,10 +29,6 @@ target_link_libraries(
   INTERFACE cxxopts
   INTERFACE common_options
 )
-target_include_directories(
-  libraries_main
-  INTERFACE "${PROJECT_SOURCE_DIR}/ArgumentParser"
-)
 
 if (BUILD_CPU)
   add_executable(main_cpu main.cpp)

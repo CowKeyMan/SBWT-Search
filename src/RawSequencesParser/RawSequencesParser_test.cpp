@@ -6,8 +6,8 @@
 
 #include <gtest/gtest.h>
 
-#include "RawSequencesParser.hpp"
-#include "TypeDefinitionUtils.h"
+#include "RawSequencesParser/RawSequencesParser.hpp"
+#include "Utils/TypeDefinitionUtils.h"
 
 using std::make_unique;
 using std::unique_ptr;

@@ -13,9 +13,9 @@
 
 #include <sdsl/bit_vectors.hpp>
 
-#include "IOUtils.hpp"
-#include "Parser.h"
-#include "TypeDefinitionUtils.h"
+#include "Parser/Parser.h"
+#include "Utils/IOUtils.hpp"
+#include "Utils/TypeDefinitionUtils.h"
 
 using sdsl::bit_vector;
 using std::string;

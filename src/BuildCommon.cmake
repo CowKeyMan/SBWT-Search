@@ -5,6 +5,8 @@
 # Any common options are put as an interface
 # rather than putting it with each file individually
 
+include_directories("${PROJECT_SOURCE_DIR}")
+
 add_library(common_options INTERFACE)
 target_compile_options(
   common_options
@@ -21,18 +23,10 @@ add_library(
   parser
   "${PROJECT_SOURCE_DIR}/Parser/Parser.cpp"
 )
-target_include_directories(
-  parser
-  PUBLIC "${CMAKE_BINARY_DIR}/Parser"
-)
 
 # Parser Library
 add_library(io_utils
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
-)
-target_include_directories(
-  io_utils
-  INTERFACE "${CMAKE_BINARY_DIR}/Utils"
 )
 
 include(ExternalProject)
@@ -61,11 +55,7 @@ target_link_libraries(
 )
 target_include_directories(
   query_file_parser
-  PUBLIC
-  "${PROJECT_SOURCE_DIR}/QueryFileParser"
-  "${PROJECT_SOURCE_DIR}/Utils"
-  SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include"
-  "${PROJECT_SOURCE_DIR}/Parser"
+  PUBLIC SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include"
 )
 add_dependencies(query_file_parser kseqpp)
 
@@ -77,13 +67,6 @@ add_library(
 target_link_libraries(
   raw_sequences_parser
   INTERFACE common_options
-)
-target_include_directories(
-  raw_sequences_parser
-  INTERFACE
-  "${PROJECT_SOURCE_DIR}/RawSequencesParser"
-  "${PROJECT_SOURCE_DIR}/Utils"
-  "${PROJECT_SOURCE_DIR}/Parser"
 )
 
 # IndexFileParser library
@@ -115,27 +98,19 @@ target_link_libraries(
 target_include_directories(
   index_file_parser
   PUBLIC SYSTEM "${sdsl_SOURCE_DIR}/include"
-  PUBLIC
-  "${PROJECT_SOURCE_DIR}/IndexFileParser"
-  "${PROJECT_SOURCE_DIR}/Utils"
-  "${PROJECT_SOURCE_DIR}/Parser"
 )
 add_dependencies(index_file_parser sdsl)
 
 add_library(rank_index_builder INTERFACE)
-target_include_directories(
-  rank_index_builder
-  INTERFACE
-  "${PROJECT_SOURCE_DIR}/Utils"
-  "${PROJECT_SOURCE_DIR}/RankIndexBuilder"
-)
 add_library(
   rank_index_builder_cpu
   "${PROJECT_SOURCE_DIR}/RankIndexBuilder/RankIndexBuilder_cpu.cpp"
 )
 target_link_libraries(
   rank_index_builder_cpu
-  PUBLIC rank_index_builder
+  PUBLIC
+  common_options
+  rank_index_builder
 )
 
 # TODO: Add more libraries here

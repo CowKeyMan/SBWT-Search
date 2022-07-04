@@ -6,9 +6,9 @@
 
 #include <gtest/gtest.h>
 
-#include "IndexFileParser.h"
-#include "TestUtils.hpp"
-#include "TypeDefinitionUtils.h"
+#include "IndexFileParser/IndexFileParser.h"
+#include "Utils/TestUtils.hpp"
+#include "Utils/TypeDefinitionUtils.h"
 
 using std::make_unique;
 using std::unique_ptr;

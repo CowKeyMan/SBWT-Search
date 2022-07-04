@@ -16,9 +16,9 @@
 #include <cmath>
 #include <stdexcept>
 
-#include "TypeDefinitionUtils.h"
-#include "MathUtils.hpp"
-#include "Parser.h"
+#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/MathUtils.hpp"
+#include "Parser/Parser.h"
 
 using std::string;
 using std::vector;

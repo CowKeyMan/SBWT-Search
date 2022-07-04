@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "BenchmarkUtils.hpp"
+#include "Utils/BenchmarkUtils.hpp"
 
 TEST(BenchmarkUtils, TimeIt) {
   ASSERT_EQ(0, TIME_IT_TOTAL);

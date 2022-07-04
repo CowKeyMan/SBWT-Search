@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Parser.h"
+#include "Parser/Parser.h"
 
 using std::string;
 

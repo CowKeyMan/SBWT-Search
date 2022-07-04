@@ -14,7 +14,7 @@
 #include <cstddef>
 #include <vector>
 
-#include "TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitionUtils.h"
 
 using std::vector;
 
