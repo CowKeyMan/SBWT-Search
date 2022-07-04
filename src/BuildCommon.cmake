@@ -122,6 +122,22 @@ target_include_directories(
 )
 add_dependencies(index_file_parser sdsl)
 
+add_library(rank_index_builder INTERFACE)
+target_include_directories(
+  rank_index_builder
+  INTERFACE
+  "${PROJECT_SOURCE_DIR}/Utils"
+  "${PROJECT_SOURCE_DIR}/RankIndexBuilder"
+)
+add_library(
+  rank_index_builder_cpu
+  "${PROJECT_SOURCE_DIR}/RankIndexBuilder/RankIndexBuilder_cpu.cpp"
+)
+target_link_libraries(
+  rank_index_builder_cpu
+  PUBLIC rank_index_builder
+)
+
 # TODO: Add more libraries here
 
 # Common libraries
@@ -142,8 +158,10 @@ if (BUILD_CPU)
   add_library(libraries_cpu INTERFACE)
   target_link_libraries(
     libraries_cpu
-    INTERFACE common_options
-    INTERFACE common_libraries
+    INTERFACE
+    common_options
+    common_libraries
+    rank_index_builder_cpu
     # TODO: Combine more libraries here which are cpu specific
   )
 endif()
@@ -151,7 +169,11 @@ endif()
 # Build CUDA Libraries
 if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
   # Combine Libaries
-  add_library(libraries_cuda INTERFACE)
+  add_library(
+    libraries_cuda
+    INTERFACE
+    "${PROJECT_SOURCE_DIR}/RankIndexBuilder/RankIndexBuilder_cpu.cpp"
+  )
   target_link_libraries(
     libraries_cuda
     INTERFACE common_options

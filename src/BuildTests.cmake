@@ -40,6 +40,7 @@ if (BUILD_CPU)
   add_executable(
     test_main_cpu
     ${test_common_sources}
+    "${PROJECT_SOURCE_DIR}/RankIndexBuilder/RankIndexBuilder_cpu_test.cpp"
   )
   add_test(NAME test_main_cpu COMMAND test_main_cpu)
   target_link_libraries(
