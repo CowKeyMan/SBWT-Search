@@ -1,0 +1,33 @@
+classDiagram
+  direction LR
+  main --> ArgumentParser
+  main --> IndexFileParser
+  main --> RankIndexBuilder
+  main --> QueryFileParser
+  main --> RawSequencesParser
+  class main {
+    main()
+  }
+  class ArgumentParser {
+    parse_arguments(int argc, char** argv)
+  }
+  class IndexFileParser {
+    parse(string filename)
+    get_bit_vector_pointer()
+    get_bits_total()
+    get_bit_vector_size()
+  }
+  class QueryFileParser {
+    parse()
+    get_seqs()
+  }
+  class RankIndexBuilder {
+    build()
+    get_layer_0()
+    get_layer_1_2()
+  }
+  class RawSequencesParser {
+    parse()
+    get_bit_seqs()
+    get_positions()
+  }

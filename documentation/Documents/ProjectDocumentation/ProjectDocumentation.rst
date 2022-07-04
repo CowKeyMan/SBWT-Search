@@ -8,3 +8,4 @@ This part of the documentation will describe the project documentation, which is
    :caption: Contents:
 
    BenchmarkingNotes
+   Components
