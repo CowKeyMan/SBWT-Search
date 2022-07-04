@@ -70,15 +70,15 @@ vector<u64> layer_1_2 = {
 };
 
 class RankIndexBuilderTest: public ::testing::Test {
-protected:
-  RankIndexBuilder host;
-  RankIndexBuilderTest():
-    host(
-      64 * 17,  // 17 u64s total
-      &bit_vector[0],
-      64 * 8,  // 8 u64s = 1 super block
-      64 * 8 * 2  // 2 super blocks + 1 hyper block
-    ) {}
+  protected:
+    RankIndexBuilder host;
+    RankIndexBuilderTest():
+      host(
+        64 * 17,  // 17 u64s total
+        &bit_vector[0],
+        64 * 8,  // 8 u64s = 1 super block
+        64 * 8 * 2  // 2 super blocks + 1 hyper block
+      ) {}
 };
 
 TEST_F(RankIndexBuilderTest, BuildIndex) {

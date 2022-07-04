@@ -14,20 +14,20 @@ const auto seq_0 = "GACTG";
 const auto seq_3 = "TA";
 
 class QueryFileParserTest: public ::testing::Test {
-protected:
-  unique_ptr<QueryFileParser> host;
+  protected:
+    unique_ptr<QueryFileParser> host;
 
-  QueryFileParserTest() {
-    host = make_unique<QueryFileParser>("test_objects/test_query.fna", 3);
-  }
+    QueryFileParserTest() {
+      host = make_unique<QueryFileParser>("test_objects/test_query.fna", 3);
+    }
 
-  void shared_tests() {
-    ASSERT_EQ(seq_0, host->get_seqs()[0]);
-    ASSERT_EQ(seq_3, host->get_seqs()[3]);
-    ASSERT_EQ(4, host->get_seqs().size());
-    ASSERT_EQ(15, host->get_total_letters());
-    ASSERT_EQ(7, host->get_total_positions());
-  }
+    void shared_tests() {
+      ASSERT_EQ(seq_0, host->get_seqs()[0]);
+      ASSERT_EQ(seq_3, host->get_seqs()[3]);
+      ASSERT_EQ(4, host->get_seqs().size());
+      ASSERT_EQ(15, host->get_total_letters());
+      ASSERT_EQ(7, host->get_total_positions());
+    }
 };
 
 TEST_F(QueryFileParserTest, ParseKseqppStreams) {

@@ -3,10 +3,12 @@
 
 #include <unordered_set>
 
+#include "cxxopts.hpp"
 #include "Utils/BenchmarkUtils.hpp"
 #include "QueryFileParser/QueryFileParser.h"
 #include "RawSequencesParser/RawSequencesParser.hpp"
-#include "cxxopts.hpp"
+#include "RankIndexBuilder/RankIndexBuilder.h"
+#include "IndexFileParser/IndexFileParser.h"
 
 using std::cerr;
 using std::cout;
@@ -21,6 +23,7 @@ auto query_file_parser_fasta() -> void;
 auto query_file_parser_fasta_zip() -> void;
 auto query_file_parser_fastq() -> void;
 auto query_file_parser_fastq_zip() -> void;
+
 u64 kmer_size = 30;
 const auto fasta_1gb_path = "benchmark_objects/FASTA1GB.fna";
 const auto fasta_1gb_zipped_path = "benchmark_objects/FASTA1GB.fna.gz";
@@ -31,7 +34,7 @@ auto raw_sequence_parser_char_to_bits() -> void;
 
 auto main(int argc, char **argv) -> int {
   auto arguments = parse_arguments(argc, argv);
-  // QueryFileParser module tests
+  // QueryFileParser module
   if (arguments.count("-QUERY_FILE_PARSER_FASTA")) query_file_parser_fasta();
   if (arguments.count("-QUERY_FILE_PARSER_FASTA_ZIP"))
     query_file_parser_fasta_zip();
@@ -40,7 +43,7 @@ auto main(int argc, char **argv) -> int {
   if (arguments.count("-QUERY_FILE_PARSER_FASTQ_ZIP"))
     query_file_parser_fastq_zip();
 
-  // RawSequencesParser module tests
+  // RawSequencesParser module
   if (arguments.count("-RAW_SEQUENCE_PARSER_CHAR_TO_BITS"))
     raw_sequence_parser_char_to_bits();
 }

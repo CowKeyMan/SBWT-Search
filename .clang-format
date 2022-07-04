@@ -48,6 +48,7 @@ IncludeCategories:
     SortPriority:    0
 IncludeIsMainRegex: '^'
 IndentCaseLabels: true
+IndentAccessModifiers: true
 IndentPPDirectives: None
 IndentWidth: 2
 IndentWrappedFunctionNames: false

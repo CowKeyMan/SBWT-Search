@@ -30,21 +30,21 @@ const vector<u64> bits = { 1984096220112486400, 154618822656 };
 const int kmer_size = 3;
 
 class RawSequencesParserTest: public ::testing::Test {
-protected:
-  RawSequencesParser<CharToBitsVector> host;
-  RawSequencesParserTest():
-    host(
-      raw_sequences,
-      (2 + 0 + 1 + 2 + 30 + 0),
-      (4 + 2 + 3 + 4 + 32 + 2),
-      kmer_size
-    ) {}
-  void shared_tests() {
-    ASSERT_EQ(bits, host.get_bit_seqs());
-    ASSERT_EQ(0, host.get_positions()[0]);
-    ASSERT_EQ(6, host.get_positions()[2]);
-    ASSERT_EQ(42, host.get_positions()[34]);
-  }
+  protected:
+    RawSequencesParser<CharToBitsVector> host;
+    RawSequencesParserTest():
+      host(
+        raw_sequences,
+        (2 + 0 + 1 + 2 + 30 + 0),
+        (4 + 2 + 3 + 4 + 32 + 2),
+        kmer_size
+      ) {}
+    void shared_tests() {
+      ASSERT_EQ(bits, host.get_bit_seqs());
+      ASSERT_EQ(0, host.get_positions()[0]);
+      ASSERT_EQ(6, host.get_positions()[2]);
+      ASSERT_EQ(42, host.get_positions()[34]);
+    }
 };
 
 TEST_F(RawSequencesParserTest, ParseSerial) {

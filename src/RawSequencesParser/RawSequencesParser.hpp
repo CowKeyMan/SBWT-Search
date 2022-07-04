@@ -108,6 +108,7 @@ private:
     PositionsBuilder(u64 kmer_size, size_t total_positions):
       kmer_size(kmer_size),
       positions(round_up<u64>(total_positions, 64), 0) {}
+
     void add_position(const size_t seq_length, const u64 seq_index) {
       if (
         // First check is to make sure we do not get underflow
@@ -117,9 +118,11 @@ private:
         ++positions_index;
       }
     }
+
     void add_to_global_index(const size_t seq_length) {
       global_index += seq_length;
     }
+
     auto &get_positions() { return positions; };
   } positions_builder;
 
@@ -133,6 +136,7 @@ private:
   public:
     BitSeqsBuilder(size_t total_letters):
       bit_seqs(round_up<u64>(total_letters, 64) / 64 * 2, 0) {}
+
     void add_character(char c) {
       auto bits = char_to_bits(c);
       bits <<= internal_shift;
@@ -143,6 +147,7 @@ private:
         ++vector_index;
       }
     }
+
     auto &get_bit_seqs() { return bit_seqs; };
   } bit_seqs_builder;
 public:
@@ -155,8 +160,11 @@ public:
     string_seqs(seqs),
     positions_builder(kmer_size, total_positions),
     bit_seqs_builder(total_letters) {}
+
   auto &get_bit_seqs() { return bit_seqs_builder.get_bit_seqs(); };
+
   auto &get_positions() { return positions_builder.get_positions(); };
+
   void parse_serial(){
     check_if_has_parsed();
     for (auto &seq: string_seqs) {
