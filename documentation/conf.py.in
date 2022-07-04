@@ -40,6 +40,7 @@ extensions = [
     'sphinx.ext.inheritance_diagram',
     'exhale',
     'sphinx_rtd_dark_mode',
+    'sphinxcontrib.mermaid',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -101,4 +102,9 @@ primary_domain = 'cpp'
 suppress_warnings = ['autosectionlabel.*']
 
 default_dark_mode = False
+
 numref = True
+numfig = True
+
+mermaid_output_format = 'svg'
+mermaid_cmd = 'node_modules/.bin/mmdc'

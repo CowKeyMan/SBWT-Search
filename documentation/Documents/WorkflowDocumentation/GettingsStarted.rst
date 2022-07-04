@@ -31,11 +31,10 @@ Working with CMake
 
 This section will describe the cmake configuration of this project and how it all comes together to build the executable. Furthermore I will advise how one needs to add new libraries easily.
 
-.. figure:: CMakeHierarchy.png
+.. _CMakeHierarchy:
+.. mermaid:: graphs/CMakeHierarchy.mmd
   :align: center
-  :name: CMakeHierarchy
-
-  Hierarchy of CMake Outputs
+  :caption: Hierarchy of CMake Outputs
 
 In Figure :numref:`CMakeHierarchy`, you may see the hierarchy of how each file affects the other. A->B means that A affects B, such that whatever options or whatever we link to A will also be in B. Of course, we try to be as modular as possible as well, so we should not just put every source file into one library and call it a day.
 

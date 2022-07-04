@@ -1,0 +1,41 @@
+flowchart LR
+  subgraph CMake Hierarcy
+    common_library_1([common_library_1]) --> common_libraries{{common_libraries}}
+    common_library_2([common_library_2]) --> common_libraries
+
+    cpu_library_1([cpu_library_1]) --> libraries_cpu{{libraries_cpu}}
+    cpu_library_2([cpu_library_2]) --> libraries_cpu
+    common_libraries --> libraries_cpu
+
+    cuda_library_1([cuda_library_1]) --> libraries_cuda{{libraries_cuda}}
+    cuda_library_2([cuda_library_2]) --> libraries_cuda
+    common_libraries --> libraries_cuda
+
+    common_options{{common_options}} --> common_library_1
+    common_options{{common_options}} --> common_library_2
+    common_options{{common_options}} --> cpu_library_1
+    common_options{{common_options}} --> cpu_library_2
+    common_options{{common_options}} --> cuda_library_1
+    common_options{{common_options}} --> cuda_library_2
+
+    main_only_library_1([main_only_libary_1]) --> main_cpu[main_cpu]
+    main_only_library_2([main_only_libary_2]) --> main_cpu
+    main_only_library_1 --> main_gpu[main_gpu]
+    main_only_library_2 --> main_gpu
+
+    google_test[/google_test/] --> test_main_cpu[test_main_cpu]
+    google_test[/google_test/] --> test_main_cuda
+
+    libraries_cuda --> test_main_cuda
+    libraries_cuda --> main_cuda
+
+    libraries_cpu --> test_main_cpu
+    libraries_cpu --> main_cpu
+  end
+
+  subgraph Notation
+    interface{{Interface}}
+    library([library])
+    executable[executable]
+    ExternalDependency[/External Dependency/]
+  end

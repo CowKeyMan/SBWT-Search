@@ -20,3 +20,7 @@ err.txt
 
 .ycm_extra_conf.py
 *.vim
+
+node_modules
+package-lock.json
+package.json

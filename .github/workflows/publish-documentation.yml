@@ -27,8 +27,17 @@ jobs:
       - name: Install Doxygen and lcov
         run: sudo apt-get install doxygen lcov -y
 
-      - name: Install Sphinx
-        run: pip3 install breathe exhale sphinx sphinx-rtd-theme sphinx-rtd-dark-mode
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Install Sphinx and extentions
+        run: |
+          pip3 install breathe exhale sphinx sphinx-rtd-theme sphinx-rtd-dark-mode sphinxcontrib-mermaid
+          cd documentation
+          npm install @mermaid-js/mermaid-cli
+          cd ..
 
       - name: Install kseqpp dependencies
         run: sudo apt install zlib1g-dev # a dependency

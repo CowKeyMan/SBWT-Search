@@ -77,6 +77,21 @@ Installation
   pip install sphinx-rtd-dark-mode
   pip install sphinx-rtd-theme
 
+Mermaid
++++++++
+
+For diagrams in the docentation we use Mermaid, which is a text based graph creator. This needs to be installed separately.
+
+
+Installation
+------------
+
+.. code-block:: bash
+
+  pip install sphinxcontrib-mermaid
+  cd documentation/
+  npm install @mermaid-js/mermaid-cli
+
 clang-tidy
 ++++++++++
 
