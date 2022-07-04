@@ -2,7 +2,7 @@
 #define I_O_UTILS_HPP
 
 /**
- * @file IOUtils.h
+ * @file IOUtils.hpp
  * @brief Contains utilities to ease interacting with IO streams
  *        such as check if a file exists
  * */
