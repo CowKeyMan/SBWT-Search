@@ -20,8 +20,6 @@ using std::vector;
 
 namespace sbwt_search {
 
-class CPUIndexBuilder;
-
 class RankIndexBuilder {
   private:
     const size_t bits_total;
