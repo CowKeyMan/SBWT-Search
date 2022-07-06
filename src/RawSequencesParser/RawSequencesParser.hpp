@@ -18,7 +18,7 @@
 
 #include "Utils/TypeDefinitionUtils.h"
 #include "Utils/MathUtils.hpp"
-#include "Parser/Parser.h"
+#include "Builder/Builder.h"
 
 using std::string;
 using std::vector;
@@ -94,7 +94,7 @@ public:
 };
 
 template <class CharToBits = CharToBitsVector>
-class RawSequencesParser: Parser {
+class RawSequencesParser: Builder {
 private:
   const vector<string> &string_seqs;
 
@@ -166,7 +166,7 @@ public:
   auto &get_positions() { return positions_builder.get_positions(); };
 
   void parse_serial(){
-    check_if_has_parsed();
+    check_if_has_built();
     for (auto &seq: string_seqs) {
       for (size_t seq_index = 0; seq_index < seq.length(); ++seq_index) {
         positions_builder.add_position(seq.length(), seq_index);

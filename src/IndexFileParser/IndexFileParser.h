@@ -13,7 +13,7 @@
 
 #include <sdsl/bit_vectors.hpp>
 
-#include "Parser/Parser.h"
+#include "Builder/Builder.h"
 #include "Utils/IOUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
 
@@ -24,7 +24,7 @@ using std::vector;
 
 namespace sbwt_search {
 
-class IndexFileParser: Parser {
+class IndexFileParser: Builder {
   private:
     string filename;
     unique_ptr<bit_vector> sdsl_vector;

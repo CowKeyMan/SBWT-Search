@@ -18,13 +18,13 @@ target_compile_options(
 )
 target_link_libraries(common_options INTERFACE gcov)
 
-# Parser Library
+# Builder Library
 add_library(
   parser
-  "${PROJECT_SOURCE_DIR}/Parser/Parser.cpp"
+  "${PROJECT_SOURCE_DIR}/Builder/Builder.cpp"
 )
 
-# Parser Library
+# IOUtils Library
 add_library(io_utils
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
 )

@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-#include "Parser/Parser.h"
+#include "Builder/Builder.h"
 #include "Utils/IOUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
 
@@ -18,7 +18,7 @@ using std::vector;
 
 namespace sbwt_search {
 
-class QueryFileParser: Parser {
+class QueryFileParser: Builder {
   private:
     string filename;
     u64 kmer_size;

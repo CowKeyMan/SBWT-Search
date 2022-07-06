@@ -27,21 +27,21 @@ auto QueryFileParser::add_sequence(const string &seq) -> void {
 }
 
 auto QueryFileParser::parse_kseqpp_streams() -> void {
-  check_if_has_parsed();
+  check_if_has_built();
   KSeq record;
   SeqStreamIn stream(filename.c_str());
   while (stream >> record) { add_sequence(record.seq); }
 }
 
 auto QueryFileParser::parse_kseqpp_read() -> void {
-  check_if_has_parsed();
+  check_if_has_built();
   auto iss = SeqStreamIn(filename.c_str());
   auto records = iss.read();
   for (auto &record: records) { add_sequence(record.seq); }
 }
 
 auto QueryFileParser::parse_kseqpp_gz_stream() -> void {
-  check_if_has_parsed();
+  check_if_has_built();
   KSeq record;
   gzFile fp = gzopen(filename.c_str(), "r");
   auto stream = make_kstream(fp, gzread, klibpp::mode::in);
@@ -50,7 +50,7 @@ auto QueryFileParser::parse_kseqpp_gz_stream() -> void {
 }
 
 auto QueryFileParser::parse_kseqpp_gz_read() -> void {
-  check_if_has_parsed();
+  check_if_has_built();
   gzFile fp = gzopen(filename.c_str(), "r");
   auto records = make_ikstream(fp, gzread).read();
   gzclose(fp);
