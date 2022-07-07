@@ -32,6 +32,7 @@ set(
   "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
+  "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer_test.cpp"
   # TODO: add more source files here
 )
 
@@ -46,7 +47,6 @@ if (BUILD_CPU)
   add_test(NAME test_main_cpu COMMAND test_main_cpu)
   target_link_libraries(
     test_main_cpu
-    PRIVATE common_options
     PRIVATE libraries_cpu
     PRIVATE test_lib
   )
@@ -61,7 +61,6 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
   add_test(NAME all_tests COMMAND test_main_cuda)
   target_link_libraries(
     test_main_cuda
-    PRIVATE common_options
     PRIVATE libraries_cuda
     PRIVATE test_lib
   )

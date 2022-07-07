@@ -13,6 +13,5 @@ target_link_libraries(
   PRIVATE libraries_cpu
   PRIVATE libraries_cuda
 )
-enable_warnings(benchmark_main "PRIVATE")
 
 endif() # BUILD_BENCHMARKS
