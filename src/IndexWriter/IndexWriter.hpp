@@ -20,12 +20,12 @@ class IndexWriter {
     Implementation *const host;
 
   protected:
-    const Container &container;
-    IndexWriter(Container &container):
-        host(static_cast<Implementation *>(this)), container(container) {}
+    IndexWriter(): host(static_cast<Implementation *>(this)) {}
 
   public:
-    void write(const string path) const { host->do_write(path); }
+    void write(const Container &container, const string path) const {
+      host->do_write(container, path);
+    }
 };
 
 class SdslIndexWriter: public IndexWriter<SdslIndexWriter, SdslSbwtContainer> {
@@ -34,10 +34,10 @@ class SdslIndexWriter: public IndexWriter<SdslIndexWriter, SdslSbwtContainer> {
   private:
     const string format = "plain-matrix";
 
-    void do_write(string path) const;
+    void do_write(const SdslSbwtContainer &container, string path) const;
 
   public:
-    SdslIndexWriter(SdslSbwtContainer &container): IndexWriter(container) {}
+    SdslIndexWriter(): IndexWriter() {}
 };
 
 class BitVectorIndexWriter:
@@ -45,11 +45,10 @@ class BitVectorIndexWriter:
     friend IndexWriter;
 
   private:
-    void do_write(string path) const;
+    void do_write(const BitVectorSbwtContainer &container, string path) const;
 
   public:
-    BitVectorIndexWriter(BitVectorSbwtContainer &container):
-        IndexWriter(container) {}
+    BitVectorIndexWriter(): IndexWriter() {}
 };
 
 }

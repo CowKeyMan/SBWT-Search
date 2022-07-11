@@ -11,6 +11,7 @@
 #include "IndexFileParser/IndexFileParser.hpp"
 #include "IndexWriter/IndexWriter.hpp"
 #include "SbwtContainer/SbwtContainer.hpp"
+#include "SbwtFactory/SbwtFactory.hpp"
 #include "Utils/TestUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
 #include "sdsl/bit_vectors.hpp"
@@ -48,19 +49,20 @@ auto assert_containers_equal(Container &a, Container &b) {
   }
 }
 
-TEST(SbwtContainerTest, ConstructWriteRead) {
-  auto host = BitVectorSbwtContainer(
+TEST(SbwtFactoryTest, SdslConstructWriteRead) {
+  auto container = BitVectorSbwtContainer(
     move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3]), 64 + 8 * 4
   );
-  auto writer = BitVectorIndexWriter(host);
-  writer.write("test_objects/tmp/bitvector");
+  auto factory = BitVectorSbwtFactory();
+  auto writer = factory.get_index_writer();
+  writer.write(container, "test_objects/tmp/bitvector");
   auto loaded_container
     = BitVectorIndexFileParser("test_objects/tmp/bitvector").parse(false);
-  assert_containers_equal<BitVectorSbwtContainer>(host, loaded_container);
+  assert_containers_equal<BitVectorSbwtContainer>(container, loaded_container);
   ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
 }
 
-TEST(SdslContainerTest, ConstructWriteRead) {
+TEST(SbwtFactoryTest, BitVectorConstructWriteRead) {
   vector<bit_vector> sdsl_acgt(acgt.size());
   for (auto i = 0; i < acgt.size(); ++i) {
     sdsl_acgt[i].bit_resize(64 + 8 * 4);
@@ -68,21 +70,22 @@ TEST(SdslContainerTest, ConstructWriteRead) {
       sdsl_acgt[i].set_int(i2 * 64, acgt[i][i2], 64);
     }
   }
-  auto host = SdslSbwtContainer(
+  auto container = SdslSbwtContainer(
     move(sdsl_acgt[0]),
     move(sdsl_acgt[1]),
     move(sdsl_acgt[2]),
     move(sdsl_acgt[3])
   );
-  auto writer = SdslIndexWriter(host);
-  writer.write("test_objects/tmp/bitvector");
+  auto factory = SdslSbwtFactory();
+  auto writer = factory.get_index_writer();
+  writer.write(container, "test_objects/tmp/bitvector");
   auto loaded_container
-    = SdslIndexFileParser("test_objects/tmp/bitvector").parse(false);
-  assert_containers_equal<SdslSbwtContainer>(host, loaded_container);
+    = factory.get_index_parser("test_objects/tmp/bitvector").parse(false);
+  assert_containers_equal<SdslSbwtContainer>(container, loaded_container);
   ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
 }
 
-TEST(SbwtContainerTest, ChangeEndianness) {
+TEST(SbwtFactoryTest, BitVectorChangeEndianness) {
   auto host = BitVectorSbwtContainer(
     move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3]), 64 + 8 * 4
   );
@@ -93,6 +96,25 @@ TEST(SbwtContainerTest, ChangeEndianness) {
   // 00000101 10101000 11111011 00110000 00000000 00000000 00000000 00000000
   ASSERT_EQ(host.get_acgt(ACGT::A)[0], 13573098559561007104ULL);
   ASSERT_EQ(host.get_acgt(ACGT::A)[1], 407851949854031872ULL);
+}
+
+string incorrect_sbwt_filepath = "test_objects/tmp/incorrect.sbwt";
+
+void write_incorrect_sbwt() {
+  ThrowingOfstream stream(incorrect_sbwt_filepath, std::ios::out | std::ios::binary);
+  string incorrect_format = "not_plain_matrix";
+  u64 string_size = incorrect_format.size();
+  stream.write(reinterpret_cast<char *>(&string_size), sizeof(u64));
+  stream << incorrect_format;
+}
+
+TEST(SbwtFactoryTest, InvalidSdsl) {
+  write_incorrect_sbwt();
+  try {
+    SdslIndexFileParser(incorrect_sbwt_filepath).parse(false);
+  } catch (runtime_error &e) {
+    ASSERT_EQ(string(e.what()), "Error input is not a plain-matrix SBWT");
+  }
 }
 
 }

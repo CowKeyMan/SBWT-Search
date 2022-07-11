@@ -31,7 +31,7 @@ set(
   "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
-  "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer_test.cpp"
+  "${PROJECT_SOURCE_DIR}/SbwtFactory/SbwtFactory_test.cpp"
   # TODO: add more source files here
 )
 
