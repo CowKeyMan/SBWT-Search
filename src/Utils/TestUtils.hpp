@@ -1,6 +1,11 @@
 #ifndef TEST_UTILS_HPP
 #define TEST_UTILS_HPP
 
+/**
+ * @file TestUtils.hpp
+ * @brief Contains functions to make testing functions cleaner
+ * */
+
 #include <vector>
 
 #include <gtest/gtest.h>

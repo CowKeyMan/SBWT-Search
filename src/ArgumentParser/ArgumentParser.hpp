@@ -1,6 +1,11 @@
 #ifndef ARGUMENT_PARSER_HPP
 #define ARGUMENT_PARSER_HPP
 
+/**
+ * @file ArgumentParser.hpp
+ * @brief Contains functions to parse the main program's arguments
+ * */
+
 #include "cxxopts.hpp"
 
 using cxxopts::value;
