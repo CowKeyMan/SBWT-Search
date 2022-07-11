@@ -6,7 +6,6 @@
  * @brief Contains CUDA commonly used functions and tools
  * */
 
-
 #include "cuda_runtime.h"
 
 __device__ auto get_idx() -> int {
