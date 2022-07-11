@@ -81,8 +81,10 @@ add_library(
 )
 add_library(
   index_file_parser
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/BitVectorIndexFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/SdslIndexFileParser.cpp"
 )
+target_link_libraries(index_file_parser PRIVATE libsdsl)
 add_library(
   rank_index_builder_cpu
   "${PROJECT_SOURCE_DIR}/RankIndexBuilder/RankIndexBuilder_cpu.cpp"
@@ -90,6 +92,17 @@ add_library(
 add_library(
   sbwt_container
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
+)
+target_link_libraries(sbwt_container PRIVATE libsdsl)
+add_library(
+  index_writer
+  "${PROJECT_SOURCE_DIR}/IndexWriter/IndexWriter.cpp"
+)
+target_link_libraries(
+  index_writer
+  PRIVATE
+  libsdsl
+  sbwt_container
 )
 # TODO: Add more libraries here
 
@@ -106,8 +119,11 @@ target_link_libraries(
   ZLIB::ZLIB
   parser
   cxxopts
+  sbwt_container
+  index_writer
   # TODO: Link more libraries here
 )
+add_dependencies(common_libraries kseqpp)
 
 # Build Cpu Libraries
 if (BUILD_CPU)
