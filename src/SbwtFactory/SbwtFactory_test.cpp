@@ -62,13 +62,24 @@ TEST(SbwtFactoryTest, SdslConstructWriteRead) {
   ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
 }
 
-TEST(SbwtFactoryTest, BitVectorConstructWriteRead) {
+vector<bit_vector> build_sdsl_bit_vectors() {
   vector<bit_vector> sdsl_acgt(acgt.size());
   for (auto i = 0; i < acgt.size(); ++i) {
     sdsl_acgt[i].bit_resize(64 + 8 * 4);
     for (auto i2 = 0; i2 < acgt[i].size(); ++i2) {
       sdsl_acgt[i].set_int(i2 * 64, acgt[i][i2], 64);
     }
+  }
+  return sdsl_acgt;
+}
+
+TEST(SbwtFactoryTest, BitVectorConstructWriteRead) {
+  auto sdsl_acgt = build_sdsl_bit_vectors();
+  // last 2 bytes of first number in acgt
+  vector<u64> expected = { 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0 };
+  for (size_t i = 0; i < expected.size(); ++i) {
+    // assert reverse are equal
+    ASSERT_EQ(expected[expected.size() - i - 1], sdsl_acgt[0][i]);
   }
   auto container = SdslSbwtContainer(
     move(sdsl_acgt[0]),
@@ -101,7 +112,9 @@ TEST(SbwtFactoryTest, BitVectorChangeEndianness) {
 string incorrect_sbwt_filepath = "test_objects/tmp/incorrect.sbwt";
 
 void write_incorrect_sbwt() {
-  ThrowingOfstream stream(incorrect_sbwt_filepath, std::ios::out | std::ios::binary);
+  ThrowingOfstream stream(
+    incorrect_sbwt_filepath, std::ios::out | std::ios::binary
+  );
   string incorrect_format = "not_plain_matrix";
   u64 string_size = incorrect_format.size();
   stream.write(reinterpret_cast<char *>(&string_size), sizeof(u64));
