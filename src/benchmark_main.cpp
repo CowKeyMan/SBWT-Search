@@ -8,7 +8,6 @@
 #include "QueryFileParser/QueryFileParser.h"
 #include "RawSequencesParser/RawSequencesParser.hpp"
 #include "RankIndexBuilder/RankIndexBuilder.h"
-#include "IndexFileParser/IndexFileParser.h"
 
 using std::cerr;
 using std::cout;
