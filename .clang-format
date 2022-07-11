@@ -31,13 +31,13 @@ BreakStringLiterals: true
 ColumnLimit: 80
 CompactNamespaces: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 2
+ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 2
 Cpp11BracedListStyle: false
 DeriveLineEnding: false
 FixNamespaceComments: false
 IncludeBlocks: Regroup
-EmptyLineBeforeAccessModifier: Never
+EmptyLineBeforeAccessModifier: LogicalBlock
 IncludeCategories:
   - Regex:           '<[[:alnum:].]+>'
     Priority:        1
