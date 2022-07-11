@@ -11,9 +11,11 @@
 using std::is_unsigned;
 
 template <class UnsignedNumber>
-UnsignedNumber round_up(const UnsignedNumber value, const UnsignedNumber multiple) {
+UnsignedNumber
+round_up(const UnsignedNumber value, const UnsignedNumber multiple) {
   static_assert(
-    is_unsigned<UnsignedNumber>::value, "Template class to round_up must be unsigned"
+    is_unsigned<UnsignedNumber>::value,
+    "Template class to round_up must be unsigned"
   );
   return (value + multiple - 1) / multiple * multiple;
 }

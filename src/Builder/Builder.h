@@ -12,6 +12,7 @@ namespace sbwt_search {
 class Builder {
   private:
     bool has_built = false;
+
   protected:
     void check_if_has_built();
     Builder(){};

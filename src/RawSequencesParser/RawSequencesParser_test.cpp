@@ -33,12 +33,12 @@ class RawSequencesParserTest: public ::testing::Test {
   protected:
     RawSequencesParser<CharToBitsVector> host;
     RawSequencesParserTest():
-      host(
-        raw_sequences,
-        (2 + 0 + 1 + 2 + 30 + 0),
-        (4 + 2 + 3 + 4 + 32 + 2),
-        kmer_size
-      ) {}
+        host(
+          raw_sequences,
+          (2 + 0 + 1 + 2 + 30 + 0),
+          (4 + 2 + 3 + 4 + 32 + 2),
+          kmer_size
+        ) {}
     void shared_tests() {
       ASSERT_EQ(bits, host.get_bit_seqs());
       ASSERT_EQ(0, host.get_positions()[0]);

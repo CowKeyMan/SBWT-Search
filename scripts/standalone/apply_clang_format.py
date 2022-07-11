@@ -6,7 +6,7 @@ and changes files
 from pathlib import Path
 from subprocess import Popen
 
-suffixes = 'h cpp cu cuh'.split()
+suffixes = 'h cpp cu cuh hpp'.split()
 file_names = [
     x
     for x in Path('src').rglob('*')

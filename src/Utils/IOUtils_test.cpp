@@ -31,9 +31,9 @@ TEST(IOUtilsTest, TestPathValid) {
     ASSERT_EQ(
       string(e.what()),
       string("The path ") + random_path
-      + " cannot be opened. Check that all the folders in the path is "
-        "correct and that you have permission to create files in this path "
-        "folder"
+        + " cannot be opened. Check that all the folders in the path is "
+          "correct and that you have permission to create files in this path "
+          "folder"
     );
   }
 }

@@ -35,8 +35,7 @@ class SbwtContainer {
     SbwtContainer(const size_t bits_total, const size_t bit_vector_size):
         bits_total(bits_total),
         bit_vector_size(bit_vector_size),
-        host(static_cast<Implementation *>(this)) {
-    }
+        host(static_cast<Implementation *>(this)) {}
 
   public:
     const u64 *get_acgt(ACGT letter) const { return host->do_get_acgt(letter); }

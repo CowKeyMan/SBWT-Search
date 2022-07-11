@@ -26,6 +26,7 @@ class CPUIndexBuilder {
     ;
     size_t layer_2_temps_index = 0;
     u64 layer_0_count = 0, layer_1_count = 0, layer_2_count = 0;
+
   public:
     CPUIndexBuilder(
       const size_t bits_total,
@@ -34,11 +35,11 @@ class CPUIndexBuilder {
       const u64 superblock_bits,
       const u64 hyperblock_bits
     ):
-      bits_total(bits_total),
-      bits_vector(bits_vector),
-      basicblock_bits(basicblock_bits),
-      superblock_bits(superblock_bits),
-      hyperblock_bits(hyperblock_bits) {
+        bits_total(bits_total),
+        bits_vector(bits_vector),
+        basicblock_bits(basicblock_bits),
+        superblock_bits(superblock_bits),
+        hyperblock_bits(hyperblock_bits) {
       layer_0.reserve(round_up(bits_total, hyperblock_bits) / hyperblock_bits);
       layer_1_2.reserve(
         round_up(bits_total, superblock_bits) / superblock_bits
