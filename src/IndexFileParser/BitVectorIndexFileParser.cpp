@@ -39,18 +39,4 @@ auto BitVectorIndexFileParser::parse_single_acgt(string filename)
   return result;
 }
 
-auto BitVectorIndexFileParser::parse_c_map() const -> vector<u64> {
-  vector<u64> result;
-  u64 bit_vector_size;
-  ThrowingIfstream stream(
-    files_prefix + c_map_postfix, std::ios::in | std::ios::binary
-  );
-  stream.read(reinterpret_cast<char *>(&bit_vector_size), sizeof(u64));
-  result.resize(bit_vector_size, 0);
-  stream.read(
-    reinterpret_cast<char *>(&result[0]), sizeof(u64) * bit_vector_size
-  );
-  return result;
-}
-
 }

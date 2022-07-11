@@ -65,7 +65,6 @@ class SdslSbwtContainer: public SbwtContainer<SdslSbwtContainer> {
 
   private:
     const vector<bit_vector> acgt;
-    const bit_vector c_map;
     const u64 *do_get_acgt(ACGT letter);
 
   public:

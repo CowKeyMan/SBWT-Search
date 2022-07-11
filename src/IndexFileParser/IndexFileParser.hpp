@@ -66,7 +66,6 @@ class BitVectorIndexFileParser:
     u64 bits_total;
 
     BitVectorSbwtContainer do_parse(bool file_has_index);
-    vector<u64> parse_c_map() const;
     vector<vector<u64>> parse_acgt();
     vector<u64> parse_single_acgt(string filename);
 
