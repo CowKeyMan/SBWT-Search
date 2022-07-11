@@ -7,8 +7,12 @@ namespace sbwt_search {
 using std::ifstream;
 using std::ios_base;
 
-void check_file_exists(const char *filename) {
-  ThrowingStream<ifstream> tmp(filename, ios_base::in);
+auto ThrowingIfstream::check_file_exists(const string filename) -> void {
+  ThrowingIfstream(filename, ios_base::in);
+}
+
+auto ThrowingOfstream::check_path_valid(const string filepath) -> void {
+  ThrowingOfstream(filepath, ios_base::in);
 }
 
 }

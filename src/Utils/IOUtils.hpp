@@ -11,30 +11,41 @@
 #include <iostream>
 #include <stdexcept>
 
-using std::ios;
-using std::ios_base;
-using std::is_base_of;
-using std::ostream;
+using std::ifstream;
+using std::ofstream;
 using std::runtime_error;
 using std::string;
 
 namespace sbwt_search {
 
-template <class BaseStream>
-class ThrowingStream: public BaseStream {
-public:
-  ThrowingStream(const char *filename, ios_base::openmode mode):
-    BaseStream(filename, mode) {
-    static_assert(
-      is_base_of<ios, BaseStream>::value, "BaseStream must inherit C++ stream"
-    );
-    if (this->fail()) {
-      throw runtime_error(string("The file ") + filename + " cannot be opened");
+class ThrowingIfstream: public ifstream {
+  public:
+    ThrowingIfstream(const string filename, ios_base::openmode mode):
+        ifstream(filename, mode) {
+      if (this->fail()) {
+        throw runtime_error(
+          string("The file ") + filename + " cannot be opened"
+        );
+      }
     }
-  }
+    static void check_file_exists(const string filename);
 };
 
-void check_file_exists(const char *filename);
+class ThrowingOfstream: public ofstream {
+  public:
+    ThrowingOfstream(const string filepath, ios_base::openmode mode):
+        ofstream(filepath, mode) {
+      if (this->fail()) {
+        throw runtime_error(
+          string("The path ") + filepath
+          + " cannot be opened. Check that all the folders in the path is "
+            "correct and that you have permission to create files in this path "
+            "folder"
+        );
+      }
+    }
+    static void check_path_valid(const string filepath);
+};
 
 }
 
