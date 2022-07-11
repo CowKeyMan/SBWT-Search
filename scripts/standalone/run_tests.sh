@@ -9,3 +9,4 @@ lcov --directory . --capture -q --output-file build/code_coverage.info --exclude
 printf "\nRunning genhtml..."
 genhtml -q build/code_coverage.info --output-directory ./docs/code_coverage/
 printf "\n"
+find test_objects/tmp/ -not -name  "*.gitignore" -type f -delete
