@@ -25,10 +25,10 @@ if(ENABLE_CLANG_TIDY)
 endif()
 
 if(ENABLE_HEADER_GUARDS_CHECK)
-  message("\nRunning header guard checks...")
+  message("\nRunning header checks...")
   message("********************************************************")
   execute_process(
-    COMMAND python3 scripts/cmake_checks/check_header_guards.py
+    COMMAND python3 scripts/cmake_checks/check_headers.py
     WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}
   )
   message("")
