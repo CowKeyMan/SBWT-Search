@@ -55,7 +55,7 @@ class CpuRankIndexBuilder:
         vector<u64> &&get_layer_0() { return move(layer_0); };
         vector<u64> &&get_layer_1_2() { return move(layer_1_2); };
 
-        void build() {
+        auto build() -> void {
           for (size_t i = 0, bits = 0;
                bits < round_up(bits_total, superblock_bits);
                bits += 64, ++i) {
@@ -73,25 +73,25 @@ class CpuRankIndexBuilder:
         }
 
       private:
-        void do_divisble_by_superblock(const u64 bits) {
+        auto do_divisble_by_superblock(const u64 bits) -> void {
           if (bits % hyperblock_bits == 0) { do_divisble_by_hyperlock(); }
           layer_2_temps_index = 0;
           layer_2_count = 0;
           fill(layer_2_temps.begin(), layer_2_temps.end(), 0);
         }
 
-        void do_divisble_by_hyperlock() {
+        auto do_divisble_by_hyperlock() -> void {
           layer_0.push_back(layer_0_count);
           layer_1_count = 0;
         }
 
-        void do_divisible_by_basicblock() {
+        auto do_divisible_by_basicblock() -> void {
           layer_2_temps[layer_2_temps_index++] = layer_2_count;
           layer_2_count = 0;
           if (layer_2_temps_index == 3) { add_layer_1_2(); }
         }
 
-        void add_layer_1_2() {
+        auto add_layer_1_2() -> void {
           layer_1_2.push_back(
             (layer_1_count
              - accumulate(layer_2_temps.begin(), layer_2_temps.end(), 0)
@@ -102,9 +102,10 @@ class CpuRankIndexBuilder:
         }
     };
 
-    void do_build_index() {
+    auto do_build_index() -> void {
       for (auto i = 0; i < 4; ++i) {
-        const u64 *vector_pointer = this->container.get_acgt(static_cast<ACGT>(i));
+        const u64 *vector_pointer
+          = this->container.get_acgt(static_cast<ACGT>(i));
         auto single_builder = SingleIndexBuilder(
           this->container.get_bits_total(),
           vector_pointer,
