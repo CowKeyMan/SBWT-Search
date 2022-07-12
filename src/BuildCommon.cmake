@@ -86,10 +86,6 @@ add_library(
 )
 target_link_libraries(index_file_parser PRIVATE libsdsl)
 add_library(
-  rank_index_builder_cpu
-  "${PROJECT_SOURCE_DIR}/RankIndexBuilder/RankIndexBuilder_cpu.cpp"
-)
-add_library(
   sbwt_container
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
 )
@@ -133,7 +129,6 @@ if (BUILD_CPU)
     libraries_cpu
     INTERFACE
     common_libraries
-    rank_index_builder_cpu
     # TODO: Combine more libraries here which are cpu specific
   )
 endif()
@@ -144,7 +139,6 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
   add_library(
     libraries_cuda
     INTERFACE
-    "${PROJECT_SOURCE_DIR}/RankIndexBuilder/RankIndexBuilder_cpu.cpp"
   )
   target_link_libraries(
     libraries_cuda
