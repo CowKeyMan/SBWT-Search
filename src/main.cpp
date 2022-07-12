@@ -6,7 +6,7 @@
 #include "QueryFileParser/QueryFileParser.h"
 #include "RawSequencesParser/RawSequencesParser.hpp"
 #include "SbwtFactory/SbwtFactory.hpp"
-#include "RankIndexBuilder/CpuRankIndexBuilder.hpp"
+#include "RankIndexBuilder/RankIndexBuilder.hpp"
 
 using sbwt_search::CharToBitsVector;
 using sbwt_search::parse_arguments;
@@ -33,8 +33,8 @@ auto main(int argc, char **argv) -> int {
   sequences_parser.parse_serial();
 
   auto factory = SdslSbwtFactory();
-  auto index_parser = factory.get_index_parser("path_to_sbwt_file");
-  auto loaded_container = index_parser.parse();
+  auto sbwt_parser = factory.get_sbwt_parser("path_to_sbwt_file");
+  auto loaded_container = sbwt_parser.parse();
   auto index_builder = CpuRankIndexBuilder<
     decltype(loaded_container),
     superblock_bits,

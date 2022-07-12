@@ -7,8 +7,8 @@
 
 #include <sdsl/bit_vectors.hpp>
 
-#include "IndexFileParser/IndexFileParser.hpp"
 #include "SbwtContainer/SbwtContainer.hpp"
+#include "SbwtParser/SbwtParser.hpp"
 #include "Utils/IOUtils.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
@@ -24,7 +24,7 @@ using std::vector;
 
 namespace sbwt_search {
 
-auto SdslIndexFileParser::do_parse() -> SdslSbwtContainer {
+auto SdslSbwtParser::do_parse() -> SdslSbwtContainer {
   ThrowingIfstream stream(filename, std::ios::in);
   assert_plain_matrix(stream);
   vector<bit_vector> acgt(4);
@@ -36,7 +36,7 @@ auto SdslIndexFileParser::do_parse() -> SdslSbwtContainer {
 
 // Function credits:
 // https://github.com/algbio/SBWT/blob/master/src/globals.cpp
-void SdslIndexFileParser::assert_plain_matrix(istream &stream) const {
+void SdslSbwtParser::assert_plain_matrix(istream &stream) const {
   size_t size;
   stream.read(reinterpret_cast<char *>(&size), sizeof(u64));
   string variant(size, '\0');

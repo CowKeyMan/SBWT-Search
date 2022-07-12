@@ -1,8 +1,8 @@
-#ifndef INDEX_WRITER_HPP
-#define INDEX_WRITER_HPP
+#ifndef SBWT_WRITER_HPP
+#define SBWT_WRITER_HPP
 
 /**
- * @file IndexWriter.hpp
+ * @file SbwtWriter.hpp
  * @brief Writes the given SbwtContainer to disk
  */
 
@@ -18,7 +18,7 @@ namespace sbwt_search {
 using namespace std;
 
 template <class Implementation, class Container>
-class IndexWriter {
+class SbwtWriter {
   private:
     Implementation *const host;
 
@@ -26,7 +26,7 @@ class IndexWriter {
     const Container &container;
     const string path;
 
-    IndexWriter(const Container &container, const string path):
+    SbwtWriter(const Container &container, const string path):
         container(container),
         path(path),
         host(static_cast<Implementation *>(this)) {}
@@ -35,8 +35,8 @@ class IndexWriter {
     void write() const { host->do_write(); }
 };
 
-class SdslIndexWriter: public IndexWriter<SdslIndexWriter, SdslSbwtContainer> {
-    friend IndexWriter;
+class SdslSbwtWriter: public SbwtWriter<SdslSbwtWriter, SdslSbwtContainer> {
+    friend SbwtWriter;
 
   private:
     const string format = "plain-matrix";
@@ -44,22 +44,22 @@ class SdslIndexWriter: public IndexWriter<SdslIndexWriter, SdslSbwtContainer> {
     void do_write() const;
 
   public:
-    SdslIndexWriter(const SdslSbwtContainer &container, const string path):
-        IndexWriter(container, path) {}
+    SdslSbwtWriter(const SdslSbwtContainer &container, const string path):
+        SbwtWriter(container, path) {}
 };
 
-class BitVectorIndexWriter:
-    public IndexWriter<BitVectorIndexWriter, BitVectorSbwtContainer> {
-    friend IndexWriter;
+class BitVectorSbwtWriter:
+    public SbwtWriter<BitVectorSbwtWriter, BitVectorSbwtContainer> {
+    friend SbwtWriter;
 
   private:
     void do_write() const;
 
   public:
-    BitVectorIndexWriter(
+    BitVectorSbwtWriter(
       const BitVectorSbwtContainer &container, const string path
     ):
-        IndexWriter(container, path) {}
+        SbwtWriter(container, path) {}
 };
 
 }

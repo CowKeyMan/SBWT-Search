@@ -7,9 +7,9 @@
  *        based on the format being used
  */
 
-#include "IndexFileParser/IndexFileParser.hpp"
-#include "IndexWriter/IndexWriter.hpp"
 #include "SbwtContainer/SbwtContainer.hpp"
+#include "SbwtParser/SbwtParser.hpp"
+#include "SbwtWriter/SbwtWriter.hpp"
 
 namespace sbwt_search {
 
@@ -22,49 +22,49 @@ class SbwtFactory {
     SbwtFactory(): host(static_cast<Implementation *>(this)) {}
 
   public:
-    Parser get_index_parser(string filepath) const {
-      return host->do_get_index_parser(filepath);
+    Parser get_sbwt_parser(string filepath) const {
+      return host->do_get_sbwt_parser(filepath);
     }
     Writer
-    get_index_writer(const Container &container, const string path) const {
-      return host->do_get_index_writer(container, path);
+    get_sbwt_writer(const Container &container, const string path) const {
+      return host->do_get_sbwt_writer(container, path);
     }
 };
 
 class SdslSbwtFactory:
     public SbwtFactory<
       SdslSbwtFactory,
-      SdslIndexFileParser,
+      SdslSbwtParser,
       SdslSbwtContainer,
-      SdslIndexWriter> {
+      SdslSbwtWriter> {
     friend SbwtFactory;
 
   private:
-    SdslIndexFileParser do_get_index_parser(string filepath) {
-      return SdslIndexFileParser(filepath);
+    SdslSbwtParser do_get_sbwt_parser(string filepath) {
+      return SdslSbwtParser(filepath);
     }
-    SdslIndexWriter
-    do_get_index_writer(const SdslSbwtContainer &container, const string path) {
-      return SdslIndexWriter(container, path);
+    SdslSbwtWriter
+    do_get_sbwt_writer(const SdslSbwtContainer &container, const string path) {
+      return SdslSbwtWriter(container, path);
     }
 };
 
 class BitVectorSbwtFactory:
     public SbwtFactory<
       BitVectorSbwtFactory,
-      BitVectorIndexFileParser,
+      BitVectorSbwtParser,
       BitVectorSbwtContainer,
-      BitVectorIndexWriter> {
+      BitVectorSbwtWriter> {
     friend SbwtFactory;
 
   private:
-    BitVectorIndexFileParser do_get_index_parser(string filepath) const {
-      return BitVectorIndexFileParser(filepath);
+    BitVectorSbwtParser do_get_sbwt_parser(string filepath) const {
+      return BitVectorSbwtParser(filepath);
     }
-    BitVectorIndexWriter do_get_index_writer(
+    BitVectorSbwtWriter do_get_sbwt_writer(
       const BitVectorSbwtContainer &container, const string path
     ) const {
-      return BitVectorIndexWriter(container, path);
+      return BitVectorSbwtWriter(container, path);
     }
 };
 

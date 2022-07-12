@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "RankIndexBuilder/CpuRankIndexBuilder.hpp"
+#include "RankIndexBuilder/RankIndexBuilder.hpp"
 #include "Utils/TestUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
 

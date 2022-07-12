@@ -1,8 +1,8 @@
-#ifndef INDEX_FILE_PARSER_HPP
-#define INDEX_FILE_PARSER_HPP
+#ifndef SBWT_PARSER_HPP
+#define SBWT_PARSER_HPP
 
 /**
- * @file IndexFileParser.hpp
+ * @file SbwtParser.hpp
  * @brief Contains functions for interacting and reading SBWT index files
  * */
 
@@ -29,20 +29,19 @@ using std::vector;
 namespace sbwt_search {
 
 template <class Implementation, class Container>
-class IndexFileParser: Builder {
+class SbwtParser: Builder {
   private:
     Implementation *const host;
 
   protected:
-    IndexFileParser(): host(static_cast<Implementation *>(this)) {}
+    SbwtParser(): host(static_cast<Implementation *>(this)) {}
 
   public:
     Container parse() const { return host->do_parse(); }
 };
 
-class SdslIndexFileParser:
-    public IndexFileParser<SdslIndexFileParser, SdslSbwtContainer> {
-    friend IndexFileParser;
+class SdslSbwtParser: public SbwtParser<SdslSbwtParser, SdslSbwtContainer> {
+    friend SbwtParser;
 
   private:
     const string filename;
@@ -51,13 +50,12 @@ class SdslIndexFileParser:
     void assert_plain_matrix(istream &in) const;
 
   public:
-    SdslIndexFileParser(const string filename):
-        filename(filename), IndexFileParser() {}
+    SdslSbwtParser(const string filename): filename(filename), SbwtParser() {}
 };
 
-class BitVectorIndexFileParser:
-    public IndexFileParser<BitVectorIndexFileParser, BitVectorSbwtContainer> {
-    friend IndexFileParser;
+class BitVectorSbwtParser:
+    public SbwtParser<BitVectorSbwtParser, BitVectorSbwtContainer> {
+    friend SbwtParser;
 
   private:
     const string files_prefix;
@@ -68,8 +66,8 @@ class BitVectorIndexFileParser:
     vector<u64> parse_single_acgt(string filename);
 
   public:
-    BitVectorIndexFileParser(const string files_prefix):
-        files_prefix(files_prefix), IndexFileParser() {}
+    BitVectorSbwtParser(const string files_prefix):
+        files_prefix(files_prefix), SbwtParser() {}
 };
 
 }

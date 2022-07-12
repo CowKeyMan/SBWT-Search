@@ -1,8 +1,7 @@
 #include <ostream>
 #include <string>
 
-#include "IndexFileParser/IndexFileParser.hpp"
-#include "IndexWriter/IndexWriter.hpp"
+#include "SbwtWriter/SbwtWriter.hpp"
 #include "Utils/BitVectorUtils.h"
 #include "Utils/IOUtils.hpp"
 
@@ -11,7 +10,7 @@ using std::string;
 
 namespace sbwt_search {
 
-auto SdslIndexWriter::do_write() const -> void {
+auto SdslSbwtWriter::do_write() const -> void {
   ThrowingOfstream stream(path, std::ios::out | std::ios::binary);
   size_t string_size = format.size();
   stream.write(reinterpret_cast<char *>(&string_size), sizeof(u64));
@@ -22,7 +21,7 @@ auto SdslIndexWriter::do_write() const -> void {
   }
 }
 
-auto BitVectorIndexWriter::do_write() const -> void {
+auto BitVectorSbwtWriter::do_write() const -> void {
   for (auto i = 0; i < 4; ++i) {
     ThrowingOfstream stream(
       path + acgt_postfixes[i], std::ios::out | std::ios::binary

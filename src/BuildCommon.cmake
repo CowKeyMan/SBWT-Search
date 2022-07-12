@@ -80,11 +80,11 @@ add_library(
   "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser.cpp"
 )
 add_library(
-  index_file_parser
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/BitVectorIndexFileParser.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/SdslIndexFileParser.cpp"
+  sbwt_parser
+  "${PROJECT_SOURCE_DIR}/SbwtParser/BitVectorSbwtParser.cpp"
+  "${PROJECT_SOURCE_DIR}/SbwtParser/SdslSbwtParser.cpp"
 )
-target_link_libraries(index_file_parser PRIVATE libsdsl)
+target_link_libraries(sbwt_parser PRIVATE libsdsl)
 add_library(
   sbwt_container
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
@@ -92,11 +92,11 @@ add_library(
 target_link_libraries(sbwt_container PRIVATE libsdsl)
 add_dependencies(sbwt_container sdsl)
 add_library(
-  index_writer
-  "${PROJECT_SOURCE_DIR}/IndexWriter/IndexWriter.cpp"
+  sbwt_writer
+  "${PROJECT_SOURCE_DIR}/SbwtWriter/SbwtWriter.cpp"
 )
 target_link_libraries(
-  index_writer
+  sbwt_writer
   PRIVATE
   libsdsl
   sbwt_container
@@ -111,13 +111,13 @@ target_link_libraries(
   io_utils
   query_file_parser
   raw_sequences_parser
-  index_file_parser
+  sbwt_parser
   libsdsl
   ZLIB::ZLIB
   parser
   cxxopts
   sbwt_container
-  index_writer
+  sbwt_writer
   # TODO: Link more libraries here
 )
 add_dependencies(common_libraries kseqpp)
