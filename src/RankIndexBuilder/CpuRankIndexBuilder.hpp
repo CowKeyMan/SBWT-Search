@@ -1,3 +1,13 @@
+#ifndef RANK_INDEX_BUILDER_HPP
+#define RANK_INDEX_BUILDER_HPP
+
+/**
+ * @file CpuRankIndexBuilder.hpp
+ * @brief Module responsible for building the rank index of the SBWT file on the CPU
+          Inherits from RankIndexBuilder
+ * */
+
+
 #include <vector>
 
 #include "RankIndexBuilder/RankIndexBuilder.hpp"
@@ -54,6 +64,7 @@ class CpuRankIndexBuilder:
 
         vector<u64> &&get_layer_0() { return move(layer_0); };
         vector<u64> &&get_layer_1_2() { return move(layer_1_2); };
+        u64 get_total_count() { return layer_0_count; };
 
         auto build() -> void {
           for (size_t i = 0, bits = 0;
@@ -103,6 +114,8 @@ class CpuRankIndexBuilder:
     };
 
     auto do_build_index() -> void {
+      vector<u64> c_map(5);
+      c_map[0] = 1;
       for (auto i = 0; i < 4; ++i) {
         const u64 *vector_pointer
           = this->container.get_acgt(static_cast<ACGT>(i));
@@ -118,7 +131,10 @@ class CpuRankIndexBuilder:
         this->container.set_layer_1_2(
           static_cast<ACGT>(i), single_builder.get_layer_1_2()
         );
+        c_map[i + 1] = single_builder.get_total_count();
       }
+      for (auto i = 1; i < c_map.size(); ++i) { c_map[i] += c_map[i - 1]; }
+      this->container.set_c_map(move(c_map));
     }
 
   public:
@@ -126,3 +142,5 @@ class CpuRankIndexBuilder:
 };
 
 }
+
+#endif

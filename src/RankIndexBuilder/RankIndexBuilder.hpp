@@ -1,8 +1,8 @@
-#ifndef RANK_INDEX_BUILDER_H
-#define RANK_INDEX_BUILDER_H
+#ifndef RANK_INDEX_BUILDER_HPP
+#define RANK_INDEX_BUILDER_HPP
 
 /**
- * @file RankIndexBuilder.h
+ * @file RankIndexBuilder.hpp
  * @brief Module responsible for building the rank index of the SBWT file
  *        Assumptions made:
  *          * basicblock_bits is a multiple of 64

@@ -90,6 +90,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
 )
 target_link_libraries(sbwt_container PRIVATE libsdsl)
+add_dependencies(sbwt_container sdsl)
 add_library(
   index_writer
   "${PROJECT_SOURCE_DIR}/IndexWriter/IndexWriter.cpp"

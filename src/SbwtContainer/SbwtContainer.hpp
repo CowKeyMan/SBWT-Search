@@ -31,32 +31,15 @@ class SbwtContainer {
   protected:
     const size_t bit_vector_size;
     const size_t bits_total;
-    vector<vector<u64>> layer_0;
-    vector<vector<u64>> layer_1_2;
 
     SbwtContainer(const size_t bits_total, const size_t bit_vector_size):
         bits_total(bits_total),
         bit_vector_size(bit_vector_size),
-        host(static_cast<Implementation *>(this)) {
-      layer_0.resize(4);
-      layer_1_2.resize(4);
-    }
+        host(static_cast<Implementation *>(this)) {}
 
   public:
     const u64 *get_acgt(ACGT letter) const { return host->do_get_acgt(letter); }
 
-    void set_layer_0(ACGT letter, vector<u64> &&new_layer_0) {
-      layer_0[static_cast<int>(letter)] = new_layer_0;
-    }
-    void set_layer_1_2(ACGT letter, vector<u64> &&new_layer_1_2) {
-      layer_1_2[static_cast<int>(letter)] = new_layer_1_2;
-    }
-    const vector<u64> &get_layer_0(ACGT letter) const {
-      return layer_0[static_cast<int>(letter)];
-    }
-    const vector<u64> &get_layer_1_2(ACGT letter) const {
-      return layer_1_2[static_cast<int>(letter)];
-    }
     u64 get_bit_vector_size() const { return bit_vector_size; }
     u64 get_bits_total() const { return bits_total; }
     GpuSbwtContainer to_gpu();
@@ -77,12 +60,44 @@ GpuSbwtContainer SbwtContainer<T>::to_gpu() {
   return GpuSbwtContainer();
 }
 
-class SdslSbwtContainer: public SbwtContainer<SdslSbwtContainer> {
+template <class Container>
+class CpuSbwtContainer: public SbwtContainer<Container> {
+  private:
+    vector<vector<u64>> layer_0;
+    vector<vector<u64>> layer_1_2;
+    vector<u64> c_map;
+
+  protected:
+    CpuSbwtContainer(const size_t bits_total, const size_t bit_vector_size):
+        SbwtContainer<Container>(bits_total, bit_vector_size) {
+      layer_0.resize(4);
+      layer_1_2.resize(4);
+      c_map.resize(5);
+      c_map[0] = 1;
+    }
+
+  public:
+    void set_layer_0(ACGT letter, vector<u64> &&new_layer_0) {
+      layer_0[static_cast<int>(letter)] = new_layer_0;
+    }
+    void set_layer_1_2(ACGT letter, vector<u64> &&new_layer_1_2) {
+      layer_1_2[static_cast<int>(letter)] = new_layer_1_2;
+    }
+    const vector<u64> &get_layer_0(ACGT letter) const {
+      return layer_0[static_cast<int>(letter)];
+    }
+    const vector<u64> &get_layer_1_2(ACGT letter) const {
+      return layer_1_2[static_cast<int>(letter)];
+    }
+    void set_c_map(vector<u64> &&value) { c_map = value; }
+    const vector<u64> &get_c_map() const { return c_map; }
+};
+
+class SdslSbwtContainer: public CpuSbwtContainer<SdslSbwtContainer> {
     friend SbwtContainer;
 
   private:
     const vector<bit_vector> acgt;
-    const vector<u64> c_map;
 
     const u64 *do_get_acgt(ACGT letter);
 
@@ -93,17 +108,16 @@ class SdslSbwtContainer: public SbwtContainer<SdslSbwtContainer> {
       const bit_vector &&g,
       const bit_vector &&t
     ):
-        acgt{ a, c, g, t }, SbwtContainer(a.size(), a.capacity() / 64) {}
+        acgt{ a, c, g, t }, CpuSbwtContainer(a.size(), a.capacity() / 64) {}
 
     bit_vector get_acgt_sdsl(ACGT letter) const;
 };
 
-class BitVectorSbwtContainer: public SbwtContainer<BitVectorSbwtContainer> {
+class BitVectorSbwtContainer: public CpuSbwtContainer<BitVectorSbwtContainer> {
     friend SbwtContainer;
 
   private:
     vector<vector<u64>> acgt;
-    vector<u64> c_map;
     vector<vector<u64>> layer_0;
     vector<vector<u64>> layer_1_2;
 
@@ -117,7 +131,7 @@ class BitVectorSbwtContainer: public SbwtContainer<BitVectorSbwtContainer> {
       const vector<u64> &&t,
       const size_t bits_total
     ):
-        acgt{ a, c, g, t }, SbwtContainer(bits_total, a.size()) {}
+        acgt{ a, c, g, t }, CpuSbwtContainer(bits_total, a.size()) {}
 
     void change_acgt_endianness();
 };

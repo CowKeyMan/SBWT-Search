@@ -69,6 +69,7 @@ vector<u64> layer_1_2 = {
   (30ULL << 32) | (10ULL << 20) | (65ULL << 10) | (20ULL << 0),
   (0ULL << 32) | (2ULL << 20) | (0ULL << 10) | (0ULL << 0),
 };
+vector<u64> c_map = { 1, 132 + 1, 132 * 2 + 1, 132 * 3 + 1, 132 * 4 + 1 };
 
 BitVectorSbwtContainer build_container() {
   auto four_vectors
@@ -97,6 +98,7 @@ TEST(RankIndexBuilderTest, BuildIndex) {
   assert_vectors_equal<u64>(
     layer_1_2, container.get_layer_1_2(static_cast<ACGT>(0))
   );
+  assert_vectors_equal<u64>(c_map, container.get_c_map());
 }
 
 }
