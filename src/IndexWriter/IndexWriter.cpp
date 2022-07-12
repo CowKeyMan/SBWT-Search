@@ -11,8 +11,7 @@ using std::string;
 
 namespace sbwt_search {
 
-auto SdslIndexWriter::do_write(const SdslSbwtContainer &container, string path)
-  const -> void {
+auto SdslIndexWriter::do_write() const -> void {
   ThrowingOfstream stream(path, std::ios::out | std::ios::binary);
   size_t string_size = format.size();
   stream.write(reinterpret_cast<char *>(&string_size), sizeof(u64));
@@ -23,12 +22,7 @@ auto SdslIndexWriter::do_write(const SdslSbwtContainer &container, string path)
   }
 }
 
-#include <iostream>
-using namespace std;
-
-auto BitVectorIndexWriter::do_write(
-  const BitVectorSbwtContainer &container, string path
-) const -> void {
+auto BitVectorIndexWriter::do_write() const -> void {
   for (auto i = 0; i < 4; ++i) {
     ThrowingOfstream stream(
       path + acgt_postfixes[i], std::ios::out | std::ios::binary

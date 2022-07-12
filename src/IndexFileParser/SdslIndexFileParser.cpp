@@ -24,7 +24,7 @@ using std::vector;
 
 namespace sbwt_search {
 
-auto SdslIndexFileParser::do_parse(bool file_has_index) -> SdslSbwtContainer {
+auto SdslIndexFileParser::do_parse() -> SdslSbwtContainer {
   ThrowingIfstream stream(filename, std::ios::in);
   assert_plain_matrix(stream);
   vector<bit_vector> acgt(4);

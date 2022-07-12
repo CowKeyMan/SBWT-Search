@@ -37,8 +37,8 @@ class IndexFileParser: Builder {
     IndexFileParser(): host(static_cast<Implementation *>(this)) {}
 
   public:
-    Container parse(bool file_has_index) const {
-      return host->do_parse(file_has_index);
+    Container parse() const {
+      return host->do_parse();
     }
 };
 
@@ -49,7 +49,7 @@ class SdslIndexFileParser:
   private:
     const string filename;
 
-    SdslSbwtContainer do_parse(bool file_has_index);
+    SdslSbwtContainer do_parse();
     void assert_plain_matrix(istream &in) const;
 
   public:
@@ -65,7 +65,7 @@ class BitVectorIndexFileParser:
     const string files_prefix;
     u64 bits_total;
 
-    BitVectorSbwtContainer do_parse(bool file_has_index);
+    BitVectorSbwtContainer do_parse();
     vector<vector<u64>> parse_acgt();
     vector<u64> parse_single_acgt(string filename);
 

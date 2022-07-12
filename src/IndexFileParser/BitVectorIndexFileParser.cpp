@@ -10,9 +10,8 @@ using std::cerr;
 
 namespace sbwt_search {
 
-auto BitVectorIndexFileParser::do_parse(bool has_index)
+auto BitVectorIndexFileParser::do_parse()
   -> BitVectorSbwtContainer {
-  if (has_index) { cerr << "Set has_index to bit vector format. Ignoring\n"; }
   auto acgt = parse_acgt();
   return BitVectorSbwtContainer(
     move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3]), bits_total

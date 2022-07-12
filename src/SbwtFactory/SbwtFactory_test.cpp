@@ -54,10 +54,11 @@ TEST(SbwtFactoryTest, SdslConstructWriteRead) {
     move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3]), 64 + 8 * 4
   );
   auto factory = BitVectorSbwtFactory();
-  auto writer = factory.get_index_writer();
-  writer.write(container, "test_objects/tmp/bitvector");
+  auto writer
+    = factory.get_index_writer(container, "test_objects/tmp/bitvector");
+  writer.write();
   auto loaded_container
-    = BitVectorIndexFileParser("test_objects/tmp/bitvector").parse(false);
+    = factory.get_index_parser("test_objects/tmp/bitvector").parse();
   assert_containers_equal<BitVectorSbwtContainer>(container, loaded_container);
   ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
 }
@@ -88,10 +89,11 @@ TEST(SbwtFactoryTest, BitVectorConstructWriteRead) {
     move(sdsl_acgt[3])
   );
   auto factory = SdslSbwtFactory();
-  auto writer = factory.get_index_writer();
-  writer.write(container, "test_objects/tmp/bitvector");
-  auto loaded_container
-    = factory.get_index_parser("test_objects/tmp/bitvector").parse(false);
+  auto writer
+    = factory.get_index_writer(container, "test_objects/tmp/bitvector");
+  writer.write();
+  auto index_parser = factory.get_index_parser("test_objects/tmp/bitvector");
+  auto loaded_container = index_parser.parse();
   assert_containers_equal<SdslSbwtContainer>(container, loaded_container);
   ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
 }
@@ -124,7 +126,7 @@ void write_incorrect_sbwt() {
 TEST(SbwtFactoryTest, InvalidSdsl) {
   write_incorrect_sbwt();
   try {
-    SdslIndexFileParser(incorrect_sbwt_filepath).parse(false);
+    SdslIndexFileParser(incorrect_sbwt_filepath).parse();
   } catch (runtime_error &e) {
     ASSERT_EQ(string(e.what()), "Error input is not a plain-matrix SBWT");
   }

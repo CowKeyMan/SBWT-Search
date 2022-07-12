@@ -25,7 +25,10 @@ class SbwtFactory {
     Parser get_index_parser(string filepath) const {
       return host->do_get_index_parser(filepath);
     }
-    Writer get_index_writer() const { return host->do_get_index_writer(); }
+    Writer
+    get_index_writer(const Container &container, const string path) const {
+      return host->do_get_index_writer(container, path);
+    }
 };
 
 class SdslSbwtFactory:
@@ -40,7 +43,10 @@ class SdslSbwtFactory:
     SdslIndexFileParser do_get_index_parser(string filepath) {
       return SdslIndexFileParser(filepath);
     }
-    SdslIndexWriter do_get_index_writer() { return SdslIndexWriter(); }
+    SdslIndexWriter
+    do_get_index_writer(const SdslSbwtContainer &container, const string path) {
+      return SdslIndexWriter(container, path);
+    }
 };
 
 class BitVectorSbwtFactory:
@@ -55,8 +61,10 @@ class BitVectorSbwtFactory:
     BitVectorIndexFileParser do_get_index_parser(string filepath) const {
       return BitVectorIndexFileParser(filepath);
     }
-    BitVectorIndexWriter do_get_index_writer() const {
-      return BitVectorIndexWriter();
+    BitVectorIndexWriter do_get_index_writer(
+      const BitVectorSbwtContainer &container, const string path
+    ) const {
+      return BitVectorIndexWriter(container, path);
     }
 };
 
