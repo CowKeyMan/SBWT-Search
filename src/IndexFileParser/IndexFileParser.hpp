@@ -37,9 +37,7 @@ class IndexFileParser: Builder {
     IndexFileParser(): host(static_cast<Implementation *>(this)) {}
 
   public:
-    Container parse() const {
-      return host->do_parse();
-    }
+    Container parse() const { return host->do_parse(); }
 };
 
 class SdslIndexFileParser:

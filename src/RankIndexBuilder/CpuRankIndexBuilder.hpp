@@ -3,10 +3,9 @@
 
 /**
  * @file CpuRankIndexBuilder.hpp
- * @brief Module responsible for building the rank index of the SBWT file on the CPU
-          Inherits from RankIndexBuilder
+ * @brief Module responsible for building the rank index of the SBWT file on the
+ CPU Inherits from RankIndexBuilder
  * */
-
 
 #include <vector>
 

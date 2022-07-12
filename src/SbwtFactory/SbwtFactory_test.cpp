@@ -63,7 +63,7 @@ TEST(SbwtFactoryTest, SdslConstructWriteRead) {
   ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
 }
 
-auto build_sdsl_bit_vectors() -> vector<bit_vector>{
+auto build_sdsl_bit_vectors() -> vector<bit_vector> {
   vector<bit_vector> sdsl_acgt(acgt.size());
   for (auto i = 0; i < acgt.size(); ++i) {
     sdsl_acgt[i].bit_resize(64 + 8 * 4);

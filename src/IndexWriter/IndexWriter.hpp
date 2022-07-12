@@ -29,8 +29,7 @@ class IndexWriter {
     IndexWriter(const Container &container, const string path):
         container(container),
         path(path),
-        host(static_cast<Implementation *>(this)) {
-      }
+        host(static_cast<Implementation *>(this)) {}
 
   public:
     void write() const { host->do_write(); }
@@ -46,8 +45,7 @@ class SdslIndexWriter: public IndexWriter<SdslIndexWriter, SdslSbwtContainer> {
 
   public:
     SdslIndexWriter(const SdslSbwtContainer &container, const string path):
-        IndexWriter(container, path) {
-    }
+        IndexWriter(container, path) {}
 };
 
 class BitVectorIndexWriter:
