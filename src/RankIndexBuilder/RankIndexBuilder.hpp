@@ -15,6 +15,7 @@
 #include <numeric>
 #include <vector>
 
+#include "Builder/Builder.h"
 #include "SbwtContainer/SbwtContainer.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
@@ -30,7 +31,7 @@ template <
   class Container,
   u64 superblock_bits,
   u64 hyperblock_bits>
-class RankIndexBuilder {
+class RankIndexBuilder: private Builder {
   private:
     Implementation *const host;
 
@@ -52,7 +53,7 @@ class RankIndexBuilder {
     }
 
   public:
-    void build_index() { host->do_build_index(); };
+    void build_index() { check_if_has_built(); host->do_build_index(); };
 };
 
 template <class Container, u64 superblock_bits, u64 hyperblock_bits>

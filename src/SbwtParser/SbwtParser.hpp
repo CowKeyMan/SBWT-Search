@@ -29,7 +29,7 @@ using std::vector;
 namespace sbwt_search {
 
 template <class Implementation, class Container>
-class SbwtParser: Builder {
+class SbwtParser: private Builder {
   private:
     Implementation *const host;
 
@@ -37,7 +37,7 @@ class SbwtParser: Builder {
     SbwtParser(): host(static_cast<Implementation *>(this)) {}
 
   public:
-    Container parse() const { return host->do_parse(); }
+    Container parse() { check_if_has_built(); return host->do_parse(); }
 };
 
 class SdslSbwtParser: public SbwtParser<SdslSbwtParser, SdslSbwtContainer> {
