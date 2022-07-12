@@ -7,7 +7,6 @@
 #include "Utils/BenchmarkUtils.hpp"
 #include "QueryFileParser/QueryFileParser.h"
 #include "RawSequencesParser/RawSequencesParser.hpp"
-#include "RankIndexBuilder/RankIndexBuilder.h"
 
 using std::cerr;
 using std::cout;
