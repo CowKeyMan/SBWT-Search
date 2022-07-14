@@ -10,7 +10,7 @@ This script is executed automatically by cmake when building
 """
 
 from pathlib import Path
-from subprocess import Popen
+from subprocess import Popen, PIPE
 
 suffixes = 'h cpp cu cuh hpp'.split()
 file_names = [
@@ -22,9 +22,6 @@ file_names = [
 Path('tmp').mkdir(exist_ok=True)
 
 for file_name in file_names:
-    printed = 'Showing diff of: ' + str(file_name)
-    print(printed)
-    print('=' * len(printed), flush=True)
     with open(file_name, 'r') as f:
         lines = [x.replace('\r\n', '\n') for x in f.readlines()]
     original_file = f'tmp/{file_name.stem}_original{file_name.suffix}'
@@ -38,7 +35,14 @@ for file_name in file_names:
         "git --no-pager diff --no-index"
         f" --ignore-cr-at-eol -U2 {original_file} {tidy_file}"
     )
-    Popen(command, shell=True).wait()
-    print()
+    process = Popen(command, shell=True, stdout=PIPE)
+    process.wait()
     Path(original_file).unlink()
     Path(tidy_file).unlink()
+    output = process.communicate()[0].decode()
+    if len(output) > 0:
+        printed = f'Showing diff of: {file_name}'
+        print(printed)
+        print('=' * len(printed), flush=True)
+        print(output)
+        print()
