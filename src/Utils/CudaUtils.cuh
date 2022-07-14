@@ -6,40 +6,44 @@
  * @brief Contains CUDA commonly used functions and tools
  * */
 
-#include "cuda_runtime.h"
+#include <cstddef>
+#include <iostream>
+#include <vector>
 
-__device__ auto get_idx() -> int {
-  return blockDim.x * blockIdx.x + threadIdx.x;
-}
+using std::cerr;
+using std::endl;
+using std::vector;
+
+auto get_idx() -> int { return blockDim.x * blockIdx.x + threadIdx.x; }
 
 #define CUDA_CHECK(code_block) \
   { gpuAssert((code_block), __FILE__, __LINE__); }
 inline void
 gpuAssert(cudaError_t code, const char *file, int line, bool abort = true) {
   if (code != cudaSuccess) {
-    fprintf(
-      stderr, "GPUassert: %s %s %d\n", cudaGetErrorString(code), file, line
-    );
+    cerr << "GPUassert: " << cudaGetErrorString(code) << " " << line << " "
+         << line << '\n';
     if (abort) exit(code);
   }
 }
 
 template <class T>
-class CUDA_ptr {
+class CudaPointer {
     T *ptr;
 
   public:
-    CUDA_ptr(size_t size) {
+    CudaPointer(size_t size) {
       mysize = size * sizeof(T);
       CUDA_CHECK(cudaMalloc((void **)&ptr, mysize));
     }
-    CUDA_ptr(const vector<T> v): CUDA_ptr(v.size()) {
-      CUDA_CHECK(cudaMemcpy(ptr, &v[0], mysize, cudaMemcpyHostToDevice));
+    CudaPointer(const T *cpu_ptr, size_t size): CudaPointer(size) {
+      CUDA_CHECK(cudaMemcpy(ptr, cpu_ptr, mysize, cudaMemcpyHostToDevice));
     }
+    CudaPointer(const vector<T> v): CudaPointer(&v[0], v.size()) {}
     auto set(const T elem) -> void {
       CUDA_CHECK(cudaMemset(ptr, elem, mysize));
     }
-    auto get() -> T * { return ptr; }
+    auto get() const -> T *const { return ptr; }
     auto copy_to(T &destination) -> void {
       CUDA_CHECK(cudaMemcpy(&destination, ptr, mysize, cudaMemcpyDeviceToHost));
     }
@@ -48,7 +52,7 @@ class CUDA_ptr {
         cudaMemcpy(&destination[0], ptr, mysize, cudaMemcpyDeviceToHost)
       );
     }
-    ~CUDA_ptr() { CUDA_CHECK(cudaFree(ptr)); }
+    ~CudaPointer() { CUDA_CHECK(cudaFree(ptr)); }
 
   private:
     size_t mysize;
