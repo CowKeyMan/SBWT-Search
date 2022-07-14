@@ -15,16 +15,22 @@ folders = set()
 for fname in Path('src').rglob('*.h'):
     file_names += str(fname) + " "
     folders.add(str(fname.parent))
+for fname in Path('src').rglob('*.hpp'):
+    file_names += str(fname) + " "
+for fname in Path('src').rglob('*.cuh'):
+    file_names += str(fname) + " "
 for fname in Path('src').rglob('[!(test)]*[!(test)].cpp'):
     file_names += str(fname) + " "
+for fname in Path('src').rglob('[!(test)]*[!(test)].cu'):
+    file_names += str(fname) + " "
 
-folders_string = ""
-for folder in folders:
-    folders_string += " -I " + folder
+# folders_string = ""
+# for folder in folders:
+    # folders_string += " -I " + folder
 
 
 command = (
-    "clang-tidy --quiet "
+    "clang-tidy "
     + "-p ./build "
     + file_names
 )
