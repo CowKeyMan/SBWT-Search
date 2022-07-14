@@ -1,6 +1,9 @@
 # Run the tests as well as generate code coverage
 
 #!/bin/sh
+# gcno files are built when object is compiled
+# gcda files are built after execution
+find build/src -name "*.gcda" -type f -delete
 printf "\nRunning CUDA Tests:\n"
 ./build/bin/test_main_cuda
 printf "\nRunning CPU Tests:\n"
