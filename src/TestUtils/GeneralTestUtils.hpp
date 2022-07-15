@@ -1,8 +1,8 @@
-#ifndef TEST_UTILS_HPP
-#define TEST_UTILS_HPP
+#ifndef GENERAL_TEST_UTILS_HPP
+#define GENERAL_TEST_UTILS_HPP
 
 /**
- * @file TestUtils.hpp
+ * @file GeneralTestUtils.hpp
  * @brief Contains functions to make testing functions cleaner
  * */
 

@@ -40,8 +40,8 @@ class RankIndexBuilder: private Builder {
     const u64 basicblock_bits;
     RankIndexBuilder(Container &container):
         container(container),
-        basicblock_bits(superblock_bits / 4),
-        host(static_cast<Implementation *>(this)) {
+        host(static_cast<Implementation *>(this)),
+        basicblock_bits(superblock_bits / 4) {
       static_assert(
         (superblock_bits / 4) % 64 == 0 && hyperblock_bits % 64 == 0,
         "Block bits must be divisible by 64"
@@ -53,7 +53,10 @@ class RankIndexBuilder: private Builder {
     }
 
   public:
-    void build_index() { check_if_has_built(); host->do_build_index(); };
+    void build_index() {
+      check_if_has_built();
+      host->do_build_index();
+    };
 };
 
 template <class Container, u64 superblock_bits, u64 hyperblock_bits>
@@ -106,13 +109,13 @@ class CpuRankIndexBuilder:
           for (size_t i = 0, bits = 0;
                bits < round_up(bits_total, superblock_bits);
                bits += 64, ++i) {
-            if (bits % superblock_bits == 0) {
+            if (divisible_by_power_of_two(bits, superblock_bits)) {
               do_divisble_by_superblock(bits);
             }
             auto set_bits = popcount(bits_vector[i]);
-            if (bits % basicblock_bits == 0 and bits % superblock_bits != 0) {
-              do_divisible_by_basicblock();
-            }
+            auto condition = divisible_by_power_of_two(bits, basicblock_bits)
+                          && !divisible_by_power_of_two(bits, superblock_bits);
+            if (condition) { do_divisible_by_basicblock(); }
             layer_0_count += set_bits;
             layer_1_count += set_bits;
             layer_2_count += set_bits;
@@ -121,7 +124,9 @@ class CpuRankIndexBuilder:
 
       private:
         auto do_divisble_by_superblock(const u64 bits) -> void {
-          if (bits % hyperblock_bits == 0) { do_divisble_by_hyperlock(); }
+          if (divisible_by_power_of_two(bits, hyperblock_bits)) {
+            do_divisble_by_hyperlock();
+          }
           layer_2_temps_index = 0;
           layer_2_count = 0;
           fill(layer_2_temps.begin(), layer_2_temps.end(), 0);
