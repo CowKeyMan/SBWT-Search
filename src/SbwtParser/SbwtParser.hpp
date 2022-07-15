@@ -15,7 +15,7 @@
 #include <sdsl/bit_vectors.hpp>
 
 #include "Builder/Builder.h"
-#include "SbwtContainer/SbwtContainer.hpp"
+#include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "Utils/BitVectorUtils.h"
 #include "Utils/IOUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
@@ -37,7 +37,10 @@ class SbwtParser: private Builder {
     SbwtParser(): host(static_cast<Implementation *>(this)) {}
 
   public:
-    Container parse() { check_if_has_built(); return host->do_parse(); }
+    Container parse() {
+      check_if_has_built();
+      return host->do_parse();
+    }
 };
 
 class SdslSbwtParser: public SbwtParser<SdslSbwtParser, SdslSbwtContainer> {

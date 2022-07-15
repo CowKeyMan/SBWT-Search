@@ -6,6 +6,7 @@
 # rather than putting it with each file individually
 
 include_directories("${PROJECT_SOURCE_DIR}")
+include_directories("${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}")
 
 # common options
 add_compile_options(
@@ -59,6 +60,7 @@ set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
+include_directories("${CMAKE_BINARY_DIR}/deps/cxxopts-src/include")
 FetchContent_MakeAvailable(cxxopts)
 
 
@@ -86,11 +88,23 @@ add_library(
 )
 target_link_libraries(sbwt_parser PRIVATE libsdsl)
 add_library(
-  sbwt_container
+  sbwt_container_cpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
 )
-target_link_libraries(sbwt_container PRIVATE libsdsl)
-add_dependencies(sbwt_container sdsl)
+target_link_libraries(sbwt_container_cpu PRIVATE libsdsl)
+add_dependencies(sbwt_container_cpu sdsl)
+add_library(
+  sbwt_container_gpu
+  "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cu"
+)
+set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+add_library(sbwt_container INTERFACE)
+target_link_libraries(
+  sbwt_container
+  INTERFACE
+  sbwt_container_cpu
+  sbwt_container_gpu
+)
 add_library(
   sbwt_writer
   "${PROJECT_SOURCE_DIR}/SbwtWriter/SbwtWriter.cpp"
@@ -101,7 +115,16 @@ target_link_libraries(
   libsdsl
   sbwt_container
 )
-# TODO: Add more libraries here
+add_library(
+  presearcher
+  "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cu"
+)
+target_link_libraries(
+  presearcher
+  PRIVATE libsdsl
+)
+set_target_properties(presearcher PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -118,6 +141,7 @@ target_link_libraries(
   cxxopts
   sbwt_container
   sbwt_writer
+  # rank
   # TODO: Link more libraries here
 )
 add_dependencies(common_libraries kseqpp)

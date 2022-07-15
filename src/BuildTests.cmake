@@ -22,26 +22,21 @@ target_link_libraries(
   gcov
 )
 
-set(
-  test_common_sources
-  "${PROJECT_SOURCE_DIR}/test_main.cpp"
-  "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Builder/Builder_test.cpp"
-  "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser_test.cpp"
-  "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
-  "${PROJECT_SOURCE_DIR}/SbwtFactory/SbwtFactory_test.cpp"
-  # TODO: add more source files here
-)
-
 # Create cpu test executable
 if (BUILD_CPU)
   add_executable(
     test_main_cpu
-    ${test_common_sources}
+    "${PROJECT_SOURCE_DIR}/test_main.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
+    "${PROJECT_SOURCE_DIR}/Builder/Builder_test.cpp"
+    "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser_test.cpp"
+    "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
+    "${PROJECT_SOURCE_DIR}/SbwtFactory/SbwtFactory_test.cpp"
     "${PROJECT_SOURCE_DIR}/RankIndexBuilder/CpuRankIndexBuilder_test.cpp"
-    # TODO: add more cpu only source files here
+    "${PROJECT_SOURCE_DIR}/TestUtils/RankTestUtils_test.cpp"
+    # TODO: add more cpu tests here
   )
   add_test(NAME test_main_cpu COMMAND test_main_cpu)
   target_link_libraries(
@@ -53,15 +48,24 @@ endif()
 
 # Create cuda test executable
 if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
+  add_library(
+    rank_test
+    "${PROJECT_SOURCE_DIR}/Rank/Rank_test.cu"
+  )
+  set_target_properties(rank_test PROPERTIES CUDA_ARCHITECTURES "60;70;80")
   add_executable(
     test_main_cuda
-    ${test_common_sources}
+    "${PROJECT_SOURCE_DIR}/test_main.cpp"
+    "${PROJECT_SOURCE_DIR}/Rank/Rank_test.cpp"
+    # TODO: add more cuda tests here
   )
   add_test(NAME all_tests COMMAND test_main_cuda)
   target_link_libraries(
     test_main_cuda
-    PRIVATE libraries_cuda
-    PRIVATE test_lib
+    PRIVATE
+    libraries_cuda
+    test_lib
+    rank_test
   )
 endif()
 

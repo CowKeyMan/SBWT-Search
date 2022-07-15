@@ -2,6 +2,8 @@
 
 #include <sdsl/int_vector.hpp>
 
+#include "SbwtContainer/CpuSbwtContainer.hpp"
+#include "SbwtContainer/GpuSbwtContainer.hpp"
 #include "SbwtContainer/SbwtContainer.hpp"
 #include "sdsl/bit_vectors.hpp"
 

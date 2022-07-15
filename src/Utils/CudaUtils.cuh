@@ -14,7 +14,9 @@ using std::cerr;
 using std::endl;
 using std::vector;
 
-auto get_idx() -> int { return blockDim.x * blockIdx.x + threadIdx.x; }
+__device__ auto get_idx() -> int {
+  return blockDim.x * blockIdx.x + threadIdx.x;
+}
 
 #define CUDA_CHECK(code_block) \
   { gpuAssert((code_block), __FILE__, __LINE__); }

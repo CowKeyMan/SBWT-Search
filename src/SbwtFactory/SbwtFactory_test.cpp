@@ -11,7 +11,7 @@
 #include "SbwtContainer/SbwtContainer.hpp"
 #include "SbwtFactory/SbwtFactory.hpp"
 #include "SbwtParser/SbwtParser.hpp"
-#include "Utils/TestUtils.hpp"
+#include "TestUtils/GeneralTestUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
 #include "sdsl/bit_vectors.hpp"
 

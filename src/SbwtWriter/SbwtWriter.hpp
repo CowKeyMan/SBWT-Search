@@ -8,14 +8,12 @@
 
 #include <string>
 
+#include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "SbwtContainer/SbwtContainer.hpp"
 
 using std::string;
 
 namespace sbwt_search {
-
-#include <iostream>
-using namespace std;
 
 template <class Implementation, class Container>
 class SbwtWriter {

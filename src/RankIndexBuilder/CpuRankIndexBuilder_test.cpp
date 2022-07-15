@@ -5,9 +5,9 @@
 
 #include "RankIndexBuilder/RankIndexBuilder.hpp"
 #include "SbwtContainer/CpuSbwtContainer.hpp"
+#include "TestUtils/BitVectorTestUtils.hpp"
 #include "TestUtils/GeneralTestUtils.hpp"
 #include "Utils/TypeDefinitionUtils.h"
-#include "TestUtils/BitVectorTestUtils.hpp"
 
 using std::vector;
 
@@ -35,10 +35,10 @@ TEST(RankIndexBuilderTest, BuildIndex) {
     host(container);
   host.build_index();
   assert_vectors_equal<u64>(
-    layer_0, container.get_layer_0(static_cast<ACGT>(0))
+    expected_layer_0, container.get_layer_0(static_cast<ACGT>(0))
   );
   assert_vectors_equal<u64>(
-    layer_1_2, container.get_layer_1_2(static_cast<ACGT>(0))
+    expected_layer_1_2, container.get_layer_1_2(static_cast<ACGT>(0))
   );
   assert_vectors_equal<u64>(c_map, container.get_c_map());
 }

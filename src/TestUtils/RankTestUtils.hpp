@@ -6,10 +6,7 @@
  * @brief Contains a dmmmy Rank function which works on CPU
  * */
 
-#include <iostream>
-
 #include "Utils/TypeDefinitionUtils.h"
-using namespace std;
 
 namespace sbwt_search {
 
@@ -22,10 +19,12 @@ u64 dummy_cpu_rank(const u64 *v, const u64 index) {
   }
   const u64 final_int = v[final_index];
   u64 required_bits;
+  // note: if we remove %64 here, tests pass as well. Not sure why, requires
+  // investigation in case it is an optimisation
   if (reversed_bits) {
-    required_bits = (final_int << (63 - index));
+    required_bits = (final_int << (63ULL - (index % 64)));
   } else {
-    required_bits = (final_int >> (63 - index));
+    required_bits = (final_int >> (63ULL - (index % 64)));
   }
   result += __builtin_popcountll(required_bits);
   return result;
