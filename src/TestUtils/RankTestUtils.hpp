@@ -12,7 +12,7 @@ namespace sbwt_search {
 
 template <bool reversed_bits>
 u64 dummy_cpu_rank(const u64 *v, const u64 index) {
-  const u64 final_index = index / 64;
+  const u64 final_index = (index - 1) / 64;
   u64 result = 0;
   for (int i = 0; i < final_index; ++i) {
     result += __builtin_popcountll(v[i]);
@@ -22,9 +22,9 @@ u64 dummy_cpu_rank(const u64 *v, const u64 index) {
   // note: if we remove %64 here, tests pass as well. Not sure why, requires
   // investigation in case it is an optimisation
   if (reversed_bits) {
-    required_bits = (final_int << (63ULL - (index % 64)));
+    required_bits = (final_int << (64ULL - (index % 64)));
   } else {
-    required_bits = (final_int >> (63ULL - (index % 64)));
+    required_bits = (final_int >> (64ULL - (index % 64)));
   }
   result += __builtin_popcountll(required_bits);
   return result;
