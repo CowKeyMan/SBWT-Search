@@ -1,8 +1,8 @@
-#ifndef TYPE_DEFINITION_UTILS_H
-#define TYPE_DEFINITION_UTILS_H
+#ifndef TYPE_DEFINITIONS_H
+#define TYPE_DEFINITIONS_H
 
 /**
- * @file TypeDefinitionUtils.h
+ * @file TypeDefinitions.h
  * @brief Contains type definitions created for convenience
  * */
 

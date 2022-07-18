@@ -6,7 +6,9 @@
  * @brief Rank implementation on GPU
  * */
 
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/BitDefinitions.h"
+#include "Utils/BitVectorUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 namespace sbwt_search {
 
@@ -14,13 +16,13 @@ inline constexpr __host__ __device__ size_t log_base_2(const u64 n) {
   return ((n < 2) ? 0 : 1 + log_base_2(n / 2));
 }
 
-const auto two_1s = 3ULL;
-const auto ten_1s = 0x3ffULL;
-const u64 thirty_1s = 0x3fffffffU;
-
 template <u64 superblock_bits, u64 hyperblock_bits>
-__device__ u64
-d_rank(const u64 *bit_vector, const u64 *layer_0, const u64 *layer_1_2, const u64 index) {
+__device__ u64 d_rank(
+  const u64 *bit_vector,
+  const u64 *layer_0,
+  const u64 *layer_1_2,
+  const u64 index
+) {
   const u64 basicblocks_in_superblock = 4;
   const u64 basicblock_bits = superblock_bits / basicblocks_in_superblock;
   u64 entry_basicblock = 0;

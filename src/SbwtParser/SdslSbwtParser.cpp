@@ -11,7 +11,7 @@
 #include "SbwtParser/SbwtParser.hpp"
 #include "Utils/IOUtils.hpp"
 #include "Utils/MathUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using sdsl::bit_vector;
 using std::begin;

@@ -12,7 +12,7 @@
 #include "SbwtFactory/SbwtFactory.hpp"
 #include "SbwtParser/SbwtParser.hpp"
 #include "TestUtils/GeneralTestUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 #include "sdsl/bit_vectors.hpp"
 
 using sdsl::bit_vector;

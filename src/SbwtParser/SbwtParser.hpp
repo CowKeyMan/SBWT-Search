@@ -18,7 +18,7 @@
 #include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "Utils/BitVectorUtils.h"
 #include "Utils/IOUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using sdsl::bit_vector;
 using std::istream;

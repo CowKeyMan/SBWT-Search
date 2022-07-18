@@ -8,7 +8,7 @@
 #include "RankIndexBuilder/RankIndexBuilder.hpp"
 #include "TestUtils/BitVectorTestUtils.hpp"
 #include "TestUtils/RankTestUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::generate;
 using std::srand;

@@ -16,7 +16,7 @@
 #include "Builder/Builder.h"
 #include "SbwtContainer/SbwtContainer.hpp"
 #include "Utils/MathUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::accumulate;
 using std::fill;

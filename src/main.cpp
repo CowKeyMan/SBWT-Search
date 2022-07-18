@@ -3,20 +3,24 @@
 #include <string>
 
 #include "ArgumentParser/ArgumentParser.hpp"
+#include "Presearcher/Presearcher.h"
 #include "QueryFileParser/QueryFileParser.h"
+#include "RankIndexBuilder/RankIndexBuilder.hpp"
 #include "RawSequencesParser/RawSequencesParser.hpp"
 #include "SbwtFactory/SbwtFactory.hpp"
-#include "RankIndexBuilder/RankIndexBuilder.hpp"
 
+using sbwt_search::BitVectorSbwtFactory;
 using sbwt_search::CharToBitsVector;
+using sbwt_search::CpuRankIndexBuilder;
 using sbwt_search::parse_arguments;
+using sbwt_search::Presearcher;
 using sbwt_search::QueryFileParser;
 using sbwt_search::RawSequencesParser;
 using sbwt_search::SdslSbwtFactory;
-using sbwt_search::CpuRankIndexBuilder;
 using std::string;
 
 const auto kmer_size = 30;
+const auto presearch_letters = 12;
 const size_t superblock_bits = 1024;
 constexpr size_t hyperblock_bits = 1ULL << 32;  // pow(2, 32);
 
@@ -31,12 +35,19 @@ auto main(int argc, char **argv) -> int {
     kmer_size
   );
   sequences_parser.parse_serial();
+  auto bit_seqs = sequences_parser.get_bit_seqs();
+  auto positions = sequences_parser.get_positions();
 
-  auto factory = SdslSbwtFactory();
-  auto sbwt_parser = factory.get_sbwt_parser("path_to_sbwt_file");
-  auto loaded_container = sbwt_parser.parse();
+  auto factory = BitVectorSbwtFactory();
+  auto sbwt_parser = factory.get_sbwt_parser("path_to_sbwt_file/s");
+  auto cpu_container = sbwt_parser.parse();
   auto index_builder = CpuRankIndexBuilder<
-    decltype(loaded_container),
+    decltype(cpu_container),
     superblock_bits,
-    hyperblock_bits>(loaded_container);
+    hyperblock_bits>(cpu_container);
+  index_builder.build_index();
+
+  auto gpu_container = cpu_container.to_gpu();
+  auto presearcher = Presearcher(12, gpu_container);
+  presearcher.presearch<superblock_bits, hyperblock_bits, presearch_letters>();
 }

@@ -7,7 +7,7 @@
 #include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "TestUtils/BitVectorTestUtils.hpp"
 #include "TestUtils/GeneralTestUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::vector;
 

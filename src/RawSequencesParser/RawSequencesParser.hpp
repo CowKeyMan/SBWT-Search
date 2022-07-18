@@ -18,7 +18,7 @@
 
 #include "Builder/Builder.h"
 #include "Utils/MathUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::array;
 using std::ceil;

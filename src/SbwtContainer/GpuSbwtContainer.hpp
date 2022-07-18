@@ -1,5 +1,5 @@
-#ifndef GPU_SBWT_CONTAINER
-#define GPU_SBWT_CONTAINER
+#ifndef GPU_SBWT_CONTAINER_HPP
+#define GPU_SBWT_CONTAINER_HPP
 
 /**
  * @file GpuSbwtContainer.hpp

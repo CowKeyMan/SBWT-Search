@@ -1,6 +1,6 @@
 #include "SbwtContainer/GpuSbwtContainer.hpp"
 #include "Utils/CudaUtils.cuh"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 namespace sbwt_search {
 

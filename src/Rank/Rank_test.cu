@@ -2,7 +2,7 @@
 
 #include "Rank/Rank.cuh"
 #include "Utils/CudaUtils.cuh"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::vector;
 

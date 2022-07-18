@@ -1,5 +1,5 @@
-#ifndef BIT_VECTOR_TEST_UTILS
-#define BIT_VECTOR_TEST_UTILS
+#ifndef BIT_VECTOR_TEST_UTILS_HPP
+#define BIT_VECTOR_TEST_UTILS_HPP
 
 /**
  * @file BitVectorTestUtils.hpp
@@ -8,7 +8,7 @@
 
 #include <vector>
 
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::vector;
 

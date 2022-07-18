@@ -1,6 +1,14 @@
+#ifndef RANK__TEST_HPP
+#define RANK__TEST_HPP
+
+/**
+ * @file Rank_test.hpp
+ * @brief Header for compiling the test for the rank function
+ * */
+
 #include <vector>
 
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::vector;
 
@@ -14,3 +22,5 @@ auto get_rank_output(
 ) -> vector<u64>;
 
 }
+
+#endif

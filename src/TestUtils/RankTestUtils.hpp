@@ -6,7 +6,7 @@
  * @brief Contains a dmmmy Rank function which works on CPU
  * */
 
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 namespace sbwt_search {
 

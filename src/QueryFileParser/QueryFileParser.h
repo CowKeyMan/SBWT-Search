@@ -11,7 +11,7 @@
 
 #include "Builder/Builder.h"
 #include "Utils/IOUtils.hpp"
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::string;
 using std::vector;

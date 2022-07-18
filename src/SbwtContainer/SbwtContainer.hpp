@@ -11,7 +11,7 @@
 
 #include <sdsl/bit_vectors.hpp>
 
-#include "Utils/TypeDefinitionUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using sdsl::bit_vector;
 using std::size_t;
