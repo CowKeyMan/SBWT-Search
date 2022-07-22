@@ -1,26 +1,24 @@
-#ifndef GPU_SBWT_CONTAINER_HPP
-#define GPU_SBWT_CONTAINER_HPP
+#ifndef GPU_SBWT_CONTAINER_CUH
+#define GPU_SBWT_CONTAINER_CUH
 
 /**
- * @file GpuSbwtContainer.hpp
+ * @file GpuSbwtContainer.cuh
  * @brief Contains data class for SBWT index which reside on GPU
  * */
 
 #include <memory>
 
 #include "SbwtContainer/SbwtContainer.hpp"
+#include "Utils/CudaUtils.cuh"
 
 using std::make_unique;
 using std::unique_ptr;
-
-template <class T>
-class CudaPointer;
 
 namespace sbwt_search {
 
 class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
     friend SbwtContainer;
-    vector<CudaPointer<u64>> acgt, layer_0, layer_1_2;
+    vector<unique_ptr<CudaPointer<u64>>> acgt, layer_0, layer_1_2;
     unique_ptr<CudaPointer<u64>> c_map, presearch_left, presearch_right;
     unique_ptr<CudaPointer<u64 *>> acgt_pointers, layer_0_pointers,
       layer_1_2_pointers;
@@ -42,7 +40,11 @@ class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
     void set_layer_1_2(const vector<vector<u64>> &value);
     const CudaPointer<u64 *> &get_layer_0_pointers() const;
     const CudaPointer<u64 *> &get_layer_1_2_pointers() const;
-    void set_presearch(CudaPointer<u64> &&left, CudaPointer<u64> &&right);
+    void set_presearch(
+      unique_ptr<CudaPointer<u64>> left, unique_ptr<CudaPointer<u64>> right
+    );
+    CudaPointer<u64> &get_presearch_left() const;
+    CudaPointer<u64> &get_presearch_right() const;
 };
 
 }

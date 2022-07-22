@@ -34,9 +34,10 @@ class RankIndexBuilder: private Builder {
     Implementation *const host;
 
   protected:
-    Container &container;
+    Container *const container;
     const u64 basicblock_bits;
-    RankIndexBuilder(Container &container):
+
+    RankIndexBuilder(Container *container):
         container(container),
         host(static_cast<Implementation *>(this)),
         basicblock_bits(superblock_bits / 4) {
@@ -96,6 +97,8 @@ class SingleIndexBuilder {
         layer_0_count += set_bits;
         layer_1_count += set_bits;
         layer_2_count += set_bits;
+        /* layer_0.resize(1 + bits_total / hyperblock_bits); */
+        /* layer_1_2.resize(1 + bits_total / superblock_bits); */
       }
     }
 
@@ -139,38 +142,39 @@ class CpuRankIndexBuilder:
       superblock_bits,
       hyperblock_bits> {
     using Base = RankIndexBuilder<
-      CpuRankIndexBuilder,
+      CpuRankIndexBuilder<Container, superblock_bits, hyperblock_bits>,
       Container,
       superblock_bits,
       hyperblock_bits>;
     friend Base;
 
   private:
-    auto do_build_index() -> void {
+    void do_build_index() {
       vector<u64> c_map(5);
       c_map[0] = 1;
       for (auto i = 0; i < 4; ++i) {
         const u64 *vector_pointer
-          = this->container.get_acgt(static_cast<ACGT>(i));
+          = this->container->get_acgt(static_cast<ACGT>(i));
         auto single_builder
           = SingleIndexBuilder<superblock_bits, hyperblock_bits>(
-            this->container.get_bits_total(), vector_pointer
+            this->container->get_bits_total(), vector_pointer
           );
         single_builder.build();
-        this->container.set_layer_0(
+        this->container->set_layer_0(
           static_cast<ACGT>(i), single_builder.get_layer_0()
         );
-        this->container.set_layer_1_2(
+
+        this->container->set_layer_1_2(
           static_cast<ACGT>(i), single_builder.get_layer_1_2()
         );
         c_map[i + 1] = single_builder.get_total_count();
       }
       for (auto i = 1; i < c_map.size(); ++i) { c_map[i] += c_map[i - 1]; }
-      this->container.set_c_map(move(c_map));
+      this->container->set_c_map(move(c_map));
     }
 
   public:
-    CpuRankIndexBuilder(Container &container): Base(container) {}
+    CpuRankIndexBuilder(Container *const container): Base(container) {}
 };
 
 }

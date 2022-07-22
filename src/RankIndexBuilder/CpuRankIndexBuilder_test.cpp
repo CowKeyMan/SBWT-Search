@@ -32,7 +32,7 @@ TEST(RankIndexBuilderTest, BuildIndex) {
     64 * 8,  // 8 u64s = 1 super block
     64 * 8 * 2  // 2 super blocks + 1 hyper block
     >
-    host(container);
+    host(&container);
   host.build_index();
   assert_vectors_equal<u64>(
     expected_layer_0, container.get_layer_0(static_cast<ACGT>(0))

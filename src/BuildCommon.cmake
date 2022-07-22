@@ -96,6 +96,7 @@ add_dependencies(sbwt_container_cpu sdsl)
 add_library(
   sbwt_container_gpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cu"
+  "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cu"
 )
 set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "60;70;80")
 add_library(sbwt_container INTERFACE)
@@ -104,6 +105,7 @@ target_link_libraries(
   INTERFACE
   sbwt_container_cpu
   sbwt_container_gpu
+  libsdsl
 )
 add_library(
   sbwt_writer
@@ -115,16 +117,6 @@ target_link_libraries(
   libsdsl
   sbwt_container
 )
-add_library(
-  presearcher
-  "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cu"
-)
-target_link_libraries(
-  presearcher
-  PRIVATE libsdsl
-)
-set_target_properties(presearcher PROPERTIES CUDA_ARCHITECTURES "60;70;80")
-
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -141,7 +133,6 @@ target_link_libraries(
   cxxopts
   sbwt_container
   sbwt_writer
-  # rank
   # TODO: Link more libraries here
 )
 add_dependencies(common_libraries kseqpp)
