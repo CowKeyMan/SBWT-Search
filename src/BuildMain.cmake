@@ -17,11 +17,12 @@ if (BUILD_MAIN)
 # endif()
 
 if (BUILD_CUDA)
-  add_executable(main_cuda main.cpp)
+  add_executable(main_cuda main.cu)
   target_link_libraries(
     main_cuda
     PRIVATE libraries_cuda
   )
+set_target_properties(main_cuda PROPERTIES CUDA_ARCHITECTURES "60;70;80")
 endif()
 
 endif() # BUILD_MAIN

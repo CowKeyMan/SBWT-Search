@@ -48,7 +48,7 @@ auto assert_containers_equal(Container &a, Container &b) {
   }
 }
 
-TEST(SbwtFactoryTest, SdslConstructWriteRead) {
+TEST(SbwtFactoryTest, BitVectorConstructWriteRead) {
   auto container = BitVectorSbwtContainer(
     move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3]), 64 + 8 * 4
   );
@@ -73,7 +73,7 @@ auto build_sdsl_bit_vectors() -> vector<bit_vector> {
   return sdsl_acgt;
 }
 
-TEST(SbwtFactoryTest, BitVectorConstructWriteRead) {
+TEST(SbwtFactoryTest, SdslConstructWriteRead) {
   auto sdsl_acgt = build_sdsl_bit_vectors();
   // last 2 bytes of first number in acgt
   vector<u64> expected = { 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0 };

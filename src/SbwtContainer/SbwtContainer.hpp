@@ -9,19 +9,16 @@
 #include <cstddef>
 #include <vector>
 
-#include <sdsl/bit_vectors.hpp>
-
 #include "Utils/TypeDefinitions.h"
 
-using sdsl::bit_vector;
 using std::size_t;
 using std::vector;
 
 namespace sbwt_search {
 
-enum class ACGT { A = 0, C = 1, G = 2, T = 3 };
-
 class GpuSbwtContainer;
+
+enum class ACGT { A = 0, C = 1, G = 2, T = 3 };
 
 template <class Implementation>
 class SbwtContainer {
@@ -42,7 +39,6 @@ class SbwtContainer {
 
     u64 get_bit_vector_size() const { return bit_vector_size; }
     u64 get_bits_total() const { return bits_total; }
-    GpuSbwtContainer to_gpu();
 };
 
 }

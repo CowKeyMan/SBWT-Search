@@ -3,7 +3,6 @@
 #include <sdsl/int_vector.hpp>
 
 #include "SbwtContainer/CpuSbwtContainer.hpp"
-#include "SbwtContainer/GpuSbwtContainer.hpp"
 #include "SbwtContainer/SbwtContainer.hpp"
 #include "sdsl/bit_vectors.hpp"
 
@@ -11,7 +10,15 @@ using sdsl::bit_vector;
 
 namespace sbwt_search {
 
-auto SdslSbwtContainer::do_get_acgt(ACGT letter) -> const u64 * {
+SdslSbwtContainer::SdslSbwtContainer(
+  const bit_vector &&a,
+  const bit_vector &&c,
+  const bit_vector &&g,
+  const bit_vector &&t
+):
+    acgt{ a, c, g, t }, CpuSbwtContainer(a.size(), a.capacity() / 64) {}
+
+auto SdslSbwtContainer::do_get_acgt(ACGT letter) const -> const u64 * {
   return acgt[static_cast<int>(letter)].data();
 }
 

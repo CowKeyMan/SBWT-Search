@@ -111,10 +111,7 @@ class RawSequencesParser: Builder {
             positions(round_up<u64>(total_positions, 64), 0) {}
 
         void add_position(const size_t seq_length, const u64 seq_index) {
-          if (
-        // First check is to make sure we do not get underflow
-        seq_length >= kmer_size && seq_index <= seq_length - kmer_size
-      ) {
+          if (seq_length >= kmer_size && seq_index <= seq_length - kmer_size) {
             positions[positions_index] = global_index + seq_index;
             ++positions_index;
           }
@@ -164,9 +161,9 @@ class RawSequencesParser: Builder {
         positions_builder(kmer_size, total_positions),
         bit_seqs_builder(total_letters) {}
 
-    auto &get_bit_seqs() { return bit_seqs_builder.get_bit_seqs(); };
+    vector<u64> &get_bit_seqs() { return bit_seqs_builder.get_bit_seqs(); };
 
-    auto &get_positions() { return positions_builder.get_positions(); };
+    vector<u64> &get_positions() { return positions_builder.get_positions(); };
 
     void parse_serial() {
       check_if_has_built();
