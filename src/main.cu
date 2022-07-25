@@ -36,6 +36,7 @@ const auto presearch_letters = 12;
 const size_t superblock_bits = 1024;
 constexpr const size_t hyperblock_bits = 1ULL << 32;  // pow(2, 32);
 const auto threads_per_block = 1024;
+const auto reversed_bits = false;
 
 auto main(int argc, char **argv) -> int {
   /* auto args = parse_arguments(argc, argv); */
@@ -67,7 +68,8 @@ auto main(int argc, char **argv) -> int {
     threads_per_block,
     superblock_bits,
     hyperblock_bits,
-    presearch_letters>();
+    presearch_letters,
+    reversed_bits>();
 
   auto searcher = Searcher(gpu_container.get());
 
@@ -76,7 +78,8 @@ auto main(int argc, char **argv) -> int {
     superblock_bits,
     hyperblock_bits,
     presearch_letters,
-    kmer_size>(positions, bit_seqs);
+    kmer_size,
+    reversed_bits>(positions, bit_seqs);
 
   for (int i = 0; i < 1024; ++i) { cout << result[i] << ' '; }
   cout << endl;

@@ -15,7 +15,7 @@ __global__ void d_test_rank(
   const u64 i,
   u64 *out
 ) {
-  *out = d_rank<1024, 1ULL << 32>(data, L0, L12, i);
+  *out = d_rank<1024, 1ULL << 32, false>(data, L0, L12, i);
 }
 
 auto get_rank_output(
