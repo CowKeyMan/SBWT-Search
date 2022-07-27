@@ -85,20 +85,20 @@ class SingleIndexBuilder {
     u64 get_total_count() { return layer_0_count; };
 
     auto build() -> void {
-      for (size_t i = 0, bits = 0; bits < round_up(bits_total, superblock_bits);
+      for (size_t i = 0, bits = 0; bits < round_up<u64>(bits_total, superblock_bits);
            bits += 64, ++i) {
         if (divisible_by_power_of_two(bits, superblock_bits)) {
           do_divisble_by_superblock(bits);
         }
-        auto set_bits = __builtin_popcountll(bits_vector[i]);
         auto condition = divisible_by_power_of_two(bits, basicblock_bits)
                       && !divisible_by_power_of_two(bits, superblock_bits);
         if (condition) { do_divisible_by_basicblock(); }
-        layer_0_count += set_bits;
-        layer_1_count += set_bits;
-        layer_2_count += set_bits;
-        /* layer_0.resize(1 + bits_total / hyperblock_bits); */
-        /* layer_1_2.resize(1 + bits_total / superblock_bits); */
+        if (bits < round_up<u64>(bits_total, 64)) {
+          auto set_bits = __builtin_popcountll(bits_vector[i]);
+          layer_0_count += set_bits;
+          layer_1_count += set_bits;
+          layer_2_count += set_bits;
+        }
       }
     }
 
