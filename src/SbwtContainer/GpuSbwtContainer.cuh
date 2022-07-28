@@ -18,6 +18,8 @@ namespace sbwt_search {
 
 class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
     friend SbwtContainer;
+
+  private:
     vector<unique_ptr<CudaPointer<u64>>> acgt, layer_0, layer_1_2;
     unique_ptr<CudaPointer<u64>> c_map, presearch_left, presearch_right;
     unique_ptr<CudaPointer<u64 *>> acgt_pointers, layer_0_pointers,

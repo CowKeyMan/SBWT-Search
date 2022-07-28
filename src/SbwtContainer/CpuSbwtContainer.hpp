@@ -15,8 +15,8 @@
 #include "SbwtContainer/SbwtContainer.hpp"
 
 using sdsl::bit_vector;
+using std::shared_ptr;
 using std::size_t;
-using std::unique_ptr;
 
 namespace sbwt_search {
 
@@ -73,9 +73,9 @@ class SdslSbwtContainer: public CpuSbwtContainer<SdslSbwtContainer> {
       const bit_vector &&t
     );
 
-    bit_vector get_acgt_sdsl(ACGT letter) const;
+    const bit_vector &get_acgt_sdsl(ACGT letter) const;
 
-    unique_ptr<GpuSbwtContainer> to_gpu();
+    shared_ptr<GpuSbwtContainer> to_gpu();
 };
 
 class BitVectorSbwtContainer: public CpuSbwtContainer<BitVectorSbwtContainer> {
@@ -98,7 +98,7 @@ class BitVectorSbwtContainer: public CpuSbwtContainer<BitVectorSbwtContainer> {
 
     void change_acgt_endianness();
 
-    unique_ptr<GpuSbwtContainer> to_gpu();
+    shared_ptr<GpuSbwtContainer> to_gpu();
 };
 
 }

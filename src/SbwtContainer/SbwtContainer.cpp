@@ -22,7 +22,7 @@ auto SdslSbwtContainer::do_get_acgt(ACGT letter) const -> const u64 * {
   return acgt[static_cast<int>(letter)].data();
 }
 
-auto SdslSbwtContainer::get_acgt_sdsl(ACGT letter) const -> bit_vector {
+auto SdslSbwtContainer::get_acgt_sdsl(ACGT letter) const -> const bit_vector & {
   return acgt[static_cast<int>(letter)];
 }
 
