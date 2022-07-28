@@ -58,8 +58,8 @@ TEST(SbwtFactoryTest, BitVectorConstructWriteRead) {
   writer.write();
   auto loaded_container
     = factory.get_sbwt_parser("test_objects/tmp/bitvector").parse();
-  assert_containers_equal<BitVectorSbwtContainer>(container, loaded_container);
-  ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
+  assert_containers_equal<BitVectorSbwtContainer>(container, *loaded_container);
+  ASSERT_EQ(loaded_container->get_acgt(ACGT::A)[0], 978673084);
 }
 
 auto build_sdsl_bit_vectors() -> vector<bit_vector> {
@@ -93,8 +93,8 @@ TEST(SbwtFactoryTest, SdslConstructWriteRead) {
   writer.write();
   auto sbwt_parser = factory.get_sbwt_parser("test_objects/tmp/bitvector");
   auto loaded_container = sbwt_parser.parse();
-  assert_containers_equal<SdslSbwtContainer>(container, loaded_container);
-  ASSERT_EQ(loaded_container.get_acgt(ACGT::A)[0], 978673084);
+  assert_containers_equal<SdslSbwtContainer>(container, *loaded_container);
+  ASSERT_EQ(loaded_container->get_acgt(ACGT::A)[0], 978673084);
 }
 
 TEST(SbwtFactoryTest, BitVectorChangeEndianness) {

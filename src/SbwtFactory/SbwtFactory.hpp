@@ -40,11 +40,12 @@ class SdslSbwtFactory:
     friend SbwtFactory;
 
   private:
-    SdslSbwtParser do_get_sbwt_parser(string filepath) {
+    auto do_get_sbwt_parser(string filepath) -> SdslSbwtParser {
       return SdslSbwtParser(filepath);
     }
-    SdslSbwtWriter
-    do_get_sbwt_writer(const SdslSbwtContainer &container, const string path) {
+    auto
+    do_get_sbwt_writer(const SdslSbwtContainer &container, const string path)
+      -> SdslSbwtWriter {
       return SdslSbwtWriter(container, path);
     }
 };
@@ -58,12 +59,12 @@ class BitVectorSbwtFactory:
     friend SbwtFactory;
 
   private:
-    BitVectorSbwtParser do_get_sbwt_parser(string filepath) const {
+    auto do_get_sbwt_parser(string filepath) const -> BitVectorSbwtParser {
       return BitVectorSbwtParser(filepath);
     }
-    BitVectorSbwtWriter do_get_sbwt_writer(
+    auto do_get_sbwt_writer(
       const BitVectorSbwtContainer &container, const string path
-    ) const {
+    ) const -> BitVectorSbwtWriter {
       return BitVectorSbwtWriter(container, path);
     }
 };
