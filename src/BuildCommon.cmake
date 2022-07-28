@@ -78,10 +78,6 @@ add_library(
   "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser.cpp"
 )
 add_library(
-  raw_sequences_parser
-  "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser.cpp"
-)
-add_library(
   sbwt_parser
   "${PROJECT_SOURCE_DIR}/SbwtParser/BitVectorSbwtParser.cpp"
   "${PROJECT_SOURCE_DIR}/SbwtParser/SdslSbwtParser.cpp"
@@ -125,7 +121,6 @@ target_link_libraries(
   INTERFACE
   io_utils
   query_file_parser
-  raw_sequences_parser
   sbwt_parser
   libsdsl
   ZLIB::ZLIB
