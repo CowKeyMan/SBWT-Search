@@ -17,9 +17,9 @@ using std::chrono::time_point;
 // Macro for timing objects. The result is stored in TIME_IT_TOTAL
 time_point<high_resolution_clock> TIME_IT_START_TIME, TIME_IT_END_TIME;
 milliseconds::rep TIME_IT_TOTAL;
-#define TIME_IT(code_block)                                              \
+#define TIME_IT(...)                                                     \
   TIME_IT_START_TIME = high_resolution_clock::now();                     \
-  code_block;                                                            \
+  __VA_ARGS__;                                                           \
   TIME_IT_END_TIME = high_resolution_clock::now();                       \
   TIME_IT_TOTAL                                                          \
     = duration_cast<milliseconds>(TIME_IT_END_TIME - TIME_IT_START_TIME) \
