@@ -9,8 +9,7 @@
 #include "RawSequencesParser/RawSequencesParser.hpp"
 #include "Utils/TypeDefinitions.h"
 
-using std::make_unique;
-using std::unique_ptr;
+using std::make_shared;
 
 namespace sbwt_search {
 
@@ -34,16 +33,16 @@ class RawSequencesParserTest: public ::testing::Test {
     RawSequencesParser<CharToBitsVector> host;
     RawSequencesParserTest():
         host(
-          raw_sequences,
+          make_shared<vector<string>>(raw_sequences),
           (2 + 0 + 1 + 2 + 30 + 0),
           (4 + 2 + 3 + 4 + 32 + 2),
           kmer_size
         ) {}
     void shared_tests() {
-      ASSERT_EQ(bits, host.get_bit_seqs());
-      ASSERT_EQ(0, host.get_positions()[0]);
-      ASSERT_EQ(6, host.get_positions()[2]);
-      ASSERT_EQ(42, host.get_positions()[34]);
+      ASSERT_EQ(bits, *host.get_bit_seqs());
+      ASSERT_EQ(0, (*host.get_positions())[0]);
+      ASSERT_EQ(6, (*host.get_positions())[2]);
+      ASSERT_EQ(42, (*host.get_positions())[34]);
     }
 };
 
@@ -54,18 +53,24 @@ TEST_F(RawSequencesParserTest, ParseSerial) {
 
 TEST(RawSequencesParserTestCharToBits, CharToBitsArray) {
   auto host = RawSequencesParser<CharToBitsArray>(
-    raw_sequences, (2 + 0 + 1 + 2 + 30 + 0), (4 + 2 + 3 + 4 + 32 + 2), kmer_size
+    make_shared<vector<string>>(raw_sequences),
+    (2 + 0 + 1 + 2 + 30 + 0),
+    (4 + 2 + 3 + 4 + 32 + 2),
+    kmer_size
   );
   host.parse_serial();
-  ASSERT_EQ(bits, host.get_bit_seqs());
+  ASSERT_EQ(bits, *host.get_bit_seqs());
 }
 
 TEST(RawSequencesParserTestCharToBits, CharToBitsSwitch) {
   auto host = RawSequencesParser<CharToBitsSwitch>(
-    raw_sequences, (2 + 0 + 1 + 2 + 30 + 0), (4 + 2 + 3 + 4 + 32 + 2), kmer_size
+    make_shared<vector<string>>(raw_sequences),
+    (2 + 0 + 1 + 2 + 30 + 0),
+    (4 + 2 + 3 + 4 + 32 + 2),
+    kmer_size
   );
   host.parse_serial();
-  ASSERT_EQ(bits, host.get_bit_seqs());
+  ASSERT_EQ(bits, *host.get_bit_seqs());
 }
 
 }
