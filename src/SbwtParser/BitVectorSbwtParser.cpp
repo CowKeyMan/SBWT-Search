@@ -1,5 +1,7 @@
+#include <algorithm>
 #include <iostream>
 #include <istream>
+#include <memory>
 
 #include "SbwtParser/SbwtParser.hpp"
 #include "Utils/BitVectorUtils.h"
@@ -7,12 +9,14 @@
 #include "Utils/MathUtils.hpp"
 
 using std::cerr;
+using std::make_shared;
+using std::shared_ptr;
 
 namespace sbwt_search {
 
-auto BitVectorSbwtParser::do_parse() -> BitVectorSbwtContainer {
+auto BitVectorSbwtParser::do_parse() -> shared_ptr<BitVectorSbwtContainer> {
   auto acgt = parse_acgt();
-  return BitVectorSbwtContainer(
+  return make_shared<BitVectorSbwtContainer>(
     move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3]), bits_total
   );
 }

@@ -22,8 +22,8 @@
 
 using sdsl::bit_vector;
 using std::istream;
+using std::shared_ptr;
 using std::string;
-using std::unique_ptr;
 using std::vector;
 
 namespace sbwt_search {
@@ -37,7 +37,7 @@ class SbwtParser: private Builder {
     SbwtParser(): host(static_cast<Implementation *>(this)) {}
 
   public:
-    Container parse() {
+    shared_ptr<Container> parse() {
       check_if_has_built();
       return host->do_parse();
     }
@@ -49,7 +49,7 @@ class SdslSbwtParser: public SbwtParser<SdslSbwtParser, SdslSbwtContainer> {
   private:
     const string filename;
 
-    SdslSbwtContainer do_parse();
+    shared_ptr<SdslSbwtContainer> do_parse();
     void assert_plain_matrix(istream &in) const;
 
   public:
@@ -64,7 +64,7 @@ class BitVectorSbwtParser:
     const string files_prefix;
     u64 bits_total;
 
-    BitVectorSbwtContainer do_parse();
+    shared_ptr<BitVectorSbwtContainer> do_parse();
     vector<vector<u64>> parse_acgt();
     vector<u64> parse_single_acgt(string filename);
 

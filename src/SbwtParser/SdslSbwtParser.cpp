@@ -1,5 +1,6 @@
 #include <array>
 #include <istream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -17,19 +18,24 @@ using sdsl::bit_vector;
 using std::begin;
 using std::end;
 using std::istream;
+using std::make_shared;
 using std::move;
 using std::runtime_error;
+using std::shared_ptr;
 using std::string;
 using std::vector;
 
+#include <iostream>
+using namespace std;
+
 namespace sbwt_search {
 
-auto SdslSbwtParser::do_parse() -> SdslSbwtContainer {
+auto SdslSbwtParser::do_parse() -> shared_ptr<SdslSbwtContainer> {
   ThrowingIfstream stream(filename, std::ios::in);
   assert_plain_matrix(stream);
   vector<bit_vector> acgt(4);
   for (int i = 0; i < 4; ++i) { acgt[i].load(stream); }
-  return SdslSbwtContainer(
+  return make_shared<SdslSbwtContainer>(
     move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3])
   );
 }
