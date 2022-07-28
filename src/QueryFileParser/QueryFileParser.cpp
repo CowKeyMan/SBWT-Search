@@ -23,7 +23,7 @@ auto QueryFileParser::add_sequence(const string &seq) -> void {
   if (seq.length() >= kmer_size) {
     total_positions += seq.length() - kmer_size + 1;
   }
-  seqs.push_back(std::move(seq));
+  seqs->push_back(std::move(seq));
 }
 
 auto QueryFileParser::parse_kseqpp_streams() -> void {
