@@ -10,6 +10,7 @@
  *          * hyperblock_bits is a multiple of hyperblock_bits
  * */
 
+#include <memory>
 #include <numeric>
 #include <vector>
 
@@ -20,6 +21,7 @@
 
 using std::accumulate;
 using std::fill;
+using std::shared_ptr;
 using std::vector;
 
 namespace sbwt_search {
@@ -34,10 +36,10 @@ class RankIndexBuilder: private Builder {
     Implementation *const host;
 
   protected:
-    Container *const container;
+    shared_ptr<Container> container;
     const u64 basicblock_bits;
 
-    RankIndexBuilder(Container *container):
+    RankIndexBuilder(shared_ptr<Container> container):
         container(container),
         host(static_cast<Implementation *>(this)),
         basicblock_bits(superblock_bits / 4) {
@@ -85,7 +87,8 @@ class SingleIndexBuilder {
     u64 get_total_count() { return layer_0_count; };
 
     auto build() -> void {
-      for (size_t i = 0, bits = 0; bits < round_up<u64>(bits_total, superblock_bits);
+      for (size_t i = 0, bits = 0;
+           bits < round_up<u64>(bits_total, superblock_bits);
            bits += 64, ++i) {
         if (divisible_by_power_of_two(bits, superblock_bits)) {
           do_divisble_by_superblock(bits);
@@ -174,7 +177,7 @@ class CpuRankIndexBuilder:
     }
 
   public:
-    CpuRankIndexBuilder(Container *const container): Base(container) {}
+    CpuRankIndexBuilder(shared_ptr<Container> container): Base(container) {}
 };
 
 }
