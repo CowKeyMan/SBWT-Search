@@ -9,10 +9,12 @@
 #include "Rank/Rank.cuh"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Utils/CudaUtilFunctions.cuh"
+#include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
-using std::make_unique;
 using std::move;
+using std::shared_ptr;
+using std::make_unique;
 
 namespace sbwt_search {
 
@@ -48,10 +50,10 @@ __global__ void d_presearch(
 
 class Presearcher {
   private:
-    GpuSbwtContainer *const container;
+    shared_ptr<GpuSbwtContainer> container;
 
   public:
-    Presearcher(GpuSbwtContainer *container): container(container) {}
+    Presearcher(shared_ptr<GpuSbwtContainer> container): container(container) {}
     template <
       u32 threads_per_block,
       u64 superblock_bits,
@@ -59,9 +61,9 @@ class Presearcher {
       u32 presearch_letters,
       bool reversed_bits>
     void presearch() {
-      constexpr const auto presearch_times = 1ULL << (presearch_letters * 2);
-      constexpr const auto blocks_per_grid
-        = presearch_times / threads_per_block;
+      constexpr const auto presearch_times
+        = round_up<size_t>(1ULL << (presearch_letters * 2), threads_per_block);
+      auto blocks_per_grid = presearch_times / threads_per_block;
       auto presearch_left = make_unique<CudaPointer<u64>>(presearch_times);
       auto presearch_right = make_unique<CudaPointer<u64>>(presearch_times);
       d_presearch<
