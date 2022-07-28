@@ -25,9 +25,6 @@ gpuAssert(cudaError_t code, const char *file, int line, bool abort = true) {
   }
 }
 
-#include <iostream>
-using namespace std;
-
 template <class T>
 class CudaPointer {
   private:
@@ -42,15 +39,48 @@ class CudaPointer {
       CUDA_CHECK(cudaMemcpy(ptr, cpu_ptr, bytes, cudaMemcpyHostToDevice));
     }
     CudaPointer(const vector<T> &v): CudaPointer(&v[0], v.size()) {}
-    auto set(const T elem) -> void { CUDA_CHECK(cudaMemset(ptr, elem, bytes)); }
-    auto get() const -> T *const { return ptr; }
-    auto copy_to(T &destination) const -> void {
-      CUDA_CHECK(cudaMemcpy(&destination, ptr, bytes, cudaMemcpyDeviceToHost));
+
+    auto memset(
+      const uint8_t *destination, const size_t bytes_amount, const size_t index
+    ) -> void {
+      CUDA_CHECK(cudaMemset(ptr + index, destination, bytes_amount));
     }
-    auto copy_to(vector<T> &destination) const -> void {
-      CUDA_CHECK(cudaMemcpy(&destination[0], ptr, bytes, cudaMemcpyDeviceToHost)
+
+    auto set(
+      const T *source, const size_t amount, const size_t destination_index = 0
+    ) -> void {
+      CUDA_CHECK(cudaMemcpy(
+        ptr + destination_index,
+        source,
+        amount * sizeof(T),
+        cudaMemcpyHostToDevice
+      ));
+    }
+    auto set(
+      const vector<T> &source,
+      const size_t amount,
+      const size_t destination_index = 0
+    ) -> void {
+      set(&source[0], amount, destination_index);
+    }
+
+    auto get() const -> T *const { return ptr; }
+
+    auto copy_to(T *destination, const size_t amount) const -> void {
+      CUDA_CHECK(
+        cudaMemcpy(destination, ptr, amount * sizeof(T), cudaMemcpyDeviceToHost)
       );
     }
+    auto copy_to(T *destination) const -> void {
+      copy_to(destination, bytes / sizeof(T));
+    }
+    auto copy_to(vector<T> &destination, const size_t amount) const -> void {
+      copy_to(&destination[0], amount);
+    }
+    auto copy_to(vector<T> &destination) const -> void {
+      copy_to(&destination[0]);
+    }
+
     ~CudaPointer() { CUDA_CHECK(cudaFree(ptr)); }
 };
 

@@ -40,11 +40,12 @@ __global__ void d_search(
   const u64 kmer_index = kmer_positions[idx] * 2;
   const u64 first_part = (bit_seqs[kmer_index / 64] << (kmer_index % 64));
   const u64 second_part
-    = (bit_seqs[(kmer_index / 64) + 1] >> (64 - (kmer_index % 64)));
+    = (bit_seqs[kmer_index / 64 + 1] >> (64 - (kmer_index % 64)))
+    & (-((kmer_index % 64) != 0));
   const u64 kmer = first_part | second_part;
-  constexpr const u32 presearch_mask = (2ULL << (presearch_letters * 2)) - 1;
+  constexpr const u64 presearch_mask = (2ULL << (presearch_letters * 2)) - 1;
   const u32 presearched
-    = (kmer >> 64 - (presearch_letters * 2)) & presearch_mask;
+    = (kmer >> (64 - presearch_letters * 2)) & presearch_mask;
   u64 node_left = presearch_left[presearched];
   u64 node_right = presearch_right[presearched];
   for (u32 i = presearch_letters * 2; i < kmer_size * 2; i += 2) {
@@ -57,12 +58,12 @@ __global__ void d_search(
   out[idx] = node_left;
 }
 
-class Searcher {
+class SearcherGpu {
   private:
-    GpuSbwtContainer *const container;
+    shared_ptr<GpuSbwtContainer> container;
 
   public:
-    Searcher(GpuSbwtContainer *const container): container(container) {}
+    SearcherGpu(shared_ptr<GpuSbwtContainer> container): container(container) {}
     template <
       u32 threads_per_block,
       u64 superblock_bits,
@@ -72,9 +73,13 @@ class Searcher {
       bool reversed_bits>
     vector<u64>
     search(const vector<u64> &kmer_positions, const vector<u64> &bit_seqs) {
-      auto blocks_per_grid = kmer_positions.size() / threads_per_block;
+      u32 blocks_per_grid
+        = round_up<u64>(kmer_positions.size(), threads_per_block)
+        / threads_per_block;
       auto d_bit_seqs = CudaPointer<u64>(bit_seqs);
-      auto d_kmer_positions = CudaPointer<u64>(kmer_positions);
+      auto d_kmer_positions
+        = CudaPointer<u64>(round_up<u64>(kmer_positions.size(), 1024));
+      d_kmer_positions.set(kmer_positions, kmer_positions.size(), 0);
       d_search<
         superblock_bits,
         hyperblock_bits,
@@ -94,7 +99,7 @@ class Searcher {
       CUDA_CHECK(cudaPeekAtLastError());
       CUDA_CHECK(cudaDeviceSynchronize());
       auto result = vector<u64>(kmer_positions.size());
-      d_kmer_positions.copy_to(result);
+      d_kmer_positions.copy_to(result, kmer_positions.size());
       return result;
     }
 };
