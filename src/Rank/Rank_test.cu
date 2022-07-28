@@ -8,6 +8,7 @@ using std::vector;
 
 namespace sbwt_search {
 
+template <bool reversed_bits>
 __global__ void d_test_rank(
   const u64 *const data,
   const u64 *const L0,
@@ -15,9 +16,10 @@ __global__ void d_test_rank(
   const u64 i,
   u64 *out
 ) {
-  *out = d_rank<1024, 1ULL << 32, false>(data, L0, L12, i);
+  *out = d_rank<1024, 1ULL << 32, reversed_bits>(data, L0, L12, i);
 }
 
+template <bool reversed_bits>
 auto get_rank_output(
   const vector<u64> &bit_vector,
   const vector<u64> &layer_0,
@@ -30,16 +32,34 @@ auto get_rank_output(
   auto d_output = CudaPointer<u64>(1);
   auto output = vector<u64>(test_indexes.size());
   for (auto i = 0; i < test_indexes.size(); ++i) {
-    d_test_rank<<<1, 1>>>(
+    d_test_rank<reversed_bits><<<1, 1>>>(
       d_bit_vector.get(),
       d_layer_0.get(),
       d_layer_1_2.get(),
       test_indexes[i],
       d_output.get()
     );
-    d_output.copy_to(output[i]);
+    d_output.copy_to(&output[i]);
   }
   return output;
+}
+
+auto get_rank_output_reversed_bits(
+  const vector<u64> &bit_vector,
+  const vector<u64> &layer_0,
+  const vector<u64> &layer_1_2,
+  const vector<u64> &test_indexes
+) -> vector<u64> {
+  return get_rank_output<true>(bit_vector, layer_0, layer_1_2, test_indexes);
+}
+
+auto get_rank_output_no_reversed_bits(
+  const vector<u64> &bit_vector,
+  const vector<u64> &layer_0,
+  const vector<u64> &layer_1_2,
+  const vector<u64> &test_indexes
+) -> vector<u64> {
+  return get_rank_output<false>(bit_vector, layer_0, layer_1_2, test_indexes);
 }
 
 }

@@ -28,7 +28,7 @@ __device__ u64 d_rank(
   u64 entry_basicblock = 0;
   const ulonglong2 *bit_vector_128b
     = reinterpret_cast<const ulonglong2 *>(bit_vector);
-  const u64 target_shift_right = 64U - (index % 64U);
+  const u64 target_shift = 64U - (index % 64U);
   const u64 ints_in_basicblock = basicblock_bits / 64;
   const u64 in_basicblock_index = (index / 64) % ints_in_basicblock;
 #pragma unroll  // calculating entry_basicblock 2 ints at a time
@@ -36,31 +36,25 @@ __device__ u64 d_rank(
     ulonglong2 data_128b = bit_vector_128b
       [(index / 128) - ((index / 128) % (ints_in_basicblock / 2)) + i / 2];
     if (reversed_bits) {
-      entry_basicblock += __popcll(
-                            data_128b.x
-                            << (((i + 0) == in_basicblock_index)
-                                * target_shift_right)
-                          )
-                        * ((i + 0) <= in_basicblock_index);
-      entry_basicblock += __popcll(
-                            data_128b.y
-                            << (((i + 1) == in_basicblock_index)
-                                * target_shift_right)
-                          )
-                        * ((i + 1) <= in_basicblock_index);
+      // WARNING: UNDEFINED BEHAVIOUR HERE WHEN target_shift = 64
+      // (expected to equal 0 - works well on CUDA)
+      entry_basicblock
+        += __popcll(
+             data_128b.x << (((i + 0) == in_basicblock_index) * target_shift)
+           )
+           * ((i + 0) <= in_basicblock_index)
+         + __popcll(
+             data_128b.y << (((i + 1) == in_basicblock_index) * target_shift)
+           ) * ((i + 1) <= in_basicblock_index);
     } else {
       entry_basicblock
         += __popcll(
-             data_128b.x
-             >> (((i + 0) == in_basicblock_index) * target_shift_right)
+             data_128b.x >> (((i + 0) == in_basicblock_index) * target_shift)
            )
-         * ((i + 0) <= in_basicblock_index);
-      entry_basicblock
-        += __popcll(
-             data_128b.y
-             >> (((i + 1) == in_basicblock_index) * target_shift_right)
-           )
-         * ((i + 1) <= in_basicblock_index);
+           * ((i + 0) <= in_basicblock_index)
+         + __popcll(
+             data_128b.y >> (((i + 1) == in_basicblock_index) * target_shift)
+           ) * ((i + 1) <= in_basicblock_index);
     }
   }
   const u64 entry_layer_1_2 = layer_1_2[index / superblock_bits];
