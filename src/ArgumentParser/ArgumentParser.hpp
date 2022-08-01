@@ -69,7 +69,7 @@ class ArgumentParser {
       return arguments;
     }
 
-    auto get_query_file() -> string { return args["q"].as<string>(); }
+    auto get_sequence_file() -> string { return args["q"].as<string>(); }
 
     auto get_index_file() -> string { return args["i"].as<string>(); }
 };

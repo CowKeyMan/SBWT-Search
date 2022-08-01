@@ -30,7 +30,7 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/Builder/Builder_test.cpp"
-    "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser_test.cpp"
+    "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser_test.cpp"
     "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/SbwtFactory/SbwtFactory_test.cpp"

@@ -63,6 +63,9 @@ set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
 include_directories("${CMAKE_BINARY_DIR}/deps/cxxopts-src/include")
 FetchContent_MakeAvailable(cxxopts)
 
+# Fetch OpenMP
+find_package(OpenMP REQUIRED)
+
 
 # My libraries
 add_library(
@@ -74,8 +77,8 @@ add_library(
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
 )
 add_library(
-  query_file_parser
-  "${PROJECT_SOURCE_DIR}/QueryFileParser/QueryFileParser.cpp"
+  sequence_file_parser
+  "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser.cpp"
 )
 add_library(
   sbwt_parser
@@ -120,7 +123,7 @@ target_link_libraries(
   common_libraries
   INTERFACE
   io_utils
-  query_file_parser
+  sequence_file_parser
   sbwt_parser
   libsdsl
   ZLIB::ZLIB
@@ -128,6 +131,7 @@ target_link_libraries(
   cxxopts
   sbwt_container
   sbwt_writer
+  OpenMP::OpenMP_CXX
   # TODO: Link more libraries here
 )
 add_dependencies(common_libraries kseqpp)
