@@ -10,40 +10,34 @@
 #include <string>
 #include <vector>
 
-#include "Builder/Builder.h"
 #include "Utils/IOUtils.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "kseq++/kseq++.hpp"
+#include "kseq++/seqio.hpp"
 
 using std::make_unique;
 using std::unique_ptr;
 using std::string;
 using std::vector;
+using klibpp::SeqStreamIn;
 
 namespace sbwt_search {
 
-class SequenceFileParser: Builder {
+class SequenceFileParser {
   private:
     string filename;
     u64 kmer_size;
-    void add_sequence(const string &seq);
-    unique_ptr<vector<string>> seqs;
-    u64 total_letters = 0;
-    u64 total_positions = 0;
+    void add_sequence(const string seq);
+    SeqStreamIn stream;
 
   public:
     SequenceFileParser(const string &filename, const u64 kmer_size):
-        filename(filename),
         kmer_size(kmer_size),
-        seqs(make_unique<vector<string>>()) {
-      ThrowingIfstream::check_file_exists(filename.c_str());
+        stream(filename.c_str()) {
+      ThrowingIfstream::check_file_exists(filename);
     }
-    auto get_seqs() { return move(seqs); };
-    auto get_total_letters() { return total_letters; };
-    auto get_total_positions() { return total_positions; };
-    void parse_kseqpp_streams();
-    void parse_kseqpp_read();
-    void parse_kseqpp_gz_stream();
-    void parse_kseqpp_gz_read();
+    string get_next();
+    vector<string> get_all();
 };
 
 }

@@ -7,6 +7,7 @@
 
 using std::make_unique;
 using std::unique_ptr;
+using std::out_of_range;
 
 namespace sbwt_search {
 
@@ -19,34 +20,27 @@ class SequenceFileParserTest: public ::testing::Test {
 
     SequenceFileParserTest(): host("test_objects/test_query.fna", 3) {}
 
-    void shared_tests() {
-      auto seqs = host.get_seqs();
-      ASSERT_EQ(seq_0, (*seqs)[0]);
-      ASSERT_EQ(seq_3, (*seqs)[3]);
-      ASSERT_EQ(4, seqs->size());
-      ASSERT_EQ(15, host.get_total_letters());
-      ASSERT_EQ(7, host.get_total_positions());
+    void shared_tests(const vector<string>& seqs) {
+      ASSERT_EQ(seq_0, (seqs)[0]);
+      ASSERT_EQ(seq_3, (seqs)[3]);
+      ASSERT_EQ(4, seqs.size());
     }
 };
 
-TEST_F(SequenceFileParserTest, ParseKseqppStreams) {
-  host.parse_kseqpp_streams();
-  shared_tests();
+TEST_F(SequenceFileParserTest, ParseAll) {
+  const vector<string> vs = host.get_all();
+  shared_tests(vs);
 }
 
-TEST_F(SequenceFileParserTest, ParseKseqppRead) {
-  host.parse_kseqpp_read();
-  shared_tests();
-}
-
-TEST_F(SequenceFileParserTest, ParseKseqppGzStream) {
-  host.parse_kseqpp_gz_stream();
-  shared_tests();
-}
-
-TEST_F(SequenceFileParserTest, ParseKseqppGzRead) {
-  host.parse_kseqpp_gz_read();
-  shared_tests();
+TEST_F(SequenceFileParserTest, ParseOneByOne) {
+  auto seqs = make_unique<vector<string>>();
+    try {
+      while(true){
+        seqs->push_back(move(host.get_next()));
+      }
+    } catch (out_of_range &e) {
+      shared_tests(*seqs);
+    }
 }
 
 }
