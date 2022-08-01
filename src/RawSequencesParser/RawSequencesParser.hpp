@@ -25,8 +25,8 @@
 using std::array;
 using std::ceil;
 using std::fill;
-using std::make_shared;
-using std::shared_ptr;
+using std::make_unique;
+using std::unique_ptr;
 using std::string;
 using std::vector;
 
@@ -35,19 +35,19 @@ namespace sbwt_search {
 template <class CharToBits = CharToBitsVector>
 class RawSequencesParser: Builder {
   private:
-    const shared_ptr<vector<string>> string_seqs;
+    const unique_ptr<vector<string>> string_seqs;
 
     class PositionsBuilder {
       private:
         size_t positions_index = 0;
         size_t global_index = 0;
         u64 kmer_size;
-        shared_ptr<vector<u64>> positions;
+        unique_ptr<vector<u64>> positions;
 
       public:
         PositionsBuilder(u64 kmer_size, size_t total_positions):
             kmer_size(kmer_size),
-            positions(make_shared<vector<u64>>(total_positions, 0)) {}
+            positions(make_unique<vector<u64>>(total_positions, 0)) {}
 
         auto add_position(const size_t seq_length, const u64 seq_index)
           -> void {
@@ -61,7 +61,7 @@ class RawSequencesParser: Builder {
           global_index += seq_length;
         }
 
-        auto get_positions() { return positions; };
+        auto get_positions() { return move(positions); };
     } positions_builder;
 
     class BitSeqsBuilder {
@@ -69,12 +69,12 @@ class RawSequencesParser: Builder {
         size_t vector_index = 0;
         u64 internal_shift = 62;
         u64 total_letters;
-        shared_ptr<vector<u64>> bit_seqs;
+        unique_ptr<vector<u64>> bit_seqs;
         CharToBits char_to_bits;
 
       public:
         BitSeqsBuilder(size_t total_letters):
-            bit_seqs(make_shared<vector<u64>>(
+            bit_seqs(make_unique<vector<u64>>(
               round_up<u64>(total_letters, 64) / 64 * 2, 0
             )) {}
 
@@ -89,23 +89,23 @@ class RawSequencesParser: Builder {
           }
         }
 
-        auto get_bit_seqs() { return bit_seqs; };
+        auto get_bit_seqs() { return move(bit_seqs); };
     } bit_seqs_builder;
 
   public:
     RawSequencesParser(
-      const shared_ptr<vector<string>> string_seqs,
+      unique_ptr<vector<string>> string_seqs,
       const size_t total_positions,
       const size_t total_letters,
       const u64 kmer_size
     ):
-        string_seqs(string_seqs),
+        string_seqs(move(string_seqs)),
         positions_builder(kmer_size, total_positions),
         bit_seqs_builder(total_letters) {}
 
-    auto get_bit_seqs() { return bit_seqs_builder.get_bit_seqs(); };
+    auto get_bit_seqs() { return move(bit_seqs_builder.get_bit_seqs()); };
 
-    auto get_positions() { return positions_builder.get_positions(); };
+    auto get_positions() { return move(positions_builder.get_positions()); };
 
     auto parse_serial() -> void {
       check_if_has_built();

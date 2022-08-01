@@ -28,21 +28,26 @@ const vector<string> raw_sequences = {
 const vector<u64> bits = { 1984096220112486400, 154618822656 };
 const int kmer_size = 3;
 
+#include <iostream>
+using namespace std;
+
 class RawSequencesParserTest: public ::testing::Test {
   protected:
     RawSequencesParser<CharToBitsVector> host;
     RawSequencesParserTest():
         host(
-          make_shared<vector<string>>(raw_sequences),
+          make_unique<vector<string>>(raw_sequences),
           (2 + 0 + 1 + 2 + 30 + 0),
           (4 + 2 + 3 + 4 + 32 + 2),
           kmer_size
         ) {}
     void shared_tests() {
-      ASSERT_EQ(bits, *host.get_bit_seqs());
-      ASSERT_EQ(0, (*host.get_positions())[0]);
-      ASSERT_EQ(6, (*host.get_positions())[2]);
-      ASSERT_EQ(42, (*host.get_positions())[34]);
+      auto seqs = host.get_bit_seqs();
+      auto positions = host.get_positions();
+      ASSERT_EQ(bits, *seqs);
+      ASSERT_EQ(0, (*positions)[0]);
+      ASSERT_EQ(6, (*positions)[2]);
+      ASSERT_EQ(42, (*positions)[34]);
     }
 };
 
@@ -52,8 +57,8 @@ TEST_F(RawSequencesParserTest, ParseSerial) {
 }
 
 TEST(RawSequencesParserTestCharToBits, CharToBitsArray) {
-  auto host = RawSequencesParser<CharToBitsArray>(
-    make_shared<vector<string>>(raw_sequences),
+  RawSequencesParser<CharToBitsArray> host(
+    make_unique<vector<string>>(raw_sequences),
     (2 + 0 + 1 + 2 + 30 + 0),
     (4 + 2 + 3 + 4 + 32 + 2),
     kmer_size
@@ -63,8 +68,8 @@ TEST(RawSequencesParserTestCharToBits, CharToBitsArray) {
 }
 
 TEST(RawSequencesParserTestCharToBits, CharToBitsSwitch) {
-  auto host = RawSequencesParser<CharToBitsSwitch>(
-    make_shared<vector<string>>(raw_sequences),
+  RawSequencesParser<CharToBitsSwitch> host(
+    make_unique<vector<string>>(raw_sequences),
     (2 + 0 + 1 + 2 + 30 + 0),
     (4 + 2 + 3 + 4 + 32 + 2),
     kmer_size
