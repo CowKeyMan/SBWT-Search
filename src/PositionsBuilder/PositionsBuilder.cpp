@@ -19,6 +19,7 @@ auto PositionsBuilder::get_positions(
   vector<u64> &cumsum_string_lengths,
   int kmer_size
 ) -> unique_ptr<vector<u64>> {
+#pragma omp parallel for
   for (int i = 0; i < cumsum_string_lengths.size() - 1; ++i) {
     auto start_position_index = cumsum_positions_per_string[i];
     auto string_length

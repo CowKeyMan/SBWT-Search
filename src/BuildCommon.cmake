@@ -96,6 +96,7 @@ add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"
 )
+target_link_libraries(positions_builder PRIVATE OpenMP::OpenMP_CXX)
 add_library(
   sbwt_container_gpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cu"
