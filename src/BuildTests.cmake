@@ -31,11 +31,12 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/Builder/Builder_test.cpp"
     "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser_test.cpp"
-    "${PROJECT_SOURCE_DIR}/RawSequencesParser/RawSequencesParser_test.cpp"
+    "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/SeqToBitsConverter_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/SbwtFactory/SbwtFactory_test.cpp"
     "${PROJECT_SOURCE_DIR}/RankIndexBuilder/CpuRankIndexBuilder_test.cpp"
     "${PROJECT_SOURCE_DIR}/TestUtils/RankTestUtils_test.cpp"
+    "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
     # TODO: add more cpu tests here
   )
   add_test(NAME test_main_cpu COMMAND test_main_cpu)

@@ -93,6 +93,10 @@ add_library(
 target_link_libraries(sbwt_container_cpu PRIVATE libsdsl)
 add_dependencies(sbwt_container_cpu sdsl)
 add_library(
+  positions_builder
+  "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"
+)
+add_library(
   sbwt_container_gpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cu"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cu"
@@ -132,6 +136,7 @@ target_link_libraries(
   sbwt_container
   sbwt_writer
   OpenMP::OpenMP_CXX
+  positions_builder
   # TODO: Link more libraries here
 )
 add_dependencies(common_libraries kseqpp)
