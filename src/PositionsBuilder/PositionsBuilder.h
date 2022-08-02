@@ -22,11 +22,11 @@ class PositionsBuilder {
     unique_ptr<vector<u64>> positions;
 
   public:
-    PositionsBuilder(const u64 total_positions);
+    PositionsBuilder(){};
 
     unique_ptr<vector<u64>> get_positions(
       vector<u64> &cumsum_positions_per_string,
-      vector<u64> &cumulative_string_lengths,
+      vector<u64> &cumsum_string_lengths,
       int kmer_size
     );
 

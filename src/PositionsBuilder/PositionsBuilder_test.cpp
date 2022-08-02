@@ -55,11 +55,9 @@ TEST(PositionsBuilder, Build) {
     positions_per_string.end(),
     cumsum_positions_per_string.begin() + 1
   );
-  auto positions
-    = PositionsBuilder(cumsum_positions_per_string.back())
-        .get_positions(
-          cumsum_positions_per_string, cumsum_string_lengths, kmer_size
-        );
+  auto positions = PositionsBuilder().get_positions(
+    cumsum_positions_per_string, cumsum_string_lengths, kmer_size
+  );
   assert_vectors_equal<u64>(*positions, expected);
 }
 

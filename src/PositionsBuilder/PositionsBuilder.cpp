@@ -11,14 +11,12 @@ using std::vector;
 
 namespace sbwt_search {
 
-PositionsBuilder::PositionsBuilder(const u64 total_positions):
-    positions(make_unique<vector<u64>>(total_positions)) {}
-
 auto PositionsBuilder::get_positions(
   vector<u64> &cumsum_positions_per_string,
   vector<u64> &cumsum_string_lengths,
   int kmer_size
 ) -> unique_ptr<vector<u64>> {
+  positions = make_unique<vector<u64>>(cumsum_positions_per_string.back());
 #pragma omp parallel for
   for (int i = 0; i < cumsum_string_lengths.size() - 1; ++i) {
     auto start_position_index = cumsum_positions_per_string[i];
