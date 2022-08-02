@@ -24,7 +24,8 @@ auto PositionsBuilder::get_positions(
     auto start_position_index = cumsum_positions_per_string[i];
     auto string_length
       = cumsum_string_lengths[i + 1] - cumsum_string_lengths[i];
-    auto end_position_index = start_position_index + string_length - kmer_size + 1;
+    auto end_position_index
+      = start_position_index + string_length - kmer_size + 1;
     auto first_position = cumsum_string_lengths[i];
     process_one_string(
       start_position_index, end_position_index, first_position

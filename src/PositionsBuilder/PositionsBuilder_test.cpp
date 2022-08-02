@@ -17,26 +17,16 @@ using std::vector;
 namespace sbwt_search {
 
 const vector<string> string_seqs = {
-  "ACgT",  // 00011011
-  "gA",  // 1000
-  "GAT",  // 100011
-  "GtCa",  // 10110100
-  "AAAAaAAaAAAAAAAaAAAAAAAAAAAAAAAA",  // 32 As = 64 0s
-  "GC"  // 1001
+  "ACgT",  // size: 4, starting_index: 0
+  "gA",  // size: 2, starting_index: 4
+  "GAT",  // size: 3, starting_index: 6
+  "GtCa",  // size: 4, starting_index: 9
+  "AAAAaA",  // size: 6, starting_index: 13
+  "GC"  // size: 2, starting_index: 19
 };
 auto kmer_size = 3;
 
-auto build_expected() -> vector<u64> {
-  auto expected = vector<u64>();
-  auto cumsum_string_length = 0;
-  for (auto &s: string_seqs) {
-    for (int i = 0; i < s.size() - kmer_size + 1; ++i) {
-      expected.push_back(i + cumsum_string_length);
-    }
-    cumsum_string_length += s.size();
-  }
-  return expected;
-}
+const vector<u64> expected = { 0, 1, 6, 9, 10, 13, 14, 15, 16 };
 
 TEST(PositionsBuilder, Build) {
   auto string_lengths = vector<u64>(string_seqs.size());
@@ -48,7 +38,9 @@ TEST(PositionsBuilder, Build) {
   );
   auto cumsum_string_lengths = vector<u64>(string_seqs.size() + 1);
   partial_sum(
-    string_lengths.begin(), string_lengths.end(), cumsum_string_lengths.begin() + 1
+    string_lengths.begin(),
+    string_lengths.end(),
+    cumsum_string_lengths.begin() + 1
   );
   auto positions_per_string = vector<u64>(string_seqs.size());
   transform(
@@ -63,13 +55,11 @@ TEST(PositionsBuilder, Build) {
     positions_per_string.end(),
     cumsum_positions_per_string.begin() + 1
   );
-
   auto positions
     = PositionsBuilder(cumsum_positions_per_string.back())
         .get_positions(
           cumsum_positions_per_string, cumsum_string_lengths, kmer_size
         );
-  auto expected = build_expected();
   assert_vectors_equal<u64>(*positions, expected);
 }
 
