@@ -37,13 +37,16 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/RankIndexBuilder/CpuRankIndexBuilder_test.cpp"
     "${PROJECT_SOURCE_DIR}/TestUtils/RankTestUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/Semaphore_test.cpp"
     # TODO: add more cpu tests here
   )
   add_test(NAME test_main_cpu COMMAND test_main_cpu)
   target_link_libraries(
     test_main_cpu
-    PRIVATE libraries_cpu
-    PRIVATE test_lib
+    PRIVATE
+    libraries_cpu
+    test_lib
+    OpenMP::OpenMP_CXX
   )
 endif()
 
