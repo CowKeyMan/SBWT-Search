@@ -21,7 +21,7 @@ class Semaphore {
     omp_lock_t count_protector_, acquire_gate_;
     omp_lock_t *count_protector = &count_protector_,
                *acquire_gate = &acquire_gate_;
-    int count;
+    uint count;
 
   public:
     Semaphore(uint starting_count = 1): count(starting_count) {
