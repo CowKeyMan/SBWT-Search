@@ -5,7 +5,6 @@
 
 #include "SequenceFileParser/SequenceFileParser.h"
 
-using std::make_unique;
 using std::out_of_range;
 using std::unique_ptr;
 
@@ -18,11 +17,11 @@ class SequenceFileParserTest: public ::testing::Test {
   protected:
     SequenceFileParser host;
 
-    SequenceFileParserTest(): host("test_objects/test_query.fna", 3) {}
+    SequenceFileParserTest(): host("test_objects/test_query.fna") {}
 
     void shared_tests(const vector<string> &seqs) {
-      ASSERT_EQ(seq_0, (seqs)[0]);
-      ASSERT_EQ(seq_3, (seqs)[3]);
+      ASSERT_EQ(seq_0, seqs[0]);
+      ASSERT_EQ(seq_3, seqs[3]);
       ASSERT_EQ(4, seqs.size());
     }
 };
@@ -33,9 +32,10 @@ TEST_F(SequenceFileParserTest, ParseAll) {
 }
 
 TEST_F(SequenceFileParserTest, ParseOneByOne) {
-  auto seqs = make_unique<vector<string>>();
-  while (!host.eof()) { seqs->push_back(move(host.get_next())); }
-  shared_tests(*seqs);
+  auto seqs = vector<string>();
+  string s;
+  while (host >> s) { seqs.push_back(move(s)); }
+  shared_tests(seqs);
 }
 
 }

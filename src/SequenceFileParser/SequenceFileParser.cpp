@@ -28,11 +28,12 @@ auto SequenceFileParser::get_all() -> vector<string> {
   return seqs;
 }
 
-auto SequenceFileParser::get_next() -> string {
+auto SequenceFileParser::operator>>(string &s) -> bool {
+  if (stream.eof()) { return false; }
   KSeq record;
   stream >> record;
-  reached_end = stream.eof();
-  return move(record.seq);
+  s = move(record.seq);
+  return true;
 }
 
 }

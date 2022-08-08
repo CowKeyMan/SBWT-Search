@@ -15,30 +15,26 @@
 #include "kseq++/kseq++.hpp"
 #include "kseq++/seqio.hpp"
 
-using std::make_unique;
-using std::unique_ptr;
-using std::string;
-using std::vector;
 using klibpp::SeqStreamIn;
+using std::make_unique;
+using std::string;
+using std::unique_ptr;
+using std::vector;
 
 namespace sbwt_search {
 
 class SequenceFileParser {
   private:
     string filename;
-    u64 kmer_size;
     void add_sequence(const string seq);
     SeqStreamIn stream;
     bool reached_end = false;
 
   public:
-    SequenceFileParser(const string &filename, const u64 kmer_size):
-        kmer_size(kmer_size),
-        stream(filename.c_str()) {
+    SequenceFileParser(const string &filename): stream(filename.c_str()) {
       ThrowingIfstream::check_file_exists(filename);
     }
-    string get_next();
-    auto eof() -> bool { return reached_end; }
+    bool operator>>(string &s);
     vector<string> get_all();
 };
 
