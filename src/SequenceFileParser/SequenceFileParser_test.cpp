@@ -6,8 +6,8 @@
 #include "SequenceFileParser/SequenceFileParser.h"
 
 using std::make_unique;
-using std::unique_ptr;
 using std::out_of_range;
+using std::unique_ptr;
 
 namespace sbwt_search {
 
@@ -20,7 +20,7 @@ class SequenceFileParserTest: public ::testing::Test {
 
     SequenceFileParserTest(): host("test_objects/test_query.fna", 3) {}
 
-    void shared_tests(const vector<string>& seqs) {
+    void shared_tests(const vector<string> &seqs) {
       ASSERT_EQ(seq_0, (seqs)[0]);
       ASSERT_EQ(seq_3, (seqs)[3]);
       ASSERT_EQ(4, seqs.size());
@@ -34,13 +34,8 @@ TEST_F(SequenceFileParserTest, ParseAll) {
 
 TEST_F(SequenceFileParserTest, ParseOneByOne) {
   auto seqs = make_unique<vector<string>>();
-    try {
-      while(true){
-        seqs->push_back(move(host.get_next()));
-      }
-    } catch (out_of_range &e) {
-      shared_tests(*seqs);
-    }
+  while (!host.eof()) { seqs->push_back(move(host.get_next())); }
+  shared_tests(*seqs);
 }
 
 }

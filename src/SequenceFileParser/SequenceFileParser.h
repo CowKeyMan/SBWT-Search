@@ -29,6 +29,7 @@ class SequenceFileParser {
     u64 kmer_size;
     void add_sequence(const string seq);
     SeqStreamIn stream;
+    bool reached_end = false;
 
   public:
     SequenceFileParser(const string &filename, const u64 kmer_size):
@@ -37,6 +38,7 @@ class SequenceFileParser {
       ThrowingIfstream::check_file_exists(filename);
     }
     string get_next();
+    auto eof() -> bool { return reached_end; }
     vector<string> get_all();
 };
 

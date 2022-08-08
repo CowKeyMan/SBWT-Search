@@ -1,7 +1,9 @@
+#include <ctime>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <unistd.h>
 #include <utility>
 #include <vector>
 #include <zlib.h>
@@ -13,9 +15,9 @@
 
 using klibpp::KSeq;
 using std::move;
+using std::out_of_range;
 using std::string;
 using std::vector;
-using std::out_of_range;
 
 namespace sbwt_search {
 
@@ -28,8 +30,9 @@ auto SequenceFileParser::get_all() -> vector<string> {
 
 auto SequenceFileParser::get_next() -> string {
   KSeq record;
-  if (stream >> record) { return move(record.seq); }
-  throw out_of_range("End of file reached");
+  stream >> record;
+  reached_end = stream.eof();
+  return move(record.seq);
 }
 
 }
