@@ -79,6 +79,7 @@ add_library(
 add_library(
   sequence_file_parser
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser.cpp"
 )
 add_library(
   sbwt_parser
