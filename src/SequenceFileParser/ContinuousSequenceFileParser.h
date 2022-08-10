@@ -29,9 +29,6 @@ using std::vector;
 using threading_utils::BoundedSemaphore;
 using threading_utils::Semaphore;
 
-#include <iostream>
-using namespace std;
-
 namespace sbwt_search {
 
 class ContinuousSequenceFileParser {
