@@ -30,7 +30,7 @@ class BoundedSemaphore {
       omp_init_lock(release_gate);
       if (starting_count == 0) {
         omp_set_lock(acquire_gate);
-      } else if (starting_count == maximum) {
+      } else if (starting_count >= maximum) {
         omp_set_lock(release_gate);
       }
     }

@@ -6,6 +6,8 @@
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/Semaphore_test.hpp"
 
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 using std::this_thread::sleep_for;
 
@@ -38,7 +40,6 @@ TEST(BoundedSemaphoreTest, TestBasic) {
       sem.acquire();
     }
   }
-
   ASSERT_EQ(1, counter_1);
   ASSERT_EQ(2, counter_2);
   ASSERT_EQ(3, counter);
@@ -50,6 +51,29 @@ TEST(BoundedSemaphoreTest, SemaphoreBasic) {
 
 TEST(BoundedSemaphoreTest, Start0) {
   semaphore_test_start_0<BoundedSemaphore>();
+}
+
+TEST(BoundedSemaphoreTest, OverReleased) {
+  BoundedSemaphore sem(4, 1);
+  milliseconds::rep time_taken;
+
+#pragma omp parallel sections
+  {
+#pragma omp section
+    {
+      for (int i = 0; i < 3; ++i) { sem.acquire(); }
+      sleep_for(milliseconds(sleep_amount));
+      sem.acquire();
+    }
+#pragma omp section
+    {
+      auto start_time = high_resolution_clock::now();
+      sem.release();
+      auto end_time = high_resolution_clock::now();
+      time_taken = duration_cast<milliseconds>(end_time - start_time).count();
+    }
+  }
+  ASSERT_GE(time_taken, sleep_amount);
 }
 
 }
