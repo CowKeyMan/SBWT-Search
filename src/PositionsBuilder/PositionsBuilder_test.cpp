@@ -47,7 +47,7 @@ TEST(PositionsBuilder, Build) {
     string_lengths.begin(),
     string_lengths.end(),
     positions_per_string.begin(),
-    [](u64 x) -> u64 { return (x - 2) > 0 ? x - 2 : 0; }
+    [](u64 x) -> u64 { return (x - (kmer_size - 1)) > 0 ? x - (kmer_size - 1) : 0; }
   );
   auto cumsum_positions_per_string = vector<u64>(string_seqs.size() + 1);
   partial_sum(
