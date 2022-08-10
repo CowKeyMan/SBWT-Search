@@ -14,9 +14,11 @@
 
 #include "SequenceFileParser/SequenceFileParser.h"
 #include "Utils/BoundedSemaphore.hpp"
+#include "Utils/ObserverPattern.hpp"
 #include "Utils/Semaphore.hpp"
 #include "Utils/TypeDefinitions.h"
 
+using design_utils::Subject;
 using std::cerr;
 using std::make_shared;
 using std::queue;
@@ -30,7 +32,8 @@ using threading_utils::Semaphore;
 
 namespace sbwt_search {
 
-class ContinuousSequenceFileParserReader {
+class ContinuousSequenceFileParserReader:
+    public Subject<shared_ptr<vector<string>>> {
     const vector<string> &filenames;
     const u32 characters_per_send;
     const u64 max_characters_per_batch;
@@ -69,6 +72,7 @@ class ContinuousSequenceFileParserReader {
     auto start_new_batch() -> void {
       terminate_batch();
       batches.push(make_shared<vector<string>>());
+      this->notify_observers(batches.back());
       batch_size = 0;
       characters_not_consumed = 0;
       batch_semaphore.acquire();

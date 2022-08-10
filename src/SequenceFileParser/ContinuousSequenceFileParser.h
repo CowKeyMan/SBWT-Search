@@ -17,9 +17,11 @@
 #include "SequenceFileParser/ContinuousSequenceFileParserReader.hpp"
 #include "SequenceFileParser/ContinuousSequenceFileParserWriter.hpp"
 #include "Utils/BoundedSemaphore.hpp"
+#include "Utils/ObserverPattern.hpp"
 #include "Utils/Semaphore.hpp"
 #include "Utils/TypeDefinitions.h"
 
+using design_utils::Observer;
 using std::make_shared;
 using std::queue;
 using std::shared_ptr;
@@ -78,10 +80,29 @@ class ContinuousSequenceFileParser {
       if (start_reading) { read(); }
     };
 
-    void read();
-    void free_all_consumers();
+    void subscribe(Observer<shared_ptr<vector<string>>> *observer) {
+      reader.subscribe(observer);
+    }
 
-    bool operator>>(tuple<shared_ptr<vector<string>> &, u64 &, u64 &> t);
+    void unsubscribe(Observer<shared_ptr<vector<string>>> *observer) {
+      reader.unsubscribe(observer);
+    }
+
+    void read() {
+      reader.read();
+      finished_reading = true;
+      free_all_consumers();
+    }
+
+  private:
+    void free_all_consumers() {
+      for (int i = 0; i < readers_amount; ++i) {
+        character_semaphore.release();
+      }
+    }
+
+  public:
+    bool operator>>(tuple<u32 &, u64 &, u64 &> t) { return writer >> t; }
 };
 }
 #endif
