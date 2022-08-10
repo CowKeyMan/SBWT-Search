@@ -57,9 +57,9 @@ class ContinuousSequenceFileParserReader {
 
     auto read() -> void {
       start_new_batch();
-      for (int i = 0; i < filenames.size(); ++i) {
+      for (auto &filename: filenames) {
         try {
-          process_file(filenames[i]);
+          process_file(filename);
         } catch (runtime_error &e) { cerr << e.what() << '\n'; }
       }
       terminate_batch();

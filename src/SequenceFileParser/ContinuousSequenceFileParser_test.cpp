@@ -1,6 +1,8 @@
+#include <chrono>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
+#include <thread>
 #include <tuple>
 
 #include <gtest/gtest.h>
@@ -10,11 +12,15 @@
 
 using std::cerr;
 using std::fill;
+using std::make_shared;
 using std::out_of_range;
+using std::shared_ptr;
 using std::stringstream;
 using std::tie;
-using std::shared_ptr;
-using std::make_shared;
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
+using std::this_thread::sleep_for;
 
 namespace sbwt_search {
 
@@ -24,6 +30,7 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
     u64 max_characters_per_batch = UINT_MAX;
     u32 characters_per_send = 4;
     uint readers_amount = 1;
+    uint max_batches = UINT_MAX;
     vector<u64> expected_string_indexes = { 0, 0, 2, 2, 4, 5, 6, 7 };
     vector<u64> expected_character_indexes = { 0, 4, 1, 5, 1, 0, 2, 0 };
     vector<vector<string>> expected_buffers;
@@ -36,15 +43,17 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
         kmer_size,
         max_characters_per_batch,
         characters_per_send,
-        readers_amount
+        readers_amount,
+        max_batches
       );
       shared_ptr<vector<string>> batch = make_shared<vector<string>>();
       u64 string_index, character_index;
-      for (int i = 0; i < expected_string_indexes.size(); ++i) {
-        host >> tie(batch, string_index, character_index);
+      int i = 0;
+      while (host >> tie(batch, string_index, character_index)) {
         assert_vectors_equal(expected_buffers[i], *batch);
         ASSERT_EQ(expected_string_indexes[i], string_index);
         ASSERT_EQ(expected_character_indexes[i], character_index);
+        ++i;
       }
     }
 };
@@ -102,5 +111,58 @@ TEST_F(ContinuousSequenceFileParserTest, TestStringTooLong) {
   );
 }
 
-// TODO: test parallel
+TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
+  auto sleep_time = 300;
+  max_characters_per_batch = 15;
+  max_batches = 2;
+  vector<string> filenames = { "test_objects/test_query.fna",
+                               "test_objects/test_query.fna",
+                               "test_objects/test_query.fna" };
+  ContinuousSequenceFileParser host(
+    filenames,
+    kmer_size,
+    max_characters_per_batch,
+    characters_per_send,
+    readers_amount,
+    max_batches,
+    false
+  );
+  vector<shared_ptr<vector<string>>> batches;
+  vector<u64> string_indexes, character_indexes;
+  expected_string_indexes = { 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 2, 2 };
+  expected_character_indexes = { 0, 4, 1, 5, 0, 4, 1, 5, 0, 4, 1, 5 };
+  vector<string> expected_buffer = { "GACTG", "AA", "GATCGA", "TA" };
+  expected_buffers.resize(12);
+  fill(expected_buffers.begin(), expected_buffers.end(), expected_buffer);
+  milliseconds::rep read_time;
+#pragma omp parallel sections
+  {
+#pragma omp section
+    {
+      auto start_time = high_resolution_clock::now();
+      host.read();
+      auto end_time = high_resolution_clock::now();
+      read_time = duration_cast<milliseconds>(end_time - start_time).count();
+    }
+#pragma omp section
+    {
+      shared_ptr<vector<string>> batch = make_shared<vector<string>>();
+      u64 string_index, character_index;
+      sleep_for(milliseconds(sleep_time));
+      while (host >> tie(batch, string_index, character_index)) {
+        batches.push_back(batch);
+        string_indexes.push_back(string_index);
+        character_indexes.push_back(character_index);
+      }
+    }
+  }
+  ASSERT_EQ(expected_buffers.size(), batches.size());
+  for (int i = 0; i < expected_buffers.size(); ++i) {
+    assert_vectors_equal(expected_buffers[i], *batches[i]);
+  }
+  assert_vectors_equal(expected_string_indexes, string_indexes);
+  assert_vectors_equal(expected_character_indexes, character_indexes);
+  ASSERT_GE(read_time, sleep_time);
+}
+
 }
