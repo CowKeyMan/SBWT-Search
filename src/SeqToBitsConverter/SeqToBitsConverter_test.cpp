@@ -57,22 +57,4 @@ TEST_F(SeqToBitsConverterTest, CharToBitsVector) {
   shared_tests();
 }
 
-TEST_F(SeqToBitsConverterTest, CharToBitsArray) {
-  auto host = SeqToBitsConverter<CharToBitsArray>(bit_seqs);
-  convert_strings<decltype(host)>(host);
-  shared_tests();
-}
-
-TEST_F(SeqToBitsConverterTest, CharToBitsSwitch) {
-  auto host = SeqToBitsConverter<CharToBitsSwitch>(bit_seqs);
-  convert_strings<decltype(host)>(host);
-  shared_tests();
-}
-
-TEST_F(SeqToBitsConverterTest, CharToBitsCArray) {
-  auto host = SeqToBitsConverter<CharToBitsCArray>(bit_seqs);
-  convert_strings<decltype(host)>(host);
-  shared_tests();
-}
-
 }
