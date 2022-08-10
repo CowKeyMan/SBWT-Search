@@ -11,6 +11,7 @@ project(
   HOMEPAGE_URL https://github.com/CowKeyMan/SBWT-Search
   LANGUAGES CXX
 )
+set (CMAKE_CXX_STANDARD 17)
 
 include(CheckLanguage)
 check_language(CUDA)
