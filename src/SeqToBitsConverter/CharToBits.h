@@ -29,12 +29,12 @@ vector<u64> get_char_to_bits() {
   return char_to_bits;
 }
 
-class CharToBitsVector {
+class CharToBits {
   private:
     const vector<u64> char_to_bits;
 
   public:
-    CharToBitsVector(): char_to_bits(get_char_to_bits()){};
+    CharToBits(): char_to_bits(get_char_to_bits()){};
     u64 operator()(char c) { return char_to_bits[c]; }
 };
 
