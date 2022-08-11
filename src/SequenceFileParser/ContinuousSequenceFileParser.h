@@ -51,7 +51,7 @@ class ContinuousSequenceFileParser {
       const vector<string> &filenames,
       const u64 kmer_size = 30,
       const u64 max_characters_per_batch = UINT_MAX,
-      const u32 characters_per_send = 64,
+      const u32 characters_per_send = 32,
       const uint readers_amount = 1,
       const u64 max_batches = UINT_MAX
     ):
@@ -59,7 +59,7 @@ class ContinuousSequenceFileParser {
         max_characters_per_batch(max_characters_per_batch),
         readers_amount(readers_amount),
         characters_per_send(characters_per_send),
-        batch_semaphore(max_batches, max_batches),
+        batch_semaphore(0, max_batches),
         character_semaphore(0),
         reader(
           filenames,
@@ -85,7 +85,7 @@ class ContinuousSequenceFileParser {
       reader.unsubscribe(observer);
     }
 
-    void read() {
+    void read_and_generate() {
       reader.read();
       finished_reading = true;
       free_all_consumers();

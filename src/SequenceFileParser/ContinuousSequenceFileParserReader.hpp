@@ -75,7 +75,7 @@ class ContinuousSequenceFileParserReader:
       this->notify_observers(batches.back());
       batch_size = 0;
       characters_not_consumed = 0;
-      batch_semaphore.acquire();
+      batch_semaphore.release();
     }
 
     auto terminate_batch() -> void {
@@ -95,6 +95,10 @@ class ContinuousSequenceFileParserReader:
       if (string_larger_than_limit(s)) {
         cerr << "The string at position " + to_string(string_index)
                   + " in file " + filename + " is too large\n";
+        return;
+      } else if (s.size() == 0) {
+        cerr << "The string at position " + to_string(string_index)
+                  + " in file " + filename + " is empty\n";
         return;
       }
       if (!string_fits_in_batch(s)) { start_new_batch(); }

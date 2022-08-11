@@ -64,7 +64,7 @@ class ContinuousSequenceFileParserTest:
     }
     auto shared_tests() -> void {
       auto host = get_host();
-      host.read();
+      host.read_and_generate();
       u32 batch_index, in_batch_index;
       u64 string_index, character_index;
       int i = 0;
@@ -163,7 +163,7 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
 #pragma omp section
     {
       auto start_time = high_resolution_clock::now();
-      host.read();
+      host.read_and_generate();
       auto end_time = high_resolution_clock::now();
       read_time = duration_cast<milliseconds>(end_time - start_time).count();
     }

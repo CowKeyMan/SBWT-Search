@@ -98,7 +98,7 @@ class ContinuousSequenceFileParserWriter {
       in_batch_index = string_index = character_index = 0;
       batches.pop();
       batch_index++;
-      batch_semaphore.release();
+      batch_semaphore.acquire();
     }
 
     auto set_output_variables(tuple<u32 &, u32 &, u64 &, u64 &> &t) -> void {
