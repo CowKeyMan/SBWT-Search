@@ -53,8 +53,7 @@ class ContinuousSequenceFileParser {
       const u64 max_characters_per_batch = UINT_MAX,
       const u32 characters_per_send = 64,
       const uint readers_amount = 1,
-      const u64 max_batches = UINT_MAX,
-      bool start_reading = true
+      const u64 max_batches = UINT_MAX
     ):
         kmer_size(kmer_size),
         max_characters_per_batch(max_characters_per_batch),
@@ -76,9 +75,7 @@ class ContinuousSequenceFileParser {
           character_semaphore,
           characters_per_send,
           finished_reading
-        ) {
-      if (start_reading) { read(); }
-    };
+        ){};
 
     void subscribe(Observer<shared_ptr<vector<string>>> *observer) {
       reader.subscribe(observer);
@@ -102,7 +99,7 @@ class ContinuousSequenceFileParser {
     }
 
   public:
-    bool operator>>(tuple<u32 &, u64 &, u64 &> t) { return writer >> t; }
+    bool operator>>(tuple<u32 &, u32 &, u64 &, u64 &> t) { return writer >> t; }
 };
 }
 #endif

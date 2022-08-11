@@ -36,6 +36,7 @@ class ContinuousSequenceFileParserTest:
     uint readers_amount = 1;
     uint max_batches = UINT_MAX;
     vector<u32> expected_batch_indexes = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    vector<u32> expected_in_batch_indexes = { 0, 1, 2, 3, 4, 5, 6, 7 };
     vector<u64> expected_string_indexes = { 0, 0, 2, 2, 4, 5, 6, 7 };
     vector<u64> expected_character_indexes = { 0, 4, 1, 5, 1, 0, 2, 0 };
     vector<vector<string>> expected_batches;
@@ -56,8 +57,7 @@ class ContinuousSequenceFileParserTest:
         max_characters_per_batch,
         characters_per_send,
         readers_amount,
-        max_batches,
-        false
+        max_batches
       );
       host.subscribe(this);
       return host;
@@ -65,10 +65,12 @@ class ContinuousSequenceFileParserTest:
     auto shared_tests() -> void {
       auto host = get_host();
       host.read();
-      u32 batch_index;
+      u32 batch_index, in_batch_index;
       u64 string_index, character_index;
       int i = 0;
-      while (host >> tie(batch_index, string_index, character_index)) {
+      while (
+        host >> tie(batch_index, in_batch_index, string_index, character_index)
+      ) {
         ASSERT_EQ(expected_batch_indexes[i], batch_index)
           << " unequal at index " << i;
         ASSERT_EQ(expected_string_indexes[i], string_index)
@@ -93,6 +95,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSimple) {
 TEST_F(ContinuousSequenceFileParserTest, GetMaxCharsPerBatchEqualToFileSize) {
   max_characters_per_batch = 15;
   expected_batch_indexes = { 0, 0, 0, 0, 1, 1, 1, 1 };
+  expected_in_batch_indexes = { 0, 1, 2, 3, 0, 2, 3, 4 };
   expected_string_indexes = { 0, 0, 2, 2, 0, 0, 2, 2 };
   expected_character_indexes = { 0, 4, 1, 5, 0, 4, 1, 5 };
   expected_batches
@@ -122,6 +125,7 @@ TEST_F(ContinuousSequenceFileParserTest, TestStringTooLong) {
     { "AA", "TA" },
   };
   expected_batch_indexes = { 0, 0, 1 };
+  expected_in_batch_indexes = { 0, 1, 0 };
   expected_string_indexes = { 0, 0, 0 };
   expected_character_indexes = { 0, 4, 0 };
   stringstream mybuffer;
@@ -144,9 +148,10 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
                 "test_objects/test_query.fna",
                 "test_objects/test_query.fna" };
   auto host = get_host();
+  vector<u32> batch_indexes, in_batch_indexes;
   vector<u64> string_indexes, character_indexes;
-  vector<u32> batch_indexes;
   expected_batch_indexes = { 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2 };
+  expected_in_batch_indexes = { 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3 };
   expected_string_indexes = { 0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 2, 2 };
   expected_character_indexes = { 0, 4, 1, 5, 0, 4, 1, 5, 0, 4, 1, 5 };
   expected_batches = { { "GACTG", "AA", "GATCGA", "TA" },
@@ -166,12 +171,15 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
     {
       shared_ptr<vector<string>> batch = make_shared<vector<string>>();
       u64 string_index, character_index;
-      u32 batch_index;
+      u32 batch_index, in_batch_index;
       sleep_for(milliseconds(sleep_time));
-      while (host >> tie(batch_index, string_index, character_index)) {
+      while (
+        host >> tie(batch_index, in_batch_index, string_index, character_index)
+      ) {
+        batch_indexes.push_back(batch_index);
+        in_batch_indexes.push_back(in_batch_index);
         string_indexes.push_back(string_index);
         character_indexes.push_back(character_index);
-        batch_indexes.push_back(batch_index);
       }
     }
   }
@@ -179,9 +187,10 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
   for (int i = 0; i < expected_batches.size(); ++i) {
     assert_vectors_equal(expected_batches[i], *batches[i]);
   }
+  assert_vectors_equal(expected_batch_indexes, batch_indexes);
+  assert_vectors_equal(expected_in_batch_indexes, in_batch_indexes);
   assert_vectors_equal(expected_string_indexes, string_indexes);
   assert_vectors_equal(expected_character_indexes, character_indexes);
-  assert_vectors_equal(expected_batch_indexes, batch_indexes);
   ASSERT_GE(read_time, sleep_time);
 }
 

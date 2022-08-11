@@ -32,7 +32,7 @@ class ContinuousSequenceFileParserWriter {
     BoundedSemaphore &batch_semaphore;
     Semaphore &character_semaphore;
     u64 string_index = 0, character_index = 0;
-    u32 batch_index = 0;
+    u32 batch_index = 0, in_batch_index = 0;
     bool &finished_reading;
     bool first_read = true;
 
@@ -50,7 +50,7 @@ class ContinuousSequenceFileParserWriter {
         characters_per_send(characters_per_send),
         finished_reading(finished_reading) {}
 
-    auto operator>>(tuple<u32&, u64&, u64&>& t) -> bool {
+    auto operator>>(tuple<u32 &, u32 &, u64 &, u64 &> &t) -> bool {
       character_semaphore.acquire();
 #pragma omp critical
       {
@@ -68,6 +68,7 @@ class ContinuousSequenceFileParserWriter {
     auto is_over() -> bool { return finished_reading && batches.empty(); }
 
     auto recalculate_indexes() -> void {
+      ++in_batch_index;
       auto characters_to_advance = characters_per_send;
       for (int i = string_index; i < batches.front()->size(); ++i) {
         const auto &s = (*batches.front())[i];
@@ -94,15 +95,16 @@ class ContinuousSequenceFileParserWriter {
     }
 
     auto start_new_batch() -> void {
-      string_index = character_index = 0;
+      in_batch_index = string_index = character_index = 0;
       batches.pop();
       batch_index++;
       batch_semaphore.release();
     }
 
-    auto set_output_variables(tuple<u32&, u64&, u64&>& t) -> void {
-      auto [batch_index, string_index, character_index] = t;
+    auto set_output_variables(tuple<u32 &, u32 &, u64 &, u64 &> &t) -> void {
+      auto [batch_index, in_batch_index, string_index, character_index] = t;
       batch_index = this->batch_index;
+      in_batch_index = this->in_batch_index;
       string_index = this->string_index;
       character_index = this->character_index;
     }
