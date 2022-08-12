@@ -35,6 +35,8 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
     uint max_batches = UINT_MAX;
     vector<vector<u64>> expected_string_indexes = { { 0, 8, 8, 8 } };
     vector<vector<u64>> expected_character_indexes = { { 0, 0, 0, 0 } };
+    vector<vector<u64>> expected_cumulative_character_indexes
+      = { { 0, 30, 30, 30 } };
     vector<vector<string>> expected_batches
       = { { "GACTG", "AA", "GATCGA", "TA", "GACTG", "AA", "GATCGA", "TA" } };
     vector<shared_ptr<vector<string>>> batches;
@@ -73,6 +75,8 @@ TEST_F(ContinuousSequenceFileParserTest, GetMaxCharsPerBatchEqualToFileSize) {
   max_characters_per_batch = 32 * 3;
   expected_string_indexes = { { 0, 1, 2, 4 }, { 0, 1, 2, 4 } };
   expected_character_indexes = { { 0, 12, 12, 0 }, { 0, 12, 12, 0 } };
+  expected_cumulative_character_indexes
+    = { { 0, 32, 64, 87 }, { 0, 32, 64, 87 } };
   expected_batches = { { "AAAAAAAAAAAAAAAAAAAA",
                          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
                          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -107,6 +111,8 @@ TEST_F(ContinuousSequenceFileParserTest, TestStringTooLong) {
   expected_string_indexes = { { 0, 1, 1, 1 }, { 0, 1, 1, 1 }, { 0, 1, 1, 1 } };
   expected_character_indexes
     = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
+    expected_cumulative_character_indexes
+      = { { 0, 20, 20, 20 }, { 0, 32, 32, 32 }, { 0, 2, 2, 2 } };
   stringstream mybuffer;
   auto *old_buf = cerr.rdbuf();
   cerr.rdbuf(mybuffer.rdbuf());
@@ -129,6 +135,8 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
   expected_string_indexes = { { 0, 1, 2, 4 }, { 0, 1, 2, 4 }, { 0, 1, 2, 4 } };
   expected_character_indexes
     = { { 0, 12, 12, 0 }, { 0, 12, 12, 0 }, { 0, 12, 12, 0 } };
+  expected_cumulative_character_indexes
+    = { { 0, 87, 87, 87}, { 0, 87, 87, 87}, { 0, 87, 87, 87 }};
   max_batches = 2;
   expected_batches = { { "AAAAAAAAAAAAAAAAAAAA",
                          "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -166,8 +174,12 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
   ASSERT_EQ(expected_batches.size(), batches.size());
   for (int i = 0; i < expected_batches.size(); ++i) {
     assert_vectors_equal(expected_batches[i], batches[i]->buffer);
-    assert_vectors_equal(expected_string_indexes[i], batches[i]->string_indexes);
-    assert_vectors_equal(expected_character_indexes[i], batches[i]->character_indexes);
+    assert_vectors_equal(
+      expected_string_indexes[i], batches[i]->string_indexes
+    );
+    assert_vectors_equal(
+      expected_character_indexes[i], batches[i]->character_indexes
+    );
   }
   ASSERT_GE(read_time, sleep_time);
 }

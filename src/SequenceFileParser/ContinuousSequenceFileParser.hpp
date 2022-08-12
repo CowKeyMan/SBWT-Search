@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "SequenceFileParser/SequenceFileParser.h"
-#include "SequenceFileParser/StringSequenceBatch.hpp"
+#include "BatchObjects/StringSequenceBatch.hpp"
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
@@ -86,10 +86,12 @@ class ContinuousSequenceFileParser {
 
     auto initialise_sequence_batch() -> void {
       sequence_batch = make_unique<StringSequenceBatch>();
-      sequence_batch->character_indexes.reserve(readers_amount + 1);
       sequence_batch->string_indexes.reserve(readers_amount + 1);
-      sequence_batch->character_indexes.push_back(0);
+      sequence_batch->character_indexes.reserve(readers_amount + 1);
+      sequence_batch->cumulative_character_indexes.reserve(readers_amount + 1);
       sequence_batch->string_indexes.push_back(0);
+      sequence_batch->character_indexes.push_back(0);
+      sequence_batch->cumulative_character_indexes.push_back(0);
     }
 
     auto process_file(const string &filename) -> void {
@@ -105,6 +107,7 @@ class ContinuousSequenceFileParser {
            ++i) {
         sequence_batch->string_indexes.push_back(sequence_batch->buffer.size());
         sequence_batch->character_indexes.push_back(0);
+        sequence_batch->cumulative_character_indexes.push_back(sequence_batch_size);
       }
       sequence_batches.push(move(sequence_batch));
       batch_semaphore.release();
