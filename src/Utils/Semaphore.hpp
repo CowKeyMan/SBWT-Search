@@ -18,38 +18,35 @@ namespace threading_utils {
 
 class Semaphore {
   private:
-    omp_lock_t count_protector_, acquire_gate_;
-    omp_lock_t *count_protector = &count_protector_,
-               *acquire_gate = &acquire_gate_;
+    omp_lock_t acquire_gate_;
+    omp_lock_t *acquire_gate = &acquire_gate_;
     uint count;
 
   public:
     Semaphore(uint starting_count = 1): count(starting_count) {
-      omp_init_lock(count_protector);
       omp_init_lock(acquire_gate);
       if (starting_count == 0) { omp_set_lock(acquire_gate); }
     }
 
     void acquire() {
       omp_set_lock(acquire_gate);
-      omp_set_lock(count_protector);
-      --count;
-      if (count > 0) { omp_unset_lock(acquire_gate); }
-      omp_unset_lock(count_protector);
+#pragma omp critical(SEMAPHORE_COUNT_PROTECTOR)
+      {
+        --count;
+        if (count > 0) { omp_unset_lock(acquire_gate); }
+      }
     }
 
     void release() {
-      omp_set_lock(count_protector);
-      int previous_count = count;
-      ++count;
-      if (previous_count == 0) { omp_unset_lock(acquire_gate); }
-      omp_unset_lock(count_protector);
+#pragma omp critical(SEMAPHORE_COUNT_PROTECTOR)
+      {
+        int previous_count = count;
+        ++count;
+        if (previous_count == 0) { omp_unset_lock(acquire_gate); }
+      }
     }
 
-    ~Semaphore() {
-      omp_destroy_lock(count_protector);
-      omp_destroy_lock(acquire_gate);
-    }
+    ~Semaphore() { omp_destroy_lock(acquire_gate); }
 };
 
 }
