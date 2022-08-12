@@ -1,34 +1,35 @@
 #include <memory>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 #include <gtest/gtest.h>
 
 #include "SequenceFileParser/SequenceFileParser.h"
+#include "TestUtils/GeneralTestUtils.hpp"
 
 using std::out_of_range;
+using std::string;
 using std::unique_ptr;
+using std::vector;
 
 namespace sbwt_search {
-
-const auto seq_0 = "GACTG";
-const auto seq_3 = "TA";
 
 class SequenceFileParserTest: public ::testing::Test {
   protected:
     SequenceFileParser host;
+    vector<string> expected_seqs = { "GACTG", "AA", "GATCGA", "TA" };
 
     SequenceFileParserTest(): host("test_objects/test_query.fna") {}
 
     void shared_tests(const vector<string> &seqs) {
-      ASSERT_EQ(seq_0, seqs[0]);
-      ASSERT_EQ(seq_3, seqs[3]);
-      ASSERT_EQ(4, seqs.size());
+      assert_vectors_equal(expected_seqs, seqs);
     }
 };
 
 TEST_F(SequenceFileParserTest, ParseAll) {
-  const vector<string> vs = host.get_all();
-  shared_tests(vs);
+  const vector<string> seqs = host.get_all();
+  shared_tests(seqs);
 }
 
 TEST_F(SequenceFileParserTest, ParseOneByOne) {
@@ -36,6 +37,13 @@ TEST_F(SequenceFileParserTest, ParseOneByOne) {
   string s;
   while (host >> s) { seqs.push_back(move(s)); }
   shared_tests(seqs);
+}
+
+TEST(SequenceFileParserTest_NoClass, FileWithEmptyString) {
+  SequenceFileParser host("test_objects/test_query_with_empty_line.fna");
+  vector<string> expected_seqs = { "GACTG", "AA", "", "GATCGA", "TA" };
+  const vector<string> seqs = host.get_all();
+  assert_vectors_equal(expected_seqs, seqs);
 }
 
 }
