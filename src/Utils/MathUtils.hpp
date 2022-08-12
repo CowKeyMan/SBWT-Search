@@ -22,6 +22,17 @@ auto constexpr round_up(
 }
 
 template <class UnsignedNumber>
+auto constexpr round_down(
+  const UnsignedNumber value, const UnsignedNumber multiple
+) -> UnsignedNumber {
+  static_assert(
+    is_unsigned<UnsignedNumber>::value,
+    "Template class to round_down must be unsigned"
+  );
+  return (value / multiple) * multiple;
+}
+
+template <class UnsignedNumber>
 inline auto divisible_by_power_of_two(
   const UnsignedNumber numerator, const UnsignedNumber denominator_power_of_two
 ) -> UnsignedNumber {

@@ -11,6 +11,12 @@ TEST(MathUtils, RoundUp) {
   ASSERT_EQ(64, round_up<u64>(64, 64));
 }
 
+TEST(MathUtils, RoundDown) {
+  ASSERT_EQ(0, round_down<u64>(45, 64));
+  ASSERT_EQ(64, round_down<u64>(65, 64));
+  ASSERT_EQ(64, round_down<u64>(64, 64));
+}
+
 TEST(MathUtils, DivisibleByPowerOfTwo) {
   ASSERT_EQ(divisible_by_power_of_two<u64>(32, 4), true);
   ASSERT_EQ(divisible_by_power_of_two<u64>(1024, 64), true);
