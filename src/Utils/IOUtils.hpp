@@ -24,7 +24,7 @@ class ThrowingIfstream: public ifstream {
         ifstream(filename, mode) {
       if (this->fail()) {
         throw runtime_error(
-          string("The file ") + filename + " cannot be opened"
+          string("The input file ") + filename + " cannot be opened"
         );
       }
     }
