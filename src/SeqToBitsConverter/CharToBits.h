@@ -35,7 +35,7 @@ class CharToBits {
 
   public:
     CharToBits(): char_to_bits(get_char_to_bits()){};
-    u64 operator()(char c) { return char_to_bits[c]; }
+    u64 operator()(char c) const { return char_to_bits[c]; }
 };
 
 ;
