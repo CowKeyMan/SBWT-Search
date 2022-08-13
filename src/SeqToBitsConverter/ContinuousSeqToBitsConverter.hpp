@@ -18,11 +18,9 @@
 #include "SeqToBitsConverter/CharToBits.h"
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/MathUtils.hpp"
-#include "Utils/ObserverPattern.hpp"
 #include "Utils/Semaphore.hpp"
 #include "Utils/TypeDefinitions.h"
 
-using design_utils::Subject;
 using std::list;
 using std::make_tuple;
 using std::next;
