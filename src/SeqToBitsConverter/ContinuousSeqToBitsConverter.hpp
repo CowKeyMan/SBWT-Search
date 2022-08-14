@@ -17,7 +17,7 @@
 #include "BatchObjects/StringSequenceBatch.hpp"
 #include "SeqToBitsConverter/CharToBits.h"
 #include "Utils/BoundedSemaphore.hpp"
-#include "Utils/CircularQueue.hpp"
+#include "Utils/CircularBuffer.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/Semaphore.hpp"
 #include "Utils/TypeDefinitions.h"
@@ -31,7 +31,7 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 using threading_utils::BoundedSemaphore;
-using utils::CircularQueue;
+using utils::CircularBuffer;
 
 namespace sbwt_search {
 
@@ -39,7 +39,7 @@ template <class StringSequenceBatchProducer>
 class ContinuousSeqToBitsConverter {
   private:
     shared_ptr<StringSequenceBatchProducer> producer;
-    CircularQueue<vector<u64>> write_batches;
+    CircularBuffer<vector<u64>> write_batches;
     BoundedSemaphore batch_semaphore;
     const uint threads;
     const CharToBits char_to_bits;
@@ -58,15 +58,18 @@ class ContinuousSeqToBitsConverter {
         max_ints_per_batch(max_ints_per_batch),
         batch_semaphore(0, max_batches),
         char_to_bits(),
-        write_batches(max_batches) {}
+        write_batches(max_batches + 1, vector<u64>(max_ints_per_batch)) {}
 
   public:
     void read_and_generate() {
       omp_set_nested(1);
       unique_ptr<StringSequenceBatch> read_batch;
-      vector<u64> write_batch;
       while (*producer >> read_batch) {
-        write_batch = vector<u64>(max_ints_per_batch);
+        vector<u64> &write_batch = write_batches.current_write();
+        write_batch.resize(
+          round_up<u64>(read_batch->cumulative_character_indexes.back(), 32)
+          / 32
+        );
 #pragma omp parallel num_threads(threads) default(none) \
   shared(read_batch, write_batch)
         {
@@ -85,11 +88,7 @@ class ContinuousSeqToBitsConverter {
             ++write_index;
           }
         }
-        write_batch.resize(
-          round_up<u64>(read_batch->cumulative_character_indexes.back(), 32)
-          / 32
-        );
-        write_batches.push(move(write_batch));
+        write_batches.step_write();
         batch_semaphore.release();
       }
       finished = true;
@@ -122,9 +121,9 @@ class ContinuousSeqToBitsConverter {
   public:
     bool operator>>(vector<u64> &batch) {
       batch_semaphore.acquire();
-      if (finished && write_batches.size() == 0) { return false; }
-      batch = write_batches.front();
-      write_batches.pop();
+      if (finished && write_batches.empty()) { return false; }
+      batch = write_batches.current_read();
+      write_batches.step_read();
       return true;
     }
 };

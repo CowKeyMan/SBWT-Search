@@ -5,18 +5,18 @@
 namespace utils {
 
 TEST(CircularBufferTest, NormalUsage) {
-  CircularBuffer<int> buffer(3, 9);
-  ASSERT_EQ(3, buffer.size());
-  ASSERT_EQ(9, buffer.current());
-  buffer.current() = 1;
-  ASSERT_EQ(1, buffer.current());
-  buffer.step_forward();
-  ASSERT_EQ(9, buffer.current());
-  buffer.current() = 2;
-  ASSERT_EQ(2, buffer.current());
-  buffer.step_forward();
-  buffer.step_forward();
-  ASSERT_EQ(1, buffer.current());
+  CircularBuffer<int> buffer(2, 9);
+  ASSERT_EQ(2, buffer.size());
+  ASSERT_EQ(9, buffer.current_write());
+  buffer.current_write() = 1;
+  buffer.step_write();
+  ASSERT_EQ(1, buffer.current_read());
+  buffer.current_write() = 2;
+  buffer.step_write();
+  buffer.step_read();
+  ASSERT_EQ(2, buffer.current_read());
+  buffer.step_read();
+  ASSERT_EQ(1, buffer.current_read());
 }
 
 }

@@ -138,7 +138,7 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
   auto parser = make_shared<DummyParser>(
     buffers, string_indexes, character_indexes, cumulative_character_indexes
   );
-  auto host = ContinuousSeqToBitsConverter<DummyParser>(parser, 2);
+  auto host = ContinuousSeqToBitsConverter<DummyParser>(parser, 2, 99, 3);
   vector<vector<u64>> outputs;
   int counter = 0;
 #pragma omp parallel sections
@@ -155,7 +155,7 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
       sleep_for(milliseconds(sleep_amount));
       vector<u64> output;
       for (uint i = 0; host >> output; ++i) {
-        outputs.push_back(move(output));
+        outputs.push_back(output);
       };
     }
   }
@@ -163,7 +163,7 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
   for (uint i = 0; i < iterations; ++i) {
     assert_vectors_equal(expected_bits[i], outputs[i]);
   }
-  ASSERT_GE(read_time, sleep_time);
+  ASSERT_GE(read_time, sleep_amount);
 }
 
 }
