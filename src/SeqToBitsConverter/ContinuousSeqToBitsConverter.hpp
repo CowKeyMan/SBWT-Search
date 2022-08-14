@@ -17,6 +17,7 @@
 #include "BatchObjects/StringSequenceBatch.hpp"
 #include "SeqToBitsConverter/CharToBits.h"
 #include "Utils/BoundedSemaphore.hpp"
+#include "Utils/CircularQueue.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/Semaphore.hpp"
 #include "Utils/TypeDefinitions.h"
@@ -25,11 +26,12 @@ using std::list;
 using std::make_tuple;
 using std::next;
 using std::queue;
-using std::unique_ptr;
 using std::shared_ptr;
 using std::string;
+using std::unique_ptr;
 using std::vector;
 using threading_utils::BoundedSemaphore;
+using utils::CircularQueue;
 
 namespace sbwt_search {
 
@@ -37,7 +39,7 @@ template <class StringSequenceBatchProducer>
 class ContinuousSeqToBitsConverter {
   private:
     shared_ptr<StringSequenceBatchProducer> producer;
-    queue<vector<u64>> write_batches;
+    CircularQueue<vector<u64>> write_batches;
     BoundedSemaphore batch_semaphore;
     const uint threads;
     const CharToBits char_to_bits;
@@ -49,13 +51,14 @@ class ContinuousSeqToBitsConverter {
       shared_ptr<StringSequenceBatchProducer> producer,
       uint threads,
       u64 max_ints_per_batch = 999,
-      u64 max_batches = UINT_MAX
+      u64 max_batches = 10
     ):
         producer(producer),
         threads(threads),
         max_ints_per_batch(max_ints_per_batch),
         batch_semaphore(0, max_batches),
-        char_to_bits() {}
+        char_to_bits(),
+        write_batches(max_batches) {}
 
   public:
     void read_and_generate() {
@@ -120,7 +123,7 @@ class ContinuousSeqToBitsConverter {
     bool operator>>(vector<u64> &batch) {
       batch_semaphore.acquire();
       if (finished && write_batches.size() == 0) { return false; }
-      batch = move(write_batches.front());
+      batch = write_batches.front();
       write_batches.pop();
       return true;
     }

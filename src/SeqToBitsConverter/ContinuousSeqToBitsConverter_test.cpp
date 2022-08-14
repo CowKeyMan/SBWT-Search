@@ -1,7 +1,9 @@
+#include <chrono>
 #include <cmath>
 #include <cstdlib>
 #include <memory>
 #include <stdexcept>
+#include <thread>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -14,6 +16,10 @@ using std::make_shared;
 using std::make_unique;
 using std::string;
 using std::vector;
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
+using std::this_thread::sleep_for;
 
 namespace sbwt_search {
 
@@ -110,12 +116,13 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
   // create 2 big buffers (example by generating random characters. Buffers can
   // be a single large string) give the buffers and indexes to the test
   const uint threads = 2, iterations = 60;
+  auto sleep_amount = 200;
+  milliseconds::rep read_time;
   buffers = {};
   string_indexes = {};
   character_indexes = {};
   cumulative_character_indexes = {};
   for (uint i = 0; i < iterations / 2; ++i) {
-
     buffers.push_back(buffer_example_1);
     expected_bits.push_back(expected_bits_1);
     string_indexes.push_back({ 0, 4, 6 });
@@ -126,7 +133,7 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
     expected_bits.push_back(expected_bits_2);
     string_indexes.push_back({ 0, 1, 2 });
     character_indexes.push_back({ 0, 0, 0 });
-    cumulative_character_indexes.push_back({ 0, 64,  120 });
+    cumulative_character_indexes.push_back({ 0, 64, 120 });
   }
   auto parser = make_shared<DummyParser>(
     buffers, string_indexes, character_indexes, cumulative_character_indexes
@@ -138,18 +145,25 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
   {
 #pragma omp section
     {
+      auto start_time = high_resolution_clock::now();
       host.read_and_generate();
+      auto end_time = high_resolution_clock::now();
+      read_time = duration_cast<milliseconds>(end_time - start_time).count();
     }
 #pragma omp section
     {
+      sleep_for(milliseconds(sleep_amount));
       vector<u64> output;
-      for (uint i = 0; host >> output; ++i) {outputs.push_back(move(output));};
+      for (uint i = 0; host >> output; ++i) {
+        outputs.push_back(move(output));
+      };
     }
   }
   ASSERT_EQ(outputs.size(), iterations);
   for (uint i = 0; i < iterations; ++i) {
     assert_vectors_equal(expected_bits[i], outputs[i]);
   }
+  ASSERT_GE(read_time, sleep_time);
 }
 
 }
