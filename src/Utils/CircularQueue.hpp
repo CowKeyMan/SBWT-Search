@@ -1,3 +1,12 @@
+#ifndef CIRCULAR_QUEUE_HPP
+#define CIRCULAR_QUEUE_HPP
+
+/**
+ * @file CircularQueue.hpp
+ * @brief Implementation of a Circular Queue/Buffer which is used for optimising
+ * memory when using queues
+ * */
+
 #include <vector>
 
 using std::vector;
@@ -15,7 +24,7 @@ class CircularQueue {
 
     auto front() -> T & { return q[front_idx]; }
 
-    auto pop() -> void { front_idx = (front_idx + 1) % capacity(); }
+    auto pop() -> void { front_idx = (front_idx + 1) % q.size(); }
 
     auto push(T element) -> void {
       q[back_idx] = element;
@@ -35,3 +44,5 @@ class CircularQueue {
 };
 
 }
+
+#endif

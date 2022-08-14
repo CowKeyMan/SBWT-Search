@@ -19,6 +19,15 @@ TEST(CircularQueueTest, NormalUsage) {
   q.push(4);
   ASSERT_EQ(2, q.front());
   ASSERT_EQ(3, q.size());
+  q.pop();
+  q.pop();
+  ASSERT_EQ(1, q.size());
+  q.pop();
+  ASSERT_TRUE(q.empty());
+  q.push(5);
+  q.push(6);
+  ASSERT_EQ(5, q.front());
+  ASSERT_EQ(2, q.size());
 }
 
 }
