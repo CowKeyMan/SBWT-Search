@@ -3,7 +3,7 @@
 
 /**
  * @file CircularQueue.hpp
- * @brief Implementation of a Circular Queue/Buffer which is used for optimising
+ * @brief Implementation of a Circular Queue which is used for optimising
  * memory when using queues
  * */
 
