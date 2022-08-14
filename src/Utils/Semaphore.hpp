@@ -12,9 +12,10 @@
 
 #include <omp.h>
 
-using uint = unsigned int;
 
 namespace threading_utils {
+
+using uint = unsigned int;
 
 class Semaphore {
   private:
