@@ -14,6 +14,7 @@
 
 #include "BatchObjects/CumulativePropertiesBatch.hpp"
 #include "BatchObjects/StringSequenceBatch.hpp"
+#include "SequenceFileParser/CumulativePropertiesBatchProducer.hpp"
 #include "SequenceFileParser/SequenceFileParser.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.hpp"
 #include "Utils/CircularBuffer.hpp"
@@ -35,10 +36,11 @@ namespace sbwt_search {
 class ContinuousSequenceFileParser {
   private:
     const u64 max_chars_per_batch, max_strings_per_batch;
-    u64 current_batch_size = 0;
+    u64 current_batch_size = 0, current_batch_strings = 0;
     const uint num_readers;
     const vector<string> filenames;
     StringSequenceBatchProducer string_sequence_batch_producer;
+    CumulativePropertiesBatchProducer cumulative_properties_batch_producer;
     const uint bits_split = 64;
 
   public:
@@ -64,6 +66,9 @@ class ContinuousSequenceFileParser {
           max_batches,
           num_readers,
           bits_split
+        ),
+        cumulative_properties_batch_producer(
+          max_batches, max_strings_per_batch, kmer_size
         ) {}
 
     auto get_max_chars_per_batch(u64 value, uint bits_split) -> const u64 {
@@ -81,20 +86,27 @@ class ContinuousSequenceFileParser {
       }
       terminate_batch();
       string_sequence_batch_producer.set_finished_reading();
+      cumulative_properties_batch_producer.set_finished_reading();
     }
 
-    bool operator>>(shared_ptr<const StringSequenceBatch> &sb) {
-      return string_sequence_batch_producer >> sb;
+    bool operator>>(shared_ptr<const StringSequenceBatch> &batch) {
+      return string_sequence_batch_producer >> batch;
+    }
+
+    bool operator>>(shared_ptr<const CumulativePropertiesBatch> &batch) {
+      return cumulative_properties_batch_producer >> batch;
     }
 
   private:
     auto start_new_batch() -> void {
       string_sequence_batch_producer.start_new_batch();
-      current_batch_size = 0;
+      cumulative_properties_batch_producer.start_new_batch();
+      current_batch_size = current_batch_strings = 0;
     }
 
     auto terminate_batch() -> void {
       string_sequence_batch_producer.terminate_batch();
+      cumulative_properties_batch_producer.terminate_batch();
     }
 
     auto process_file(const string &filename) -> void {
@@ -111,15 +123,17 @@ class ContinuousSequenceFileParser {
         print_string_too_large(filename, string_index);
         return;
       }
-      if (!string_fits_in_batch(s)) {
+      if (!string_fits_in_batch(s) || current_batch_strings >= max_strings_per_batch) {
         terminate_batch();
         start_new_batch();
       }
       add_string(s);
+      ++current_batch_strings;
     }
 
     auto add_string(string &s) -> void {
       string_sequence_batch_producer.add_string(s);
+      cumulative_properties_batch_producer.add_string(s);
       current_batch_size += s.size();
     }
 

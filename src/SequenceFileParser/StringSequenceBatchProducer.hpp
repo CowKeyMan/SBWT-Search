@@ -55,7 +55,7 @@ class StringSequenceBatchProducer {
           round_up<u64>(max_chars_per_batch / num_readers, bits_split / 2)
         ),
         semaphore(0, max_batches),
-        batches(max_batches + 2),
+        batches(max_batches + 1),
         num_readers(num_readers),
         bits_split(bits_split) {
       for (int i = 0; i < batches.size(); ++i) {
@@ -98,17 +98,17 @@ class StringSequenceBatchProducer {
         batch->cumulative_char_indexes.push_back(current_batch_size);
       }
       batches.step_write();
-      reset_sequence_batch(batches.current_write());
       semaphore.release();
     }
 
     auto start_new_batch() -> void {
+      reset_batch(batches.current_write());
       current_batch_size = 0;
       chars_to_next_index = chars_per_reader;
     }
 
   private:
-    auto reset_sequence_batch(shared_ptr<StringSequenceBatch> &batch) -> void {
+    auto reset_batch(shared_ptr<StringSequenceBatch> &batch) -> void {
       batch->buffer.resize(0);
       batch->string_indexes.resize(1);
       batch->char_indexes.resize(1);
@@ -116,10 +116,10 @@ class StringSequenceBatchProducer {
     }
 
   public:
-    bool operator>>(shared_ptr<const StringSequenceBatch> &sb) {
+    bool operator>>(shared_ptr<const StringSequenceBatch> &batch) {
       semaphore.acquire();
       if (no_more_sequences()) { return false; }
-      sb = batches.current_read();
+      batch = batches.current_read();
       batches.step_read();
       return true;
     }
