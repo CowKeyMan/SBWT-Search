@@ -11,12 +11,12 @@ using std::vector;
 
 namespace sbwt_search {
 
-auto PositionsBuilder::get_positions(
-  vector<u64> &cumsum_positions_per_string,
-  vector<u64> &cumsum_string_lengths,
-  int kmer_size
-) -> unique_ptr<vector<u64>> {
-  positions = make_unique<vector<u64>>(cumsum_positions_per_string.back());
+auto PositionsBuilder::build_positions(
+  const vector<u64> &cumsum_positions_per_string,
+  const vector<u64> &cumsum_string_lengths,
+  vector<u64> &positions
+) -> void {
+  positions.resize(cumsum_positions_per_string.back());
 #pragma omp parallel for
   for (int i = 0; i < cumsum_string_lengths.size() - 1; ++i) {
     auto start_position_index = cumsum_positions_per_string[i];
@@ -26,17 +26,20 @@ auto PositionsBuilder::get_positions(
       = start_position_index + string_length - kmer_size + 1;
     auto first_position = cumsum_string_lengths[i];
     process_one_string(
-      start_position_index, end_position_index, first_position
+      start_position_index, end_position_index, first_position, positions
     );
   }
-  return move(positions);
 }
 
 auto PositionsBuilder::process_one_string(
-  u64 start_position_index, u64 end_position_index, u64 first_position
+  const u64 start_position_index,
+  const u64 end_position_index,
+  const u64 first_position,
+  vector<u64> &positions
 ) -> void {
-  for (int i = 0; i < end_position_index - start_position_index; ++i) {
-    (*positions)[start_position_index + i] = first_position + i;
+  if (start_position_index > end_position_index) { return; }
+  for (uint i = 0; i < end_position_index - start_position_index; ++i) {
+    positions[start_position_index + i] = first_position + i;
   }
 }
 

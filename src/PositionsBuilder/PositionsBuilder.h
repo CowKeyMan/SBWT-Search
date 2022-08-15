@@ -19,20 +19,23 @@ namespace sbwt_search {
 
 class PositionsBuilder {
   private:
-    unique_ptr<vector<u64>> positions;
+    const uint kmer_size;
 
   public:
-    PositionsBuilder(){};
+    PositionsBuilder(const uint kmer_size): kmer_size(kmer_size){};
 
-    unique_ptr<vector<u64>> get_positions(
-      vector<u64> &cumsum_positions_per_string,
-      vector<u64> &cumsum_string_lengths,
-      int kmer_size
+    void build_positions(
+      const vector<u64> &cumsum_positions_per_string,
+      const vector<u64> &cumsum_string_lengths,
+      vector<u64> &positions
     );
 
   private:
     void process_one_string(
-      u64 start_position_index, u64 end_position_index, u64 first_position
+      const u64 start_position_index,
+      const u64 end_position_index,
+      const u64 first_position,
+      vector<u64> &positions
     );
 };
 

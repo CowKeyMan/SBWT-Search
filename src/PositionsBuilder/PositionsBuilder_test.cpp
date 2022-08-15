@@ -28,7 +28,7 @@ auto kmer_size = 3;
 
 const vector<u64> expected = { 0, 1, 6, 9, 10, 13, 14, 15, 16 };
 
-TEST(PositionsBuilder, Build) {
+TEST(PositionsBuilderTest, Build) {
   auto string_lengths = vector<u64>(string_seqs.size());
   transform(
     string_seqs.begin(),
@@ -55,10 +55,11 @@ TEST(PositionsBuilder, Build) {
     positions_per_string.end(),
     cumsum_positions_per_string.begin() + 1
   );
-  auto positions = PositionsBuilder().get_positions(
-    cumsum_positions_per_string, cumsum_string_lengths, kmer_size
+  vector<u64> positions(99);
+  PositionsBuilder(kmer_size).build_positions(
+    cumsum_positions_per_string, cumsum_string_lengths, positions
   );
-  assert_vectors_equal<u64>(*positions, expected);
+  assert_vectors_equal<u64>(positions, expected);
 }
 
 };
