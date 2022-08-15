@@ -3,7 +3,7 @@
 
 /**
  * @file ContinuousSeqToBitsConverter.hpp
- * @brief Class for converting character sequences continuously, with parallel
+ * @brief Class for converting char sequences continuously, with parallel
  * capabilities
  * */
 
@@ -27,8 +27,8 @@ using std::shared_ptr;
 using std::string;
 using std::unique_ptr;
 using std::vector;
-using threading_utils::BoundedSemaphore;
 using structure_utils::CircularBuffer;
+using threading_utils::BoundedSemaphore;
 
 namespace sbwt_search {
 
@@ -58,28 +58,26 @@ class ContinuousSeqToBitsConverter {
   public:
     void read_and_generate() {
       omp_set_nested(1);
-      unique_ptr<StringSequenceBatch> read_batch;
+      shared_ptr<const StringSequenceBatch> read_batch;
       while (*producer >> read_batch) {
         vector<u64> &write_batch = write_batches.current_write();
         write_batch.resize(
-          round_up<u64>(read_batch->cumulative_character_indexes.back(), 32)
-          / 32
+          round_up<u64>(read_batch->cumulative_char_indexes.back(), 32) / 32
         );
 #pragma omp parallel num_threads(threads) default(none) \
   shared(read_batch, write_batch)
         {
           uint idx = omp_get_thread_num();
-          auto character_index = read_batch->character_indexes[idx];
+          auto char_index = read_batch->char_indexes[idx];
           auto string_index = read_batch->string_indexes[idx];
-          auto cumulative_character_index
-            = read_batch->cumulative_character_indexes[idx];
-          const auto next_cumulative_character_index
-            = read_batch->cumulative_character_indexes[idx + 1];
-          auto write_index = cumulative_character_index / 32;
-          while (cumulative_character_index < next_cumulative_character_index) {
+          auto cumulative_char_index = read_batch->cumulative_char_indexes[idx];
+          const auto next_cumulative_char_index
+            = read_batch->cumulative_char_indexes[idx + 1];
+          auto write_index = cumulative_char_index / 32;
+          while (cumulative_char_index < next_cumulative_char_index) {
             write_batch[write_index]
-              = convert_int(read_batch->buffer, string_index, character_index);
-            cumulative_character_index += 32;
+              = convert_int(read_batch->buffer, string_index, char_index);
+            cumulative_char_index += 32;
             ++write_index;
           }
         }
@@ -91,16 +89,16 @@ class ContinuousSeqToBitsConverter {
     }
 
     u64 convert_int(
-      vector<string> &buffer, u64 &string_index, u64 &character_index
+      const vector<string> &buffer, u64 &string_index, u64 &char_index
     ) {
       u64 result = 0;
       for (u64 internal_shift = 62; internal_shift < 64; internal_shift -= 2) {
-        if (end_of_string(buffer, string_index, character_index)) {
+        if (end_of_string(buffer, string_index, char_index)) {
           ++string_index;
-          character_index = 0;
+          char_index = 0;
         }
         if (string_index == buffer.size()) { return result; }
-        char c = buffer[string_index][character_index++];
+        char c = buffer[string_index][char_index++];
         result |= (char_to_bits(c) << internal_shift);
       }
       return result;
@@ -108,9 +106,9 @@ class ContinuousSeqToBitsConverter {
 
   private:
     bool end_of_string(
-      vector<string> &buffer, u64 string_index, u64 character_index
+      const vector<string> &buffer, const u64 string_index, const u64 char_index
     ) {
-      return character_index == buffer[string_index].size();
+      return char_index == buffer[string_index].size();
     }
 
   public:
