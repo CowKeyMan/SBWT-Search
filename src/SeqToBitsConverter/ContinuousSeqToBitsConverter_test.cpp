@@ -44,7 +44,6 @@ vector<string> buffer_example_2 = {
 vector<u64> expected_bits_2 = { 0, 3, 0, 2 };
 
 class DummyParser {
-  public:
   private:
     int counter = 0;
 
@@ -117,6 +116,8 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
   // be a single large string) give the buffers and indexes to the test
   const uint threads = 2, iterations = 60;
   auto sleep_amount = 200;
+  auto max_ints_per_batch = 99;
+  auto max_batches = 3;
   milliseconds::rep read_time;
   buffers = {};
   string_indexes = {};
@@ -138,7 +139,7 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
   auto parser = make_shared<DummyParser>(
     buffers, string_indexes, character_indexes, cumulative_character_indexes
   );
-  auto host = ContinuousSeqToBitsConverter<DummyParser>(parser, 2, 99, 3);
+  auto host = ContinuousSeqToBitsConverter<DummyParser>(parser, threads, max_ints_per_batch, max_batches);
   vector<vector<u64>> outputs;
   int counter = 0;
 #pragma omp parallel sections

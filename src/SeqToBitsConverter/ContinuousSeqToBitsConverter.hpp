@@ -11,7 +11,6 @@
 #include <iterator>
 #include <list>
 #include <memory>
-#include <queue>
 #include <tuple>
 
 #include "BatchObjects/StringSequenceBatch.hpp"
@@ -19,19 +18,17 @@
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/CircularBuffer.hpp"
 #include "Utils/MathUtils.hpp"
-#include "Utils/Semaphore.hpp"
 #include "Utils/TypeDefinitions.h"
 
 using std::list;
 using std::make_tuple;
 using std::next;
-using std::queue;
 using std::shared_ptr;
 using std::string;
 using std::unique_ptr;
 using std::vector;
 using threading_utils::BoundedSemaphore;
-using utils::CircularBuffer;
+using structure_utils::CircularBuffer;
 
 namespace sbwt_search {
 
@@ -43,8 +40,7 @@ class ContinuousSeqToBitsConverter {
     BoundedSemaphore batch_semaphore;
     const uint threads;
     const CharToBits char_to_bits;
-    const u64 max_ints_per_batch;
-    bool finished = 0;
+    bool finished = false;
 
   public:
     ContinuousSeqToBitsConverter(
@@ -55,7 +51,6 @@ class ContinuousSeqToBitsConverter {
     ):
         producer(producer),
         threads(threads),
-        max_ints_per_batch(max_ints_per_batch),
         batch_semaphore(0, max_batches),
         char_to_bits(),
         write_batches(max_batches + 1, vector<u64>(max_ints_per_batch)) {}
