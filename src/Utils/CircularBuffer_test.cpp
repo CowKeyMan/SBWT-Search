@@ -11,12 +11,14 @@ TEST(CircularBufferTest, NormalUsage) {
   buffer.current_write() = 1;
   buffer.step_write();
   ASSERT_EQ(1, buffer.current_read());
+  buffer.set(0, 5);
+  ASSERT_EQ(5, buffer.current_read());
   buffer.current_write() = 2;
   buffer.step_write();
   buffer.step_read();
   ASSERT_EQ(2, buffer.current_read());
   buffer.step_read();
-  ASSERT_EQ(1, buffer.current_read());
+  ASSERT_EQ(5, buffer.current_read());
 }
 
 }
