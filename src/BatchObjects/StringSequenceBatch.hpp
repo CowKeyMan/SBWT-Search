@@ -15,8 +15,8 @@ class StringSequenceBatch {
   public:
     vector<string> buffer;
     vector<u64> string_indexes;
-    vector<u64> character_indexes;
-    vector<u64> cumulative_character_indexes;
+    vector<u64> char_indexes;
+    vector<u64> cumulative_char_indexes;
 };
 
 }
