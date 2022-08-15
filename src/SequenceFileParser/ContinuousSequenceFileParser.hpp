@@ -7,65 +7,71 @@
  * buffer. Then it can serve these sequences to its consumers
  * */
 
-#include <climits>
 #include <iostream>
 #include <queue>
 #include <string>
 #include <vector>
 
-#include "SequenceFileParser/SequenceFileParser.h"
+#include "BatchObjects/CumulativePropertiesBatch.hpp"
 #include "BatchObjects/StringSequenceBatch.hpp"
-#include "Utils/BoundedSemaphore.hpp"
+#include "SequenceFileParser/SequenceFileParser.h"
+#include "SequenceFileParser/StringSequenceBatchProducer.hpp"
+#include "Utils/CircularBuffer.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
 using std::cerr;
-using std::move;
+using std::make_shared;
 using std::queue;
 using std::runtime_error;
+using std::shared_ptr;
 using std::string;
 using std::to_string;
 using std::vector;
-using threading_utils::BoundedSemaphore;
+using structure_utils::CircularBuffer;
 
 namespace sbwt_search {
 
 class ContinuousSequenceFileParser {
   private:
-    queue<unique_ptr<StringSequenceBatch>> sequence_batches;
-    unique_ptr<StringSequenceBatch> sequence_batch;
-    const uint bits_split;
-    u64 sequence_batch_size, characters_to_next_index, characters_per_reader,
-      max_characters_per_batch;
-    const uint readers_amount;
-    BoundedSemaphore batch_semaphore;
+    const u64 max_chars_per_batch, max_strings_per_batch;
+    u64 current_batch_size = 0;
+    const uint num_readers;
     const vector<string> filenames;
-
-    bool finished_reading = false;
+    StringSequenceBatchProducer string_sequence_batch_producer;
+    const uint bits_split = 64;
 
   public:
     ContinuousSequenceFileParser(
       const vector<string> &filenames,
-      const u64 max_characters_per_batch = UINT_MAX,
-      const uint readers_amount = 1,
-      const u64 max_batches = UINT_MAX
+      const uint kmer_size,
+      const u64 max_chars_per_batch = 1000,
+      const u64 max_strings_per_batch = 1000,
+      const uint num_readers = 1,
+      const u64 max_batches = 5,
+      const uint bits_split = 64
     ):
         filenames(filenames),
-        bits_split(64),
-        readers_amount(readers_amount),
-        batch_semaphore(0, max_batches),
-        max_characters_per_batch(
-          round_down<u64>(max_characters_per_batch, bits_split / 2)
-        ) {
-      if (this->max_characters_per_batch == 0) {
-        this->max_characters_per_batch = bits_split / 2;
-      }
-      this->characters_per_reader = round_up<u64>(
-        this->max_characters_per_batch / readers_amount, bits_split / 2
-      );
+        num_readers(num_readers),
+        bits_split(bits_split),
+        max_strings_per_batch(max_strings_per_batch),
+        max_chars_per_batch(
+          get_max_chars_per_batch(max_chars_per_batch, bits_split)
+        ),
+        string_sequence_batch_producer(
+          max_strings_per_batch,
+          get_max_chars_per_batch(max_chars_per_batch, bits_split),
+          max_batches,
+          num_readers,
+          bits_split
+        ) {}
+
+    auto get_max_chars_per_batch(u64 value, uint bits_split) -> const u64 {
+      auto result = round_down<u64>(value, bits_split / 2);
+      if (result == 0) { result = bits_split / 2; };
+      return result;
     }
 
-  public:
     void read_and_generate() {
       start_new_batch();
       for (auto &filename: filenames) {
@@ -74,24 +80,21 @@ class ContinuousSequenceFileParser {
         } catch (runtime_error &e) { cerr << e.what() << '\n'; }
       }
       terminate_batch();
-      finished_reading = true;
+      string_sequence_batch_producer.set_finished_reading();
+    }
+
+    bool operator>>(shared_ptr<const StringSequenceBatch> &sb) {
+      return string_sequence_batch_producer >> sb;
     }
 
   private:
     auto start_new_batch() -> void {
-      initialise_sequence_batch();
-      sequence_batch_size = 0;
-      characters_to_next_index = characters_per_reader;
+      string_sequence_batch_producer.start_new_batch();
+      current_batch_size = 0;
     }
 
-    auto initialise_sequence_batch() -> void {
-      sequence_batch = make_unique<StringSequenceBatch>();
-      sequence_batch->string_indexes.reserve(readers_amount + 1);
-      sequence_batch->character_indexes.reserve(readers_amount + 1);
-      sequence_batch->cumulative_character_indexes.reserve(readers_amount + 1);
-      sequence_batch->string_indexes.push_back(0);
-      sequence_batch->character_indexes.push_back(0);
-      sequence_batch->cumulative_character_indexes.push_back(0);
+    auto terminate_batch() -> void {
+      string_sequence_batch_producer.terminate_batch();
     }
 
     auto process_file(const string &filename) -> void {
@@ -101,21 +104,9 @@ class ContinuousSequenceFileParser {
       while (parser >> s) { process_string(filename, s, string_index++); }
     }
 
-    auto terminate_batch() -> void {
-      for (uint i = sequence_batch->string_indexes.size();
-           i < readers_amount + 1;
-           ++i) {
-        sequence_batch->string_indexes.push_back(sequence_batch->buffer.size());
-        sequence_batch->character_indexes.push_back(0);
-        sequence_batch->cumulative_character_indexes.push_back(sequence_batch_size);
-      }
-      sequence_batches.push(move(sequence_batch));
-      batch_semaphore.release();
-    }
-
-    auto process_string(
-      const string &filename, const string &s, const u64 string_index
-    ) -> void {
+    auto
+    process_string(const string &filename, string &s, const u64 string_index)
+      -> void {
       if (string_larger_than_limit(s)) {
         print_string_too_large(filename, string_index);
         return;
@@ -127,45 +118,23 @@ class ContinuousSequenceFileParser {
       add_string(s);
     }
 
+    auto add_string(string &s) -> void {
+      string_sequence_batch_producer.add_string(s);
+      current_batch_size += s.size();
+    }
+
+    auto string_fits_in_batch(const string &s) -> bool {
+      return s.size() + current_batch_size <= max_chars_per_batch;
+    }
+
     auto string_larger_than_limit(const string &s) -> bool {
-      return s.size() > max_characters_per_batch;
+      return s.size() > max_chars_per_batch;
     }
 
     auto print_string_too_large(const string &filename, const uint string_index)
       -> void {
       cerr << "The string in file " + filename + " at position "
                 + to_string(string_index) + " is too large\n";
-    }
-
-    auto string_fits_in_batch(const string &s) -> bool {
-      return s.size() + sequence_batch_size <= max_characters_per_batch;
-    }
-
-    auto add_string(const string &s) -> void {
-      if (s.size() > characters_to_next_index) {
-        sequence_batch->character_indexes.push_back(characters_to_next_index);
-        sequence_batch->string_indexes.push_back(sequence_batch->buffer.size());
-        characters_to_next_index
-          = characters_per_reader - (s.size() - characters_to_next_index);
-      } else {
-        characters_to_next_index -= s.size();
-      }
-      sequence_batch_size += s.size();
-      sequence_batch->buffer.push_back(move(s));
-    }
-
-  public:
-    bool operator>>(unique_ptr<StringSequenceBatch> &sb) {
-      if (no_more_sequences()) { return false; }
-      batch_semaphore.acquire();
-      sb = move(sequence_batches.front());
-      sequence_batches.pop();
-      return true;
-    }
-
-  private:
-    auto no_more_sequences() -> bool {
-      return finished_reading && sequence_batches.empty();
     }
 };
 
