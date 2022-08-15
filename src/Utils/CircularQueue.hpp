@@ -11,7 +11,7 @@
 
 using std::vector;
 
-namespace utils {
+namespace structure_utils {
 
 template <class T>
 class CircularQueue {

@@ -2,7 +2,7 @@
 
 #include "Utils/CircularBuffer.hpp"
 
-namespace utils {
+namespace structure_utils {
 
 TEST(CircularBufferTest, NormalUsage) {
   CircularBuffer<int> buffer(2, 9);

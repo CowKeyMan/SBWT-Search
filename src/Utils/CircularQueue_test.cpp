@@ -2,7 +2,7 @@
 
 #include "Utils/CircularQueue.hpp"
 
-namespace utils {
+namespace structure_utils {
 
 TEST(CircularQueueTest, NormalUsage) {
   CircularQueue<int> q(3);
