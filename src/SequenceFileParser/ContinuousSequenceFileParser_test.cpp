@@ -46,6 +46,9 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
       = { { 0, 3, 3, 7, 7, 10, 10, 14, 14 } };
     vector<vector<u64>> expected_cumsum_string_lengths
       = { { 0, 5, 7, 13, 15, 20, 22, 28, 30 } };
+    vector<vector<u64>> expected_string_lengths
+      = { { 5, 2, 6, 2, 5, 2, 6, 2 } };
+    vector<vector<u64>> expected_strings_before_newfile = { { 4, 4 } };
 
   protected:
     inline auto get_host() -> ContinuousSequenceFileParser {
@@ -66,7 +69,10 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
       vector<CumulativePropertiesBatch> cumsum_batches;
       shared_ptr<const StringSequenceBatch> sequence_batch;
       shared_ptr<const CumulativePropertiesBatch> cumsum_batch;
-      for (uint i = 0; host >> sequence_batch; ++i) {
+      shared_ptr<const IntervalBatch> interval_batch;
+      for (uint i = 0; host >> sequence_batch & host >> cumsum_batch
+                       & host >> interval_batch;
+           ++i) {
         assert_vectors_equal(
           expected_string_indexes[i],
           sequence_batch->string_indexes,
@@ -80,17 +86,6 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
           __LINE__
         );
         sequence_batches.push_back(*sequence_batch);
-      }
-      ASSERT_EQ(expected_sequence_batches.size(), sequence_batches.size());
-      for (auto i = 0; i < expected_sequence_batches.size(); ++i) {
-        assert_vectors_equal(
-          expected_sequence_batches[i],
-          sequence_batches[i].buffer,
-          __FILE__,
-          __LINE__
-        );
-      }
-      for (uint i = 0; host >> cumsum_batch; ++i) {
         assert_vectors_equal(
           expected_cumsum_positions_per_string[i],
           cumsum_batch->cumsum_positions_per_string,
@@ -103,49 +98,69 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
           __FILE__,
           __LINE__
         );
+        assert_vectors_equal(
+          expected_string_lengths[i],
+          interval_batch->string_lengths,
+          __FILE__,
+          __LINE__
+        );
+        assert_vectors_equal(
+          expected_strings_before_newfile[i],
+          interval_batch->strings_before_newfile,
+          __FILE__,
+          __LINE__
+        );
+      }
+      ASSERT_EQ(expected_sequence_batches.size(), sequence_batches.size());
+      for (auto i = 0; i < expected_sequence_batches.size(); ++i) {
+        assert_vectors_equal(
+          expected_sequence_batches[i],
+          sequence_batches[i].buffer,
+          __FILE__,
+          __LINE__
+        );
       }
     }
 };
 
-TEST_F(ContinuousSequenceFileParserTest, GetSimple) { shared_tests(); }
+/* TEST_F(ContinuousSequenceFileParserTest, GetSimple) { shared_tests(); } */
 
-TEST_F(ContinuousSequenceFileParserTest, GetMaxCharsPerBatchEqualToFileSize) {
-  filenames = { "test_objects/test_query_with_long_string.fna",
-                "test_objects/test_query_with_long_string.fna" };
-  max_chars_per_batch = 32 * 3;
-  expected_string_indexes = { { 0, 1, 2, 4 }, { 0, 1, 2, 4 } };
-  expected_char_indexes = { { 0, 12, 12, 0 }, { 0, 12, 12, 0 } };
-  expected_cumulative_char_indexes = { { 0, 32, 64, 87 }, { 0, 32, 64, 87 } };
-  expected_cumsum_positions_per_string
-    = { { 0, 18, 48, 79, 79 }, { 0, 18, 48, 79, 79 } };
-  expected_cumsum_string_lengths
-    = { { 0, 20, 52, 85, 87 }, { 0, 20, 52, 85, 87 } };
-  expected_sequence_batches = { { "AAAAAAAAAAAAAAAAAAAA",
-                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                                  "TA" },
-                                { "AAAAAAAAAAAAAAAAAAAA",
-                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-                                  "TA" } };
-  vector<vector<u64>> expected_cumsum_positions_per_string
-    = { { 0, 3, 3, 7, 7, 10, 10, 14, 14 } };
-  vector<vector<u64>> expected_cumsum_string_lengths
-    = { { 0, 5, 7, 13, 15, 20, 22, 28, 30 } };
-  shared_tests();
-}
+/* TEST_F(ContinuousSequenceFileParserTest, GetMaxCharsPerBatchEqualToFileSize) { */
+/*   filenames = { "test_objects/test_query_with_long_string.fna", */
+/*                 "test_objects/test_query_with_long_string.fna" }; */
+/*   max_chars_per_batch = 32 * 3; */
+/*   expected_string_indexes = { { 0, 1, 2, 4 }, { 0, 1, 2, 4 } }; */
+/*   expected_char_indexes = { { 0, 12, 12, 0 }, { 0, 12, 12, 0 } }; */
+/*   expected_cumulative_char_indexes = { { 0, 32, 64, 87 }, { 0, 32, 64, 87 } }; */
+/*   expected_cumsum_positions_per_string */
+/*     = { { 0, 18, 48, 79, 79 }, { 0, 18, 48, 79, 79 } }; */
+/*   expected_cumsum_string_lengths */
+/*     = { { 0, 20, 52, 85, 87 }, { 0, 20, 52, 85, 87 } }; */
+/*   expected_sequence_batches = { { "AAAAAAAAAAAAAAAAAAAA", */
+/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
+/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
+/*                                   "TA" }, */
+/*                                 { "AAAAAAAAAAAAAAAAAAAA", */
+/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
+/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
+/*                                   "TA" } }; */
+/*   expected_string_lengths = { { 20, 32, 33, 2 }, { 20, 32, 33, 2 } }; */
+/*   expected_strings_before_newfile = { { 4 }, { 4 } }; */
+/*   shared_tests(); */
+/* } */
 
-TEST_F(ContinuousSequenceFileParserTest, TestInvalidFile) {
-  filenames = { "test_objects/test_query.fna",
-                "invalid_file__",
-                "test_objects/test_query.fna" };
-  stringstream mybuffer;
-  auto *old_buf = cerr.rdbuf();
-  cerr.rdbuf(mybuffer.rdbuf());
-  shared_tests();
-  cerr.rdbuf(old_buf);
-  ASSERT_EQ("The input file invalid_file__ cannot be opened\n", mybuffer.str());
-}
+/* TEST_F(ContinuousSequenceFileParserTest, TestInvalidFile) { */
+/*   filenames = { "test_objects/test_query.fna", */
+/*                 "invalid_file__", */
+/*                 "test_objects/test_query.fna" }; */
+/*   expected_strings_before_newfile = { { 4, 0, 4 } }; */
+/*   stringstream mybuffer; */
+/*   auto *old_buf = cerr.rdbuf(); */
+/*   cerr.rdbuf(mybuffer.rdbuf()); */
+/*   shared_tests(); */
+/*   cerr.rdbuf(old_buf); */
+/*   ASSERT_EQ("The input file invalid_file__ cannot be opened\n", mybuffer.str()); */
+/* } */
 
 TEST_F(ContinuousSequenceFileParserTest, TestStringTooLong) {
   filenames = { "test_objects/test_query_with_long_string.fna" };
@@ -159,9 +174,10 @@ TEST_F(ContinuousSequenceFileParserTest, TestStringTooLong) {
   expected_char_indexes = { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } };
   expected_cumulative_char_indexes
     = { { 0, 20, 20, 20 }, { 0, 32, 32, 32 }, { 0, 2, 2, 2 } };
-  expected_cumsum_positions_per_string
-    = { { 0, 18 }, { 0, 30 }, { 0, 0 } };
+  expected_cumsum_positions_per_string = { { 0, 18 }, { 0, 30 }, { 0, 0 } };
   expected_cumsum_string_lengths = { { 0, 20 }, { 0, 32 }, { 0, 2 } };
+  expected_string_lengths = { { 20 }, { 32, 0 }, { 2 } };
+  expected_strings_before_newfile = { { }, { }, { 1 } };
   stringstream mybuffer;
   auto *old_buf = cerr.rdbuf();
   cerr.rdbuf(mybuffer.rdbuf());
@@ -206,6 +222,7 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
   auto host = get_host();
   vector<StringSequenceBatch> sequence_batches;
   vector<CumulativePropertiesBatch> cumsum_batches;
+  vector<IntervalBatch> interval_batches;
   shared_ptr<const StringSequenceBatch> sequence_batch;
   milliseconds::rep read_time;
 #pragma omp parallel sections
@@ -221,14 +238,13 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
     {
       sleep_for(milliseconds(sleep_time));
       shared_ptr<const StringSequenceBatch> sequence_batch;
-      while (host >> sequence_batch) {
-        sequence_batches.push_back(*sequence_batch);
-      }
-    }
-#pragma omp section
-    {
       shared_ptr<const CumulativePropertiesBatch> cumsum_batch;
-      while (host >> cumsum_batch) { cumsum_batches.push_back(*cumsum_batch); }
+      shared_ptr<const IntervalBatch> interval_batch;
+      while (host >> sequence_batch & host >> cumsum_batch & host >> interval_batch) {
+        sequence_batches.push_back(*sequence_batch);
+        cumsum_batches.push_back(*cumsum_batch);
+        interval_batches.push_back(*interval_batch);
+      }
     }
   }
   ASSERT_EQ(expected_sequence_batches.size(), sequence_batches.size());

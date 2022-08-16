@@ -2,8 +2,8 @@
 #define CUMULATIVE_PROPERTIES_BATCH_PRODUCER_HPP
 
 /**
- * @file stringsequencebatchbuilder.hpp
- * @brief takes care of building and sending the stringsequencebatch
+ * @file StringSequenceBatchBuilder.hpp
+ * @brief Takes care of building and sending the StringSequenceBatch
  * */
 
 #include <memory>
@@ -24,7 +24,6 @@ namespace sbwt_search {
 class CumulativePropertiesBatchProducer {
   private:
     CircularBuffer<shared_ptr<CumulativePropertiesBatch>> batches;
-    const uint max_strings_per_batch;
     bool finished_reading = false;
     BoundedSemaphore semaphore;
     uint kmer_size;
@@ -34,16 +33,16 @@ class CumulativePropertiesBatchProducer {
       u64 max_batches, u64 max_strings_per_batch, uint kmer_size
     ):
         batches(max_batches + 1),
-        max_strings_per_batch(max_strings_per_batch),
         semaphore(0, max_batches),
         kmer_size(kmer_size) {
       for (int i = 0; i < batches.size(); ++i) {
-        batches.set(i, get_empty_cumsum_batch());
+        batches.set(i, get_empty_cumsum_batch(max_strings_per_batch));
       }
     }
 
   private:
-    auto get_empty_cumsum_batch() -> shared_ptr<CumulativePropertiesBatch> {
+    auto get_empty_cumsum_batch(const u64 max_strings_per_batch)
+      -> shared_ptr<CumulativePropertiesBatch> {
       auto batch = make_shared<CumulativePropertiesBatch>();
       batch->cumsum_positions_per_string.reserve(max_strings_per_batch);
       batch->cumsum_positions_per_string.push_back(0);
@@ -70,9 +69,7 @@ class CumulativePropertiesBatchProducer {
       semaphore.release();
     }
 
-    auto start_new_batch() -> void {
-      reset_batch(batches.current_write());
-    }
+    auto start_new_batch() -> void { reset_batch(batches.current_write()); }
 
   private:
     auto reset_batch(shared_ptr<CumulativePropertiesBatch> &batch) -> void {
