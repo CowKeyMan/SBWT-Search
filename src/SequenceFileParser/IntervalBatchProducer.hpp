@@ -41,7 +41,7 @@ class IntervalBatchProducer {
       -> shared_ptr<IntervalBatch> {
       auto batch = make_shared<IntervalBatch>();
       batch->string_lengths.reserve(max_strings_per_batch);
-      batch->strings_before_newfile.reserve(max_strings_per_batch);
+      batch->strings_before_newfile.reserve(max_strings_per_batch + 1);
       return batch;
     }
 
@@ -57,6 +57,7 @@ class IntervalBatchProducer {
     }
 
     auto terminate_batch() -> void {
+      batches.current_write()->strings_before_newfile.push_back(u64(-1));
       batches.step_write();
       semaphore.release();
     }

@@ -1,4 +1,5 @@
 #include <chrono>
+#include <climits>
 #include <memory>
 #include <sstream>
 #include <stdexcept>
@@ -48,7 +49,8 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
       = { { 0, 5, 7, 13, 15, 20, 22, 28, 30 } };
     vector<vector<u64>> expected_string_lengths
       = { { 5, 2, 6, 2, 5, 2, 6, 2 } };
-    vector<vector<u64>> expected_strings_before_newfile = { { 4, 4 } };
+    vector<vector<u64>> expected_strings_before_newfile
+      = { { 4, 4, ULLONG_MAX } };
 
   protected:
     inline auto get_host() -> ContinuousSequenceFileParser {
@@ -123,44 +125,44 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
     }
 };
 
-/* TEST_F(ContinuousSequenceFileParserTest, GetSimple) { shared_tests(); } */
+TEST_F(ContinuousSequenceFileParserTest, GetSimple) { shared_tests(); }
 
-/* TEST_F(ContinuousSequenceFileParserTest, GetMaxCharsPerBatchEqualToFileSize) { */
-/*   filenames = { "test_objects/test_query_with_long_string.fna", */
-/*                 "test_objects/test_query_with_long_string.fna" }; */
-/*   max_chars_per_batch = 32 * 3; */
-/*   expected_string_indexes = { { 0, 1, 2, 4 }, { 0, 1, 2, 4 } }; */
-/*   expected_char_indexes = { { 0, 12, 12, 0 }, { 0, 12, 12, 0 } }; */
-/*   expected_cumulative_char_indexes = { { 0, 32, 64, 87 }, { 0, 32, 64, 87 } }; */
-/*   expected_cumsum_positions_per_string */
-/*     = { { 0, 18, 48, 79, 79 }, { 0, 18, 48, 79, 79 } }; */
-/*   expected_cumsum_string_lengths */
-/*     = { { 0, 20, 52, 85, 87 }, { 0, 20, 52, 85, 87 } }; */
-/*   expected_sequence_batches = { { "AAAAAAAAAAAAAAAAAAAA", */
-/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
-/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
-/*                                   "TA" }, */
-/*                                 { "AAAAAAAAAAAAAAAAAAAA", */
-/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
-/*                                   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", */
-/*                                   "TA" } }; */
-/*   expected_string_lengths = { { 20, 32, 33, 2 }, { 20, 32, 33, 2 } }; */
-/*   expected_strings_before_newfile = { { 4 }, { 4 } }; */
-/*   shared_tests(); */
-/* } */
+TEST_F(ContinuousSequenceFileParserTest, GetMaxCharsPerBatchEqualToFileSize) {
+  filenames = { "test_objects/test_query_with_long_string.fna",
+                "test_objects/test_query_with_long_string.fna" };
+  max_chars_per_batch = 32 * 3;
+  expected_string_indexes = { { 0, 1, 2, 4 }, { 0, 1, 2, 4 } };
+  expected_char_indexes = { { 0, 12, 12, 0 }, { 0, 12, 12, 0 } };
+  expected_cumulative_char_indexes = { { 0, 32, 64, 87 }, { 0, 32, 64, 87 } };
+  expected_cumsum_positions_per_string
+    = { { 0, 18, 48, 79, 79 }, { 0, 18, 48, 79, 79 } };
+  expected_cumsum_string_lengths
+    = { { 0, 20, 52, 85, 87 }, { 0, 20, 52, 85, 87 } };
+  expected_sequence_batches = { { "AAAAAAAAAAAAAAAAAAAA",
+                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                  "TA" },
+                                { "AAAAAAAAAAAAAAAAAAAA",
+                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                  "TA" } };
+  expected_string_lengths = { { 20, 32, 33, 2 }, { 20, 32, 33, 2 } };
+  expected_strings_before_newfile = { { 4, ULLONG_MAX }, { 4, ULLONG_MAX } };
+  shared_tests();
+}
 
-/* TEST_F(ContinuousSequenceFileParserTest, TestInvalidFile) { */
-/*   filenames = { "test_objects/test_query.fna", */
-/*                 "invalid_file__", */
-/*                 "test_objects/test_query.fna" }; */
-/*   expected_strings_before_newfile = { { 4, 0, 4 } }; */
-/*   stringstream mybuffer; */
-/*   auto *old_buf = cerr.rdbuf(); */
-/*   cerr.rdbuf(mybuffer.rdbuf()); */
-/*   shared_tests(); */
-/*   cerr.rdbuf(old_buf); */
-/*   ASSERT_EQ("The input file invalid_file__ cannot be opened\n", mybuffer.str()); */
-/* } */
+TEST_F(ContinuousSequenceFileParserTest, TestInvalidFile) {
+  filenames = { "test_objects/test_query.fna",
+                "invalid_file__",
+                "test_objects/test_query.fna" };
+  expected_strings_before_newfile = { { 4, 0, 4, ULLONG_MAX } };
+  stringstream mybuffer;
+  auto *old_buf = cerr.rdbuf();
+  cerr.rdbuf(mybuffer.rdbuf());
+  shared_tests();
+  cerr.rdbuf(old_buf);
+  ASSERT_EQ("The input file invalid_file__ cannot be opened\n", mybuffer.str());
+}
 
 TEST_F(ContinuousSequenceFileParserTest, TestStringTooLong) {
   filenames = { "test_objects/test_query_with_long_string.fna" };
@@ -177,7 +179,8 @@ TEST_F(ContinuousSequenceFileParserTest, TestStringTooLong) {
   expected_cumsum_positions_per_string = { { 0, 18 }, { 0, 30 }, { 0, 0 } };
   expected_cumsum_string_lengths = { { 0, 20 }, { 0, 32 }, { 0, 2 } };
   expected_string_lengths = { { 20 }, { 32, 0 }, { 2 } };
-  expected_strings_before_newfile = { { }, { }, { 1 } };
+  expected_strings_before_newfile
+    = { { ULLONG_MAX }, { ULLONG_MAX }, { 1, ULLONG_MAX } };
   stringstream mybuffer;
   auto *old_buf = cerr.rdbuf();
   cerr.rdbuf(mybuffer.rdbuf());
@@ -240,7 +243,8 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
       shared_ptr<const StringSequenceBatch> sequence_batch;
       shared_ptr<const CumulativePropertiesBatch> cumsum_batch;
       shared_ptr<const IntervalBatch> interval_batch;
-      while (host >> sequence_batch & host >> cumsum_batch & host >> interval_batch) {
+      while (host >> sequence_batch & host >> cumsum_batch
+             & host >> interval_batch) {
         sequence_batches.push_back(*sequence_batch);
         cumsum_batches.push_back(*cumsum_batch);
         interval_batches.push_back(*interval_batch);
