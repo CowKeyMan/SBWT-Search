@@ -18,10 +18,10 @@ using std::vector;
 
 namespace sbwt_search {
 
-const u64 default_char_to_bits_value = 99;
+const u64 invalid_char_to_bits_value = 99;
 
 vector<u64> get_char_to_bits() {
-  vector<u64> char_to_bits(256, default_char_to_bits_value);
+  vector<u64> char_to_bits(256, invalid_char_to_bits_value);
   char_to_bits['A'] = char_to_bits['a'] = 0;
   char_to_bits['C'] = char_to_bits['c'] = 1;
   char_to_bits['G'] = char_to_bits['g'] = 2;
