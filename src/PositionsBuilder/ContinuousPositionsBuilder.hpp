@@ -26,7 +26,7 @@ namespace sbwt_search {
 template <class CumulativePropertiesProducer>
 class ContinuousPositionsBuilder {
     shared_ptr<CumulativePropertiesProducer> producer;
-    CircularBuffer<vector<u64>> write_batches;
+    CircularBuffer<vector<u64>> batches;
     BoundedSemaphore batch_semaphore;
     const u64 max_positions_per_batch;
     bool finished = false;
@@ -44,7 +44,7 @@ class ContinuousPositionsBuilder {
         kmer_size(kmer_size),
         max_positions_per_batch(max_positions_per_batch),
         batch_semaphore(0, max_batches),
-        write_batches(max_batches + 1, vector<u64>(max_positions_per_batch)),
+        batches(max_batches + 1, vector<u64>(max_positions_per_batch)),
         builder(kmer_size) {}
 
     auto read_and_generate() -> void {
@@ -53,9 +53,9 @@ class ContinuousPositionsBuilder {
         builder.build_positions(
           read_batch->cumsum_positions_per_string,
           read_batch->cumsum_string_lengths,
-          write_batches.current_write()
+          batches.current_write()
         );
-        write_batches.step_write();
+        batches.step_write();
         batch_semaphore.release();
       }
       finished = true;
@@ -64,9 +64,9 @@ class ContinuousPositionsBuilder {
 
     bool operator>>(vector<u64> &batch) {
       batch_semaphore.acquire();
-      if (finished && write_batches.empty()) { return false; }
-      batch = write_batches.current_read();
-      write_batches.step_read();
+      if (finished && batches.empty()) { return false; }
+      batch = batches.current_read();
+      batches.step_read();
       return true;
     }
 };
