@@ -38,14 +38,13 @@ class ContinuousResultsPrinter {
     // runtime objects
     ofstream stream;
     vector<string>::iterator current_filename;
-    size_t string_index = 0;
-    size_t char_index = 0;
+    size_t string_index = 0, char_index = 0, invalid_index = 0;
 
   public:
     ContinuousResultsPrinter(
       ResultsProducer results_producer,
-      InvalidCharsProducer invalid_chars_producer,
       IntervalProducer interval_producer,
+      InvalidCharsProducer invalid_chars_producer,
       vector<string> filenames,
       uint kmer_size
     ):
@@ -57,7 +56,7 @@ class ContinuousResultsPrinter {
       current_filename = this->filenames.begin();
     }
 
-    auto get_and_print() -> void {
+    auto read_and_generate() -> void {
       if (current_filename == filenames.end()) { return; }
       open_next_file();
       while ((results_producer >> results)
@@ -69,15 +68,12 @@ class ContinuousResultsPrinter {
 
   private:
     auto process_batch() -> void {
+      string_index = 0, char_index = 0, invalid_index = 0;
       for (auto file_length: interval_batch->strings_before_newfile) {
-        if (!stream.is_open()) {
-        open_next_file();
-        }
+        if (!stream.is_open()) { open_next_file(); }
         print_words(string_index, file_length);
         string_index += file_length;
-        if (file_length != ULLONG_MAX) {
-        stream.close();
-        }
+        if (file_length != ULLONG_MAX) { stream.close(); }
       }
     }
 
@@ -88,30 +84,49 @@ class ContinuousResultsPrinter {
 
     auto print_words(size_t string_index, size_t file_length) {
       auto total_strings = interval_batch->string_lengths.size();
-      for (size_t i = string_index; i < file_length + string_index && i < total_strings; ++i) {
+      for (size_t i = string_index;
+           i < file_length + string_index && i < total_strings;
+           ++i) {
         auto string_length = interval_batch->string_lengths[i];
-        if (string_length < kmer_size) {
-          string_length = 0;
-        } else {
-          string_length = string_length - kmer_size + 1;
-        }
-        print_word(char_index, string_length);
-        char_index += string_length;
+        auto num_chars = string_length - kmer_size + 1;
+        if (string_length < kmer_size) { num_chars = 0; }
+        print_word(char_index, invalid_index, num_chars, string_length);
+        char_index += num_chars;
+        invalid_index += string_length;
       }
     }
 
-    auto print_word(size_t index, size_t string_length) {
-      for (int i = index; i < index + string_length; ++i) {
-        if ((*invalid_chars)[i]) {
+    auto print_word(
+      size_t char_index,
+      size_t invalid_index,
+      size_t num_chars,
+      size_t string_length
+    ) -> void {
+      uint invalid_chars_left
+        = get_invalid_chars_left_first_kmer(invalid_index);
+      for (int i = char_index; i < char_index + num_chars; ++i) {
+        auto furthest_index = invalid_index + kmer_size - 1 + i - char_index;
+        if (furthest_index < invalid_index + string_length && (*invalid_chars)[furthest_index]) {
+          invalid_chars_left = kmer_size;
+        }
+        if (invalid_chars_left > 0) {
           stream << "-2";
+          --invalid_chars_left;
         } else if ((*results)[i] == u64(-1)) {
           stream << "-1";
         } else {
           stream << (*results)[i];
         }
-        if (index + 1 != string_length) { stream << ' '; }
+        if (char_index + 1 != num_chars) { stream << ' '; }
       }
       stream << "\n";
+    }
+
+    auto get_invalid_chars_left_first_kmer(char first_invalid_index) -> uint {
+      for (int i = kmer_size; i > 0; --i) {
+        if ((*invalid_chars)[i - 1 + first_invalid_index]) { return i; }
+      }
+      return 0;
     }
 };
 }

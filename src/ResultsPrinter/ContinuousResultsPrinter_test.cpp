@@ -55,19 +55,19 @@ Simulating the following 4 files, kmer_size = 3:
   File 1:
     --empty--
     --empty--
-    10 not_found
+    10 not_found | valid valid
     --empty--
     --empty--
-    30 invalid invalid 60
+    30 40 50 60 | invalid valid
     --empty--
   File 2 is completely empty:
   File 3:
     --empty--
     --empty--
   File 4:
-    70
+    70 | valid  valid
     --empty--
-    invalid 90 100
+    80 invalid 100 | valid valid
 */
 
 class ContinuousResultsPrinterTest: public ::testing::Test {
@@ -75,7 +75,26 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
     const uint kmer_size = 3;
     vector<vector<u64>> results
       = { { 10, ULLONG_MAX, 30, 40, 50, 60, 70, 80, 90, 100 } };
-    vector<vector<u64>> invalid_chars = { { 0, 0, 0, 1, 1, 0, 0, 1, 0, 0 } };
+    vector<vector<u64>> invalid_chars = { {
+      0,
+      0,
+      0,
+      0,  // end of first string
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,  // end of second string
+      0,
+      0,
+      0,  // end of third string
+      0,
+      1,
+      0,
+      0,
+      0  // end of last string
+    } };
     vector<vector<u64>> string_lengths
       = { { 0, 0, 2 + 2, 0, 0, 4 + 2, 0, 0, 0, 1 + 2, 0, 3 + 2 } };
     vector<vector<u64>> strings_before_newfile = { { 7, 0, 2, 3, ULLONG_MAX } };
@@ -84,10 +103,10 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
                                  "tmp/results_file3.txt",
                                  "tmp/results_file4.txt" };
     vector<vector<string>> expected_file_lines
-      = { { "\n", "\n", "10 -1\n", "\n", "\n", "30 -2 -2 60\n", "\n" },
+      = { { "\n", "\n", "10 -1\n", "\n", "\n", "30 40 -2 -2\n", "\n" },
           {},
           { "\n", "\n" },
-          { "70\n", "\n", "-2 90 100\n" } };
+          { "70\n", "\n", "-2 -2 100\n" } };
 
     auto get_results_producer() -> DummyVectorProducer {
       return DummyVectorProducer(results);
@@ -104,12 +123,12 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
         DummyIntervalProducer,
         DummyVectorProducer>(
         get_results_producer(),
-        get_invalid_producer(),
         get_interval_producer(),
+        get_invalid_producer(),
         filenames,
         kmer_size
       );
-      host.get_and_print();
+      host.read_and_generate();
       // DO ASSERTS HERE
     }
 };
