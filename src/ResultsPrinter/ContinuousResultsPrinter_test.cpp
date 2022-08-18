@@ -20,16 +20,17 @@ using std::filesystem::remove;
 
 namespace sbwt_search {
 
+template <typename T>
 class DummyVectorProducer {
-    vector<vector<u64>> v;
+    vector<vector<T>> v;
     uint counter = 0;
 
   public:
-    DummyVectorProducer(vector<vector<u64>> v): v(v) {}
+    DummyVectorProducer(vector<vector<T>> v): v(v) {}
 
-    bool operator>>(shared_ptr<vector<u64>> &out) {
+    bool operator>>(shared_ptr<vector<T>> &out) {
       if (counter == v.size()) { return false; }
-      out = make_shared<vector<u64>>(v[counter]);
+      out = make_shared<vector<T>>(v[counter]);
       ++counter;
       return true;
     }
@@ -82,7 +83,7 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
     const uint kmer_size = 3;
     vector<vector<u64>> results
       = { { 10, ULLONG_MAX, 30, 40, 50, 60, 70, 80, 90, 100 } };
-    vector<vector<u64>> invalid_chars = { {
+    vector<vector<char>> invalid_chars = { {
       0,
       0,
       0,
@@ -116,20 +117,20 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
           { "70", "", "-2 -2 100" } };
     // NOTE: at the end of each string there is a linefeed (\n) character
 
-    auto get_results_producer() -> DummyVectorProducer {
-      return DummyVectorProducer(results);
+    auto get_results_producer() -> DummyVectorProducer<u64> {
+      return DummyVectorProducer<u64>(results);
     }
-    auto get_invalid_producer() -> DummyVectorProducer {
-      return DummyVectorProducer(invalid_chars);
+    auto get_invalid_producer() -> DummyVectorProducer<char> {
+      return DummyVectorProducer<char>(invalid_chars);
     }
     auto get_interval_producer() -> DummyIntervalProducer {
       return DummyIntervalProducer(string_lengths, strings_before_newfile);
     }
     auto shared_tests() {
       auto host = ContinuousResultsPrinter<
-        DummyVectorProducer,
+        DummyVectorProducer<u64>,
         DummyIntervalProducer,
-        DummyVectorProducer>(
+        DummyVectorProducer<char>>(
         get_results_producer(),
         get_interval_producer(),
         get_invalid_producer(),
@@ -142,7 +143,7 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
         string line;
         for (uint line_index = 0; getline(stream, line); ++line_index) {
           ASSERT_EQ(expected_file_lines[file_index][line_index], line)
-            << " unequal at index " << file_index << ":" << line_index << endl;
+            << " unequal at index " << file_index << ":" << line_index << '\n';
         }
       }
     }
@@ -154,15 +155,13 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
 TEST_F(ContinuousResultsPrinterTest, SingleBatch) { shared_tests(); }
 
 TEST_F(ContinuousResultsPrinterTest, MultipleBatches) {
-  vector<vector<u64>> results
-    = { { 10, ULLONG_MAX }, { 30, 40, 50, 60, 70 }, { 80, 90, 100 } };
-  vector<vector<u64>> invalid_chars
-    = { { 0, 0, 0, 0 },  // end of first string
-        { 0, 0, 0, 0, 1, 0, 0, 0, 0 },  // end of third string
-        { 0, 1, 0, 0, 0 } };  // end of last string
-  vector<vector<u64>> string_lengths
+  results = { { 10, ULLONG_MAX }, { 30, 40, 50, 60, 70 }, { 80, 90, 100 } };
+  invalid_chars = { { 0, 0, 0, 0 },  // end of first string
+                    { 0, 0, 0, 0, 1, 0, 0, 0, 0 },  // end of third string
+                    { 0, 1, 0, 0, 0 } };  // end of last string
+  string_lengths
     = { { 0, 0, 2 + 2, 0, 0 }, { 4 + 2, 0, 0, 0, 1 + 2, 0 }, { 3 + 2 } };
-  vector<vector<u64>> strings_before_newfile
+  strings_before_newfile
     = { { ULLONG_MAX }, { 2, 0, 2, ULLONG_MAX }, { 1, ULLONG_MAX } };
   shared_tests();
 }

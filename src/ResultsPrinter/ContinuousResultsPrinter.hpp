@@ -1,6 +1,3 @@
-#include <iostream>
-using namespace std;
-
 #ifndef CONTINUOUS_RESULTS_PRINTER_HPP
 #define CONTINUOUS_RESULTS_PRINTER_HPP
 
@@ -30,7 +27,8 @@ class ContinuousResultsPrinter {
     IntervalProducer interval_producer;
     InvalidCharsProducer invalid_chars_producer;
     // batch objects
-    shared_ptr<vector<u64>> results, invalid_chars;
+    shared_ptr<vector<u64>> results;
+    shared_ptr<vector<char>> invalid_chars;
     shared_ptr<IntervalBatch> interval_batch;
     // other parameters
     const uint kmer_size;
@@ -85,7 +83,8 @@ class ContinuousResultsPrinter {
     auto print_words(size_t string_index, size_t file_length) {
       auto total_strings = interval_batch->string_lengths.size();
       for (size_t i = string_index;
-           i < file_length + string_index && i < total_strings;
+           (file_length == ULLONG_MAX || i < file_length + string_index)
+           && i < total_strings;
            ++i) {
         auto string_length = interval_batch->string_lengths[i];
         auto num_chars = string_length - kmer_size + 1;
@@ -119,7 +118,7 @@ class ContinuousResultsPrinter {
         }
         if (i + 1 != char_index + num_chars) { stream << ' '; }
       }
-      stream << "\n";
+      stream << '\n';
     }
 
     auto get_invalid_chars_left_first_kmer(char first_invalid_index) -> uint {
