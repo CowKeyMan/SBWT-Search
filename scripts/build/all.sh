@@ -31,7 +31,7 @@ cmake \
 cd ..
 
 
-sh scripts/build/build_release.sh
-sh scripts/build/build_benchmarks.sh
-sh scripts/build/build_tests.sh
-sh scripts/build/build_docs.sh
+sh scripts/build/release.sh
+sh scripts/build/benchmarks.sh
+sh scripts/build/tests.sh
+sh scripts/build/docs.sh
