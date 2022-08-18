@@ -8,10 +8,10 @@
 #include <vector>
 #include <zlib.h>
 
+#include <kseq++/kseq++.hpp>
 #include <kseq++/seqio.hpp>
 
 #include "SequenceFileParser/SequenceFileParser.h"
-#include "kseq++/kseq++.hpp"
 
 using klibpp::KSeq;
 using std::move;
@@ -20,6 +20,11 @@ using std::string;
 using std::vector;
 
 namespace sbwt_search {
+
+SequenceFileParser::SequenceFileParser(const string &filename):
+    stream(filename.c_str()) {
+  ThrowingIfstream::check_file_exists(filename);
+}
 
 auto SequenceFileParser::get_all() -> vector<string> {
   auto seqs = vector<string>();

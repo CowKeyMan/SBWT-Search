@@ -10,10 +10,10 @@
 #include <string>
 #include <vector>
 
+#include <kseq++/seqio.hpp>
+
 #include "Utils/IOUtils.hpp"
 #include "Utils/TypeDefinitions.h"
-#include "kseq++/kseq++.hpp"
-#include "kseq++/seqio.hpp"
 
 using klibpp::SeqStreamIn;
 using std::make_unique;
@@ -31,9 +31,7 @@ class SequenceFileParser {
     bool reached_end = false;
 
   public:
-    SequenceFileParser(const string &filename): stream(filename.c_str()) {
-      ThrowingIfstream::check_file_exists(filename);
-    }
+    SequenceFileParser(const string &filename);
     bool operator>>(string &s);
     vector<string> get_all();
 };
