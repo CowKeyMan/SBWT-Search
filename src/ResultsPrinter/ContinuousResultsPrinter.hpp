@@ -117,7 +117,7 @@ class ContinuousResultsPrinter {
         } else {
           stream << (*results)[i];
         }
-        if (char_index + 1 != num_chars) { stream << ' '; }
+        if (i + 1 != char_index + num_chars) { stream << ' '; }
       }
       stream << "\n";
     }

@@ -1,5 +1,8 @@
 #include <climits>
+#include <filesystem>
+#include <fstream>
 #include <memory>
+#include <string>
 
 #include <gtest/gtest.h>
 
@@ -9,7 +12,11 @@
 #include "ResultsPrinter/ContinuousResultsPrinter.hpp"
 #include "Utils/TypeDefinitions.h"
 
+using std::getline;
+using std::ifstream;
 using std::make_shared;
+using std::string;
+using std::filesystem::remove;
 
 namespace sbwt_search {
 
@@ -103,10 +110,11 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
                                  "tmp/results_file3.txt",
                                  "tmp/results_file4.txt" };
     vector<vector<string>> expected_file_lines
-      = { { "\n", "\n", "10 -1\n", "\n", "\n", "30 40 -2 -2\n", "\n" },
+      = { { "", "", "10 -1", "", "", "30 40 -2 -2", "" },
           {},
-          { "\n", "\n" },
-          { "70\n", "\n", "-2 -2 100\n" } };
+          { "", "" },
+          { "70", "", "-2 -2 100" } };
+    // NOTE: at the end of each string there is a linefeed (\n) character
 
     auto get_results_producer() -> DummyVectorProducer {
       return DummyVectorProducer(results);
@@ -129,9 +137,33 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
         kmer_size
       );
       host.read_and_generate();
-      // DO ASSERTS HERE
+      for (uint file_index = 0; file_index < filenames.size(); ++file_index) {
+        ifstream stream(filenames[file_index]);
+        string line;
+        for (uint line_index = 0; getline(stream, line); ++line_index) {
+          ASSERT_EQ(expected_file_lines[file_index][line_index], line)
+            << " unequal at index " << file_index << ":" << line_index << endl;
+        }
+      }
+    }
+    auto TearDown() -> void override {
+      for (auto &filename: filenames) { remove(filename); }
     }
 };
 
 TEST_F(ContinuousResultsPrinterTest, SingleBatch) { shared_tests(); }
+
+TEST_F(ContinuousResultsPrinterTest, MultipleBatches) {
+  vector<vector<u64>> results
+    = { { 10, ULLONG_MAX }, { 30, 40, 50, 60, 70 }, { 80, 90, 100 } };
+  vector<vector<u64>> invalid_chars
+    = { { 0, 0, 0, 0 },  // end of first string
+        { 0, 0, 0, 0, 1, 0, 0, 0, 0 },  // end of third string
+        { 0, 1, 0, 0, 0 } };  // end of last string
+  vector<vector<u64>> string_lengths
+    = { { 0, 0, 2 + 2, 0, 0 }, { 4 + 2, 0, 0, 0, 1 + 2, 0 }, { 3 + 2 } };
+  vector<vector<u64>> strings_before_newfile
+    = { { ULLONG_MAX }, { 2, 0, 2, ULLONG_MAX }, { 1, ULLONG_MAX } };
+  shared_tests();
+}
 }
