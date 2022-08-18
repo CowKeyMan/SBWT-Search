@@ -1,17 +1,13 @@
-#include <ctime>
-#include <iterator>
-#include <memory>
 #include <stdexcept>
 #include <string>
-#include <unistd.h>
 #include <utility>
 #include <vector>
-#include <zlib.h>
 
 #include <kseq++/kseq++.hpp>
 #include <kseq++/seqio.hpp>
 
 #include "SequenceFileParser/SequenceFileParser.h"
+#include "Utils/IOUtils.hpp"
 
 using klibpp::KSeq;
 using std::move;
