@@ -53,9 +53,14 @@ class ContinuousSearcher {
         bit_seq_producer(bit_seq_producer),
         positions_producer(positions_producer),
         semaphore(0, max_batches),
-        batches(max_batches) {
-      for (uint i = 0; i < max_batches; ++i) {
-        batches.set(i, make_shared<vector<u64>>(max_positions_per_batch));
+        batches(max_batches + 1) {
+      for (uint i = 0; i < batches.size(); ++i) {
+        batches.set(
+          i,
+          make_shared<vector<u64>>(
+            round_up<u64>(max_positions_per_batch, superblock_bits)
+          )
+        );
       }
     }
 
@@ -63,8 +68,8 @@ class ContinuousSearcher {
       shared_ptr<vector<u64>> bit_seqs, kmer_positions;
       while ((*bit_seq_producer >> bit_seqs)
              & (*positions_producer >> kmer_positions)) {
-        cout << "searcher" << endl;
         searcher.search(*bit_seqs, *kmer_positions, *batches.current_write());
+        batches.step_write();
         semaphore.release();
       }
       finished = true;
