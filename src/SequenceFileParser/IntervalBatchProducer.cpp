@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "BatchObjects/IntervalBatch.hpp"
+#include "BatchObjects/IntervalBatch.h"
 #include "SequenceFileParser/IntervalBatchProducer.h"
 
 using std::make_shared;

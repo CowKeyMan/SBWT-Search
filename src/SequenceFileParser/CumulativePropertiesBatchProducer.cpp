@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "BatchObjects/CumulativePropertiesBatch.hpp"
+#include "BatchObjects/CumulativePropertiesBatch.h"
 #include "SequenceFileParser/CumulativePropertiesBatchProducer.h"
 
 using std::make_shared;

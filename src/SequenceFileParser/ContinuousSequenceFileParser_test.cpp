@@ -9,9 +9,9 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
-#include "BatchObjects/CumulativePropertiesBatch.hpp"
-#include "BatchObjects/IntervalBatch.hpp"
-#include "BatchObjects/StringSequenceBatch.hpp"
+#include "BatchObjects/CumulativePropertiesBatch.h"
+#include "BatchObjects/IntervalBatch.h"
+#include "BatchObjects/StringSequenceBatch.h"
 #include "SequenceFileParser/ContinuousSequenceFileParser.h"
 #include "TestUtils/GeneralTestUtils.hpp"
 

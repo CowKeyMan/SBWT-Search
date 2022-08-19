@@ -3,7 +3,7 @@
 #include <utility>
 #include <vector>
 
-#include "BatchObjects/StringSequenceBatch.hpp"
+#include "BatchObjects/StringSequenceBatch.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
