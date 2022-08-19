@@ -8,24 +8,23 @@
  * */
 
 #include <algorithm>
-#include <iterator>
-#include <list>
 #include <memory>
-#include <tuple>
+#include <omp.h>
+#include <string>
+#include <vector>
 
-#include "BatchObjects/StringSequenceBatch.hpp"
+#include <ext/alloc_traits.h>
+
+#include "BatchObjects/StringSequenceBatch.h"
 #include "SeqToBitsConverter/CharToBits.h"
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/CircularBuffer.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
-using std::list;
-using std::make_shared;
-using std::make_tuple;
-using std::next;
-using std::shared_ptr;
 using std::fill;
+using std::make_shared;
+using std::shared_ptr;
 using std::string;
 using std::vector;
 using structure_utils::CircularBuffer;
@@ -65,14 +64,14 @@ class ContinuousSeqToBitsConverter {
       for (uint i = 0; i < bit_batches.size(); ++i) {
         bit_batches.set(i, make_shared<vector<u64>>(max_ints_per_batch));
         invalid_batches.set(
-          i, make_shared<vector<char>>(max_ints_per_batch + kmer_size, 0)
+          i, make_shared<vector<char>>(max_ints_per_batch + kmer_size)
         );
       }
     }
 
   public:
     void read_and_generate() {
-      shared_ptr<const StringSequenceBatch> read_batch;
+      shared_ptr<StringSequenceBatch> read_batch;
       while (*producer >> read_batch) {
         bit_batches.current_write()->resize(
           round_up<u64>(read_batch->cumulative_char_indexes.back(), 32) / 32
@@ -144,7 +143,7 @@ class ContinuousSeqToBitsConverter {
     }
 
   public:
-    bool operator>>(shared_ptr<const vector<u64>> &batch) {
+    bool operator>>(shared_ptr<vector<u64>> &batch) {
       bit_semaphore.acquire();
       if (finished && bit_batches.empty()) { return false; }
       batch = bit_batches.current_read();
@@ -152,7 +151,7 @@ class ContinuousSeqToBitsConverter {
       return true;
     }
 
-    bool operator>>(shared_ptr<const vector<char>> &batch) {
+    bool operator>>(shared_ptr<vector<char>> &batch) {
       invalid_semaphore.acquire();
       if (finished && invalid_batches.empty()) { return false; }
       batch = invalid_batches.current_read();
@@ -160,6 +159,6 @@ class ContinuousSeqToBitsConverter {
       return true;
     }
 };
-}
+}  // namespace sbwt_search
 
 #endif

@@ -38,8 +38,6 @@ class CharToBits {
     u64 operator()(char c) const { return char_to_bits[c]; }
 };
 
-;
-
-}
+}  // namespace sbwt_search
 
 #endif

@@ -41,7 +41,7 @@ class DummyParser {
         cumulative_char_indexes(cumulative_char_indexes),
         char_indexes(char_indexes) {}
 
-    auto operator>>(shared_ptr<const StringSequenceBatch> &batch) -> bool {
+    auto operator>>(shared_ptr<StringSequenceBatch> &batch) -> bool {
       if (counter < string_indexes.size()) {
         auto result_batch = make_shared<StringSequenceBatch>();
         result_batch->buffer = buffers[counter];
@@ -102,9 +102,9 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
       );
       auto host = ContinuousSeqToBitsConverter<DummyParser>(parser, 1, kmer_size, max_ints_per_batch);
       host.read_and_generate();
-      shared_ptr<const vector<u64>> bit_output;
-      shared_ptr<const vector<char>> invalid_output;
-      for (int i = 0; host >> bit_output & host >> invalid_output; ++i) {
+      shared_ptr<vector<u64>> bit_output;
+      shared_ptr<vector<char>> invalid_output;
+      for (int i = 0; (host >> bit_output) & (host >> invalid_output); ++i) {
         assert_vectors_equal(expected_bits[i], *bit_output, __FILE__, __LINE__);
         assert_vectors_equal(expected_invalid[i], *invalid_output, __FILE__, __LINE__);
       }
@@ -174,8 +174,8 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
 #pragma omp section
     {
       sleep_for(milliseconds(sleep_amount));
-      shared_ptr<const vector<u64>> seq_output;
-      shared_ptr<const vector<char>> invalid_output;
+      shared_ptr<vector<u64>> seq_output;
+      shared_ptr<vector<char>> invalid_output;
       while (host >> seq_output & host >> invalid_output) {
         outputs.push_back(*seq_output);
       };
