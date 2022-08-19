@@ -35,7 +35,8 @@ ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 2
 Cpp11BracedListStyle: false
 DeriveLineEnding: false
-FixNamespaceComments: false
+FixNamespaceComments: true
+ShortNamespaceLines: 0
 IncludeBlocks: Regroup
 EmptyLineBeforeAccessModifier: LogicalBlock
 IncludeCategories:
