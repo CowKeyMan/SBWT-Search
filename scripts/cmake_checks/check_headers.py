@@ -66,7 +66,7 @@ for file_name in file_names:
     with open(file_name, 'r') as f:
         lines = f.readlines()
     header_capitalized = capitalize(file_name.stem, file_name.suffix[1:])
-    if not(
+    if len(lines) > 0 and not(
         lines[0].strip() == '#ifndef ' + header_capitalized
         and lines[1].strip() == '#define ' + header_capitalized
         and lines[-1].strip() == '#endif'
@@ -75,7 +75,7 @@ for file_name in file_names:
         print(
             '* ' + str(file_name) + ' does not have proper header guards',
         )
-    if not(
+    if len(lines) > 3 and not(
         lines[3].strip() == '/**'
         and lines[4].strip() == f'* @file {file_name.name}'
         and lines[5].startswith(' * @brief ')
