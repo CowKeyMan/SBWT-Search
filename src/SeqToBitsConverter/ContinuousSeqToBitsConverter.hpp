@@ -70,7 +70,7 @@ class ContinuousSeqToBitsConverter {
     }
 
   public:
-    void read_and_generate() {
+    auto read_and_generate() -> void {
       shared_ptr<StringSequenceBatch> read_batch;
       while (*producer >> read_batch) {
         bit_batches.current_write()->resize(
@@ -111,12 +111,12 @@ class ContinuousSeqToBitsConverter {
       invalid_semaphore.release();
     }
 
-    u64 convert_int(
+    auto convert_int(
       const vector<string> &buffer,
       u64 &string_index,
       u64 &char_index,
       u64 start_index
-    ) {
+    ) -> u64 {
       u64 result = 0;
       for (u64 internal_shift = 62, index = 0; internal_shift < 64;
            internal_shift -= 2, ++index) {
@@ -136,14 +136,14 @@ class ContinuousSeqToBitsConverter {
     }
 
   private:
-    bool end_of_string(
+    auto end_of_string(
       const vector<string> &buffer, const u64 string_index, const u64 char_index
-    ) {
+    ) -> bool {
       return char_index == buffer[string_index].size();
     }
 
   public:
-    bool operator>>(shared_ptr<vector<u64>> &batch) {
+    auto operator>>(shared_ptr<vector<u64>> &batch) -> bool {
       bit_semaphore.acquire();
       if (finished && bit_batches.empty()) { return false; }
       batch = bit_batches.current_read();
@@ -151,7 +151,7 @@ class ContinuousSeqToBitsConverter {
       return true;
     }
 
-    bool operator>>(shared_ptr<vector<char>> &batch) {
+    auto operator>>(shared_ptr<vector<char>> &batch) -> bool {
       invalid_semaphore.acquire();
       if (finished && invalid_batches.empty()) { return false; }
       batch = invalid_batches.current_read();

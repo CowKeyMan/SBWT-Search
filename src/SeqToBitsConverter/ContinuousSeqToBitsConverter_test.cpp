@@ -1,12 +1,11 @@
 #include <chrono>
-#include <cmath>
-#include <cstdlib>
 #include <memory>
-#include <stdexcept>
 #include <thread>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 #include "SeqToBitsConverter/ContinuousSeqToBitsConverter.hpp"
 #include "TestUtils/GeneralTestUtils.hpp"
@@ -100,13 +99,17 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
       auto parser = make_shared<DummyParser>(
         buffers, string_indexes, char_indexes, cumulative_char_indexes
       );
-      auto host = ContinuousSeqToBitsConverter<DummyParser>(parser, 1, kmer_size, max_ints_per_batch);
+      auto host = ContinuousSeqToBitsConverter<DummyParser>(
+        parser, 1, kmer_size, max_ints_per_batch
+      );
       host.read_and_generate();
       shared_ptr<vector<u64>> bit_output;
       shared_ptr<vector<char>> invalid_output;
       for (int i = 0; (host >> bit_output) & (host >> invalid_output); ++i) {
         assert_vectors_equal(expected_bits[i], *bit_output, __FILE__, __LINE__);
-        assert_vectors_equal(expected_invalid[i], *invalid_output, __FILE__, __LINE__);
+        assert_vectors_equal(
+          expected_invalid[i], *invalid_output, __FILE__, __LINE__
+        );
       }
     }
 };
@@ -188,4 +191,4 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
   ASSERT_GE(read_time, sleep_amount);
 }
 
-}
+}  // namespace sbwt_search
