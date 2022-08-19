@@ -1,7 +1,8 @@
 #ifndef INTERVAL_BATCH_H
 #define INTERVAL_BATCH_H
 
-/* @file IntervalBatch.h
+/**
+ * @file IntervalBatch.h
  * @brief Data class for the intervals. The string_lengths is a vector which
  * gives the length of each string in the current batch, which can even be 0.
  * strings_before_newfile is a vector which tells us how many strings we need

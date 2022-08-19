@@ -1,7 +1,8 @@
-#ifndef STRING_SEQUENCE_BATCHER_H
-#define STRING_SEQUENCE_BATCHER_H
+#ifndef STRING_SEQUENCE_BATCH_H
+#define STRING_SEQUENCE_BATCH_H
 
-/* @file StringSequenceBatch.h
+/**
+ * @file StringSequenceBatch.h
  * @brief Data class for the string sequences and associated data. The buffer
  * stores the strings themselves. the buffers are then split into some number of
  * readers. Thus, the rest are indexes. string_indexes is the index of the

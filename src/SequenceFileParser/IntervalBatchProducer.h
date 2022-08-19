@@ -1,8 +1,8 @@
-#ifndef INTERVAL_BATCH_PRODUCER_HPP
-#define INTERVAL_BATCH_PRODUCER_HPP
+#ifndef INTERVAL_BATCH_PRODUCER_H
+#define INTERVAL_BATCH_PRODUCER_H
 
 /**
- * @file IntervalBatchProducer.hpp
+ * @file IntervalBatchProducer.h
  * @brief Builds the IntervalBatch
  * */
 
