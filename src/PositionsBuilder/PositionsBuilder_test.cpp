@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
 
 #include "PositionsBuilder/PositionsBuilder.h"
 #include "TestUtils/GeneralTestUtils.hpp"
@@ -47,7 +47,9 @@ TEST(PositionsBuilderTest, Build) {
     string_lengths.begin(),
     string_lengths.end(),
     positions_per_string.begin(),
-    [](u64 x) -> u64 { return (x - (kmer_size - 1)) > 0 ? x - (kmer_size - 1) : 0; }
+    [](u64 x) -> u64 {
+      return (x - (kmer_size - 1)) > 0 ? x - (kmer_size - 1) : 0;
+    }
   );
   auto cumsum_positions_per_string = vector<u64>(string_seqs.size() + 1);
   partial_sum(
@@ -62,4 +64,4 @@ TEST(PositionsBuilderTest, Build) {
   assert_vectors_equal<u64>(positions, expected);
 }
 
-};
+};  // namespace sbwt_search

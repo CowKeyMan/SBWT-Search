@@ -2,9 +2,11 @@
 #include <memory>
 #include <thread>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
-#include "BatchObjects/CumulativePropertiesBatch.hpp"
+#include "BatchObjects/CumulativePropertiesBatch.h"
 #include "PositionsBuilder/ContinuousPositionsBuilder.hpp"
 #include "TestUtils/GeneralTestUtils.hpp"
 
@@ -34,7 +36,8 @@ class DummyProducer {
       if (counter < cumsum_string_lengths.size()) {
         batch = make_shared<CumulativePropertiesBatch>();
         batch->cumsum_string_lengths = cumsum_string_lengths[counter];
-        batch->cumsum_positions_per_string = cumsum_positions_per_string[counter];
+        batch->cumsum_positions_per_string
+          = cumsum_positions_per_string[counter];
         ++counter;
         return true;
       }
@@ -63,17 +66,17 @@ class ContinuousPositionsBuilderTest: public ::testing::Test {
       );
       auto host = ContinuousPositionsBuilder<DummyProducer>(parser, kmer_size);
       host.read_and_generate();
-      vector<u64> output(99);
+      shared_ptr<vector<u64>> output;
       for (int i = 0; host >> output; ++i) {
-        assert_vectors_equal(expected_positions[i], output);
+        assert_vectors_equal(expected_positions[i], *output);
       }
     }
 };
 
 TEST_F(ContinuousPositionsBuilderTest, SingleBatch) {
-  cumsum_string_lengths = { {cumsum_string_lengths_1} };
-  cumsum_positions_per_string = { {cumsum_positions_per_string_1} };
-  expected_positions = { {expected_positions_1} };
+  cumsum_string_lengths = { { cumsum_string_lengths_1 } };
+  cumsum_positions_per_string = { { cumsum_positions_per_string_1 } };
+  expected_positions = { { expected_positions_1 } };
   shared_tests();
 }
 
@@ -88,7 +91,7 @@ TEST_F(ContinuousPositionsBuilderTest, MultipleBatches) {
 TEST_F(ContinuousPositionsBuilderTest, Parallel) {
   const uint threads = 2, iterations = 60;
   auto sleep_amount = 200;
-  auto max_positions_per_batch = 99;
+  auto max_positions_per_batch = 999;
   auto max_batches = 3;
   milliseconds::rep read_time;
   cumsum_string_lengths = {};
@@ -122,8 +125,8 @@ TEST_F(ContinuousPositionsBuilderTest, Parallel) {
 #pragma omp section
     {
       sleep_for(milliseconds(sleep_amount));
-      vector<u64> output(max_positions_per_batch);
-      for (uint i = 0; host >> output; ++i) { outputs.push_back(output); };
+      shared_ptr<vector<u64>> output;
+      for (uint i = 0; host >> output; ++i) { outputs.push_back(*output); };
     }
   }
   ASSERT_EQ(outputs.size(), iterations);
@@ -133,4 +136,4 @@ TEST_F(ContinuousPositionsBuilderTest, Parallel) {
   ASSERT_GE(read_time, sleep_amount);
 }
 
-}
+}  // namespace sbwt_search

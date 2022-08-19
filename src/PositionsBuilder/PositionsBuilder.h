@@ -2,17 +2,14 @@
 #define POSITIONS_BUILDER_H
 
 /**
- * @file PositionsBuilder.hpp
+ * @file PositionsBuilder.h
  * @brief Builds the positions of the valid bit sequences
  * */
 
-#include <memory>
 #include <vector>
 
 #include "Utils/TypeDefinitions.h"
 
-using std::make_unique;
-using std::unique_ptr;
 using std::vector;
 
 namespace sbwt_search {
@@ -22,8 +19,7 @@ class PositionsBuilder {
     const uint kmer_size;
 
   public:
-    PositionsBuilder(const uint kmer_size): kmer_size(kmer_size){};
-
+    PositionsBuilder(const uint kmer_size);
     void build_positions(
       const vector<u64> &cumsum_positions_per_string,
       const vector<u64> &cumsum_string_lengths,
@@ -39,5 +35,5 @@ class PositionsBuilder {
     );
 };
 
-}
+}  // namespace sbwt_search
 #endif

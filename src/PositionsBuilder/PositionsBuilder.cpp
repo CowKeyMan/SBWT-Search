@@ -1,15 +1,14 @@
-#include <memory>
 #include <vector>
 
 #include "PositionsBuilder/PositionsBuilder.h"
 #include "Utils/TypeDefinitions.h"
 
-using std::make_unique;
-using std::move;
-using std::unique_ptr;
 using std::vector;
 
 namespace sbwt_search {
+
+PositionsBuilder::PositionsBuilder(const uint kmer_size):
+    kmer_size(kmer_size){};
 
 auto PositionsBuilder::build_positions(
   const vector<u64> &cumsum_positions_per_string,
@@ -43,4 +42,4 @@ auto PositionsBuilder::process_one_string(
   }
 }
 
-}
+}  // namespace sbwt_search
