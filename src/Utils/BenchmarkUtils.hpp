@@ -7,7 +7,6 @@
  * */
 
 #include <chrono>
-#include <iostream>
 
 using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;

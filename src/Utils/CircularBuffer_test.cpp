@@ -1,4 +1,6 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 #include "Utils/CircularBuffer.hpp"
 
@@ -21,4 +23,4 @@ TEST(CircularBufferTest, NormalUsage) {
   ASSERT_EQ(5, buffer.current_read());
 }
 
-}
+}  // namespace structure_utils

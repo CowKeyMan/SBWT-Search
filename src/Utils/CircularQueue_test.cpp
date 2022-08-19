@@ -1,4 +1,6 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 #include "Utils/CircularQueue.hpp"
 
@@ -30,4 +32,4 @@ TEST(CircularQueueTest, NormalUsage) {
   ASSERT_EQ(2, q.size());
 }
 
-}
+}  // namespace structure_utils

@@ -77,6 +77,6 @@ const vector<u64> expected_layer_1_2 = {
 };
 const vector<u64> c_map = { 1, 132 + 1, 132 * 2 + 1, 132 * 3 + 1, 132 * 4 + 1 };
 
-}
+}  // namespace sbwt_search
 
 #endif

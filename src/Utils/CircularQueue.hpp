@@ -7,6 +7,7 @@
  * memory when using queues
  * */
 
+#include <stddef.h>
 #include <vector>
 
 using std::vector;
@@ -43,6 +44,6 @@ class CircularQueue {
     auto capacity() -> size_t { return q.size() - 1; }
 };
 
-}
+}  // namespace structure_utils
 
 #endif

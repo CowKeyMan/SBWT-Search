@@ -7,6 +7,7 @@
  * memory when using large buffers
  * */
 
+#include <stddef.h>
 #include <vector>
 
 using std::vector;
@@ -36,6 +37,6 @@ class CircularBuffer {
     auto empty() -> bool { return write_idx == read_idx; }
 };
 
-}
+}  // namespace structure_utils
 
 #endif

@@ -35,7 +35,7 @@ class BoundedSemaphore {
 
     void acquire() {
       omp_set_lock(acquire_gate);
-#pragma omp critical (BOUNDED_SEMAPHORE_COUNT_PROTECTOR)
+#pragma omp critical(BOUNDED_SEMAPHORE_COUNT_PROTECTOR)
       {
         uint previous_count = count;
         --count;
@@ -46,7 +46,7 @@ class BoundedSemaphore {
 
     void release() {
       omp_set_lock(release_gate);
-#pragma omp critical (BOUNDED_SEMAPHORE_COUNT_PROTECTOR)
+#pragma omp critical(BOUNDED_SEMAPHORE_COUNT_PROTECTOR)
       {
         uint previous_count = count;
         ++count;
@@ -60,6 +60,6 @@ class BoundedSemaphore {
       omp_destroy_lock(release_gate);
     }
 };
-}
+}  // namespace threading_utils
 
 #endif

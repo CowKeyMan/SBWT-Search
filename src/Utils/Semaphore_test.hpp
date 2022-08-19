@@ -1,8 +1,8 @@
-#ifndef SEMAPHORE__TEST_H
-#define SEMAPHORE__TEST_H
+#ifndef SEMAPHORE__TEST_HPP
+#define SEMAPHORE__TEST_HPP
 
 /**
- * @file Semaphore_test.h
+ * @file Semaphore_test.hpp
  * @brief Since these tests will be run by both the semaphore and bounded
  * semaphore, they have been extracted to their own class and templated to be
  * used by both
@@ -11,9 +11,9 @@
 #include <chrono>
 #include <thread>
 
-#include <gtest/gtest.h>
-
-#include "Utils/Semaphore.hpp"
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 using std::chrono::milliseconds;
 using std::this_thread::sleep_for;
@@ -76,6 +76,6 @@ void semaphore_test_start_0() {
   ASSERT_EQ(0, counter_1);
 }
 
-}
+}  // namespace threading_utils
 
 #endif

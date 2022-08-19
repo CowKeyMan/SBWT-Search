@@ -8,7 +8,6 @@
 #include "SequenceFileParser/IntervalBatchProducer.h"
 #include "SequenceFileParser/SequenceFileParser.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
-#include "Utils/IOUtils.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 

@@ -1,9 +1,11 @@
 #include <stdexcept>
 #include <string>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
-#include "Utils/IOUtils.hpp"
+#include "Utils/IOUtils.h"
 
 using std::runtime_error;
 using std::string;
@@ -17,7 +19,8 @@ TEST(IOUtilsTest, TestFileExists) {
     ThrowingIfstream::check_file_exists(random_file_name);
   } catch (runtime_error &e) {
     ASSERT_EQ(
-      string(e.what()), "The file " + random_file_name + " cannot be opened"
+      string(e.what()),
+      "The input file " + random_file_name + " cannot be opened"
     );
   }
 }
@@ -38,4 +41,4 @@ TEST(IOUtilsTest, TestPathValid) {
   }
 }
 
-}
+}  // namespace sbwt_search

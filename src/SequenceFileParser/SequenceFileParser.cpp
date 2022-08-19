@@ -7,7 +7,7 @@
 #include <kseq++/seqio.hpp>
 
 #include "SequenceFileParser/SequenceFileParser.h"
-#include "Utils/IOUtils.hpp"
+#include "Utils/IOUtils.h"
 
 using klibpp::KSeq;
 using std::move;

@@ -1,7 +1,10 @@
 #include <chrono>
+#include <memory>
 #include <thread>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/Semaphore_test.hpp"
@@ -76,4 +79,4 @@ TEST(BoundedSemaphoreTest, OverReleased) {
   ASSERT_GE(time_taken, sleep_amount);
 }
 
-}
+}  // namespace threading_utils

@@ -1,4 +1,10 @@
-#include <gtest/gtest.h>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
 #include "TestUtils/BitVectorTestUtils.hpp"
 #include "TestUtils/RankTestUtils.hpp"
@@ -21,4 +27,4 @@ TEST(RankTestUtilsTest, TestRankReversed) {
   ASSERT_EQ(20, dummy_cpu_rank<true>(&bit_vector[0], 64 * 4 + 5));
 }
 
-}
+}  // namespace sbwt_search

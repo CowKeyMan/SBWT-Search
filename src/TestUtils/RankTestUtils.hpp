@@ -28,6 +28,6 @@ u64 dummy_cpu_rank(const u64 *v, const u64 index) {
   return result;
 }
 
-}
+}  // namespace sbwt_search
 
 #endif

@@ -12,7 +12,6 @@
 
 #include <omp.h>
 
-
 namespace threading_utils {
 
 using uint = unsigned int;
@@ -50,6 +49,6 @@ class Semaphore {
     ~Semaphore() { omp_destroy_lock(acquire_gate); }
 };
 
-}
+}  // namespace threading_utils
 
 #endif
