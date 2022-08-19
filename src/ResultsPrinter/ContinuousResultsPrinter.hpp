@@ -1,14 +1,22 @@
 #ifndef CONTINUOUS_RESULTS_PRINTER_HPP
 #define CONTINUOUS_RESULTS_PRINTER_HPP
 
+/**
+ * @file ContinuousResultsPrinter.hpp
+ * @brief Gets results, intervals and list of invalid characters and prints
+ * these out to disk based on the given data and filenames.
+ * */
+
 #include <climits>
 #include <fstream>
 #include <iterator>
 #include <memory>
+#include <stddef.h>
+#include <string>
+#include <vector>
 
-#include "BatchObjects/CumulativePropertiesBatch.hpp"
-#include "BatchObjects/IntervalBatch.hpp"
-#include "BatchObjects/StringSequenceBatch.hpp"
+#include "BatchObjects/IntervalBatch.h"
+#include "BatchObjects/StringSequenceBatch.h"
 #include "Utils/TypeDefinitions.h"
 
 using std::next;
@@ -23,9 +31,9 @@ template <
   class InvalidCharsProducer>
 class ContinuousResultsPrinter {
     // producers
-    ResultsProducer results_producer;
-    IntervalProducer interval_producer;
-    InvalidCharsProducer invalid_chars_producer;
+    shared_ptr<ResultsProducer> results_producer;
+    shared_ptr<IntervalProducer> interval_producer;
+    shared_ptr<InvalidCharsProducer> invalid_chars_producer;
     // batch objects
     shared_ptr<vector<u64>> results;
     shared_ptr<vector<char>> invalid_chars;
@@ -40,10 +48,10 @@ class ContinuousResultsPrinter {
 
   public:
     ContinuousResultsPrinter(
-      ResultsProducer results_producer,
-      IntervalProducer interval_producer,
-      InvalidCharsProducer invalid_chars_producer,
-      vector<string> filenames,
+      shared_ptr<ResultsProducer> results_producer,
+      shared_ptr<IntervalProducer> interval_producer,
+      shared_ptr<InvalidCharsProducer> invalid_chars_producer,
+      vector<string> &filenames,
       uint kmer_size
     ):
         results_producer(results_producer),
@@ -57,9 +65,9 @@ class ContinuousResultsPrinter {
     auto read_and_generate() -> void {
       if (current_filename == filenames.end()) { return; }
       open_next_file();
-      while ((results_producer >> results)
-             & (interval_producer >> interval_batch)
-             & (invalid_chars_producer >> invalid_chars)) {
+      while ((*results_producer >> results)
+             & (*interval_producer >> interval_batch)
+             & (*invalid_chars_producer >> invalid_chars)) {
         process_batch();
       }
     }
@@ -128,5 +136,5 @@ class ContinuousResultsPrinter {
       return 0;
     }
 };
-}
+}  // namespace sbwt_search
 #endif

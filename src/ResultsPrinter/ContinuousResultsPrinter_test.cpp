@@ -4,11 +4,13 @@
 #include <memory>
 #include <string>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <ext/alloc_traits.h>
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
-#include "BatchObjects/CumulativePropertiesBatch.hpp"
-#include "BatchObjects/IntervalBatch.hpp"
-#include "BatchObjects/StringSequenceBatch.hpp"
+#include "BatchObjects/CumulativePropertiesBatch.h"
+#include "BatchObjects/IntervalBatch.h"
 #include "ResultsPrinter/ContinuousResultsPrinter.hpp"
 #include "Utils/TypeDefinitions.h"
 
@@ -28,7 +30,7 @@ class DummyVectorProducer {
   public:
     DummyVectorProducer(vector<vector<T>> v): v(v) {}
 
-    bool operator>>(shared_ptr<vector<T>> &out) {
+    auto operator>>(shared_ptr<vector<T>> &out) -> bool {
       if (counter == v.size()) { return false; }
       out = make_shared<vector<T>>(v[counter]);
       ++counter;
@@ -48,7 +50,7 @@ class DummyIntervalProducer {
         string_lengths(string_lengths),
         strings_before_newfile(strings_before_newfile) {}
 
-    bool operator>>(shared_ptr<IntervalBatch> &out) {
+    auto operator>>(shared_ptr<IntervalBatch> &out) -> bool {
       if (counter == string_lengths.size()) { return false; }
       out = make_shared<IntervalBatch>();
       out->string_lengths = string_lengths[counter];
@@ -117,14 +119,16 @@ class ContinuousResultsPrinterTest: public ::testing::Test {
           { "70", "", "-2 -2 100" } };
     // NOTE: at the end of each string there is a linefeed (\n) character
 
-    auto get_results_producer() -> DummyVectorProducer<u64> {
-      return DummyVectorProducer<u64>(results);
+    auto get_results_producer() -> shared_ptr<DummyVectorProducer<u64>> {
+      return make_shared<DummyVectorProducer<u64>>(results);
     }
-    auto get_invalid_producer() -> DummyVectorProducer<char> {
-      return DummyVectorProducer<char>(invalid_chars);
+    auto get_invalid_producer() -> shared_ptr<DummyVectorProducer<char>> {
+      return make_shared<DummyVectorProducer<char>>(invalid_chars);
     }
-    auto get_interval_producer() -> DummyIntervalProducer {
-      return DummyIntervalProducer(string_lengths, strings_before_newfile);
+    auto get_interval_producer() -> shared_ptr<DummyIntervalProducer> {
+      return make_shared<DummyIntervalProducer>(
+        string_lengths, strings_before_newfile
+      );
     }
     auto shared_tests() {
       auto host = ContinuousResultsPrinter<
@@ -165,4 +169,4 @@ TEST_F(ContinuousResultsPrinterTest, MultipleBatches) {
     = { { ULLONG_MAX }, { 2, 0, 2, ULLONG_MAX }, { 1, ULLONG_MAX } };
   shared_tests();
 }
-}
+}  // namespace sbwt_search
