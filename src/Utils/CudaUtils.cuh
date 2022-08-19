@@ -41,9 +41,9 @@ class CudaPointer {
     CudaPointer(const vector<T> &v): CudaPointer(&v[0], v.size()) {}
 
     auto memset(
-      const uint8_t *destination, const size_t bytes_amount, const size_t index
+      const size_t index, const size_t amount, const uint8_t value
     ) -> void {
-      CUDA_CHECK(cudaMemset(ptr + index, destination, bytes_amount));
+      CUDA_CHECK(cudaMemset(ptr + index, value, amount * sizeof(T)));
     }
 
     auto set(

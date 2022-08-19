@@ -1,3 +1,4 @@
+#include "Utils/DebugUtils.hpp"
 #ifndef SEARCHER_CUH
 #define SEARCHER_CUH
 
@@ -75,17 +76,17 @@ class SearcherGpu {
 
     auto search(
       const vector<u64> &bit_seqs,
-      const vector<u64> &kmer_positions,
+      vector<u64> &kmer_positions,
       vector<u64> &results
     ) -> void {
       u32 blocks_per_grid
         = round_up<u64>(kmer_positions.size(), threads_per_block)
         / threads_per_block;
       auto d_bit_seqs = CudaPointer<u64>(bit_seqs);
-      auto d_kmer_positions
-        = CudaPointer<u64>(round_up<u64>(kmer_positions.size(), superblock_bits)
-        );
-      d_kmer_positions.set(kmer_positions, kmer_positions.size(), 0);
+      auto memory_reserved = round_up<u64>(kmer_positions.size(), superblock_bits);
+      auto d_kmer_positions = CudaPointer<u64>(memory_reserved);
+      d_kmer_positions.set(kmer_positions, kmer_positions.size());
+      d_kmer_positions.memset(kmer_positions.size(), memory_reserved - kmer_positions.size(), 0);
       d_search<
         superblock_bits,
         hyperblock_bits,
