@@ -1,9 +1,10 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
 
 #include "SequenceFileParser/SequenceFileParser.h"
 #include "TestUtils/GeneralTestUtils.hpp"
@@ -46,4 +47,4 @@ TEST(SequenceFileParserTest_NoClass, FileWithEmptyString) {
   assert_vectors_equal(expected_seqs, seqs);
 }
 
-}
+}  // namespace sbwt_search

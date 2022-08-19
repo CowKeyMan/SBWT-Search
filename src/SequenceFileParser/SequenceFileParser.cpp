@@ -37,4 +37,4 @@ auto SequenceFileParser::operator>>(string &s) -> bool {
   return true;
 }
 
-}
+}  // namespace sbwt_search

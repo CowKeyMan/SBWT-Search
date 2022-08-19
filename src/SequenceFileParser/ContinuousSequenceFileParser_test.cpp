@@ -1,29 +1,27 @@
 #include <chrono>
 #include <climits>
+#include <iostream>
 #include <memory>
 #include <sstream>
-#include <stdexcept>
 #include <thread>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
 
-#include "SequenceFileParser/ContinuousSequenceFileParser.hpp"
+#include "BatchObjects/CumulativePropertiesBatch.hpp"
+#include "BatchObjects/IntervalBatch.hpp"
+#include "BatchObjects/StringSequenceBatch.hpp"
+#include "SequenceFileParser/ContinuousSequenceFileParser.h"
 #include "TestUtils/GeneralTestUtils.hpp"
 
 using std::cerr;
-using std::fill;
-using std::make_shared;
-using std::out_of_range;
 using std::shared_ptr;
 using std::stringstream;
-using std::tie;
 using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 using std::this_thread::sleep_for;
-
-#include <iostream>
-using namespace std;
 
 namespace sbwt_search {
 
@@ -69,9 +67,9 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
       host.read_and_generate();
       vector<StringSequenceBatch> sequence_batches;
       vector<CumulativePropertiesBatch> cumsum_batches;
-      shared_ptr<const StringSequenceBatch> sequence_batch;
-      shared_ptr<const CumulativePropertiesBatch> cumsum_batch;
-      shared_ptr<const IntervalBatch> interval_batch;
+      shared_ptr<StringSequenceBatch> sequence_batch;
+      shared_ptr<CumulativePropertiesBatch> cumsum_batch;
+      shared_ptr<IntervalBatch> interval_batch;
       for (uint i = 0; host >> sequence_batch & host >> cumsum_batch
                        & host >> interval_batch;
            ++i) {
@@ -226,7 +224,7 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
   vector<StringSequenceBatch> sequence_batches;
   vector<CumulativePropertiesBatch> cumsum_batches;
   vector<IntervalBatch> interval_batches;
-  shared_ptr<const StringSequenceBatch> sequence_batch;
+  shared_ptr<StringSequenceBatch> sequence_batch;
   milliseconds::rep read_time;
 #pragma omp parallel sections
   {
@@ -240,9 +238,9 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
 #pragma omp section
     {
       sleep_for(milliseconds(sleep_time));
-      shared_ptr<const StringSequenceBatch> sequence_batch;
-      shared_ptr<const CumulativePropertiesBatch> cumsum_batch;
-      shared_ptr<const IntervalBatch> interval_batch;
+      shared_ptr<StringSequenceBatch> sequence_batch;
+      shared_ptr<CumulativePropertiesBatch> cumsum_batch;
+      shared_ptr<IntervalBatch> interval_batch;
       while (host >> sequence_batch & host >> cumsum_batch
              & host >> interval_batch) {
         sequence_batches.push_back(*sequence_batch);
@@ -286,4 +284,4 @@ TEST_F(ContinuousSequenceFileParserTest, TestParallel) {
   }
   ASSERT_GE(read_time, sleep_time);
 }
-}
+}  // namespace sbwt_search

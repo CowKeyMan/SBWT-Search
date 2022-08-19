@@ -12,9 +12,6 @@
 
 #include <kseq++/seqio.hpp>
 
-#include "Utils/IOUtils.hpp"
-#include "Utils/TypeDefinitions.h"
-
 using klibpp::SeqStreamIn;
 using std::make_unique;
 using std::string;
@@ -36,6 +33,6 @@ class SequenceFileParser {
     vector<string> get_all();
 };
 
-}
+}  // namespace sbwt_search
 
 #endif
