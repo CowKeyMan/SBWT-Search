@@ -69,6 +69,6 @@ class SearcherCpu {
     }
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

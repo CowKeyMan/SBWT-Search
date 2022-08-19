@@ -6,6 +6,7 @@
  * @brief Search implementation
  * */
 
+#include <memory>
 #include <utility>
 #include <vector>
 
@@ -14,6 +15,7 @@
 #include "Utils/CudaUtilFunctions.cuh"
 #include "Utils/TypeDefinitions.h"
 
+using std::shared_ptr;
 using std::vector;
 
 namespace sbwt_search {
@@ -22,9 +24,9 @@ template <
   u64 superblock_bits,
   u64 hyperblock_bits,
   u64 presearch_letters,
-  u32 kmer_size,
   bool reversed_bits>
 __global__ void d_search(
+  const u32 kmer_size,
   const u64 *const c_map,
   const u64 *const *const acgt,
   const u64 *const *const layer_0,
@@ -58,34 +60,38 @@ __global__ void d_search(
   out[idx] = node_left;
 }
 
+template <
+  u32 threads_per_block,
+  u64 superblock_bits,
+  u64 hyperblock_bits,
+  u64 presearch_letters,
+  bool reversed_bits>
 class SearcherGpu {
   private:
     shared_ptr<GpuSbwtContainer> container;
 
   public:
     SearcherGpu(shared_ptr<GpuSbwtContainer> container): container(container) {}
-    template <
-      u32 threads_per_block,
-      u64 superblock_bits,
-      u64 hyperblock_bits,
-      u32 presearch_letters,
-      u32 kmer_size,
-      bool reversed_bits>
-    vector<u64>
-    search(const vector<u64> &kmer_positions, const vector<u64> &bit_seqs) {
+
+    auto search(
+      const vector<u64> &bit_seqs,
+      const vector<u64> &kmer_positions,
+      vector<u64> &results
+    ) -> void {
       u32 blocks_per_grid
         = round_up<u64>(kmer_positions.size(), threads_per_block)
         / threads_per_block;
       auto d_bit_seqs = CudaPointer<u64>(bit_seqs);
       auto d_kmer_positions
-        = CudaPointer<u64>(round_up<u64>(kmer_positions.size(), 1024));
+        = CudaPointer<u64>(round_up<u64>(kmer_positions.size(), superblock_bits)
+        );
       d_kmer_positions.set(kmer_positions, kmer_positions.size(), 0);
       d_search<
         superblock_bits,
         hyperblock_bits,
         presearch_letters,
-        kmer_size,
         reversed_bits><<<blocks_per_grid, threads_per_block>>>(
+        container->get_kmer_size(),
         container->get_c_map().get(),
         container->get_acgt_pointers().get(),
         container->get_layer_0_pointers().get(),
@@ -98,12 +104,11 @@ class SearcherGpu {
       );
       CUDA_CHECK(cudaPeekAtLastError());
       CUDA_CHECK(cudaDeviceSynchronize());
-      auto result = vector<u64>(kmer_positions.size());
-      d_kmer_positions.copy_to(result, kmer_positions.size());
-      return result;
+      results.resize(kmer_positions.size());
+      d_kmer_positions.copy_to(results, kmer_positions.size());
     }
 };
 
-}
+}  // namespace sbwt_search
 
 #endif
