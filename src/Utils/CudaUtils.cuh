@@ -84,4 +84,10 @@ class CudaPointer {
     ~CudaPointer() { CUDA_CHECK(cudaFree(ptr)); }
 };
 
+auto get_free_gpu_memory() -> size_t {
+  size_t free, total;
+  cudaMemGetInfo(&free, &total);
+  return free;
+}
+
 #endif
