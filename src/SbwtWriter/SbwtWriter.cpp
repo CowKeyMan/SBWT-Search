@@ -3,7 +3,7 @@
 
 #include "SbwtWriter/SbwtWriter.hpp"
 #include "Utils/BitVectorUtils.h"
-#include "Utils/IOUtils.hpp"
+#include "Utils/IOUtils.h"
 
 using std::ofstream;
 using std::string;

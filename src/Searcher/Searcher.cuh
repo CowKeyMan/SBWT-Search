@@ -1,4 +1,3 @@
-#include "Utils/DebugUtils.hpp"
 #ifndef SEARCHER_CUH
 #define SEARCHER_CUH
 

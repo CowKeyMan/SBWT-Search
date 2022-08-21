@@ -10,7 +10,7 @@
 
 #include "SbwtContainer/SbwtContainer.hpp"
 #include "SbwtParser/SbwtParser.hpp"
-#include "Utils/IOUtils.hpp"
+#include "Utils/IOUtils.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
