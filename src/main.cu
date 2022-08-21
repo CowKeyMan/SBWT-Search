@@ -29,6 +29,8 @@ using std::remove_reference;
 using std::runtime_error;
 using std::string;
 using namespace sbwt_search;
+using gpu_utils::get_free_gpu_memory;
+using math_utils::round_down;
 using std::endl;
 
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer>;

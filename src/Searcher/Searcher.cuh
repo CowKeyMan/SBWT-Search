@@ -12,9 +12,12 @@
 
 #include "Rank/Rank.cuh"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
-#include "Utils/CudaUtilFunctions.cuh"
+#include "Utils/CudaKernelUtils.cuh"
+#include "Utils/CudaUtils.cuh"
 #include "Utils/TypeDefinitions.h"
 
+using gpu_utils::get_idx;
+using math_utils::round_up;
 using std::shared_ptr;
 using std::vector;
 
@@ -81,10 +84,10 @@ class SearcherGpu {
       u32 blocks_per_grid
         = round_up<u64>(kmer_positions.size(), threads_per_block)
         / threads_per_block;
-      auto d_bit_seqs = CudaPointer<u64>(bit_seqs);
+      auto d_bit_seqs = GpuPointer<u64>(bit_seqs);
       auto memory_reserved
         = round_up<u64>(kmer_positions.size(), superblock_bits);
-      auto d_kmer_positions = CudaPointer<u64>(memory_reserved);
+      auto d_kmer_positions = GpuPointer<u64>(memory_reserved);
       d_kmer_positions.set(kmer_positions, kmer_positions.size());
       d_kmer_positions.memset(
         kmer_positions.size(), memory_reserved - kmer_positions.size(), 0
@@ -105,8 +108,8 @@ class SearcherGpu {
         d_bit_seqs.get(),
         d_kmer_positions.get()
       );
-      CUDA_CHECK(cudaPeekAtLastError());
-      CUDA_CHECK(cudaDeviceSynchronize());
+      GPU_CHECK(cudaPeekAtLastError());
+      GPU_CHECK(cudaDeviceSynchronize());
       results.resize(kmer_positions.size());
       d_kmer_positions.copy_to(results, kmer_positions.size());
     }

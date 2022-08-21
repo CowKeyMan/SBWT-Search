@@ -8,8 +8,6 @@
 
 #include <cstdint>
 
-namespace sbwt_search {
-
 using std::int32_t;
 using std::int64_t;
 using std::uint32_t;
@@ -23,7 +21,5 @@ using u8 = uint8_t;
 
 using s64 = int64_t;
 using s32 = int32_t;
-
-}  // namespace sbwt_search
 
 #endif

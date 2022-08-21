@@ -4,6 +4,7 @@
 #include "Utils/CudaUtils.cuh"
 #include "Utils/TypeDefinitions.h"
 
+using gpu_utils::GpuPointer;
 using std::vector;
 
 namespace sbwt_search {
@@ -26,10 +27,10 @@ auto get_rank_output(
   const vector<u64> &layer_1_2,
   const vector<u64> &test_indexes
 ) -> vector<u64> {
-  auto d_bit_vector = CudaPointer<u64>(bit_vector);
-  auto d_layer_0 = CudaPointer<u64>(layer_0);
-  auto d_layer_1_2 = CudaPointer<u64>(layer_1_2);
-  auto d_output = CudaPointer<u64>(1);
+  auto d_bit_vector = GpuPointer<u64>(bit_vector);
+  auto d_layer_0 = GpuPointer<u64>(layer_0);
+  auto d_layer_1_2 = GpuPointer<u64>(layer_1_2);
+  auto d_output = GpuPointer<u64>(1);
   auto output = vector<u64>(test_indexes.size());
   for (auto i = 0; i < test_indexes.size(); ++i) {
     d_test_rank<reversed_bits><<<1, 1>>>(

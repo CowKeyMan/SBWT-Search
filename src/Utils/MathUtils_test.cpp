@@ -1,13 +1,15 @@
 #include <memory>
+#include <stdint.h>
 
 #include "gtest/gtest_pred_impl.h"
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
 #include "Utils/MathUtils.hpp"
-#include "Utils/TypeDefinitions.h"
 
-using sbwt_search::u64;
+using u64 = uint64_t;
+
+namespace math_utils {
 
 TEST(MathUtils, RoundUp) {
   ASSERT_EQ(64, round_up<u64>(45, 64));
@@ -26,3 +28,5 @@ TEST(MathUtils, DivisibleByPowerOfTwo) {
   ASSERT_EQ(divisible_by_power_of_two<u64>(1024, 64), true);
   ASSERT_EQ(divisible_by_power_of_two<u64>(64, 1024), false);
 }
+
+}  // namespace math_utils

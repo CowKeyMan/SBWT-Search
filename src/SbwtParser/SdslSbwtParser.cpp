@@ -11,9 +11,11 @@
 
 #include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "SbwtParser/SbwtParser.hpp"
+#include "Utils/BitVectorUtils.h"
 #include "Utils/IOUtils.h"
 #include "Utils/TypeDefinitions.h"
 
+using io_utils::ThrowingIfstream;
 using sdsl::bit_vector;
 using std::begin;
 using std::end;

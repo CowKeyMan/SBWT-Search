@@ -9,6 +9,7 @@
 #include "SequenceFileParser/SequenceFileParser.h"
 #include "Utils/IOUtils.h"
 
+using io_utils::ThrowingIfstream;
 using klibpp::KSeq;
 using std::move;
 using std::out_of_range;

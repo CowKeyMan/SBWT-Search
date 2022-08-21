@@ -10,7 +10,7 @@
 using std::runtime_error;
 using std::string;
 
-namespace sbwt_search {
+namespace io_utils {
 
 TEST(IOUtilsTest, TestFileExists) {
   ThrowingIfstream::check_file_exists("README.md");
@@ -41,4 +41,4 @@ TEST(IOUtilsTest, TestPathValid) {
   }
 }
 
-}  // namespace sbwt_search
+}  // namespace io_utils

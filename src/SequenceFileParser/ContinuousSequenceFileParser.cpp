@@ -17,6 +17,7 @@ class IntervalBatch;
 class StringSequenceBatch;
 }  // namespace sbwt_search
 
+using math_utils::round_down;
 using std::cerr;
 using std::runtime_error;
 using std::shared_ptr;

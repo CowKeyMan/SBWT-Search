@@ -5,7 +5,7 @@
 using std::runtime_error;
 using std::string;
 
-namespace sbwt_search {
+namespace io_utils {
 
 using std::ifstream;
 using std::ios_base;
@@ -43,4 +43,4 @@ auto ThrowingOfstream::check_path_valid(const string filepath) -> void {
   ThrowingOfstream(filepath, ios_base::in);
 }
 
-}  // namespace sbwt_search
+}  // namespace io_utils

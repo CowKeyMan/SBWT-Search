@@ -7,6 +7,7 @@
 #include "FilenamesParser/FilenamesParser.h"
 #include "Utils/IOUtils.h"
 
+using io_utils::ThrowingIfstream;
 using std::getline;
 using std::ifstream;
 using std::ios_base;

@@ -8,6 +8,8 @@
 
 #include <type_traits>
 
+namespace math_utils {
+
 using std::is_unsigned;
 
 template <class UnsignedNumber>
@@ -42,5 +44,7 @@ inline auto divisible_by_power_of_two(
   );
   return (numerator & (denominator_power_of_two - 1)) == 0;
 }
+
+}  // namespace math_utils
 
 #endif

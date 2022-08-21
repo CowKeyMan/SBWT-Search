@@ -12,6 +12,8 @@
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
+using io_utils::ThrowingIfstream;
+using math_utils::round_up;
 using std::cerr;
 using std::make_shared;
 using std::shared_ptr;

@@ -10,12 +10,12 @@
 #include <iostream>
 #include <vector>
 
+namespace gpu_utils {
+
 using std::cerr;
 using std::endl;
 using std::vector;
 
-#define CUDA_CHECK(code_block) \
-  { gpuAssert((code_block), __FILE__, __LINE__); }
 inline void
 gpuAssert(cudaError_t code, const char *file, int line, bool abort = true) {
   if (code != cudaSuccess) {
@@ -24,31 +24,33 @@ gpuAssert(cudaError_t code, const char *file, int line, bool abort = true) {
     if (abort) exit(code);
   }
 }
+#define GPU_CHECK(code_block) \
+  { gpu_utils::gpuAssert((code_block), __FILE__, __LINE__); }
 
 template <class T>
-class CudaPointer {
+class GpuPointer {
   private:
     T *ptr;
     size_t bytes;
 
   public:
-    CudaPointer(size_t size): bytes(size * sizeof(T)) {
-      CUDA_CHECK(cudaMalloc((void **)&ptr, bytes));
+    GpuPointer(size_t size): bytes(size * sizeof(T)) {
+      GPU_CHECK(cudaMalloc((void **)&ptr, bytes));
     }
-    CudaPointer(const T *cpu_ptr, size_t size): CudaPointer(size) {
-      CUDA_CHECK(cudaMemcpy(ptr, cpu_ptr, bytes, cudaMemcpyHostToDevice));
+    GpuPointer(const T *cpu_ptr, size_t size): GpuPointer(size) {
+      GPU_CHECK(cudaMemcpy(ptr, cpu_ptr, bytes, cudaMemcpyHostToDevice));
     }
-    CudaPointer(const vector<T> &v): CudaPointer(&v[0], v.size()) {}
+    GpuPointer(const vector<T> &v): GpuPointer(&v[0], v.size()) {}
 
     auto memset(const size_t index, const size_t amount, const uint8_t value)
       -> void {
-      CUDA_CHECK(cudaMemset(ptr + index, value, amount * sizeof(T)));
+      GPU_CHECK(cudaMemset(ptr + index, value, amount * sizeof(T)));
     }
 
     auto set(
       const T *source, const size_t amount, const size_t destination_index = 0
     ) -> void {
-      CUDA_CHECK(cudaMemcpy(
+      GPU_CHECK(cudaMemcpy(
         ptr + destination_index,
         source,
         amount * sizeof(T),
@@ -66,7 +68,7 @@ class CudaPointer {
     auto get() const -> T *const { return ptr; }
 
     auto copy_to(T *destination, const size_t amount) const -> void {
-      CUDA_CHECK(
+      GPU_CHECK(
         cudaMemcpy(destination, ptr, amount * sizeof(T), cudaMemcpyDeviceToHost)
       );
     }
@@ -80,9 +82,11 @@ class CudaPointer {
       copy_to(&destination[0]);
     }
 
-    ~CudaPointer() { CUDA_CHECK(cudaFree(ptr)); }
+    ~GpuPointer() { GPU_CHECK(cudaFree(ptr)); }
 };
 
 auto get_free_gpu_memory() -> size_t;
+
+}  // namespace gpu_utils
 
 #endif

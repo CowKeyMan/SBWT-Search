@@ -14,7 +14,7 @@ using std::ifstream;
 using std::ofstream;
 using std::string;
 
-namespace sbwt_search {
+namespace io_utils {
 
 class ThrowingIfstream: public ifstream {
   public:
@@ -28,6 +28,6 @@ class ThrowingOfstream: public ofstream {
     static void check_path_valid(const string filepath);
 };
 
-}  // namespace sbwt_search
+}  // namespace io_utils
 
 #endif

@@ -22,6 +22,7 @@
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
+using math_utils::round_up;
 using std::fill;
 using std::make_shared;
 using std::shared_ptr;

@@ -12,6 +12,7 @@
 #include "Utils/IOUtils.h"
 #include "Utils/TypeDefinitions.h"
 
+using io_utils::ThrowingOfstream;
 using std::ofstream;
 using std::string;
 

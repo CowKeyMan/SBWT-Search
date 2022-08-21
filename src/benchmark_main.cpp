@@ -14,6 +14,7 @@ using std::string;
 using std::unordered_set;
 
 using namespace sbwt_search;
+using benchmark_utils::TIME_IT_TOTAL;
 
 auto parse_arguments(int argc, char **argv) -> unordered_set<string>;
 

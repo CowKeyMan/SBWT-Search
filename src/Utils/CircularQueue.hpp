@@ -10,9 +10,9 @@
 #include <stddef.h>
 #include <vector>
 
-using std::vector;
-
 namespace structure_utils {
+
+using std::vector;
 
 template <class T>
 class CircularQueue {

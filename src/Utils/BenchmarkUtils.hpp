@@ -8,6 +8,8 @@
 
 #include <chrono>
 
+namespace benchmark_utils {
+
 using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
@@ -23,5 +25,7 @@ milliseconds::rep TIME_IT_TOTAL;
   TIME_IT_TOTAL                                                          \
     = duration_cast<milliseconds>(TIME_IT_END_TIME - TIME_IT_START_TIME) \
         .count();
+
+}  // namespace benchmark_utils
 
 #endif
