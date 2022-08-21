@@ -82,9 +82,9 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
 
     vector<char> expected_invalid_1, expected_invalid_2;
     ContinuousSeqToBitsConverterTest() {
-      expected_invalid_1 = vector<char>(max_ints_per_batch + kmer_size);
+      expected_invalid_1 = vector<char>(47, 0);
       expected_invalid_1[5] = 1;
-      expected_invalid_2 = vector<char>(max_ints_per_batch + kmer_size);
+      expected_invalid_2 = vector<char>(63, 0);
     }
 
     vector<u64> expected_bits_2 = { 0, 3, 0, 2 };

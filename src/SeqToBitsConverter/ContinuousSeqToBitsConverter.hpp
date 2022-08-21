@@ -76,6 +76,7 @@ class ContinuousSeqToBitsConverter {
         bit_batches.current_write()->resize(
           round_up<u64>(read_batch->cumulative_char_indexes.back(), 32) / 32
         );
+        invalid_batches.current_write()->resize(read_batch->cumulative_char_indexes.back());
         fill(
           invalid_batches.current_write()->begin(),
           invalid_batches.current_write()->end(),
@@ -124,7 +125,7 @@ class ContinuousSeqToBitsConverter {
           ++string_index;
           char_index = 0;
         }
-        if (string_index == buffer.size()) { return result; }
+        if (string_index >= buffer.size()) { return result; }
         u64 c = char_to_bits(buffer[string_index][char_index++]);
         if (c == invalid_char_to_bits_value) {
           (*invalid_batches.current_write())[index + start_index] = 1;
