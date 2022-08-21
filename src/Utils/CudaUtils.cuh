@@ -40,9 +40,8 @@ class CudaPointer {
     }
     CudaPointer(const vector<T> &v): CudaPointer(&v[0], v.size()) {}
 
-    auto memset(
-      const size_t index, const size_t amount, const uint8_t value
-    ) -> void {
+    auto memset(const size_t index, const size_t amount, const uint8_t value)
+      -> void {
       CUDA_CHECK(cudaMemset(ptr + index, value, amount * sizeof(T)));
     }
 
@@ -84,10 +83,6 @@ class CudaPointer {
     ~CudaPointer() { CUDA_CHECK(cudaFree(ptr)); }
 };
 
-auto get_free_gpu_memory() -> size_t {
-  size_t free, total;
-  cudaMemGetInfo(&free, &total);
-  return free;
-}
+auto get_free_gpu_memory() -> size_t;
 
 #endif
