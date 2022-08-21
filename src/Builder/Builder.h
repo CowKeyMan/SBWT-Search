@@ -19,6 +19,6 @@ class Builder {
     Builder(){};
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

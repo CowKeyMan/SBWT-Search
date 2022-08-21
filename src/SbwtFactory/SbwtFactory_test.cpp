@@ -131,4 +131,4 @@ TEST(SbwtFactoryTest, InvalidSdsl) {
   }
 }
 
-}
+}  // namespace sbwt_search

@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
 
 #include "FilenamesParser/FilenamesParser.h"
 #include "TestUtils/GeneralTestUtils.hpp"

@@ -1,8 +1,11 @@
 #include <algorithm>
-#include <random>
+#include <cstdlib>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest-message.h>
+#include <gtest/gtest-test-part.h>
+#include <pstl/glue_algorithm_defs.h>
 
 #include "Rank/Rank_test.hpp"
 #include "RankIndexBuilder/RankIndexBuilder.hpp"
@@ -56,4 +59,4 @@ TEST(RankTest, RankTestNoReversedBits) {
   ASSERT_EQ(host.expected, actual);
 }
 
-}
+}  // namespace sbwt_search

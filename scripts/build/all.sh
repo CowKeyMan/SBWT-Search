@@ -32,6 +32,6 @@ cd ..
 
 
 sh scripts/build/release.sh
-sh scripts/build/benchmarks.sh
+# sh scripts/build/benchmarks.sh
 sh scripts/build/tests.sh
 sh scripts/build/docs.sh

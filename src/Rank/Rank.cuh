@@ -69,6 +69,6 @@ __device__ u64 d_rank(
   return entry_basicblock + entry_layer_2 + entry_layer_1 + entry_layer_0;
 }
 
-}
+}  // namespace sbwt_search
 
 #endif

@@ -1,17 +1,17 @@
-#include <array>
+#include <cstddef>
 #include <istream>
+#include <iterator>
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <sdsl/bit_vectors.hpp>
+#include <sdsl/int_vector.hpp>
 
-#include "SbwtContainer/SbwtContainer.hpp"
+#include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "SbwtParser/SbwtParser.hpp"
 #include "Utils/IOUtils.h"
-#include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
 using sdsl::bit_vector;
@@ -24,9 +24,6 @@ using std::runtime_error;
 using std::shared_ptr;
 using std::string;
 using std::vector;
-
-#include <iostream>
-using namespace std;
 
 namespace sbwt_search {
 
@@ -52,4 +49,4 @@ void SdslSbwtParser::assert_plain_matrix(istream &stream) const {
   }
 }
 
-}
+}  // namespace sbwt_search

@@ -8,8 +8,10 @@
 
 #include <string>
 
-#include "SbwtContainer/CpuSbwtContainer.hpp"
-#include "SbwtContainer/SbwtContainer.hpp"
+namespace sbwt_search {
+class BitVectorSbwtContainer;
+class SdslSbwtContainer;
+}  // namespace sbwt_search
 
 using std::string;
 
@@ -60,6 +62,6 @@ class BitVectorSbwtWriter:
         SbwtWriter(container, path) {}
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

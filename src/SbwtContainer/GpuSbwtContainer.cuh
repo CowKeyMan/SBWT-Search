@@ -52,6 +52,6 @@ class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
     u32 get_kmer_size() const;
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

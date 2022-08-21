@@ -1,6 +1,3 @@
-#include <iostream>
-using namespace std;
-
 #ifndef CONTINUOUS_SEARCHER_CUH
 #define CONTINUOUS_SEARCHER_CUH
 

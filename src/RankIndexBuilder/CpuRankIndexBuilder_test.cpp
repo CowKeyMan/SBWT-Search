@@ -46,4 +46,4 @@ TEST(RankIndexBuilderTest, BuildIndex) {
   assert_vectors_equal<u64>(c_map, container->get_c_map());
 }
 
-}
+}  // namespace sbwt_search

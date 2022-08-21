@@ -73,6 +73,6 @@ class BitVectorSbwtParser:
         files_prefix(files_prefix), SbwtParser() {}
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

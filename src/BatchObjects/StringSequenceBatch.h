@@ -1,7 +1,8 @@
 #ifndef STRING_SEQUENCE_BATCH_H
 #define STRING_SEQUENCE_BATCH_H
 
-/* @file StringSequenceBatch.h
+/**
+ * @file StringSequenceBatch.h
  * @brief Data class for the string sequences and associated data. The buffer
  * stores the strings themselves. the buffers are then split into some number of
  * readers. Thus, the rest are indexes. string_indexes is the index of the
@@ -17,7 +18,7 @@
  * {0, 3, 0, 0, 0}, cumulative_char_indexes = {0, 3, 6, 9, 9}. Notice how if we
  * have more readers than characters to give it, we simply duplicate the maximum
  * or 0s at the end.
- */
+ * */
 
 #include <string>
 #include <vector>

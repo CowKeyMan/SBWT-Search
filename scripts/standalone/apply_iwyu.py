@@ -58,7 +58,7 @@ def format_directory(directory: str):
 
 if __name__ == '__main__':
     if len(args['filenames']) == 0:
-        format_files(get_directory('src'))
+        format_directory('src')
     for item in args['filenames']:
         if Path(item).is_dir():
             format_directory(item)

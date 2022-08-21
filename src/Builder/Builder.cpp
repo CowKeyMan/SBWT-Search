@@ -12,4 +12,4 @@ auto Builder::check_if_has_built() -> void {
   has_built = true;
 }
 
-}
+}  // namespace sbwt_search

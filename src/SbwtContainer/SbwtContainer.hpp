@@ -16,8 +16,6 @@ using std::vector;
 
 namespace sbwt_search {
 
-class GpuSbwtContainer;
-
 enum class ACGT { A = 0, C = 1, G = 2, T = 3 };
 
 template <class Implementation>
@@ -41,6 +39,6 @@ class SbwtContainer {
     u64 get_bits_total() const { return bits_total; }
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

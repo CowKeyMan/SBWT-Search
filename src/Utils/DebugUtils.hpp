@@ -6,9 +6,9 @@
  * @brief Utilities for debugging code
  * */
 
+#include <climits>
 #include <iostream>
 #include <vector>
-#include <climits>
 
 using namespace std;
 

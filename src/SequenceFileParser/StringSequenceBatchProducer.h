@@ -7,6 +7,7 @@
  * */
 
 #include <memory>
+#include <stddef.h>
 #include <string>
 
 #include "Utils/BoundedSemaphore.hpp"

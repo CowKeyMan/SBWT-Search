@@ -1,9 +1,16 @@
+#include <cstddef>
 #include <ostream>
 #include <string>
+#include <vector>
 
+#include <sdsl/int_vector.hpp>
+
+#include "SbwtContainer/CpuSbwtContainer.hpp"
+#include "SbwtContainer/SbwtContainer.hpp"
 #include "SbwtWriter/SbwtWriter.hpp"
 #include "Utils/BitVectorUtils.h"
 #include "Utils/IOUtils.h"
+#include "Utils/TypeDefinitions.h"
 
 using std::ofstream;
 using std::string;
@@ -36,4 +43,4 @@ auto BitVectorSbwtWriter::do_write() const -> void {
   }
 }
 
-}
+}  // namespace sbwt_search

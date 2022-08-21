@@ -1,10 +1,11 @@
 #include <byteswap.h>
+#include <memory>
 
+#include <ext/alloc_traits.h>
 #include <sdsl/int_vector.hpp>
 
 #include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "SbwtContainer/SbwtContainer.hpp"
-#include "sdsl/bit_vectors.hpp"
 
 using sdsl::bit_vector;
 
@@ -36,4 +37,4 @@ auto BitVectorSbwtContainer::change_acgt_endianness() -> void {
   }
 }
 
-}
+}  // namespace sbwt_search

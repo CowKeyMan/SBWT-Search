@@ -82,10 +82,13 @@ class SearcherGpu {
         = round_up<u64>(kmer_positions.size(), threads_per_block)
         / threads_per_block;
       auto d_bit_seqs = CudaPointer<u64>(bit_seqs);
-      auto memory_reserved = round_up<u64>(kmer_positions.size(), superblock_bits);
+      auto memory_reserved
+        = round_up<u64>(kmer_positions.size(), superblock_bits);
       auto d_kmer_positions = CudaPointer<u64>(memory_reserved);
       d_kmer_positions.set(kmer_positions, kmer_positions.size());
-      d_kmer_positions.memset(kmer_positions.size(), memory_reserved - kmer_positions.size(), 0);
+      d_kmer_positions.memset(
+        kmer_positions.size(), memory_reserved - kmer_positions.size(), 0
+      );
       d_search<
         superblock_bits,
         hyperblock_bits,

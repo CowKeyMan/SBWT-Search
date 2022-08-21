@@ -94,4 +94,4 @@ auto GpuSbwtContainer::get_presearch_right() const -> CudaPointer<u64> & {
   return *presearch_right.get();
 }
 
-}
+}  // namespace sbwt_search

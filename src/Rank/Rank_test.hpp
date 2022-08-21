@@ -28,6 +28,6 @@ auto get_rank_output_no_reversed_bits(
   const vector<u64> &test_indexes
 ) -> vector<u64>;
 
-}
+}  // namespace sbwt_search
 
 #endif

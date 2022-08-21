@@ -1,12 +1,16 @@
 #include <algorithm>
 #include <iostream>
-#include <istream>
 #include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
+#include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "SbwtParser/SbwtParser.hpp"
 #include "Utils/BitVectorUtils.h"
 #include "Utils/IOUtils.h"
 #include "Utils/MathUtils.hpp"
+#include "Utils/TypeDefinitions.h"
 
 using std::cerr;
 using std::make_shared;
@@ -40,4 +44,4 @@ auto BitVectorSbwtParser::parse_single_acgt(string filename) -> vector<u64> {
   return result;
 }
 
-}
+}  // namespace sbwt_search

@@ -101,6 +101,6 @@ class BitVectorSbwtContainer: public CpuSbwtContainer<BitVectorSbwtContainer> {
     shared_ptr<GpuSbwtContainer> to_gpu();
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

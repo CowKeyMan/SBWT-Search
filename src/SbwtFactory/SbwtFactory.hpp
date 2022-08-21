@@ -69,6 +69,6 @@ class BitVectorSbwtFactory:
     }
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

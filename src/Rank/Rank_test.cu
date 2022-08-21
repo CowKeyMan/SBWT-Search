@@ -62,4 +62,4 @@ auto get_rank_output_no_reversed_bits(
   return get_rank_output<false>(bit_vector, layer_0, layer_1_2, test_indexes);
 }
 
-}
+}  // namespace sbwt_search

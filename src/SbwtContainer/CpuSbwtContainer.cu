@@ -37,4 +37,4 @@ shared_ptr<GpuSbwtContainer> BitVectorSbwtContainer::to_gpu() {
   return build_gpu_container<decltype(*this)>(*this);
 }
 
-}
+}  // namespace sbwt_search

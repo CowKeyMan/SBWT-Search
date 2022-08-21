@@ -180,6 +180,6 @@ class CpuRankIndexBuilder:
     CpuRankIndexBuilder(shared_ptr<Container> container): Base(container) {}
 };
 
-}
+}  // namespace sbwt_search
 
 #endif

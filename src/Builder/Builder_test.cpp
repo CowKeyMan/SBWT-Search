@@ -26,4 +26,4 @@ TEST(BuilderTest, AlreadyBuilt) {
   }
 }
 
-}
+}  // namespace sbwt_search

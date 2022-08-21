@@ -61,8 +61,6 @@ auto main(int argc, char **argv) -> int {
   const auto max_chars_per_batch
     = get_max_chars_per_batch(args.get_unavailable_ram(), max_batches);
 
-  cout << "Using " << max_chars_per_batch << " characters per batch" << endl;
-
   omp_set_nested(1);
   using SequenceFileParser = ContinuousSequenceFileParser;
   auto sequence_file_parser = make_shared<SequenceFileParser>(

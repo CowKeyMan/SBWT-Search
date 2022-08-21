@@ -1,3 +1,10 @@
+#ifndef MEMORY_UTILS_HPP
+#define MEMORY_UTILS_HPP
+
+/**
+ * @file MemoryUtils.hpp
+ * @brief Utilities which deal with memory management
+ * */
 
 // Function credits:
 // https://stackoverflow.com/questions/2513505/how-to-get-available-memory-c-g
@@ -26,3 +33,5 @@ unsigned long long get_total_system_memory() {
 #endif
 
 }  // namespace memory_utils
+
+#endif

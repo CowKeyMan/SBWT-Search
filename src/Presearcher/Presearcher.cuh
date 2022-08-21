@@ -12,9 +12,9 @@
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
+using std::make_unique;
 using std::move;
 using std::shared_ptr;
-using std::make_unique;
 
 namespace sbwt_search {
 
@@ -84,6 +84,6 @@ class Presearcher {
     }
 };
 
-}
+}  // namespace sbwt_search
 
 #endif
