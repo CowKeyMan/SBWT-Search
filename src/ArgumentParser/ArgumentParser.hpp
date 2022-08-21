@@ -6,7 +6,9 @@
  * @brief Contains functions to parse the main program's arguments
  * */
 
+#include <climits>
 #include <memory>
+#include <string>
 
 #include "cxxopts.hpp"
 
@@ -16,6 +18,7 @@ using cxxopts::value;
 using std::make_unique;
 using std::string;
 using std::unique_ptr;
+using std::to_string;
 
 namespace sbwt_search {
 
@@ -55,6 +58,27 @@ class ArgumentParser {
         "Writes output in gzipped form. "
         "This can shrink the output files by an order of magnitude.",
         value<bool>()->default_value("false")
+      )("u,unavailable-main-memory",
+        "The amount of main memory not to consume from the operating system in "
+        "bits. This means that the program will hog as much main memory it "
+        "can, provided that the VRAM can also keep up with it, except for the "
+        "amount specified by this value. By default it is set to 4GB",
+        value<size_t>()->default_value(to_string(4ULL * 8 * 1024 * 1024 * 1024))
+      )("m,max-main-memory",
+        "The maximum amount of main memory (RAM) which may be used by the "
+        "searching step, in bits. The default is that the program will occupy "
+        "as much memory as it can, minus the unavailable main-memory. This "
+        "value may be skipped by a few megabytes for its operation. It is only "
+        "recommended to change this when you have a few small queries to "
+        "process.",
+        value<size_t>()->default_value(to_string(ULLONG_MAX))
+      )("b,batches",
+        "The number of batches to use. The default is 2. 1 is the minimum, and "
+        "is equivalent to serial processing in terms of speed. The more "
+        "batches, the more multiprocessing may be available, but if one step "
+        "of the pipeline is much slower, then this may be a bottleneck to the "
+        "rest of the steps",
+        value<unsigned int>()->default_value(to_string(2))
       )("h,help", "Print usage", value<bool>()->default_value("false"));
       options.allow_unrecognised_options();
       return options;
@@ -70,10 +94,13 @@ class ArgumentParser {
     }
 
     auto get_sequence_file() -> string { return args["q"].as<string>(); }
-
     auto get_index_file() -> string { return args["i"].as<string>(); }
+    auto get_output_file() -> string { return args["o"].as<string>(); }
+    auto get_unavailable_ram() -> size_t { return args["u"].as<size_t>(); }
+    auto get_max_memory() -> size_t { return args["m"].as<size_t>(); }
+    auto get_batches() -> unsigned int { return args["b"].as<unsigned int>(); }
 };
 
-}
+}  // namespace sbwt_search
 
 #endif
