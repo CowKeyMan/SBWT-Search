@@ -65,7 +65,7 @@ FetchContent_MakeAvailable(cxxopts)
 
 # Fetch OpenMP
 find_package(OpenMP REQUIRED)
-
+add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
 
 # My libraries
 add_library(
@@ -80,13 +80,21 @@ add_library(
   sequence_file_parser
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/SequenceFileParser/IntervalBatchProducer.cpp"
+  "${PROJECT_SOURCE_DIR}/SequenceFileParser/CumulativePropertiesBatchProducer.cpp"
+  "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringSequenceBatchProducer.cpp"
+)
+target_link_libraries(sequence_file_parser PRIVATE io_utils)
+add_library(
+  filenames_parser
+  "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
 )
 add_library(
   sbwt_parser
   "${PROJECT_SOURCE_DIR}/SbwtParser/BitVectorSbwtParser.cpp"
   "${PROJECT_SOURCE_DIR}/SbwtParser/SdslSbwtParser.cpp"
 )
-target_link_libraries(sbwt_parser PRIVATE libsdsl)
+target_link_libraries(sbwt_parser PRIVATE libsdsl io_utils)
 add_library(
   sbwt_container_cpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
@@ -130,6 +138,7 @@ target_link_libraries(
   INTERFACE
   io_utils
   sequence_file_parser
+  filenames_parser
   sbwt_parser
   libsdsl
   ZLIB::ZLIB
@@ -137,11 +146,16 @@ target_link_libraries(
   cxxopts
   sbwt_container
   sbwt_writer
-  OpenMP::OpenMP_CXX
   positions_builder
+  OpenMP::OpenMP_CXX
   # TODO: Link more libraries here
 )
-add_dependencies(common_libraries kseqpp)
+add_library(
+  cuda_utils
+  "${PROJECT_SOURCE_DIR}/Utils/CudaUtils.cu"
+)
+set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+
 
 # Build Cpu Libraries
 if (BUILD_CPU)
@@ -166,6 +180,7 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
     libraries_cuda
     INTERFACE
     common_libraries
+    cuda_utils
     # TODO: Combine more libraries here which are cuda specific
   )
 endif()

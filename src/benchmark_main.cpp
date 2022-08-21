@@ -64,18 +64,6 @@ auto sequence_file_parser_fasta() -> void {
     SequenceFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_streams();
   })
   cout << "SequenceFileParser_kseqpp_streams_fasta: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({ SequenceFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_read(); }
-  )
-  cout << "SequenceFileParser_kseqpp_read_fasta: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    SequenceFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_stream();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_stream_fasta: " << TIME_IT_TOTAL
-       << '\n';
-  TIME_IT({
-    SequenceFileParser(fasta_1gb_path, kmer_size).parse_kseqpp_gz_read();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_read_fasta: " << TIME_IT_TOTAL << '\n';
 }
 
 auto sequence_file_parser_fasta_zip() -> void {
@@ -84,21 +72,6 @@ auto sequence_file_parser_fasta_zip() -> void {
   })
   cout << "SequenceFileParser_kseqpp_streams_zip_fasta: " << TIME_IT_TOTAL
        << '\n';
-  TIME_IT({
-    SequenceFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_read();
-  })
-  cout << "SequenceFileParser_kseqpp_read_zip_fasta: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    SequenceFileParser(fasta_1gb_zipped_path, kmer_size)
-      .parse_kseqpp_gz_stream();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_stream_zip_fasta: " << TIME_IT_TOTAL
-       << '\n';
-  TIME_IT({
-    SequenceFileParser(fasta_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_read_zip_fasta: " << TIME_IT_TOTAL
-       << '\n';
 }
 
 auto sequence_file_parser_fastq() -> void {
@@ -106,18 +79,6 @@ auto sequence_file_parser_fastq() -> void {
     SequenceFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_streams();
   })
   cout << "SequenceFileParser_kseqpp_streams_fastq: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({ SequenceFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_read(); }
-  )
-  cout << "SequenceFileParser_kseqpp_read_fastq: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    SequenceFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_stream();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_stream_fastq: " << TIME_IT_TOTAL
-       << '\n';
-  TIME_IT({
-    SequenceFileParser(fastq_1gb_path, kmer_size).parse_kseqpp_gz_read();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_read_fastq: " << TIME_IT_TOTAL << '\n';
 }
 
 auto sequence_file_parser_fastq_zip() -> void {
@@ -125,21 +86,6 @@ auto sequence_file_parser_fastq_zip() -> void {
     SequenceFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_streams();
   })
   cout << "SequenceFileParser_kseqpp_streams_zip_fastq: " << TIME_IT_TOTAL
-       << '\n';
-  TIME_IT({
-    SequenceFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_read();
-  })
-  cout << "SequenceFileParser_kseqpp_read_zip_fastq: " << TIME_IT_TOTAL << '\n';
-  TIME_IT({
-    SequenceFileParser(fastq_1gb_zipped_path, kmer_size)
-      .parse_kseqpp_gz_stream();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_stream_zip_fastq: " << TIME_IT_TOTAL
-       << '\n';
-  TIME_IT({
-    SequenceFileParser(fastq_1gb_zipped_path, kmer_size).parse_kseqpp_gz_read();
-  })
-  cout << "SequenceFileParser_kseqpp_gz_read_zip_fastq: " << TIME_IT_TOTAL
        << '\n';
 }
 
