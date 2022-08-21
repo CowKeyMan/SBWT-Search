@@ -85,6 +85,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringSequenceBatchProducer.cpp"
 )
 target_link_libraries(sequence_file_parser PRIVATE io_utils)
+add_dependencies(sequence_file_parser kseqpp)
 add_library(
   filenames_parser
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
@@ -95,12 +96,13 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtParser/SdslSbwtParser.cpp"
 )
 target_link_libraries(sbwt_parser PRIVATE libsdsl io_utils)
+add_dependencies(sbwt_parser sdsl)
 add_library(
   sbwt_container_cpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
 )
-target_link_libraries(sbwt_container_cpu PRIVATE libsdsl)
 add_dependencies(sbwt_container_cpu sdsl)
+target_link_libraries(sbwt_container_cpu PRIVATE libsdsl)
 add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"
@@ -112,6 +114,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cu"
 )
 set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+add_dependencies(sbwt_container_gpu kseqpp)
 add_library(sbwt_container INTERFACE)
 target_link_libraries(
   sbwt_container
@@ -130,6 +133,7 @@ target_link_libraries(
   libsdsl
   sbwt_container
 )
+add_dependencies(sbwt_writer kseqpp)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
