@@ -17,9 +17,10 @@ GpuSbwtContainer::GpuSbwtContainer(
   const u64 *cpu_g,
   const u64 *cpu_t,
   const u64 bits_total,
-  const u64 bit_vector_size
+  const u64 bit_vector_size,
+  const u32 kmer_size
 ):
-    SbwtContainer(bits_total, bit_vector_size) {
+    SbwtContainer(bits_total, bit_vector_size), kmer_size(kmer_size) {
   acgt.reserve(4);
   acgt.push_back(make_unique<CudaPointer<u64>>(cpu_a, bit_vector_size));
   acgt.push_back(make_unique<CudaPointer<u64>>(cpu_c, bit_vector_size));
@@ -65,6 +66,8 @@ auto GpuSbwtContainer::set_layer_1_2(const vector<vector<u64>> &value) -> void {
                                                       layer_1_2[2]->get(),
                                                       layer_1_2[3]->get() }));
 }
+
+auto GpuSbwtContainer::get_kmer_size() const -> u32 { return kmer_size; }
 
 auto GpuSbwtContainer::get_layer_0_pointers() const
   -> const CudaPointer<u64 *> & {

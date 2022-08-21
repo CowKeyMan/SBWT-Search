@@ -24,6 +24,7 @@ class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
     unique_ptr<CudaPointer<u64>> c_map, presearch_left, presearch_right;
     unique_ptr<CudaPointer<u64 *>> acgt_pointers, layer_0_pointers,
       layer_1_2_pointers;
+    u32 kmer_size;
 
   public:
     GpuSbwtContainer(
@@ -32,7 +33,8 @@ class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
       const u64 *cpu_g,
       const u64 *cpu_t,
       const u64 bits_total,
-      const u64 bit_vector_size
+      const u64 bit_vector_size,
+      const u32 kmer_size = 30
     );
 
     void set_c_map(const vector<u64> &value);
@@ -47,6 +49,7 @@ class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
     );
     CudaPointer<u64> &get_presearch_left() const;
     CudaPointer<u64> &get_presearch_right() const;
+    u32 get_kmer_size() const;
 };
 
 }
