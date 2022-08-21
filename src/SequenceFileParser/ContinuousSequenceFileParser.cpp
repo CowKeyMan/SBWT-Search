@@ -1,4 +1,3 @@
-#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -10,6 +9,7 @@
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "spdlog/spdlog.h"
 
 namespace sbwt_search {
 class CumulativePropertiesBatch;
@@ -18,7 +18,6 @@ class StringSequenceBatch;
 }  // namespace sbwt_search
 
 using math_utils::round_down;
-using std::cerr;
 using std::runtime_error;
 using std::shared_ptr;
 using std::string;
@@ -57,9 +56,10 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
 auto ContinuousSequenceFileParser::read_and_generate() -> void {
   start_new_batch();
   for (auto &filename: filenames) {
+    spdlog::info("Now reading file {}", filename);
     try {
       process_file(filename);
-    } catch (runtime_error &e) { cerr << e.what() << '\n'; }
+    } catch (runtime_error &e) { spdlog::error(e.what()); }
     interval_batch_producer.file_end();
   }
   terminate_batch();
@@ -98,12 +98,14 @@ auto ContinuousSequenceFileParser::start_new_batch() -> void {
   cumulative_properties_batch_producer.start_new_batch();
   interval_batch_producer.start_new_batch();
   current_batch_size = current_batch_strings = 0;
+  spdlog::trace("SequenceFileParser has started batch {}", batch_idx);
 }
 
 auto ContinuousSequenceFileParser::terminate_batch() -> void {
   string_sequence_batch_producer.terminate_batch();
   cumulative_properties_batch_producer.terminate_batch();
   interval_batch_producer.terminate_batch();
+  spdlog::trace("SequenceFileParser has finished batch {}", batch_idx++);
 }
 
 auto ContinuousSequenceFileParser::process_file(const string &filename)
@@ -150,8 +152,10 @@ auto ContinuousSequenceFileParser::string_larger_than_limit(const string &s)
 auto ContinuousSequenceFileParser::print_string_too_large(
   const string &filename, const uint string_index
 ) -> void {
-  cerr << "The string in file " + filename + " at position "
-            + to_string(string_index) + " is too large\n";
+  spdlog::error(
+    "The string in file " + filename + " at position " + to_string(string_index)
+    + " is too large\n"
+  );
 }
 
 }  // namespace sbwt_search

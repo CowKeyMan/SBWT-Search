@@ -5,8 +5,9 @@ if (BUILD_TESTS)
 include(FetchContent)
 FetchContent_Declare(
   googletest
+  QUIET
   GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.11.0
+  GIT_TAG        release-1.12.1
 )
 FetchContent_MakeAvailable(googletest)
 
@@ -29,15 +30,15 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/test_main.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
-    # "${PROJECT_SOURCE_DIR}/Builder/Builder_test.cpp"
+    "${PROJECT_SOURCE_DIR}/Builder/Builder_test.cpp"
     "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser_test.cpp"
     "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser_test.cpp"
     "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/ContinuousSeqToBitsConverter_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/CircularQueue_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/CircularBuffer_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
-    # "${PROJECT_SOURCE_DIR}/SbwtFactory/SbwtFactory_test.cpp"
-    # "${PROJECT_SOURCE_DIR}/RankIndexBuilder/CpuRankIndexBuilder_test.cpp"
+    "${PROJECT_SOURCE_DIR}/SbwtFactory/SbwtFactory_test.cpp"
+    "${PROJECT_SOURCE_DIR}/RankIndexBuilder/CpuRankIndexBuilder_test.cpp"
     "${PROJECT_SOURCE_DIR}/TestUtils/RankTestUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
     "${PROJECT_SOURCE_DIR}/PositionsBuilder/ContinuousPositionsBuilder_test.cpp"
@@ -54,6 +55,7 @@ if (BUILD_CPU)
     libraries_cpu
     test_lib
     OpenMP::OpenMP_CXX
+    spdlog::spdlog
   )
 endif()
 
@@ -63,6 +65,7 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
     rank_test
     "${PROJECT_SOURCE_DIR}/Rank/Rank_test.cu"
   )
+  target_link_libraries(rank_test PRIVATE spdlog::spdlog)
   set_target_properties(rank_test PROPERTIES CUDA_ARCHITECTURES "60;70;80")
   add_executable(
     test_main_cuda

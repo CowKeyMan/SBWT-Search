@@ -23,6 +23,7 @@ if (BUILD_CUDA)
     PRIVATE
     libraries_cuda
     OpenMP::OpenMP_CXX
+    spdlog::spdlog
   )
 set_target_properties(main_cuda PROPERTIES CUDA_ARCHITECTURES "60;70;80")
 endif()

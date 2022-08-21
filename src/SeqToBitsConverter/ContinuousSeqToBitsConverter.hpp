@@ -21,6 +21,7 @@
 #include "Utils/CircularBuffer.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "spdlog/spdlog.h"
 
 using math_utils::round_up;
 using std::fill;
@@ -73,7 +74,8 @@ class ContinuousSeqToBitsConverter {
   public:
     auto read_and_generate() -> void {
       shared_ptr<StringSequenceBatch> read_batch;
-      while (*producer >> read_batch) {
+      for (uint batch_idx = 0; *producer >> read_batch; ++batch_idx) {
+        spdlog::trace("SetToBitsConverter has started batch {}", batch_idx);
         bit_batches.current_write()->resize(
           round_up<u64>(read_batch->cumulative_char_indexes.back(), 32) / 32
         );
@@ -109,6 +111,7 @@ class ContinuousSeqToBitsConverter {
         invalid_semaphore.release();
         bit_batches.step_write();
         bit_semaphore.release();
+        spdlog::trace("SetToBitsConverter has finished batch {}", batch_idx);
       }
       finished = true;
       bit_semaphore.release();

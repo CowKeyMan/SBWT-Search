@@ -23,6 +23,8 @@
 #include "Utils/CudaUtils.cuh"
 #include "Utils/MemoryUtils.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "spdlog/cfg/env.h"
+#include "spdlog/spdlog.h"
 
 using memory_utils::get_total_system_memory;
 using std::remove_reference;
@@ -52,6 +54,8 @@ const auto reversed_bits = true;
 const auto num_seq_to_bit_converters = 3;
 
 auto main(int argc, char **argv) -> int {
+  spdlog::set_level(spdlog::level::warn);
+  spdlog::cfg::load_env_levels();
   auto args = ArgumentParser(program_name, program_description, argc, argv);
   auto gpu_container = get_gpu_container(args.get_index_file());
   FilenamesParser filenames_parser(
@@ -62,7 +66,7 @@ auto main(int argc, char **argv) -> int {
   const auto max_batches = args.get_batches();
   const auto max_chars_per_batch
     = get_max_chars_per_batch(args.get_unavailable_ram(), max_batches);
-
+  spdlog::info("Using {} characters per batch", max_chars_per_batch);
   omp_set_nested(1);
   using SequenceFileParser = ContinuousSequenceFileParser;
   auto sequence_file_parser = make_shared<SequenceFileParser>(
@@ -162,6 +166,13 @@ auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t {
   size_t free = get_free_gpu_memory();
   auto max_chars_per_batch
     = round_down<size_t>(free * 8 / 66 / (max_batches + 1), threads_per_block);
+  spdlog::debug(
+    "Free gpu memory: {} bits ({:.2f}GB). This allows for {} characters per "
+    "batch",
+    free,
+    double(free) / 8 / 1024 / 1024 / 1024,
+    max_chars_per_batch
+  );
   return max_chars_per_batch;
 }
 
@@ -174,5 +185,12 @@ auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches)
   size_t free = get_total_system_memory() * 8 - unavailable_memory;
   auto max_chars_per_batch
     = round_down<size_t>(free / 460 / (max_batches + 1), threads_per_block);
+  spdlog::debug(
+    "Free main memory: {} bits ({:.2f}GB). This allows for {} characters per "
+    "batch",
+    free,
+    double(free) / 8 / 1024 / 1024 / 1024,
+    max_chars_per_batch
+  );
   return max_chars_per_batch;
 }

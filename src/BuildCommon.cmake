@@ -67,6 +67,16 @@ FetchContent_MakeAvailable(cxxopts)
 find_package(OpenMP REQUIRED)
 add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
 
+# Fetch spdlog
+FetchContent_Declare(
+  spdlog
+  QUIET
+  GIT_REPOSITORY       https://github.com/gabime/spdlog
+  GIT_TAG              v1.10.0
+  GIT_SHALLOW          TRUE
+  )
+FetchContent_MakeAvailable(spdlog)
+
 # My libraries
 add_library(
   parser
@@ -84,7 +94,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/CumulativePropertiesBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringSequenceBatchProducer.cpp"
 )
-target_link_libraries(sequence_file_parser PRIVATE io_utils)
+target_link_libraries(sequence_file_parser PRIVATE io_utils spdlog::spdlog)
 add_dependencies(sequence_file_parser kseqpp)
 add_library(
   filenames_parser
@@ -113,6 +123,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cu"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cu"
 )
+target_link_libraries(sbwt_container_gpu PRIVATE spdlog::spdlog)
 set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "60;70;80")
 add_dependencies(sbwt_container_gpu kseqpp)
 add_library(sbwt_container INTERFACE)
@@ -152,12 +163,14 @@ target_link_libraries(
   sbwt_writer
   positions_builder
   OpenMP::OpenMP_CXX
+  spdlog::spdlog
   # TODO: Link more libraries here
 )
 add_library(
   cuda_utils
   "${PROJECT_SOURCE_DIR}/Utils/CudaUtils.cu"
 )
+target_link_libraries(cuda_utils PRIVATE spdlog::spdlog)
 set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "60;70;80")
 
 

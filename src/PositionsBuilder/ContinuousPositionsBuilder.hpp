@@ -15,6 +15,7 @@
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/CircularBuffer.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "spdlog/spdlog.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -54,7 +55,8 @@ class ContinuousPositionsBuilder {
 
     auto read_and_generate() -> void {
       shared_ptr<CumulativePropertiesBatch> read_batch;
-      while (*producer >> read_batch) {
+      for (uint batch_idx = 0; *producer >> read_batch; ++batch_idx) {
+        spdlog::trace("PositionsBuider has started batch {}", batch_idx);
         builder.build_positions(
           read_batch->cumsum_positions_per_string,
           read_batch->cumsum_string_lengths,
@@ -62,6 +64,7 @@ class ContinuousPositionsBuilder {
         );
         batches.step_write();
         batch_semaphore.release();
+        spdlog::trace("PositionsBuider has finished batch {}", batch_idx);
       }
       finished = true;
       batch_semaphore.release();

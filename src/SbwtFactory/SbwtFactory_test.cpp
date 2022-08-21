@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 #include <sdsl/bit_vectors.hpp>
 
 #include "SbwtContainer/SbwtContainer.hpp"
@@ -19,6 +19,8 @@ using sdsl::bit_vector;
 using std::make_unique;
 using std::move;
 using std::unique_ptr;
+using io_utils::ThrowingOfstream;
+using std::runtime_error;
 
 namespace sbwt_search {
 

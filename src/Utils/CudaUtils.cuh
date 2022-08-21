@@ -7,21 +7,22 @@
  * */
 
 #include <cstddef>
-#include <iostream>
+#include <stdexcept>
 #include <vector>
+#include <sstream>
 
 namespace gpu_utils {
 
-using std::cerr;
-using std::endl;
 using std::vector;
+using std::runtime_error;
+using std::stringstream;
 
 inline void
-gpuAssert(cudaError_t code, const char *file, int line, bool abort = true) {
+gpuAssert(cudaError_t code, const char *file, int line) {
   if (code != cudaSuccess) {
-    cerr << "GPUassert: " << cudaGetErrorString(code) << " at " << file << ":"
-         << line << '\n';
-    if (abort) exit(code);
+    stringstream ss;
+    ss << "GPUassert: " << cudaGetErrorString(code) << " at " << file << ":" << line << '\n';
+    throw runtime_error(ss.str());
   }
 }
 #define GPU_CHECK(code_block) \

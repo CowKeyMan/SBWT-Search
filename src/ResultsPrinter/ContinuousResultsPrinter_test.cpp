@@ -4,10 +4,7 @@
 #include <memory>
 #include <string>
 
-#include "gtest/gtest_pred_impl.h"
-#include <ext/alloc_traits.h>
-#include <gtest/gtest-message.h>
-#include <gtest/gtest-test-part.h>
+#include "gtest/gtest.h"
 
 #include "BatchObjects/CumulativePropertiesBatch.h"
 #include "BatchObjects/IntervalBatch.h"

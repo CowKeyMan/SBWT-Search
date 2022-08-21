@@ -2,9 +2,7 @@
 #include <string>
 #include <vector>
 
-#include "gtest/gtest_pred_impl.h"
-#include <gtest/gtest-message.h>
-#include <gtest/gtest-test-part.h>
+#include "gtest/gtest.h"
 
 #include "TestUtils/BitVectorTestUtils.hpp"
 #include "TestUtils/RankTestUtils.hpp"

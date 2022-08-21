@@ -2,10 +2,7 @@
 #include <cstdlib>
 #include <vector>
 
-#include "gtest/gtest_pred_impl.h"
-#include <gtest/gtest-message.h>
-#include <gtest/gtest-test-part.h>
-#include <pstl/glue_algorithm_defs.h>
+#include "gtest/gtest.h"
 
 #include "Rank/Rank_test.hpp"
 #include "RankIndexBuilder/RankIndexBuilder.hpp"

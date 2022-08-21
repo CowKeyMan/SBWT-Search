@@ -6,7 +6,6 @@
  * @brief Gets results, intervals and list of invalid characters and prints
  * these out to disk based on the given data and filenames.
  * */
-
 #include <climits>
 #include <fstream>
 #include <iterator>
@@ -18,6 +17,7 @@
 #include "BatchObjects/IntervalBatch.h"
 #include "BatchObjects/StringSequenceBatch.h"
 #include "Utils/TypeDefinitions.h"
+#include "spdlog/spdlog.h"
 
 using std::next;
 using std::ofstream;
@@ -65,10 +65,13 @@ class ContinuousResultsPrinter {
     auto read_and_generate() -> void {
       if (current_filename == filenames.end()) { return; }
       open_next_file();
-      while ((*results_producer >> results)
-             & (*interval_producer >> interval_batch)
-             & (*invalid_chars_producer >> invalid_chars)) {
+      for (uint batch_idx = 0; (*results_producer >> results)
+                               & (*interval_producer >> interval_batch)
+                               & (*invalid_chars_producer >> invalid_chars);
+           ++batch_idx) {
+        spdlog::trace("ResultsPrinter has started batch {}", batch_idx);
         process_batch();
+        spdlog::trace("ResultsPrinter has finished batch {}", batch_idx);
       }
     }
 

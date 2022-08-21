@@ -11,6 +11,7 @@
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Searcher/Searcher.cuh"
 #include "Utils/TypeDefinitions.h"
+#include "spdlog/spdlog.h"
 
 using std::shared_ptr;
 
@@ -63,11 +64,14 @@ class ContinuousSearcher {
 
     void read_and_generate() {
       shared_ptr<vector<u64>> bit_seqs, kmer_positions;
-      while ((*bit_seq_producer >> bit_seqs)
-             & (*positions_producer >> kmer_positions)) {
+      for (uint batch_idx = 0; (*bit_seq_producer >> bit_seqs)
+                               & (*positions_producer >> kmer_positions);
+           ++batch_idx) {
+        spdlog::trace("Searcher has started batch {}", batch_idx);
         searcher.search(*bit_seqs, *kmer_positions, *batches.current_write());
         batches.step_write();
         semaphore.release();
+        spdlog::trace("Searcher has finished batch {}", batch_idx);
       }
       finished = true;
       batches.step_write();

@@ -38,6 +38,7 @@ class ContinuousSequenceFileParser {
     CumulativePropertiesBatchProducer cumulative_properties_batch_producer;
     IntervalBatchProducer interval_batch_producer;
     const uint bits_split = 64;
+    uint batch_idx = 0;
 
   public:
     ContinuousSequenceFileParser(

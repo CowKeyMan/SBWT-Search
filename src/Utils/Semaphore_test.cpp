@@ -2,6 +2,7 @@
 
 #include "Utils/Semaphore.hpp"
 #include "Utils/Semaphore_test.hpp"
+#include "gtest/gtest.h"
 
 namespace threading_utils {
 
