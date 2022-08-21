@@ -15,8 +15,8 @@ using std::string;
 namespace sbwt_search {
 
 StringSequenceBatchProducer::StringSequenceBatchProducer(
-  const uint max_strings_per_batch,
-  const uint max_chars_per_batch,
+  const size_t max_strings_per_batch,
+  const size_t max_chars_per_batch,
   const uint max_batches,
   const uint num_readers,
   const uint bits_split
@@ -52,6 +52,7 @@ auto StringSequenceBatchProducer::add_string(const string &s) -> void {
   if (s.size() > chars_to_next_index) {
     batch.char_indexes.push_back(chars_to_next_index);
     batch.string_indexes.push_back(batch.buffer.size());
+    batch.cumulative_char_indexes.push_back(current_batch_size + chars_to_next_index);
     chars_to_next_index += chars_per_reader - s.size();
   } else {
     chars_to_next_index -= s.size();

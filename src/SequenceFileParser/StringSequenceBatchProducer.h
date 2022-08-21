@@ -38,8 +38,8 @@ class StringSequenceBatchProducer {
 
   public:
     StringSequenceBatchProducer(
-      const uint max_strings_per_batch,
-      const uint max_chars_per_batch,
+      const size_t max_strings_per_batch,
+      const size_t max_chars_per_batch,
       const uint max_batches,
       const uint num_readers,
       const uint bits_split = 64
