@@ -9,3 +9,4 @@ This part of the documentation will describe the project documentation, which is
 
    BenchmarkingNotes
    Components
+   Searching

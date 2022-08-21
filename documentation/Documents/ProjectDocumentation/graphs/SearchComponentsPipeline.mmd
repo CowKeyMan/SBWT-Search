@@ -1,0 +1,79 @@
+flowchart TD
+    StringSequenceBatch(["
+        StringSequenceBatch
+        <i>
+        buffers (max_characters * 64 + max_characters * 8)
+        string_indexes ((num_readers + 1) * 64)
+        cumulative_char_indexes ((num_readers + 1) * 64)
+        char_indexes ((num_readers + 1) * 64)
+
+        </i>
+    "])
+    CumulativePropertiesBatch(["
+        CumulativePropertiesBatch
+        <i>
+        cumsum_positions_per_string (max_characters * 64)
+        cumsum_string_lengths (max_characters * 64)
+
+        </i>
+    "])
+    IntervalBatch(["
+        IntervalBatch
+        <i>
+        string_before_newfile (max_characters * 64)
+        string_lengths (max_characters * 64)
+
+        </i>
+    "])
+    Positions(["
+        Positions
+        <i>
+        (max_characters * 64)
+
+        </i>
+    "])
+    BitSeqs(["
+        BitSeqs
+        <i>
+        (max_characters * 2)
+
+        </i>
+    "])
+    Results(["
+        Results
+        <i>
+        (max_characters * 64)
+
+        </i>
+    "])
+    InvalidChars(["
+        InvalidChars
+        <i>
+        (max_characters * 8)
+
+        </i>
+    "])
+
+    FASTA{FASTA}-->ContinuousSequenceFileParser
+    subgraph ContinuousSequenceFileParser\n
+        StringSequenceBatchProducer
+        CumulativePropertiesBatchProducer
+        IntervalBatchProducer
+    end
+    StringSequenceBatchProducer --- StringSequenceBatch
+    CumulativePropertiesBatchProducer --- CumulativePropertiesBatch
+    IntervalBatchProducer --- IntervalBatch
+    ContinuousPositionsBuilder --- Positions
+    ContinuousSeqToBitsConverter --- BitSeqs
+    ContinuousSeqToBitsConverter --- InvalidChars
+    ContinuousSearcher --- Results
+
+    StringSequenceBatch-->ContinuousSeqToBitsConverter
+    CumulativePropertiesBatch-->ContinuousPositionsBuilder
+    Positions --> ContinuousSearcher
+    BitSeqs --> ContinuousSearcher
+    Results --> ContinuousResultsPrinter
+    InvalidChars --> ContinuousResultsPrinter
+    IntervalBatch --> ContinuousResultsPrinter
+
+    ContinuousResultsPrinter--> ResultFiles{Results}
