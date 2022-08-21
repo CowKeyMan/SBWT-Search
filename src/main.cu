@@ -68,6 +68,9 @@ auto main(int argc, char **argv) -> int {
     = get_max_chars_per_batch(args.get_unavailable_ram(), max_batches);
   spdlog::info("Using {} characters per batch", max_chars_per_batch);
   omp_set_nested(1);
+#pragma omp parallel
+#pragma omp single
+  spdlog::info("Running OpenMP with {} threads", omp_get_num_threads());
   using SequenceFileParser = ContinuousSequenceFileParser;
   auto sequence_file_parser = make_shared<SequenceFileParser>(
     input_filenames,
@@ -170,7 +173,7 @@ auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t {
     "Free gpu memory: {} bits ({:.2f}GB). This allows for {} characters per "
     "batch",
     free,
-    double(free) / 8 / 1024 / 1024 / 1024,
+    double(free) / 1024 / 1024 / 1024,
     max_chars_per_batch
   );
   return max_chars_per_batch;
