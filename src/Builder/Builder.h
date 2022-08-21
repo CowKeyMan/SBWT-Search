@@ -15,6 +15,7 @@ class Builder {
 
   protected:
     void check_if_has_built();
+
     Builder(){};
 };
 
