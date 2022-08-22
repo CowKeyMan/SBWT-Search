@@ -55,7 +55,7 @@ flowchart TD
     "])
 
     FASTA{FASTA}-->ContinuousSequenceFileParser
-    subgraph ContinuousSequenceFileParser\n
+    subgraph ContinuousSequenceFileParser
         StringSequenceBatchProducer
         CumulativePropertiesBatchProducer
         IntervalBatchProducer
