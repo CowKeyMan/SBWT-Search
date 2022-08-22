@@ -36,10 +36,10 @@ using math_utils::round_down;
 using std::endl;
 
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer>;
-auto get_max_chars_per_batch(size_t unavailable_memory, uint max_batches)
+auto get_max_chars_per_batch(size_t unavailable_memory, uint max_batches, size_t max_cpu_memory)
   -> size_t;
 auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t;
-auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches)
+auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches, size_t max_memory)
   -> size_t;
 
 const auto program_name = "SBWT Search";
@@ -66,7 +66,10 @@ auto main(int argc, char **argv) -> int {
   auto output_filenames = filenames_parser.get_output_filenames();
   const auto max_batches = args.get_batches();
   const auto max_chars_per_batch
-    = get_max_chars_per_batch(args.get_unavailable_ram(), max_batches);
+    = get_max_chars_per_batch(args.get_unavailable_ram(), max_batches, args.get_max_cpu_memory());
+  if (max_chars_per_batch == 0) {
+    throw runtime_error("Not enough memory");
+  }
   spdlog::info("Using {} characters per batch", max_chars_per_batch);
   omp_set_nested(1);
 #pragma omp parallel
@@ -159,10 +162,10 @@ auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
   return gpu_container;
 }
 
-auto get_max_chars_per_batch(size_t unavailable_memory, uint max_batches)
+auto get_max_chars_per_batch(size_t unavailable_memory, uint max_batches, size_t max_cpu_memory)
   -> size_t {
   auto gpu_chars = get_max_chars_per_batch_gpu(max_batches);
-  auto cpu_chars = get_max_chars_per_batch_cpu(unavailable_memory, max_batches);
+  auto cpu_chars = get_max_chars_per_batch_cpu(unavailable_memory, max_batches, max_cpu_memory);
   if (gpu_chars < cpu_chars) { return gpu_chars; }
   return cpu_chars;
 }
@@ -181,7 +184,7 @@ auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t {
   return max_chars_per_batch;
 }
 
-auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches)
+auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches, size_t max_memory)
   -> size_t {
   if (unavailable_memory > get_total_system_memory() * 8) {
     throw runtime_error("Not enough memory. Please specify a lower number of "
@@ -190,6 +193,7 @@ auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches)
   size_t free = get_total_system_memory() * 8 - unavailable_memory;
   auto max_chars_per_batch
     = round_down<size_t>(free / 460 / (max_batches + 1), threads_per_block);
+  if (max_memory < free) { free = max_memory; }
   spdlog::debug(
     "Free main memory: {} bits ({:.2f}GB). This allows for {} characters per "
     "batch",

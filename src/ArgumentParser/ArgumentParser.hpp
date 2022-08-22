@@ -97,7 +97,7 @@ class ArgumentParser {
     auto get_index_file() -> string { return args["i"].as<string>(); }
     auto get_output_file() -> string { return args["o"].as<string>(); }
     auto get_unavailable_ram() -> size_t { return args["u"].as<size_t>(); }
-    auto get_max_memory() -> size_t { return args["m"].as<size_t>(); }
+    auto get_max_cpu_memory() -> size_t { return args["m"].as<size_t>(); }
     auto get_batches() -> unsigned int { return args["b"].as<unsigned int>(); }
 };
 
