@@ -34,7 +34,6 @@ module load python-data
 module load bzip2
 
 export OLD_PWD="${PWD}"
-mkdir -p "main_results"
 
 cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
@@ -47,4 +46,4 @@ sh scripts/build/release.sh
 /usr/bin/time ./build/bin/main_cuda -i test_objects/parsed100.sbwt -q test_objects/fastq.fastq -o main_results/output.txt -u 429496729600
 
 cd "${OLD_PWD}"
-cp -r "${LOCAL_SCRATCH}/SBWT-Search/main_results" main_results
+cp -r "${LOCAL_SCRATCH}/SBWT-Search/main_results" .
