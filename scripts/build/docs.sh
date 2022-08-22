@@ -14,6 +14,7 @@ cmake \
   -DBUILD_TESTS=OFF \
   -DBUILD_BENCHMARKS=OFF \
   -DBUILD_DOCS=ON \
+  -DENABLE_PROFILING=OFF \
   ..
 cmake --build . -j8
 cd ../documentation

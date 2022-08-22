@@ -27,9 +27,9 @@ include(cmake/PreventBuildingInCmakeDirectory.cmake)
 include(cmake/ExportCompileCommands.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/StaticAnalyzers.cmake)
+include(cmake/Profiling.cmake)
 include(cmake/Options.cmake)
 include(cmake/CCache.cmake)
 
 add_subdirectory(src)
 add_subdirectory (documentation)
-

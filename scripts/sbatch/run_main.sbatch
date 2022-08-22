@@ -47,4 +47,4 @@ sh scripts/build/release.sh
 /usr/bin/time ./build/bin/main_cuda -i test_objects/parsed100.sbwt -q test_objects/fastq.fastq -o main_results/output.txt -u 429496729600
 
 cd "${OLD_PWD}"
-cp -r main_results "${LOCAL_SCRATCH}/SBWT-Search/main
+cp -r main_results "${LOCAL_SCRATCH}/SBWT-Search/main_results"

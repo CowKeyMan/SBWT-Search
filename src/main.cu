@@ -56,6 +56,7 @@ const auto num_seq_to_bit_converters = 3;
 auto main(int argc, char **argv) -> int {
   spdlog::set_level(spdlog::level::warn);
   spdlog::cfg::load_env_levels();
+  spdlog::info("Loading SBWT index");
   auto args = ArgumentParser(program_name, program_description, argc, argv);
   auto gpu_container = get_gpu_container(args.get_index_file());
   FilenamesParser filenames_parser(
@@ -134,6 +135,7 @@ auto main(int argc, char **argv) -> int {
 #pragma omp section
     results_printer->read_and_generate();
   }
+  spdlog::info("DONE");
 }
 
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
