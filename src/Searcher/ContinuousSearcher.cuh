@@ -74,7 +74,6 @@ class ContinuousSearcher {
         semaphore.release();
       }
       finished = true;
-      batches.step_write();
       semaphore.release();
     }
 
