@@ -107,11 +107,11 @@ class ContinuousSeqToBitsConverter {
             ++write_index;
           }
         }
+        spdlog::trace("SeqToBitsConverter has finished batch {}", batch_idx);
         invalid_batches.step_write();
         invalid_semaphore.release();
         bit_batches.step_write();
         bit_semaphore.release();
-        spdlog::trace("SeqToBitsConverter has finished batch {}", batch_idx);
       }
       finished = true;
       bit_semaphore.release();

@@ -69,9 +69,9 @@ class ContinuousSearcher {
            ++batch_idx) {
         spdlog::trace("Searcher has started batch {}", batch_idx);
         searcher.search(*bit_seqs, *kmer_positions, *batches.current_write());
+        spdlog::trace("Searcher has finished batch {}", batch_idx);
         batches.step_write();
         semaphore.release();
-        spdlog::trace("Searcher has finished batch {}", batch_idx);
       }
       finished = true;
       batches.step_write();

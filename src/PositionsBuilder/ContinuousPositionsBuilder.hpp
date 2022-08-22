@@ -62,9 +62,9 @@ class ContinuousPositionsBuilder {
           read_batch->cumsum_string_lengths,
           *batches.current_write()
         );
+        spdlog::trace("PositionsBuider has finished batch {}", batch_idx);
         batches.step_write();
         batch_semaphore.release();
-        spdlog::trace("PositionsBuider has finished batch {}", batch_idx);
       }
       finished = true;
       batch_semaphore.release();

@@ -102,10 +102,10 @@ auto ContinuousSequenceFileParser::start_new_batch() -> void {
 }
 
 auto ContinuousSequenceFileParser::terminate_batch() -> void {
+  spdlog::trace("SequenceFileParser has finished batch {}", batch_idx++);
   string_sequence_batch_producer.terminate_batch();
   cumulative_properties_batch_producer.terminate_batch();
   interval_batch_producer.terminate_batch();
-  spdlog::trace("SequenceFileParser has finished batch {}", batch_idx++);
 }
 
 auto ContinuousSequenceFileParser::process_file(const string &filename)
