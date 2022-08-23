@@ -20,6 +20,13 @@ link_libraries(gcov)
 # External Dependencies
 include(ExternalProject)
 include(FetchContent)
+
+if(EXISTS "${CMAKE_BINARY_DIR}/external/kseqpp/lib/pkgconfig/kseq++.pc")
+  set(KSEQPP_FOUND TRUE)
+else()
+  set(KSEQPP_FOUND FALSE)
+endif()
+if (NOT KSEQPP_FOUND)
 ## Fetch kseqpp
 ExternalProject_Add(
   kseqpp
@@ -29,25 +36,28 @@ ExternalProject_Add(
   CMAKE_ARGS
 		-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 )
+endif()
 include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include")
 
 ## Fetch ZLIB
 find_package(ZLIB)
 
+find_library(SDSL_FOUND NAMES libsdsl sdsl PATHS "${CMAKE_BINARY_DIR}/external/sdsl/lib/" "${CMAKE_BINARY_DIR}/external/sdsl/")
+if (NOT SDSL_FOUND)
 ## Fetch sdsl
-ExternalProject_Add(
-  sdsl
-  GIT_REPOSITORY  https://github.com/simongog/sdsl-lite/
-  GIT_TAG         v2.1.1
-  PREFIX          "${CMAKE_BINARY_DIR}/external/sdsl"
-  CMAKE_ARGS
-    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-)
+  ExternalProject_Add(
+    sdsl
+    GIT_REPOSITORY  https://github.com/simongog/sdsl-lite/
+    GIT_TAG         v2.1.1
+    PREFIX          "${CMAKE_BINARY_DIR}/external/sdsl"
+    CMAKE_ARGS
+      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  )
+endif()
 add_library(libsdsl SHARED IMPORTED)
 set_target_properties(libsdsl PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/external/sdsl/lib/libsdsl.a")
-ExternalProject_Get_Property(sdsl SOURCE_DIR)
-set (sdsl_SOURCE_DIR "${SOURCE_DIR}")
-include_directories(SYSTEM "${sdsl_SOURCE_DIR}/include")
+include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/sdsl/include")
+
 
 ## Fetch cxxopts
 FetchContent_Declare(
@@ -76,6 +86,7 @@ FetchContent_Declare(
   GIT_SHALLOW          TRUE
   )
 FetchContent_MakeAvailable(spdlog)
+include_directories(SYSTEM "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
 
 # My libraries
 add_library(
@@ -95,7 +106,9 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringSequenceBatchProducer.cpp"
 )
 target_link_libraries(sequence_file_parser PRIVATE io_utils spdlog::spdlog)
+if(NOT KSEQPP_FOUND)
 add_dependencies(sequence_file_parser kseqpp)
+endif()
 add_library(
   filenames_parser
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
@@ -106,12 +119,16 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtParser/SdslSbwtParser.cpp"
 )
 target_link_libraries(sbwt_parser PRIVATE libsdsl io_utils)
+if (NOT SDSL_FOUND)
 add_dependencies(sbwt_parser sdsl)
+endif()
 add_library(
   sbwt_container_cpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
 )
+if (NOT SDSL_FOUND)
 add_dependencies(sbwt_container_cpu sdsl)
+endif()
 target_link_libraries(sbwt_container_cpu PRIVATE libsdsl)
 add_library(
   positions_builder
@@ -125,7 +142,12 @@ add_library(
 )
 target_link_libraries(sbwt_container_gpu PRIVATE spdlog::spdlog)
 set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+if(NOT KSEQPP_FOUND)
 add_dependencies(sbwt_container_gpu kseqpp)
+endif()
+if (NOT SDSL_FOUND)
+add_dependencies(sbwt_container_gpu sdsl)
+endif()
 add_library(sbwt_container INTERFACE)
 target_link_libraries(
   sbwt_container
@@ -144,7 +166,9 @@ target_link_libraries(
   libsdsl
   sbwt_container
 )
+if(NOT KSEQPP_FOUND)
 add_dependencies(sbwt_writer kseqpp)
+endif()
 
 # Common libraries
 add_library(common_libraries INTERFACE)
