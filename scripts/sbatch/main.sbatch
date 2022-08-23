@@ -33,6 +33,7 @@ module load cuda
 module load python-data
 module load bzip2
 
+unset OMP_NUM_THREADS
 export OLD_PWD="${PWD}"
 
 cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
