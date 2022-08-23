@@ -7,21 +7,21 @@
  * */
 
 #include <cstddef>
+#include <sstream>
 #include <stdexcept>
 #include <vector>
-#include <sstream>
 
 namespace gpu_utils {
 
-using std::vector;
 using std::runtime_error;
 using std::stringstream;
+using std::vector;
 
-inline void
-gpuAssert(cudaError_t code, const char *file, int line) {
+inline void gpuAssert(cudaError_t code, const char *file, int line) {
   if (code != cudaSuccess) {
     stringstream ss;
-    ss << "GPUassert: " << cudaGetErrorString(code) << " at " << file << ":" << line << '\n';
+    ss << "GPUassert: " << cudaGetErrorString(code) << " at " << file << ":"
+       << line << '\n';
     throw runtime_error(ss.str());
   }
 }

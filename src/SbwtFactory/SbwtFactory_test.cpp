@@ -15,12 +15,12 @@
 #include "Utils/TypeDefinitions.h"
 #include "sdsl/bit_vectors.hpp"
 
+using io_utils::ThrowingOfstream;
 using sdsl::bit_vector;
 using std::make_unique;
 using std::move;
-using std::unique_ptr;
-using io_utils::ThrowingOfstream;
 using std::runtime_error;
+using std::unique_ptr;
 
 namespace sbwt_search {
 
