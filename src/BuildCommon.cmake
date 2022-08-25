@@ -98,6 +98,12 @@ add_library(
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
 )
 add_library(
+  log_utils
+  "${PROJECT_SOURCE_DIR}/Utils/LogUtils.cpp"
+)
+target_link_libraries(log_utils PRIVATE spdlog::spdlog)
+
+add_library(
   sequence_file_parser
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser.cpp"
@@ -187,7 +193,7 @@ target_link_libraries(
   sbwt_writer
   positions_builder
   OpenMP::OpenMP_CXX
-  spdlog::spdlog
+  log_utils
   # TODO: Link more libraries here
 )
 add_library(
