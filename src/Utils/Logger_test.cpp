@@ -2,22 +2,24 @@
 // https://stackoverflow.com/questions/66473052/how-can-i-read-spdlog-output-in-a-google-test
 
 #include <cstdlib>
-#include <iostream>
+#include <string>
 
 #include <gtest/gtest.h>
 
-#include "Utils/LogUtils.h"
+#include "Utils/Logger.h"
 #include "spdlog/sinks/ostream_sink.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
 using std::basic_streambuf;
 using std::char_traits;
 using std::cout;
+using std::make_shared;
 using std::ostream;
+using std::string;
 using std::stringstream;
 
 namespace log_utils {
-
 class LogUtilsTest: public ::testing::Test {
   protected:
     basic_streambuf<char, char_traits<char>> *old_buf;
@@ -25,25 +27,49 @@ class LogUtilsTest: public ::testing::Test {
     int i;
     char buffer[500];
 
-    auto SetUp() -> void override {
-      auto ostream_logger = spdlog::get("gtest_logger");
-      if (!ostream_logger) {
-        auto ostream_sink
-          = std::make_shared<spdlog::sinks::ostream_sink_st>(stream);
-        ostream_logger
-          = std::make_shared<spdlog::logger>("gtest_logger", ostream_sink);
-        ostream_logger->set_pattern(">%v<");
-        ostream_logger->set_level(spdlog::level::debug);
-      }
+    auto SetUp(bool set_json_pattern) -> void {
+      auto ostream_sink = make_shared<spdlog::sinks::ostream_sink_st>(stream);
+      auto ostream_logger = std::make_shared<spdlog::logger>("", ostream_sink);
+      ostream_logger->set_level(spdlog::level::debug);
       spdlog::set_default_logger(ostream_logger);
-      initialise_global_logging(LOG_LEVEL::TRACE);
+      Logger::initialise_global_logging(
+        Logger::LOG_LEVEL::TRACE, set_json_pattern
+      );
     }
 
-    auto TearDown() -> void override { spdlog::drop_all(); }
+    auto TearDown() -> void override {
+      spdlog::drop_all();
+      spdlog::set_default_logger(spdlog::stdout_color_mt(""));
+    }
 };
 
+#include <iostream>
+using namespace std;
+
+TEST_F(LogUtilsTest, NormalLog) {
+  SetUp(false);
+  Logger::log(Logger::LOG_LEVEL::TRACE, "hello");
+  auto s = stream.str();
+  sscanf(
+    s.c_str(),
+    R"([%d-%d-%d %d:%d:%d.%d] %s %s)",
+    &i,
+    &i,
+    &i,
+    &i,
+    &i,
+    &i,
+    &i,
+    buffer,
+    &buffer[250]
+  );
+  ASSERT_EQ("[trace]", string(buffer));
+  ASSERT_EQ("hello", string(&buffer[250]));
+}
+
 TEST_F(LogUtilsTest, NormalLogJson) {
-  log(LOG_LEVEL::WARN, "hello");
+  SetUp(true);
+  Logger::log(Logger::LOG_LEVEL::WARN, "hello");
   auto s = stream.str();
   sscanf(
     s.c_str(),
@@ -64,10 +90,9 @@ TEST_F(LogUtilsTest, NormalLogJson) {
   ASSERT_EQ(R"("hello"}})", string(buffer));
 }
 
-using namespace std;
-
 TEST_F(LogUtilsTest, TimeEvent) {
-  log_timed_event("test", EVENT_STATE::START, "hello");
+  SetUp(true);
+  Logger::log_timed_event("test", Logger::EVENT_STATE::START, "hello");
   auto s = stream.str();
   sscanf(
     s.c_str(),
