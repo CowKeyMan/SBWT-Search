@@ -16,9 +16,12 @@
 
 #include "BatchObjects/IntervalBatch.h"
 #include "BatchObjects/StringSequenceBatch.h"
+#include "Utils/Logger.h"
 #include "Utils/TypeDefinitions.h"
-#include "spdlog/spdlog.h"
+#include "fmt/core.h"
 
+using fmt::format;
+using log_utils::Logger;
 using std::next;
 using std::ofstream;
 using std::shared_ptr;
@@ -69,9 +72,17 @@ class ContinuousResultsPrinter {
                                & (*interval_producer >> interval_batch)
                                & (*invalid_chars_producer >> invalid_chars);
            ++batch_idx) {
-        spdlog::trace("ResultsPrinter has started batch {}", batch_idx);
+        Logger::log_timed_event(
+          "ResultsPrinter",
+          Logger::EVENT_STATE::START,
+          format("batch {}", batch_idx)
+        );
         process_batch();
-        spdlog::trace("ResultsPrinter has finished batch {}", batch_idx);
+        Logger::log_timed_event(
+          "ResultsPrinter",
+          Logger::EVENT_STATE::STOP,
+          format("batch {}", batch_idx)
+        );
       }
     }
 

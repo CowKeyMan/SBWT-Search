@@ -52,7 +52,7 @@ auto Logger::log(LOG_LEVEL level, const string &s) -> void {
 }
 
 auto Logger::log_timed_event(
-  string component,
+  const string &component,
   EVENT_STATE start_stop,
   const string &message,
   LOG_LEVEL level

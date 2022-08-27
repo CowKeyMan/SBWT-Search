@@ -27,7 +27,7 @@ class Logger {
     ) -> void;
     static auto log(LOG_LEVEL level, const string &s) -> void;
     static auto log_timed_event(
-      string component,
+      const string &component,
       EVENT_STATE start_stop,
       const string &message = "",
       LOG_LEVEL level = LOG_LEVEL::TRACE

@@ -7,9 +7,10 @@
 #include "SequenceFileParser/IntervalBatchProducer.h"
 #include "SequenceFileParser/SequenceFileParser.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
+#include "Utils/Logger.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
-#include "spdlog/spdlog.h"
+#include "fmt/core.h"
 
 namespace sbwt_search {
 class CumulativePropertiesBatch;
@@ -17,6 +18,8 @@ class IntervalBatch;
 class StringSequenceBatch;
 }  // namespace sbwt_search
 
+using fmt::format;
+using log_utils::Logger;
 using math_utils::round_down;
 using std::runtime_error;
 using std::shared_ptr;
@@ -56,10 +59,14 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
 auto ContinuousSequenceFileParser::read_and_generate() -> void {
   start_new_batch();
   for (auto &filename: filenames) {
-    spdlog::info("Now reading file {}", filename);
+    Logger::log(
+      Logger::LOG_LEVEL::INFO, format("Now reading file {}", filename)
+    );
     try {
       process_file(filename);
-    } catch (runtime_error &e) { spdlog::error(e.what()); }
+    } catch (runtime_error &e) {
+      Logger::log(Logger::LOG_LEVEL::ERROR, e.what());
+    }
     interval_batch_producer.file_end();
   }
   terminate_batch();
@@ -98,11 +105,19 @@ auto ContinuousSequenceFileParser::start_new_batch() -> void {
   cumulative_properties_batch_producer.start_new_batch();
   interval_batch_producer.start_new_batch();
   current_batch_size = current_batch_strings = 0;
-  spdlog::trace("SequenceFileParser has started batch {}", batch_idx);
+  Logger::log_timed_event(
+    "SequenceFileParser",
+    Logger::EVENT_STATE::START,
+    format("batch {}", batch_idx)
+  );
 }
 
 auto ContinuousSequenceFileParser::terminate_batch() -> void {
-  spdlog::trace("SequenceFileParser has finished batch {}", batch_idx++);
+  Logger::log_timed_event(
+    "SequenceFileParser",
+    Logger::EVENT_STATE::STOP,
+    format("batch {}", batch_idx++)
+  );
   string_sequence_batch_producer.terminate_batch();
   cumulative_properties_batch_producer.terminate_batch();
   interval_batch_producer.terminate_batch();
@@ -152,9 +167,13 @@ auto ContinuousSequenceFileParser::string_larger_than_limit(const string &s)
 auto ContinuousSequenceFileParser::print_string_too_large(
   const string &filename, const uint string_index
 ) -> void {
-  spdlog::error(
-    "The string in file " + filename + " at position " + to_string(string_index)
-    + " is too large\n"
+  Logger::log(
+    Logger::LOG_LEVEL::ERROR,
+    format(
+      "The string in file {} at position {} is too large\n",
+      filename,
+      string_index
+    )
   );
 }
 

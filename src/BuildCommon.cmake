@@ -21,6 +21,14 @@ link_libraries(gcov)
 include(ExternalProject)
 include(FetchContent)
 
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY       https://github.com/fmtlib/fmt.git
+  GIT_TAG              9.1.0
+  GIT_SHALLOW          TRUE
+)
+FetchContent_MakeAvailable(fmt)
+
 if(EXISTS "${CMAKE_BINARY_DIR}/external/kseqpp/lib/pkgconfig/kseq++.pc")
   set(KSEQPP_FOUND TRUE)
 else()
@@ -111,7 +119,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/CumulativePropertiesBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringSequenceBatchProducer.cpp"
 )
-target_link_libraries(sequence_file_parser PRIVATE io_utils spdlog::spdlog)
+target_link_libraries(sequence_file_parser PRIVATE io_utils fmt::fmt)
 if(NOT KSEQPP_FOUND)
 add_dependencies(sequence_file_parser kseqpp)
 endif()
@@ -146,8 +154,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cu"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cu"
 )
-target_link_libraries(sbwt_container_gpu PRIVATE spdlog::spdlog)
-set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "80;70;60")
 if(NOT KSEQPP_FOUND)
 add_dependencies(sbwt_container_gpu kseqpp)
 endif()
@@ -194,13 +201,13 @@ target_link_libraries(
   positions_builder
   OpenMP::OpenMP_CXX
   logger
+  fmt::fmt
   # TODO: Link more libraries here
 )
 add_library(
   cuda_utils
   "${PROJECT_SOURCE_DIR}/Utils/CudaUtils.cu"
 )
-target_link_libraries(cuda_utils PRIVATE spdlog::spdlog)
 set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "60;70;80")
 
 

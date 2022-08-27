@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
-#include "spdlog/spdlog.h"
+#include "Utils/Logger.h"
+
+using log_utils::Logger;
 
 int main(int argc, char **argv) {
-  spdlog::set_level(spdlog::level::off);
+  Logger::initialise_global_logging(Logger::LOG_LEVEL::OFF);
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

@@ -21,26 +21,33 @@
 #include "SequenceFileParser/ContinuousSequenceFileParser.h"
 #include "Utils/BenchmarkUtils.hpp"
 #include "Utils/CudaUtils.cuh"
+#include "Utils/Logger.h"
 #include "Utils/MemoryUtils.hpp"
 #include "Utils/TypeDefinitions.h"
-#include "spdlog/cfg/env.h"
-#include "spdlog/spdlog.h"
+#include "fmt/core.h"
 
 using memory_utils::get_total_system_memory;
 using std::remove_reference;
 using std::runtime_error;
 using std::string;
 using namespace sbwt_search;
+using fmt::format;
 using gpu_utils::get_free_gpu_memory;
+using log_utils::Logger;
 using math_utils::round_down;
 using std::endl;
+constexpr auto WARN = Logger::LOG_LEVEL::WARN;
+constexpr auto INFO = Logger::LOG_LEVEL::INFO;
+constexpr auto DEBUG = Logger::LOG_LEVEL::DEBUG;
 
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer>;
-auto get_max_chars_per_batch(size_t unavailable_memory, uint max_batches, size_t max_cpu_memory)
-  -> size_t;
+auto get_max_chars_per_batch(
+  size_t unavailable_memory, uint max_batches, size_t max_cpu_memory
+) -> size_t;
 auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t;
-auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches, size_t max_memory)
-  -> size_t;
+auto get_max_chars_per_batch_cpu(
+  size_t unavailable_memory, uint max_batches, size_t max_memory
+) -> size_t;
 
 const auto program_name = "SBWT Search";
 const auto program_description
@@ -54,27 +61,30 @@ const auto reversed_bits = true;
 const auto num_seq_to_bit_converters = 3;
 
 auto main(int argc, char **argv) -> int {
-  spdlog::set_level(spdlog::level::warn);
-  spdlog::cfg::load_env_levels();
-  spdlog::info("Loading SBWT index");
+  Logger::initialise_global_logging(WARN);
+  Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::START);
   auto args = ArgumentParser(program_name, program_description, argc, argv);
   auto gpu_container = get_gpu_container(args.get_index_file());
+  Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::STOP);
   FilenamesParser filenames_parser(
     args.get_sequence_file(), args.get_output_file()
   );
   auto input_filenames = filenames_parser.get_input_filenames();
   auto output_filenames = filenames_parser.get_output_filenames();
   const auto max_batches = args.get_batches();
-  const auto max_chars_per_batch
-    = get_max_chars_per_batch(args.get_unavailable_ram(), max_batches, args.get_max_cpu_memory());
-  if (max_chars_per_batch == 0) {
-    throw runtime_error("Not enough memory");
-  }
-  spdlog::info("Using {} characters per batch", max_chars_per_batch);
+  const auto max_chars_per_batch = get_max_chars_per_batch(
+    args.get_unavailable_ram(), max_batches, args.get_max_cpu_memory()
+  );
+  if (max_chars_per_batch == 0) { throw runtime_error("Not enough memory"); }
+  Logger::log(
+    INFO, "Using " + to_string(max_chars_per_batch) + " characters per batch"
+  );
   omp_set_nested(1);
 #pragma omp parallel
 #pragma omp single
-  spdlog::info("Running OpenMP with {} threads", omp_get_num_threads());
+  Logger::log(
+    INFO, format("Running OpenMP with {} threads", omp_get_num_threads())
+  );
   using SequenceFileParser = ContinuousSequenceFileParser;
   auto sequence_file_parser = make_shared<SequenceFileParser>(
     input_filenames,
@@ -138,7 +148,7 @@ auto main(int argc, char **argv) -> int {
 #pragma omp section
     results_printer->read_and_generate();
   }
-  spdlog::info("DONE");
+  Logger::log(INFO, "DONE");
 }
 
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
@@ -162,10 +172,13 @@ auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
   return gpu_container;
 }
 
-auto get_max_chars_per_batch(size_t unavailable_memory, uint max_batches, size_t max_cpu_memory)
-  -> size_t {
+auto get_max_chars_per_batch(
+  size_t unavailable_memory, uint max_batches, size_t max_cpu_memory
+) -> size_t {
   auto gpu_chars = get_max_chars_per_batch_gpu(max_batches);
-  auto cpu_chars = get_max_chars_per_batch_cpu(unavailable_memory, max_batches, max_cpu_memory);
+  auto cpu_chars = get_max_chars_per_batch_cpu(
+    unavailable_memory, max_batches, max_cpu_memory
+  );
   if (gpu_chars < cpu_chars) { return gpu_chars; }
   return cpu_chars;
 }
@@ -174,18 +187,23 @@ auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t {
   size_t free = get_free_gpu_memory();
   auto max_chars_per_batch
     = round_down<size_t>(free * 8 / 66 / (max_batches + 1), threads_per_block);
-  spdlog::debug(
-    "Free gpu memory: {} bits ({:.2f}GB). This allows for {} characters per "
-    "batch",
-    free,
-    double(free) / 1024 / 1024 / 1024,
-    max_chars_per_batch
+
+  Logger::log(
+    Logger::LOG_LEVEL::DEBUG,
+    format(
+      "Free gpu memory: {} bits ({:.2f}GB). This allows for {} characters per "
+      "batch",
+      free,
+      double(free) / 1024 / 1024 / 1024,
+      max_chars_per_batch
+    )
   );
   return max_chars_per_batch;
 }
 
-auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches, size_t max_memory)
-  -> size_t {
+auto get_max_chars_per_batch_cpu(
+  size_t unavailable_memory, uint max_batches, size_t max_memory
+) -> size_t {
   if (unavailable_memory > get_total_system_memory() * 8) {
     throw runtime_error("Not enough memory. Please specify a lower number of "
                         "unavailable-main-memory.");
@@ -194,12 +212,15 @@ auto get_max_chars_per_batch_cpu(size_t unavailable_memory, uint max_batches, si
   auto max_chars_per_batch
     = round_down<size_t>(free / 460 / (max_batches + 1), threads_per_block);
   if (max_memory < free) { free = max_memory; }
-  spdlog::debug(
-    "Free main memory: {} bits ({:.2f}GB). This allows for {} characters per "
-    "batch",
-    free,
-    double(free) / 8 / 1024 / 1024 / 1024,
-    max_chars_per_batch
+  Logger::log(
+    DEBUG,
+    format(
+      "Free main memory: {} bits ({:.2f}GB). This allows for {} "
+      "characters per batch",
+      free,
+      double(free) / 8 / 1024 / 1024 / 1024,
+      max_chars_per_batch
+    )
   );
   return max_chars_per_batch;
 }

@@ -10,9 +10,12 @@
 
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Searcher/Searcher.cuh"
+#include "Utils/Logger.h"
 #include "Utils/TypeDefinitions.h"
-#include "spdlog/spdlog.h"
+#include "fmt/core.h"
 
+using fmt::format;
+using log_utils::Logger;
 using std::shared_ptr;
 
 namespace sbwt_search {
@@ -67,9 +70,13 @@ class ContinuousSearcher {
       for (uint batch_idx = 0; (*bit_seq_producer >> bit_seqs)
                                & (*positions_producer >> kmer_positions);
            ++batch_idx) {
-        spdlog::trace("Searcher has started batch {}", batch_idx);
+        Logger::log_timed_event(
+          "Searcher", Logger::EVENT_STATE::START, format("batch {}", batch_idx)
+        );
         searcher.search(*bit_seqs, *kmer_positions, *batches.current_write());
-        spdlog::trace("Searcher has finished batch {}", batch_idx);
+        Logger::log_timed_event(
+          "Searcher", Logger::EVENT_STATE::STOP, format("batch {}", batch_idx)
+        );
         batches.step_write();
         semaphore.release();
       }

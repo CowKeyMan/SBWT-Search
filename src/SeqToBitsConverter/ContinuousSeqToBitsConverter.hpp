@@ -19,10 +19,13 @@
 #include "SeqToBitsConverter/CharToBits.h"
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/CircularBuffer.hpp"
+#include "Utils/Logger.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
-#include "spdlog/spdlog.h"
+#include "fmt/core.h"
 
+using fmt::format;
+using log_utils::Logger;
 using math_utils::round_up;
 using std::fill;
 using std::make_shared;
@@ -75,7 +78,11 @@ class ContinuousSeqToBitsConverter {
     auto read_and_generate() -> void {
       shared_ptr<StringSequenceBatch> read_batch;
       for (uint batch_idx = 0; *producer >> read_batch; ++batch_idx) {
-        spdlog::trace("SeqToBitsConverter has started batch {}", batch_idx);
+        Logger::log_timed_event(
+          "SeqToBitsConverter",
+          Logger::EVENT_STATE::START,
+          format("batch {}", batch_idx)
+        );
         bit_batches.current_write()->resize(
           round_up<u64>(read_batch->cumulative_char_indexes.back(), 32) / 32
         );
@@ -107,7 +114,11 @@ class ContinuousSeqToBitsConverter {
             ++write_index;
           }
         }
-        spdlog::trace("SeqToBitsConverter has finished batch {}", batch_idx);
+        Logger::log_timed_event(
+          "SeqToBitsConverter",
+          Logger::EVENT_STATE::STOP,
+          format("batch {}", batch_idx)
+        );
         invalid_batches.step_write();
         invalid_semaphore.release();
         bit_batches.step_write();
