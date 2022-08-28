@@ -1,7 +1,9 @@
 import pandas as pd
 import argparse
-import re
-from collections import defaultdict
+import json
+from matplotlib import pyplot as plt
+import numpy as np
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', help='Input log file to analyse', required=True)
@@ -10,48 +12,55 @@ args = vars(parser.parse_args())
 with open(args['i'], 'r') as f:
     lines = f.readlines()
 
-r = re.compile(r"\[(.*?)\] \[(.*?)\] (.*?)$")
 
-matches = []
-for line in lines:
-    match = r.search(line)
-    if match is not None:
-        matches.append(list(match.groups()))
+def line_to_df_entry(line) -> dict:
+    try:
+        j = json.loads(line)
+    except Exception:
+        return None
+    if not j['log']['type'] == 'timed_event':
+        return None
+    return {
+        'time': j['time'],
+        'process': j['process'],
+        'thread': j['thread'],
+        'state': j['log']['state'],
+        'component': j['log']['component'],
+        'section': j['log']['message'],
+    }
 
-df = pd.DataFrame(matches, columns='datetime log_type log'.split())
 
-valid_rows = [
-    'has started' in x or 'has finished' in x for x in df['log']
+dicts = [
+    line_to_df_entry(line)
+    for line in lines
+    if line_to_df_entry(line) is not None
 ]
-df = df[valid_rows]
-df['datetime'] = pd.to_datetime(df['datetime'])
-df = df[df['log_type'] == 'trace']
-df['component'] = [x.split()[0] for x in df['log']]
-df['is_start'] = ['has started' in x for x in df['log']]
-df['batch_no'] = [x.split()[-1] for x in df['log']]
 
-component_to_timings = defaultdict(list)
 
-for component in df['component'].unique():
-    for batch in df['batch_no'].unique():
-        df_com_bat = df[
+df = pd.DataFrame(dicts)
+df['time'] = pd.to_datetime(df['time'])
+
+# plot here
+fig, ax = plt.subplots()
+total_time = (df['time'].max() - df['time'].min()).total_seconds()
+min_time = df['time'].min()
+ax.set_xlim(0, total_time)
+
+unique_components = df['component'].unique()[::-1]
+for i, component in enumerate(unique_components):
+    for section in df[df['component'] == component]['section'].unique():
+        filtered_df = df[
             (df['component'] == component)
-            & (df['batch_no'] == batch)
+            & (df['section'] == section)
         ]
-        start_times = (
-            df_com_bat[df_com_bat['is_start']]['datetime'].sort_values()
+        print(component, section)
+        start = filtered_df[filtered_df['state'] == 'start']['time'].iloc[0]
+        end = filtered_df[filtered_df['state'] == 'stop']['time'].iloc[0]
+        ax.barh(
+            i,
+            (end - start) / np.timedelta64(1, 's'),
+            left=(start - min_time).total_seconds()
         )
-        end_times = (
-            df_com_bat[~df_com_bat['is_start']]['datetime'].sort_values()
-        )
-        assert len(start_times) == len(end_times)
-        for s, e in zip(start_times, end_times):
-            millis: pd.Timedelta = (e - s).total_seconds() * 10**3
-            component_to_timings[component].append(millis)
+ax.yaxis.set_ticks(range(len(unique_components)), unique_components)
 
-print(
-    pd.DataFrame(
-        [[c, sum(t)] for c, t in component_to_timings.items()],
-        columns=['component', 'total_time']
-    )
-)
+plt.show()
