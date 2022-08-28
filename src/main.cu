@@ -62,6 +62,7 @@ const auto num_seq_to_bit_converters = 3;
 
 auto main(int argc, char **argv) -> int {
   Logger::initialise_global_logging(WARN);
+  Logger::log_timed_event("main", Logger::EVENT_STATE::START);
   Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::START);
   auto args = ArgumentParser(program_name, program_description, argc, argv);
   auto gpu_container = get_gpu_container(args.get_index_file());
@@ -149,26 +150,35 @@ auto main(int argc, char **argv) -> int {
     results_printer->read_and_generate();
   }
   Logger::log(INFO, "DONE");
+  Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
 }
 
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
   auto sbwt_factory = SdslSbwtFactory();
   auto sbwt_parser = sbwt_factory.get_sbwt_parser(index_file);
+  Logger::log_timed_event("SBWTParser", Logger::EVENT_STATE::START);
   auto cpu_container = sbwt_parser.parse();
+  Logger::log_timed_event("SBWTParser", Logger::EVENT_STATE::STOP);
   using container_type = remove_reference<decltype(*cpu_container.get())>::type;
   auto index_builder
     = CpuRankIndexBuilder<container_type, superblock_bits, hyperblock_bits>(
       cpu_container
     );
+  Logger::log_timed_event("IndexBuilder", Logger::EVENT_STATE::START);
   index_builder.build_index();
+  Logger::log_timed_event("IndexBuilder", Logger::EVENT_STATE::STOP);
+  Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::START);
   auto gpu_container = cpu_container->to_gpu();
+  Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::STOP);
   auto presearcher = Presearcher(gpu_container);
+  Logger::log_timed_event("Presearcher", Logger::EVENT_STATE::START);
   presearcher.presearch<
     threads_per_block,
     superblock_bits,
     hyperblock_bits,
     presearch_letters,
     reversed_bits>();
+  Logger::log_timed_event("Presearcher", Logger::EVENT_STATE::STOP);
   return gpu_container;
 }
 
