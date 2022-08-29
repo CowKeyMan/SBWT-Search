@@ -219,9 +219,9 @@ auto get_max_chars_per_batch_cpu(
                         "unavailable-main-memory.");
   }
   size_t free = get_total_system_memory() * 8 - unavailable_memory;
+  if (max_memory < free) { free = max_memory; }
   auto max_chars_per_batch
     = round_down<size_t>(free / 460 / (max_batches + 1), threads_per_block);
-  if (max_memory < free) { free = max_memory; }
   Logger::log(
     DEBUG,
     format(
