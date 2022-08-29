@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "gtest/gtest_pred_impl.h"
+#include <gtest/gtest.h>
 
 #include "PositionsBuilder/PositionsBuilder.h"
 #include "TestUtils/GeneralTestUtils.hpp"
