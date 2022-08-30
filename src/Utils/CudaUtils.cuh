@@ -11,6 +11,8 @@
 #include <stdexcept>
 #include <vector>
 
+#include <cuda_runtime.h>
+
 namespace gpu_utils {
 
 using std::runtime_error;
