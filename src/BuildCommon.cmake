@@ -106,6 +106,10 @@ add_library(
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
 )
 add_library(
+  error_utils
+  "${PROJECT_SOURCE_DIR}/Utils/ErrorUtils.cpp"
+)
+add_library(
   logger
   "${PROJECT_SOURCE_DIR}/Utils/Logger.cpp"
 )
@@ -202,13 +206,14 @@ target_link_libraries(
   OpenMP::OpenMP_CXX
   logger
   fmt::fmt
+  error_utils
   # TODO: Link more libraries here
 )
 add_library(
   cuda_utils
   "${PROJECT_SOURCE_DIR}/Utils/CudaUtils.cu"
 )
-set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "80;70;60")
 
 
 # Build Cpu Libraries
