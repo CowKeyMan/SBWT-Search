@@ -14,6 +14,7 @@ namespace sbwt_search {
 CumulativePropertiesBatchProducer::CumulativePropertiesBatchProducer(
   u64 max_batches, u64 max_strings_per_batch, uint kmer_size
 ):
+    kmer_size(kmer_size),
     SharedBatchesProducer<CumulativePropertiesBatch>(max_batches),
     max_strings_per_batch(max_strings_per_batch) {
   initialise_batches();
