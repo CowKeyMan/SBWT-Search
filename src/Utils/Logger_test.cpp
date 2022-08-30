@@ -43,9 +43,6 @@ class LogUtilsTest: public ::testing::Test {
     }
 };
 
-#include <iostream>
-using namespace std;
-
 TEST_F(LogUtilsTest, NormalLog) {
   SetUp(false);
   Logger::log(Logger::LOG_LEVEL::TRACE, "hello");
