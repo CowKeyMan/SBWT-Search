@@ -66,8 +66,9 @@ class ContinuousSequenceFileParser {
     void add_string(string &s);
     bool string_fits_in_batch(const string &s);
     bool string_larger_than_limit(const string &s);
-    void
-    print_string_too_large(const string &filename, const uint string_index);
+    void print_string_too_large(
+      const string &filename, const u64 string_index, const u64 string_size
+    );
 };
 
 }  // namespace sbwt_search

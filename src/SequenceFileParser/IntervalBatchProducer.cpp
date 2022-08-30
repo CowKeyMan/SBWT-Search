@@ -14,8 +14,8 @@ namespace sbwt_search {
 IntervalBatchProducer::IntervalBatchProducer(
   u64 max_batches, u64 max_strings_per_batch
 ):
-    batches(max_batches + 1), semaphore(0, max_batches) {
-  for (int i = 0; i < batches.size(); ++i) {
+    batches(max_batches + 1), semaphore(1, max_batches) {
+  for (u64 i = 0; i < batches.size(); ++i) {
     batches.set(i, get_empty_batch(max_strings_per_batch));
   }
 }

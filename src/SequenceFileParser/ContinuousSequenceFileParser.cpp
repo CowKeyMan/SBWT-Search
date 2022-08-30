@@ -135,7 +135,7 @@ auto ContinuousSequenceFileParser::process_string(
   const string &filename, string &s, const u64 string_index
 ) -> void {
   if (string_larger_than_limit(s)) {
-    print_string_too_large(filename, string_index);
+    print_string_too_large(filename, string_index, s.size());
     interval_batch_producer.add_string("");
     return;
   }
@@ -165,14 +165,15 @@ auto ContinuousSequenceFileParser::string_larger_than_limit(const string &s)
 }
 
 auto ContinuousSequenceFileParser::print_string_too_large(
-  const string &filename, const uint string_index
+  const string &filename, const u64 string_index, const u64 string_size
 ) -> void {
   Logger::log(
     Logger::LOG_LEVEL::ERROR,
     format(
-      "The string in file {} at position {} is too large\n",
+      "The string in file {} at position {} of length {} is too large\n",
       filename,
-      string_index
+      string_index,
+      string_size
     )
   );
 }
