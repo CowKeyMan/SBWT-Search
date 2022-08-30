@@ -6,7 +6,8 @@ namespace structure_utils {
 
 TEST(CircularBufferTest, NormalUsage) {
   CircularBuffer<int> buffer(2, 9);
-  ASSERT_EQ(2, buffer.size());
+  ASSERT_EQ(0, buffer.size());
+  ASSERT_EQ(2, buffer.capacity());
   ASSERT_EQ(9, buffer.current_write());
   buffer.current_write() = 1;
   buffer.step_write();

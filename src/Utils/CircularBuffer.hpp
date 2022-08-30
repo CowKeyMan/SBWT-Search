@@ -39,7 +39,7 @@ class CircularBuffer {
       ++population;
     }
 
-    auto size() -> size_t { return capacity(); }
+    auto size() -> size_t { return population; }
     auto capacity() -> size_t { return q.size(); }
     auto empty() -> bool { return population == 0; }
 };
