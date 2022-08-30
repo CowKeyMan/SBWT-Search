@@ -11,42 +11,40 @@
 
 #include "Utils/BoundedSemaphore.hpp"
 #include "Utils/CircularBuffer.hpp"
+#include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
 
 namespace sbwt_search {
 class CumulativePropertiesBatch;
+class ContinuousSequenceFileParser;
 }  // namespace sbwt_search
 
+using design_utils::SharedBatchesProducer;
 using std::make_shared;
 using std::shared_ptr;
 using std::string;
-using structure_utils::CircularBuffer;
-using threading_utils::BoundedSemaphore;
 
 namespace sbwt_search {
 
-class CumulativePropertiesBatchProducer {
-  private:
-    CircularBuffer<shared_ptr<CumulativePropertiesBatch>> batches;
-    bool finished_reading = false;
-    BoundedSemaphore semaphore;
-    uint kmer_size;
+class CumulativePropertiesBatchProducer:
+    public SharedBatchesProducer<CumulativePropertiesBatch> {
+    friend ContinuousSequenceFileParser;
 
-  public:
+  private:
+    uint kmer_size;
+    u64 max_strings_per_batch;
+
     CumulativePropertiesBatchProducer(
       u64 max_batches, u64 max_strings_per_batch, uint kmer_size
     );
-    void add_string(const string &s);
-    void terminate_batch();
-    void start_new_batch();
-    void set_finished_reading();
-    bool operator>>(shared_ptr<CumulativePropertiesBatch> &batch);
-
-  private:
-    shared_ptr<CumulativePropertiesBatch>
-    get_empty_cumsum_batch(const u64 max_strings_per_batch);
-    void reset_batch(shared_ptr<CumulativePropertiesBatch> &batch);
-    bool no_more_sequences();
+    auto no_more_sequences() -> bool;
+    auto get_default_value() -> shared_ptr<CumulativePropertiesBatch> override;
+    auto add_string(const string &s) -> void;
+    auto terminate_batch() -> void;
+    auto reset_batch(shared_ptr<CumulativePropertiesBatch> &batch) -> void;
+    auto start_new_batch() -> void;
+    auto set_finished_reading() -> void;
+    auto do_at_batch_start(unsigned int batch_id = 0) -> void override;
 };
 }  // namespace sbwt_search
 

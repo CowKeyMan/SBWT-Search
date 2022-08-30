@@ -26,16 +26,13 @@ StringSequenceBatchProducer::StringSequenceBatchProducer(
     chars_per_reader(
       round_up<u64>(max_chars_per_batch / num_readers, bits_split / 2)
     ),
-    semaphore(0, max_batches),
-    batches(max_batches + 1),
+    SharedBatchesProducer<StringSequenceBatch>(max_batches),
     num_readers(num_readers),
     bits_split(bits_split) {
-  for (int i = 0; i < batches.size(); ++i) {
-    batches.set(i, get_empty_sequence_batch());
-  };
+  initialise_batches();
 }
 
-auto StringSequenceBatchProducer::get_empty_sequence_batch()
+auto StringSequenceBatchProducer::get_default_value()
   -> shared_ptr<StringSequenceBatch> {
   auto batch = make_shared<StringSequenceBatch>();
   batch->buffer.reserve(max_strings_per_batch);
@@ -64,18 +61,20 @@ auto StringSequenceBatchProducer::add_string(const string &s) -> void {
   batch.buffer.push_back(move(s));
 }
 
-auto StringSequenceBatchProducer::terminate_batch() -> void {
+auto StringSequenceBatchProducer::do_at_batch_finish(unsigned int batch_id)
+  -> void {
   auto &batch = batches.current_write();
   for (uint i = batch->string_indexes.size(); i < num_readers + 1; ++i) {
     batch->string_indexes.push_back(batch->buffer.size());
     batch->char_indexes.push_back(0);
     batch->cumulative_char_indexes.push_back(current_batch_size);
   }
-  batches.step_write();
-  semaphore.release();
+  SharedBatchesProducer<StringSequenceBatch>::do_at_batch_finish();
 }
 
-auto StringSequenceBatchProducer::start_new_batch() -> void {
+auto StringSequenceBatchProducer::do_at_batch_start(unsigned int batch_id)
+  -> void {
+  SharedBatchesProducer<StringSequenceBatch>::do_at_batch_start();
   reset_batch(batches.current_write());
   current_batch_size = 0;
   chars_to_next_index = chars_per_reader;
@@ -88,25 +87,6 @@ auto StringSequenceBatchProducer::reset_batch(
   batch->string_indexes.resize(1);
   batch->char_indexes.resize(1);
   batch->cumulative_char_indexes.resize(1);
-}
-
-auto StringSequenceBatchProducer::operator>>(
-  shared_ptr<StringSequenceBatch> &batch
-) -> bool {
-  semaphore.acquire();
-  if (no_more_sequences()) { return false; }
-  batch = batches.current_read();
-  batches.step_read();
-  return true;
-}
-
-auto StringSequenceBatchProducer::set_finished_reading() -> void {
-  finished_reading = true;
-  semaphore.release();
-}
-
-auto StringSequenceBatchProducer::no_more_sequences() -> bool {
-  return finished_reading && batches.empty();
 }
 
 }  // namespace sbwt_search

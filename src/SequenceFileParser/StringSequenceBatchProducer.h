@@ -10,34 +10,32 @@
 #include <stddef.h>
 #include <string>
 
-#include "Utils/BoundedSemaphore.hpp"
-#include "Utils/CircularBuffer.hpp"
+#include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
 
 namespace sbwt_search {
 class StringSequenceBatch;
+class ContinuousSequenceFileParser;
 }  // namespace sbwt_search
 
+using design_utils::SharedBatchesProducer;
 using std::shared_ptr;
 using std::string;
-using structure_utils::CircularBuffer;
-using threading_utils::BoundedSemaphore;
 
 namespace sbwt_search {
 
-class StringSequenceBatchProducer {
+class StringSequenceBatchProducer:
+    public SharedBatchesProducer<StringSequenceBatch> {
+    friend ContinuousSequenceFileParser;
+
   private:
     const uint bits_split = 64;
-    CircularBuffer<shared_ptr<StringSequenceBatch>> batches;
     const uint max_strings_per_batch;
     const uint num_readers;
-    BoundedSemaphore semaphore;
     uint current_batch_size = 0;
-    bool finished_reading = false;
     uint chars_to_next_index;
     const uint chars_per_reader;
 
-  public:
     StringSequenceBatchProducer(
       const size_t max_strings_per_batch,
       const size_t max_chars_per_batch,
@@ -46,15 +44,10 @@ class StringSequenceBatchProducer {
       const uint bits_split = 64
     );
     void add_string(const string &s);
-    void terminate_batch();
-    void start_new_batch();
-    void set_finished_reading();
-    bool operator>>(shared_ptr<StringSequenceBatch> &batch);
-
-  private:
-    shared_ptr<StringSequenceBatch> get_empty_sequence_batch();
+    shared_ptr<StringSequenceBatch> get_default_value() override;
     void reset_batch(shared_ptr<StringSequenceBatch> &batch);
-    bool no_more_sequences();
+    void do_at_batch_start(unsigned int batch_id = 0) override;
+    void do_at_batch_finish(unsigned int batch_id = 0) override;
 };
 
 }  // namespace sbwt_search

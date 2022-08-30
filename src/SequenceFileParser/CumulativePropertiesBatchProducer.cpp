@@ -14,15 +14,13 @@ namespace sbwt_search {
 CumulativePropertiesBatchProducer::CumulativePropertiesBatchProducer(
   u64 max_batches, u64 max_strings_per_batch, uint kmer_size
 ):
-    batches(max_batches + 1), semaphore(0, max_batches), kmer_size(kmer_size) {
-  for (int i = 0; i < batches.size(); ++i) {
-    batches.set(i, get_empty_cumsum_batch(max_strings_per_batch));
-  }
+    SharedBatchesProducer<CumulativePropertiesBatch>(max_batches),
+    max_strings_per_batch(max_strings_per_batch) {
+  initialise_batches();
 }
 
-auto CumulativePropertiesBatchProducer::get_empty_cumsum_batch(
-  const u64 max_strings_per_batch
-) -> shared_ptr<CumulativePropertiesBatch> {
+auto CumulativePropertiesBatchProducer::get_default_value()
+  -> shared_ptr<CumulativePropertiesBatch> {
   auto batch = make_shared<CumulativePropertiesBatch>();
   batch->cumsum_positions_per_string.reserve(max_strings_per_batch);
   batch->cumsum_positions_per_string.push_back(0);
@@ -43,12 +41,9 @@ auto CumulativePropertiesBatchProducer::add_string(const string &s) -> void {
   );
 }
 
-auto CumulativePropertiesBatchProducer::terminate_batch() -> void {
-  batches.step_write();
-  semaphore.release();
-}
-
-auto CumulativePropertiesBatchProducer::start_new_batch() -> void {
+auto CumulativePropertiesBatchProducer::do_at_batch_start(unsigned int batch_id)
+  -> void {
+  SharedBatchesProducer<CumulativePropertiesBatch>::do_at_batch_start();
   reset_batch(batches.current_write());
 }
 
@@ -57,26 +52,6 @@ auto CumulativePropertiesBatchProducer::reset_batch(
 ) -> void {
   batch->cumsum_positions_per_string.resize(1);
   batch->cumsum_string_lengths.resize(1);
-}
-
-auto CumulativePropertiesBatchProducer::operator>>(
-  shared_ptr<CumulativePropertiesBatch> &batch
-) -> bool {
-  semaphore.acquire();
-  if (no_more_sequences()) { return false; }
-  batch = batches.current_read();
-  batches.step_read();
-  return true;
-}
-
-auto CumulativePropertiesBatchProducer::CumulativePropertiesBatchProducer::
-  set_finished_reading() -> void {
-  finished_reading = true;
-  semaphore.release();
-}
-
-auto CumulativePropertiesBatchProducer::no_more_sequences() -> bool {
-  return finished_reading && batches.empty();
 }
 
 }  // namespace sbwt_search

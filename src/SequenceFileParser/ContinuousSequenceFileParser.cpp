@@ -70,9 +70,9 @@ auto ContinuousSequenceFileParser::read_and_generate() -> void {
     interval_batch_producer.file_end();
   }
   terminate_batch();
-  string_sequence_batch_producer.set_finished_reading();
-  cumulative_properties_batch_producer.set_finished_reading();
-  interval_batch_producer.set_finished_reading();
+  string_sequence_batch_producer.do_at_generate_finish();
+  cumulative_properties_batch_producer.do_at_generate_finish();
+  interval_batch_producer.do_at_generate_finish();
 }
 
 auto ContinuousSequenceFileParser::operator>>(
@@ -101,9 +101,9 @@ auto ContinuousSequenceFileParser::get_max_chars_per_batch(
 }
 
 auto ContinuousSequenceFileParser::start_new_batch() -> void {
-  string_sequence_batch_producer.start_new_batch();
-  cumulative_properties_batch_producer.start_new_batch();
-  interval_batch_producer.start_new_batch();
+  string_sequence_batch_producer.do_at_batch_start();
+  cumulative_properties_batch_producer.do_at_batch_start();
+  interval_batch_producer.do_at_batch_start();
   current_batch_size = current_batch_strings = 0;
   Logger::log_timed_event(
     "SequenceFileParser",
@@ -118,9 +118,9 @@ auto ContinuousSequenceFileParser::terminate_batch() -> void {
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_idx++)
   );
-  string_sequence_batch_producer.terminate_batch();
-  cumulative_properties_batch_producer.terminate_batch();
-  interval_batch_producer.terminate_batch();
+  string_sequence_batch_producer.do_at_batch_finish();
+  cumulative_properties_batch_producer.do_at_batch_finish();
+  interval_batch_producer.do_at_batch_finish();
 }
 
 auto ContinuousSequenceFileParser::process_file(const string &filename)
