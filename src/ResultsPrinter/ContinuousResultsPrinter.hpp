@@ -6,12 +6,14 @@
  * @brief Gets results, intervals and list of invalid characters and prints
  * these out to disk based on the given data and filenames.
  * */
+#include <chrono>
 #include <climits>
 #include <fstream>
 #include <iterator>
 #include <memory>
 #include <stddef.h>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include "BatchObjects/IntervalBatch.h"
@@ -68,9 +70,9 @@ class ContinuousResultsPrinter {
     auto read_and_generate() -> void {
       if (current_filename == filenames.end()) { return; }
       open_next_file();
-      for (uint batch_idx = 0; (*results_producer >> results)
-                               & (*interval_producer >> interval_batch)
-                               & (*invalid_chars_producer >> invalid_chars);
+      for (uint batch_idx = 0; (*interval_producer >> interval_batch)
+                               & (*invalid_chars_producer >> invalid_chars)
+                               & (*results_producer >> results);
            ++batch_idx) {
         Logger::log_timed_event(
           "ResultsPrinter",
@@ -125,7 +127,7 @@ class ContinuousResultsPrinter {
     ) -> void {
       uint invalid_chars_left
         = get_invalid_chars_left_first_kmer(invalid_index);
-      for (int i = char_index; i < char_index + num_chars; ++i) {
+      for (u64 i = char_index; i < char_index + num_chars; ++i) {
         auto furthest_index = invalid_index + kmer_size - 1 + i - char_index;
         if (furthest_index < invalid_index + string_length && (*invalid_chars)[furthest_index]) {
           invalid_chars_left = kmer_size;
