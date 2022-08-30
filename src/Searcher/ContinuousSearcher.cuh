@@ -11,11 +11,15 @@
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Searcher/Searcher.cuh"
 #include "Utils/Logger.h"
+#include "Utils/MathUtils.hpp"
+#include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
 #include "fmt/core.h"
 
+using design_utils::SharedBatchesProducer;
 using fmt::format;
 using log_utils::Logger;
+using math_utils::round_up;
 using std::shared_ptr;
 
 namespace sbwt_search {
@@ -28,7 +32,7 @@ template <
   u64 hyperblock_bits,
   u32 presearch_letters,
   bool reversed_bits>
-class ContinuousSearcher {
+class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
     SearcherGpu<
       threads_per_block,
       superblock_bits,
@@ -38,9 +42,8 @@ class ContinuousSearcher {
       searcher;
     shared_ptr<BitSeqProducer> bit_seq_producer;
     shared_ptr<PositionsProducer> positions_producer;
-    CircularBuffer<shared_ptr<vector<u64>>> batches;
-    bool finished = false;
-    BoundedSemaphore semaphore;
+    shared_ptr<vector<u64>> bit_seqs, kmer_positions;
+    u64 max_positions_per_batch;
 
   public:
     ContinuousSearcher(
@@ -53,43 +56,38 @@ class ContinuousSearcher {
         searcher(move(container)),
         bit_seq_producer(bit_seq_producer),
         positions_producer(positions_producer),
-        semaphore(0, max_batches),
-        batches(max_batches + 1) {
-      for (uint i = 0; i < batches.size(); ++i) {
-        batches.set(
-          i,
-          make_shared<vector<u64>>(
-            round_up<u64>(max_positions_per_batch, superblock_bits)
-          )
-        );
-      }
+        max_positions_per_batch(max_positions_per_batch),
+        SharedBatchesProducer<vector<u64>>(max_batches) {
+      initialise_batches();
     }
 
-    void read_and_generate() {
-      shared_ptr<vector<u64>> bit_seqs, kmer_positions;
-      for (uint batch_idx = 0; (*bit_seq_producer >> bit_seqs)
-                               & (*positions_producer >> kmer_positions);
-           ++batch_idx) {
-        Logger::log_timed_event(
-          "Searcher", Logger::EVENT_STATE::START, format("batch {}", batch_idx)
-        );
-        searcher.search(*bit_seqs, *kmer_positions, *batches.current_write());
-        Logger::log_timed_event(
-          "Searcher", Logger::EVENT_STATE::STOP, format("batch {}", batch_idx)
-        );
-        batches.step_write();
-        semaphore.release();
-      }
-      finished = true;
-      semaphore.release();
+    auto get_default_value() -> shared_ptr<vector<u64>> override {
+      return make_shared<vector<u64>>(
+        round_up<u64>(max_positions_per_batch, superblock_bits)
+      );
     }
 
-    bool operator>>(shared_ptr<vector<u64>> &results) {
-      semaphore.acquire();
-      if (finished && batches.empty()) { return false; }
-      results = batches.current_read();
-      batches.step_read();
-      return true;
+    auto continue_read_condition() -> bool override {
+      return (*positions_producer >> kmer_positions)
+           & (*bit_seq_producer >> bit_seqs);
+    }
+
+    auto generate() -> void override {
+      searcher.search(*bit_seqs, *kmer_positions, *batches.current_write());
+    }
+
+    auto do_at_batch_start(unsigned int batch_id) -> void override {
+      SharedBatchesProducer<vector<u64>>::do_at_batch_start();
+      Logger::log_timed_event(
+        "Searcher", Logger::EVENT_STATE::START, format("batch {}", batch_id)
+      );
+    }
+
+    auto do_at_batch_finish(unsigned int batch_id) -> void override {
+      Logger::log_timed_event(
+        "Searcher", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
+      );
+      SharedBatchesProducer<vector<u64>>::do_at_batch_finish();
     }
 };
 

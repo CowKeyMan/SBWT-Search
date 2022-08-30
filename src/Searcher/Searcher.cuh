@@ -14,6 +14,7 @@
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Utils/CudaKernelUtils.cuh"
 #include "Utils/CudaUtils.cuh"
+#include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
 using gpu_utils::get_idx;
