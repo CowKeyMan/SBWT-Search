@@ -48,7 +48,9 @@ class ContinuousPositionsBuilder: public SharedBatchesProducer<vector<u64>> {
         kmer_size(kmer_size),
         max_positions_per_batch(max_positions_per_batch),
         builder(kmer_size),
-        SharedBatchesProducer<vector<u64>>(max_batches) {}
+        SharedBatchesProducer<vector<u64>>(max_batches) {
+      initialise_batches();
+    }
 
   protected:
     auto get_default_value() -> shared_ptr<vector<u64>> override {
