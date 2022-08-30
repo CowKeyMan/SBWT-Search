@@ -6,6 +6,9 @@
  * @brief Rank implementation on GPU
  * */
 
+#include "cuda_runtime.h"
+#include "Utils/CudaIntrinsics.h"
+
 #include "Utils/BitDefinitions.h"
 #include "Utils/BitVectorUtils.h"
 #include "Utils/TypeDefinitions.h"

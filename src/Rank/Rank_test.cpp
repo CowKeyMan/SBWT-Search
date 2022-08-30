@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "gtest/gtest.h"
+#include <pstl/glue_algorithm_defs.h>
 
 #include "Rank/Rank_test.hpp"
 #include "RankIndexBuilder/RankIndexBuilder.hpp"
