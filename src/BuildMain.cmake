@@ -25,7 +25,7 @@ if (BUILD_CUDA)
     OpenMP::OpenMP_CXX
     spdlog::spdlog
   )
-set_target_properties(main_cuda PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+set_target_properties(main_cuda PROPERTIES CUDA_ARCHITECTURES "80;70;60")
 endif()
 
 endif() # BUILD_MAIN

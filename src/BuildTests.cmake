@@ -67,7 +67,7 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
     "${PROJECT_SOURCE_DIR}/Rank/Rank_test.cu"
   )
   target_link_libraries(rank_test PRIVATE spdlog::spdlog)
-  set_target_properties(rank_test PROPERTIES CUDA_ARCHITECTURES "60;70;80")
+  set_target_properties(rank_test PROPERTIES CUDA_ARCHITECTURES "80;70;60")
   add_executable(
     test_main_cuda
     "${PROJECT_SOURCE_DIR}/test_main.cpp"
