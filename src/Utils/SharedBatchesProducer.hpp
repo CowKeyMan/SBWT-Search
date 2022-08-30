@@ -50,7 +50,6 @@ class SharedBatchesProducer {
     }
 
     auto operator>>(shared_ptr<BatchType> &out) -> bool {
-      throw_if_uninitialised();
       start_semaphore.release();
       finish_semaphore.acquire();
       if (batches.empty()) { return false; }
@@ -61,7 +60,7 @@ class SharedBatchesProducer {
 
   protected:
     auto initialise_batches() -> void {
-      for (unsigned int i = 0; i < batches.size(); ++i) {
+      for (unsigned int i = 0; i < batches.capacity(); ++i) {
         batches.set(i, get_default_value());
       }
       batches_initialised = true;
