@@ -6,12 +6,11 @@
  * @brief Rank implementation on GPU
  * */
 
-#include "cuda_runtime.h"
-#include "Utils/CudaIntrinsics.h"
-
 #include "Utils/BitDefinitions.h"
 #include "Utils/BitVectorUtils.h"
+#include "Utils/CudaIntrinsics.h"
 #include "Utils/TypeDefinitions.h"
+#include "cuda_runtime.h"
 
 namespace sbwt_search {
 
