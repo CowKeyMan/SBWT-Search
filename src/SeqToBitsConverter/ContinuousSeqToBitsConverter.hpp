@@ -63,11 +63,10 @@ class ContinuousSeqToBitsConverter {
     auto read_and_generate() -> void {
       shared_ptr<StringSequenceBatch> read_batch;
       for (uint batch_idx = 0; *producer >> read_batch; ++batch_idx) {
-        invalid_chars_producer.do_at_batch_start(
+        invalid_chars_producer.start_new_batch(
           read_batch->cumulative_char_indexes.back()
         );
-        bits_producer.do_at_batch_start(
-          read_batch->cumulative_char_indexes.back()
+        bits_producer.start_new_batch(read_batch->cumulative_char_indexes.back()
         );
         Logger::log_timed_event(
           "SeqToBitsConverter",

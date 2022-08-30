@@ -41,7 +41,7 @@ class BitsProducer: public SharedBatchesProducer<vector<u64>> {
       );
     }
 
-    auto do_at_batch_start(u64 num_chars) -> void {
+    auto start_new_batch(u64 num_chars) -> void {
       SharedBatchesProducer<vector<u64>>::do_at_batch_start();
       batches.current_write()->resize(round_up<u64>(num_chars, 32) / 32);
     }

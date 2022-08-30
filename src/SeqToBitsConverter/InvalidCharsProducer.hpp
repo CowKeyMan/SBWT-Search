@@ -43,7 +43,7 @@ class InvalidCharsProducer: public SharedBatchesProducer<vector<char>> {
       return make_shared<vector<char>>(max_chars_per_batch + kmer_size);
     }
 
-    auto do_at_batch_start(u64 num_chars) -> void {
+    auto start_new_batch(u64 num_chars) -> void {
       SharedBatchesProducer<vector<char>>::do_at_batch_start();
       batches.current_write()->resize(num_chars);
       fill(batches.current_write()->begin(), batches.current_write()->end(), 0);
