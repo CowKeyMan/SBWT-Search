@@ -3,6 +3,7 @@
 #include <string>
 
 #include <spdlog/common.h>
+#include <spdlog/fmt/bundled/core.h>
 #include <unordered_map>
 
 #include "Utils/Logger.h"
