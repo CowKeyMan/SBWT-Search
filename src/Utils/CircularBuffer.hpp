@@ -18,7 +18,7 @@ template <class T>
 class CircularBuffer {
   private:
     vector<T> q;
-    size_t read_idx = 0, write_idx = 0;
+    size_t read_idx = 0, write_idx = 0, population = 0;
 
   public:
     CircularBuffer(size_t size): q(size) {}
@@ -30,11 +30,18 @@ class CircularBuffer {
     auto current_read() -> const T & { return q[read_idx]; }
     auto current_write() -> T & { return q[write_idx]; }
 
-    auto step_write() -> void { write_idx = (write_idx + 1) % q.size(); }
-    auto step_read() -> void { read_idx = (read_idx + 1) % q.size(); }
+    auto step_write() -> void {
+      write_idx = (write_idx + 1) % q.size();
+      --population;
+    }
+    auto step_read() -> void {
+      read_idx = (read_idx + 1) % q.size();
+      ++population;
+    }
 
-    auto size() -> size_t { return q.size(); }
-    auto empty() -> bool { return write_idx == read_idx; }
+    auto size() -> size_t { return capacity(); }
+    auto capacity() -> size_t { return q.size(); }
+    auto empty() -> bool { return population == 0; }
 };
 
 }  // namespace structure_utils
