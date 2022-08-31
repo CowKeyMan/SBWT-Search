@@ -9,16 +9,12 @@
 #include "Utils/BitDefinitions.h"
 #include "Utils/BitVectorUtils.h"
 #include "Utils/CudaIntrinsics.h"
+#include "Utils/GlobalDefinitions.h"
 #include "Utils/TypeDefinitions.h"
 #include "cuda_runtime.h"
 
 namespace sbwt_search {
 
-inline constexpr __host__ __device__ size_t log_base_2(const u64 n) {
-  return ((n < 2) ? 0 : 1 + log_base_2(n / 2));
-}
-
-template <u64 superblock_bits, u64 hyperblock_bits, bool reversed_bits>
 __device__ u64 d_rank(
   const u64 *bit_vector,
   const u64 *layer_0,
@@ -37,27 +33,16 @@ __device__ u64 d_rank(
   for (u64 i = 0; i < ints_in_basicblock; i += 2) {
     ulonglong2 data_128b = bit_vector_128b
       [(index / 128) - ((index / 128) % (ints_in_basicblock / 2)) + i / 2];
-    if (reversed_bits) {
-      // WARNING: UNDEFINED BEHAVIOUR HERE WHEN target_shift = 64
-      // (expected to equal 0 - works well on CUDA)
-      entry_basicblock
-        += __popcll(
-             data_128b.x << (((i + 0) == in_basicblock_index) * target_shift)
-           )
-           * ((i + 0) <= in_basicblock_index)
-         + __popcll(
-             data_128b.y << (((i + 1) == in_basicblock_index) * target_shift)
-           ) * ((i + 1) <= in_basicblock_index);
-    } else {
-      entry_basicblock
-        += __popcll(
-             data_128b.x >> (((i + 0) == in_basicblock_index) * target_shift)
-           )
-           * ((i + 0) <= in_basicblock_index)
-         + __popcll(
-             data_128b.y >> (((i + 1) == in_basicblock_index) * target_shift)
-           ) * ((i + 1) <= in_basicblock_index);
-    }
+    // WARNING: UNDEFINED BEHAVIOUR HERE WHEN target_shift = 64
+    // (expected to equal 0 - works well on CUDA)
+    entry_basicblock
+      += __popcll(
+           data_128b.x << (((i + 0) == in_basicblock_index) * target_shift)
+         )
+         * ((i + 0) <= in_basicblock_index)
+       + __popcll(
+           data_128b.y << (((i + 1) == in_basicblock_index) * target_shift)
+         ) * ((i + 1) <= in_basicblock_index);
   }
   const u64 entry_layer_1_2 = layer_1_2[index / superblock_bits];
   u64 entry_layer_2_joined

@@ -16,7 +16,6 @@ using std::vector;
 
 namespace sbwt_search {
 
-template <bool reversed_bits>
 class RankTestClass {
   public:
     vector<u64> layer_0, layer_1_2, expected, bit_vector;
@@ -36,22 +35,14 @@ class RankTestClass {
       expected = vector<u64>(test_indexes.size());
       for (auto i = 0; i < test_indexes.size(); ++i) {
         expected[i]
-          = dummy_cpu_rank<reversed_bits>(&bit_vector[0], test_indexes[i]);
+          = dummy_cpu_rank(&bit_vector[0], test_indexes[i]);
       }
     }
 };
 
-TEST(RankTest, RankTestReversedBits) {
-  auto host = RankTestClass<true>();
-  auto actual = get_rank_output_reversed_bits(
-    host.bit_vector, host.layer_0, host.layer_1_2, host.test_indexes
-  );
-  ASSERT_EQ(host.expected, actual);
-}
-
-TEST(RankTest, RankTestNoReversedBits) {
-  auto host = RankTestClass<false>();
-  auto actual = get_rank_output_no_reversed_bits(
+TEST(RankTest, RankTest) {
+  auto host = RankTestClass();
+  auto actual = get_rank_output(
     host.bit_vector, host.layer_0, host.layer_1_2, host.test_indexes
   );
   ASSERT_EQ(host.expected, actual);

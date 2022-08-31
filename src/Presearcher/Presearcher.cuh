@@ -10,6 +10,7 @@
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Utils/CudaKernelUtils.cuh"
 #include "Utils/CudaUtils.cuh"
+#include "Utils/GlobalDefinitions.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
@@ -21,11 +22,6 @@ using std::shared_ptr;
 
 namespace sbwt_search {
 
-template <
-  u64 superblock_bits,
-  u64 hyperblock_bits,
-  u32 presearch_letters,
-  bool reversed_bits>
 __global__ void d_presearch(
   const u64 *const c_map,
   const u64 *const *const acgt,
@@ -34,7 +30,7 @@ __global__ void d_presearch(
   u64 *presearch_left,
   u64 *presearch_right
 ) {
-  const auto rank = d_rank<superblock_bits, hyperblock_bits, reversed_bits>;
+  const auto rank = d_rank;
   const u32 kmer = get_idx();
   u32 c = (kmer >> (presearch_letters * 2 - 2)) & two_1s;
   u64 node_left = c_map[c];
@@ -57,23 +53,13 @@ class Presearcher {
 
   public:
     Presearcher(shared_ptr<GpuSbwtContainer> container): container(container) {}
-    template <
-      u32 threads_per_block,
-      u64 superblock_bits,
-      u64 hyperblock_bits,
-      u32 presearch_letters,
-      bool reversed_bits>
     void presearch() {
       constexpr const auto presearch_times
         = round_up<size_t>(1ULL << (presearch_letters * 2), threads_per_block);
       auto blocks_per_grid = presearch_times / threads_per_block;
       auto presearch_left = make_unique<GpuPointer<u64>>(presearch_times);
       auto presearch_right = make_unique<GpuPointer<u64>>(presearch_times);
-      d_presearch<
-        superblock_bits,
-        hyperblock_bits,
-        presearch_letters,
-        reversed_bits><<<blocks_per_grid, threads_per_block>>>(
+      d_presearch<<<blocks_per_grid, threads_per_block>>>(
         container->get_c_map().get(),
         container->get_acgt_pointers().get(),
         container->get_layer_0_pointers().get(),

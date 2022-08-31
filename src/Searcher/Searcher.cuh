@@ -16,6 +16,7 @@
 #include "Utils/CudaUtils.cuh"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "Utils/GlobalDefinitions.h"
 
 using gpu_utils::get_idx;
 using math_utils::round_up;
@@ -24,11 +25,6 @@ using std::vector;
 
 namespace sbwt_search {
 
-template <
-  u64 superblock_bits,
-  u64 hyperblock_bits,
-  u64 presearch_letters,
-  bool reversed_bits>
 __global__ void d_search(
   const u32 kmer_size,
   const u64 *const c_map,
@@ -41,7 +37,7 @@ __global__ void d_search(
   const u64 *const bit_seqs,
   u64 *out
 ) {
-  const auto rank = d_rank<superblock_bits, hyperblock_bits, reversed_bits>;
+  const auto rank = d_rank;
   const u32 idx = get_idx();
   const u64 kmer_index = kmer_positions[idx] * 2;
   const u64 first_part = (bit_seqs[kmer_index / 64] << (kmer_index % 64));
@@ -64,12 +60,6 @@ __global__ void d_search(
   out[idx] = node_left;
 }
 
-template <
-  u32 threads_per_block,
-  u64 superblock_bits,
-  u64 hyperblock_bits,
-  u64 presearch_letters,
-  bool reversed_bits>
 class SearcherGpu {
   private:
     shared_ptr<GpuSbwtContainer> container;
@@ -93,11 +83,7 @@ class SearcherGpu {
       d_kmer_positions.memset(
         kmer_positions.size(), memory_reserved - kmer_positions.size(), 0
       );
-      d_search<
-        superblock_bits,
-        hyperblock_bits,
-        presearch_letters,
-        reversed_bits><<<blocks_per_grid, threads_per_block>>>(
+      d_search<<<blocks_per_grid, threads_per_block>>>(
         container->get_kmer_size(),
         container->get_c_map().get(),
         container->get_acgt_pointers().get(),

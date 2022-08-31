@@ -10,6 +10,7 @@
 
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Searcher/Searcher.cuh"
+#include "Utils/GlobalDefinitions.h"
 #include "Utils/Logger.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/SharedBatchesProducer.hpp"
@@ -24,22 +25,9 @@ using std::shared_ptr;
 
 namespace sbwt_search {
 
-template <
-  class PositionsProducer,
-  class BitSeqProducer,
-  u32 threads_per_block,
-  u64 superblock_bits,
-  u64 hyperblock_bits,
-  u32 presearch_letters,
-  bool reversed_bits>
+template <class PositionsProducer, class BitSeqProducer>
 class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
-    SearcherGpu<
-      threads_per_block,
-      superblock_bits,
-      hyperblock_bits,
-      presearch_letters,
-      reversed_bits>
-      searcher;
+    SearcherGpu searcher;
     shared_ptr<BitSeqProducer> bit_seq_producer;
     shared_ptr<PositionsProducer> positions_producer;
     shared_ptr<vector<u64>> bit_seqs, kmer_positions;

@@ -52,11 +52,6 @@ const auto program_name = "SBWT Search";
 const auto program_description
   = "An application to search for k-mers in a genome given an SBWT index";
 const uint kmer_size = 30;
-const auto presearch_letters = 12;
-const size_t superblock_bits = 1024;
-constexpr const size_t hyperblock_bits = 1ULL << 32;
-const auto threads_per_block = 1024;
-const auto reversed_bits = true;
 const auto num_seq_to_bit_converters = 3;
 
 auto main(int argc, char **argv) -> int {
@@ -108,14 +103,7 @@ auto main(int argc, char **argv) -> int {
   auto positions_builder = make_shared<PositionsBuilder>(
     sequence_file_parser, kmer_size, max_chars_per_batch, max_batches
   );
-  using Searcher = ContinuousSearcher<
-    PositionsBuilder,
-    SeqToBitsConverter,
-    threads_per_block,
-    superblock_bits,
-    hyperblock_bits,
-    presearch_letters,
-    reversed_bits>;
+  using Searcher = ContinuousSearcher<PositionsBuilder, SeqToBitsConverter>;
   auto searcher = make_shared<Searcher>(
     gpu_container,
     seq_to_bit_converter,
@@ -166,12 +154,7 @@ auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
   Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::STOP);
   auto presearcher = Presearcher(gpu_container);
   Logger::log_timed_event("Presearcher", Logger::EVENT_STATE::START);
-  presearcher.presearch<
-    threads_per_block,
-    superblock_bits,
-    hyperblock_bits,
-    presearch_letters,
-    reversed_bits>();
+  presearcher.presearch();
   Logger::log_timed_event("Presearcher", Logger::EVENT_STATE::STOP);
   return gpu_container;
 }
