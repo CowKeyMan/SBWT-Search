@@ -133,6 +133,10 @@ add_library(
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
 )
 add_library(
+  poppy_builder
+  "${PROJECT_SOURCE_DIR}/PoppyBuilder/PoppyBuilder.cpp"
+)
+add_library(
   sbwt_builder
   "${PROJECT_SOURCE_DIR}/SbwtBuilder/SbwtBuilder.cpp"
 )
@@ -188,6 +192,7 @@ target_link_libraries(
   parser
   cxxopts
   sbwt_container
+  poppy_builder
   positions_builder
   OpenMP::OpenMP_CXX
   logger
