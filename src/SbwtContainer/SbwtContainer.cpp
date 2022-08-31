@@ -5,6 +5,7 @@
 #include "SbwtContainer/SbwtContainer.h"
 
 using sdsl::bit_vector;
+using std::move;
 
 namespace sbwt_search {
 
@@ -19,7 +20,7 @@ CpuSbwtContainer::CpuSbwtContainer(
   const bit_vector &&g,
   const bit_vector &&t
 ):
-    acgt{ a, c, g, t }, SbwtContainer(a.size(), a.capacity() / 64) {
+    acgt{ move(a), move(c), move(g), move(t) }, SbwtContainer(a.size(), a.capacity() / 64) {
   layer_0.resize(4);
   layer_1_2.resize(4);
   c_map.resize(5);
