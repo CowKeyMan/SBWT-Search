@@ -1,11 +1,13 @@
 #include <memory>
 #include <utility>
 
-#include "SbwtContainer/CpuSbwtContainer.hpp"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
+#include "SbwtContainer/SbwtContainer.h"
 
 using std::make_shared;
 using std::shared_ptr;
+
+#include "Utils/DebugUtils.hpp"
 
 namespace sbwt_search {
 
@@ -29,11 +31,7 @@ shared_ptr<GpuSbwtContainer> build_gpu_container(CpuContainer &container) {
   return result;
 }
 
-shared_ptr<GpuSbwtContainer> SdslSbwtContainer::to_gpu() {
-  return build_gpu_container<decltype(*this)>(*this);
-}
-
-shared_ptr<GpuSbwtContainer> BitVectorSbwtContainer::to_gpu() {
+auto CpuSbwtContainer::to_gpu() -> shared_ptr<GpuSbwtContainer> {
   return build_gpu_container<decltype(*this)>(*this);
 }
 

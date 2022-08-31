@@ -4,6 +4,7 @@
 
 #include "BatchObjects/IntervalBatch.h"
 #include "SequenceFileParser/IntervalBatchProducer.h"
+#include "Utils/CircularBuffer.hpp"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -19,8 +20,7 @@ IntervalBatchProducer::IntervalBatchProducer(
   initialise_batches();
 }
 
-auto IntervalBatchProducer::get_default_value()
-  -> shared_ptr<IntervalBatch> {
+auto IntervalBatchProducer::get_default_value() -> shared_ptr<IntervalBatch> {
   auto batch = make_shared<IntervalBatch>();
   batch->string_lengths.reserve(max_strings_per_batch);
   batch->strings_before_newfile.reserve(max_strings_per_batch + 1);

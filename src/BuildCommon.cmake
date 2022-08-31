@@ -23,6 +23,7 @@ include(FetchContent)
 
 FetchContent_Declare(
   fmt
+  QUIET
   GIT_REPOSITORY       https://github.com/fmtlib/fmt.git
   GIT_TAG              9.1.0
   GIT_SHALLOW          TRUE
@@ -132,13 +133,12 @@ add_library(
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
 )
 add_library(
-  sbwt_parser
-  "${PROJECT_SOURCE_DIR}/SbwtParser/BitVectorSbwtParser.cpp"
-  "${PROJECT_SOURCE_DIR}/SbwtParser/SdslSbwtParser.cpp"
+  sbwt_builder
+  "${PROJECT_SOURCE_DIR}/SbwtBuilder/SbwtBuilder.cpp"
 )
-target_link_libraries(sbwt_parser PRIVATE libsdsl io_utils)
+target_link_libraries(sbwt_builder PRIVATE libsdsl io_utils)
 if (NOT SDSL_FOUND)
-add_dependencies(sbwt_parser sdsl)
+add_dependencies(sbwt_builder sdsl)
 endif()
 add_library(
   sbwt_container_cpu
@@ -173,19 +173,6 @@ target_link_libraries(
   sbwt_container_gpu
   libsdsl
 )
-add_library(
-  sbwt_writer
-  "${PROJECT_SOURCE_DIR}/SbwtWriter/SbwtWriter.cpp"
-)
-target_link_libraries(
-  sbwt_writer
-  PRIVATE
-  libsdsl
-  sbwt_container
-)
-if(NOT KSEQPP_FOUND)
-add_dependencies(sbwt_writer kseqpp)
-endif()
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -195,13 +182,12 @@ target_link_libraries(
   io_utils
   sequence_file_parser
   filenames_parser
-  sbwt_parser
+  sbwt_builder
   libsdsl
   ZLIB::ZLIB
   parser
   cxxopts
   sbwt_container
-  sbwt_writer
   positions_builder
   OpenMP::OpenMP_CXX
   logger

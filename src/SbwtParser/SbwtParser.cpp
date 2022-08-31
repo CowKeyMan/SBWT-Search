@@ -29,7 +29,7 @@ using std::vector;
 
 namespace sbwt_search {
 
-auto SdslSbwtParser::do_parse() -> shared_ptr<SdslSbwtContainer> {
+auto SbwtParser::parse() -> shared_ptr<SdslSbwtContainer> {
   ThrowingIfstream stream(filename, std::ios::in);
   assert_plain_matrix(stream);
   vector<bit_vector> acgt(4);
@@ -41,7 +41,7 @@ auto SdslSbwtParser::do_parse() -> shared_ptr<SdslSbwtContainer> {
 
 // Function credits:
 // https://github.com/algbio/SBWT/blob/master/src/globals.cpp
-void SdslSbwtParser::assert_plain_matrix(istream &stream) const {
+void SbwtParser::assert_plain_matrix(istream &stream) const {
   size_t size;
   stream.read(reinterpret_cast<char *>(&size), sizeof(u64));
   string variant(size, '\0');

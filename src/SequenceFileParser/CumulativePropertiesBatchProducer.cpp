@@ -4,6 +4,7 @@
 
 #include "BatchObjects/CumulativePropertiesBatch.h"
 #include "SequenceFileParser/CumulativePropertiesBatchProducer.h"
+#include "Utils/CircularBuffer.hpp"
 
 using std::make_shared;
 using std::shared_ptr;

@@ -9,6 +9,7 @@
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
 #include "Utils/Logger.h"
 #include "Utils/MathUtils.hpp"
+#include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
 #include "fmt/core.h"
 

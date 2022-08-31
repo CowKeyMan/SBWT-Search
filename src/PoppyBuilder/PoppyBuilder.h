@@ -10,12 +10,12 @@
  *          * hyperblock_bits is a multiple of hyperblock_bits
  * */
 
-#include <memory>
+#include <algorithm>
+#include <cstddef>
 #include <numeric>
+#include <utility>
 #include <vector>
 
-#include "Builder/Builder.h"
-#include "SbwtContainer/SbwtContainer.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
@@ -23,47 +23,12 @@ using math_utils::divisible_by_power_of_two;
 using math_utils::round_up;
 using std::accumulate;
 using std::fill;
-using std::shared_ptr;
 using std::vector;
 
 namespace sbwt_search {
 
-template <
-  class Implementation,
-  class Container,
-  u64 superblock_bits,
-  u64 hyperblock_bits>
-class RankIndexBuilder: private Builder {
-  private:
-    Implementation *const host;
-
-  protected:
-    shared_ptr<Container> container;
-    const u64 basicblock_bits;
-
-    RankIndexBuilder(shared_ptr<Container> container):
-        container(container),
-        host(static_cast<Implementation *>(this)),
-        basicblock_bits(superblock_bits / 4) {
-      static_assert(
-        (superblock_bits / 4) % 64 == 0 && hyperblock_bits % 64 == 0,
-        "Block bits must be divisible by 64"
-      );
-      static_assert(
-        superblock_bits < hyperblock_bits,
-        "superblock_bits must be smaller than hyperblock_bits"
-      );
-    }
-
-  public:
-    void build_index() {
-      check_if_has_built();
-      host->do_build_index();
-    };
-};
-
 template <u64 superblock_bits, u64 hyperblock_bits>
-class SingleIndexBuilder {
+class PoppyBuilder {
   private:
     const size_t bits_total;
     const u64 *bits_vector;
@@ -74,7 +39,7 @@ class SingleIndexBuilder {
     const u64 basicblock_bits;
 
   public:
-    SingleIndexBuilder(const size_t bits_total, const u64 *bits_vector):
+    PoppyBuilder(const size_t bits_total, const u64 *bits_vector):
         bits_total(bits_total),
         bits_vector(bits_vector),
         basicblock_bits(superblock_bits / 4) {
@@ -137,49 +102,6 @@ class SingleIndexBuilder {
         | layer_2_temps[2] << 0
       );
     }
-};
-
-template <class Container, u64 superblock_bits, u64 hyperblock_bits>
-class CpuRankIndexBuilder:
-    public RankIndexBuilder<
-      CpuRankIndexBuilder<Container, superblock_bits, hyperblock_bits>,
-      Container,
-      superblock_bits,
-      hyperblock_bits> {
-    using Base = RankIndexBuilder<
-      CpuRankIndexBuilder<Container, superblock_bits, hyperblock_bits>,
-      Container,
-      superblock_bits,
-      hyperblock_bits>;
-    friend Base;
-
-  private:
-    void do_build_index() {
-      vector<u64> c_map(5);
-      c_map[0] = 1;
-      for (auto i = 0; i < 4; ++i) {
-        const u64 *vector_pointer
-          = this->container->get_acgt(static_cast<ACGT>(i));
-        auto single_builder
-          = SingleIndexBuilder<superblock_bits, hyperblock_bits>(
-            this->container->get_bits_total(), vector_pointer
-          );
-        single_builder.build();
-        this->container->set_layer_0(
-          static_cast<ACGT>(i), single_builder.get_layer_0()
-        );
-
-        this->container->set_layer_1_2(
-          static_cast<ACGT>(i), single_builder.get_layer_1_2()
-        );
-        c_map[i + 1] = single_builder.get_total_count();
-      }
-      for (auto i = 1; i < c_map.size(); ++i) { c_map[i] += c_map[i - 1]; }
-      this->container->set_c_map(move(c_map));
-    }
-
-  public:
-    CpuRankIndexBuilder(shared_ptr<Container> container): Base(container) {}
 };
 
 }  // namespace sbwt_search

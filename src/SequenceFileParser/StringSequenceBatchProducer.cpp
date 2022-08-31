@@ -5,6 +5,7 @@
 
 #include "BatchObjects/StringSequenceBatch.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
+#include "Utils/CircularBuffer.hpp"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 

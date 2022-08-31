@@ -8,14 +8,13 @@
 
 #include "ArgumentParser/ArgumentParser.hpp"
 #include "FilenamesParser/FilenamesParser.h"
+#include "PoppyBuilder/PoppyBuilder.h"
 #include "PositionsBuilder/ContinuousPositionsBuilder.hpp"
 #include "Presearcher/Presearcher.cuh"
-#include "RankIndexBuilder/RankIndexBuilder.hpp"
 #include "ResultsPrinter/ContinuousResultsPrinter.hpp"
-#include "SbwtContainer/CpuSbwtContainer.hpp"
+#include "SbwtBuilder/SbwtBuilder.h"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
-#include "SbwtContainer/SbwtContainer.hpp"
-#include "SbwtFactory/SbwtFactory.hpp"
+#include "SbwtContainer/SbwtContainer.h"
 #include "Searcher/ContinuousSearcher.cuh"
 #include "SeqToBitsConverter/ContinuousSeqToBitsConverter.hpp"
 #include "SequenceFileParser/ContinuousSequenceFileParser.h"
@@ -153,20 +152,15 @@ auto main(int argc, char **argv) -> int {
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
 }
 
+#include <iostream>
+using namespace std;
+#include "Utils/DebugUtils.hpp"
+
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
-  auto sbwt_factory = SdslSbwtFactory();
-  auto sbwt_parser = sbwt_factory.get_sbwt_parser(index_file);
-  Logger::log_timed_event("SBWTParser", Logger::EVENT_STATE::START);
-  auto cpu_container = sbwt_parser.parse();
-  Logger::log_timed_event("SBWTParser", Logger::EVENT_STATE::STOP);
-  using container_type = remove_reference<decltype(*cpu_container.get())>::type;
-  auto index_builder
-    = CpuRankIndexBuilder<container_type, superblock_bits, hyperblock_bits>(
-      cpu_container
-    );
-  Logger::log_timed_event("IndexBuilder", Logger::EVENT_STATE::START);
-  index_builder.build_index();
-  Logger::log_timed_event("IndexBuilder", Logger::EVENT_STATE::STOP);
+  Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::START);
+  auto builder = SbwtBuilder(index_file);
+  auto cpu_container = builder.get_cpu_sbwt(true);
+  Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::STOP);
   Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::START);
   auto gpu_container = cpu_container->to_gpu();
   Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::STOP);

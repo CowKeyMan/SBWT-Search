@@ -8,18 +8,15 @@
 
 #include <memory>
 
-#include "SbwtContainer/SbwtContainer.hpp"
+#include "SbwtContainer/SbwtContainer.h"
 #include "Utils/CudaUtils.cuh"
 
 using gpu_utils::GpuPointer;
-using std::make_unique;
 using std::unique_ptr;
 
 namespace sbwt_search {
 
-class GpuSbwtContainer: public SbwtContainer<GpuSbwtContainer> {
-    friend SbwtContainer;
-
+class GpuSbwtContainer: public SbwtContainer {
   private:
     vector<unique_ptr<GpuPointer<u64>>> acgt, layer_0, layer_1_2;
     unique_ptr<GpuPointer<u64>> c_map, presearch_left, presearch_right;

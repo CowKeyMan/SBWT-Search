@@ -9,8 +9,6 @@
 #include <memory>
 #include <string>
 
-#include "Utils/BoundedSemaphore.hpp"
-#include "Utils/CircularBuffer.hpp"
 #include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
 

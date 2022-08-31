@@ -6,15 +6,25 @@
  * @brief Contains functions and objects relating to bit vectors
  * */
 
+#include <byteswap.h>
 #include <vector>
+
+#include <sdsl/int_vector.hpp>
 
 #include "Utils/TypeDefinitions.h"
 
+using sdsl::bit_vector;
 using std::vector;
 
 namespace sbwt_search {
 
-constexpr u64 get_ones(const int ones) {
+auto vector_to_sdsl(const vector<u64> &v, u64 num_bits) -> bit_vector {
+  auto result = bit_vector(num_bits);
+  for (u64 i = 0; i < v.size(); ++i) { result.data()[i] = v[i]; }
+  return result;
+}
+
+auto constexpr get_ones(const int ones) -> u64 {
   u64 result = 0;
   for (int i = 0; i < ones; ++i) { result = (result << 1) + 1; }
   return result;
@@ -23,7 +33,7 @@ constexpr u64 get_ones(const int ones) {
 // 2  u64s = 1 basic block
 // 8  u64s = 1 super block
 // 16 u64s = 1 hyper block
-const vector<u64> bit_vector = {
+const vector<u64> bit_array = {
   // # Hyper Block 1 - total: 130
   // ## Super Block 1 - total: 30
   // ### Basic Block 01 - total: 5
@@ -75,6 +85,7 @@ const vector<u64> expected_layer_1_2 = {
   (30ULL << 32) | (10ULL << 20) | (65ULL << 10) | (20ULL << 0),
   (0ULL << 32) | (2ULL << 20) | (0ULL << 10) | (0ULL << 0),
 };
+const u64 total_1s = 132;
 const vector<u64> c_map = { 1, 132 + 1, 132 * 2 + 1, 132 * 3 + 1, 132 * 4 + 1 };
 
 }  // namespace sbwt_search
