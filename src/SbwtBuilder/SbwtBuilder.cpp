@@ -11,14 +11,15 @@
 #include "SbwtBuilder/SbwtBuilder.h"
 #include "SbwtContainer/SbwtContainer.h"
 #include "Utils/IOUtils.h"
-#include "Utils/TypeDefinitions.h"
 #include "Utils/Logger.h"
+#include "Utils/TypeDefinitions.h"
 
 using io_utils::ThrowingIfstream;
+using log_utils::Logger;
 using std::make_unique;
 using std::move;
 using std::runtime_error;
-using log_utils::Logger;
+using std::unique_ptr;
 
 namespace sbwt_search {
 
@@ -26,12 +27,15 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   -> unique_ptr<CpuSbwtContainer> {
   ThrowingIfstream stream(filename, std::ios::in);
   assert_plain_matrix(stream);
-  vector<bit_vector> acgt(4);
+  vector<unique_ptr<bit_vector>> acgt(4);
   Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::START);
-  for (int i = 0; i < 4; ++i) { acgt[i].load(stream); }
+  for (int i = 0; i < 4; ++i) {
+    acgt[i] = make_unique<bit_vector>();
+    acgt[i]->load(stream);
+  }
   Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::STOP);
   auto container = make_unique<CpuSbwtContainer>(
-    move(acgt[0]), move(acgt[1]), move(acgt[2]), move(acgt[3])
+    acgt[0], acgt[1], acgt[2], acgt[3]
   );
   Logger::log_timed_event("Poppy", Logger::EVENT_STATE::START);
   if (build_index) { build_poppy(container.get()); }
@@ -45,8 +49,7 @@ auto SbwtBuilder::build_poppy(CpuSbwtContainer *container) -> void {
   c_map[0] = 1;
   for (int i = 0; i < 4; ++i) {
     auto builder = PoppyBuilder(
-      container->get_bits_total(),
-      container->get_acgt(static_cast<ACGT>(i))
+      container->get_bits_total(), container->get_acgt(static_cast<ACGT>(i))
     );
     builder.build();
     layer_0[i] = builder.get_layer_0();

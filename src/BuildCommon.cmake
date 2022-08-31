@@ -99,10 +99,6 @@ include_directories(SYSTEM "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
 
 # My libraries
 add_library(
-  parser
-  "${PROJECT_SOURCE_DIR}/Builder/Builder.cpp"
-)
-add_library(
   io_utils
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
 )
@@ -189,7 +185,6 @@ target_link_libraries(
   sbwt_builder
   libsdsl
   ZLIB::ZLIB
-  parser
   cxxopts
   sbwt_container
   poppy_builder

@@ -6,6 +6,7 @@
 
 using sdsl::bit_vector;
 using std::move;
+using std::unique_ptr;
 
 namespace sbwt_search {
 
@@ -15,12 +16,16 @@ auto SbwtContainer::get_bit_vector_size() const -> u64 {
 auto SbwtContainer::get_bits_total() const -> u64 { return bits_total; }
 
 CpuSbwtContainer::CpuSbwtContainer(
-  const bit_vector &&a,
-  const bit_vector &&c,
-  const bit_vector &&g,
-  const bit_vector &&t
+  unique_ptr<bit_vector> &a,
+  unique_ptr<bit_vector> &c,
+  unique_ptr<bit_vector> &g,
+  unique_ptr<bit_vector> &t
 ):
-    acgt{ move(a), move(c), move(g), move(t) }, SbwtContainer(a.size(), a.capacity() / 64) {
+    SbwtContainer(a->size(), a->capacity() / 64) {
+  acgt.push_back(move(a));
+  acgt.push_back(move(c));
+  acgt.push_back(move(g));
+  acgt.push_back(move(t));
   layer_0.resize(4);
   layer_1_2.resize(4);
   c_map.resize(5);
@@ -53,7 +58,7 @@ auto CpuSbwtContainer::set_index(
 auto CpuSbwtContainer::get_c_map() const -> const vector<u64> { return c_map; }
 
 auto CpuSbwtContainer::get_acgt(ACGT letter) const -> const u64 * {
-  return acgt[static_cast<int>(letter)].data();
+  return acgt[static_cast<int>(letter)]->data();
 }
 
 }  // namespace sbwt_search

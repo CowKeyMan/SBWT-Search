@@ -17,6 +17,7 @@
 using sdsl::bit_vector;
 using std::shared_ptr;
 using std::size_t;
+using std::unique_ptr;
 using std::vector;
 
 namespace sbwt_search {
@@ -43,17 +44,17 @@ class GpuSbwtContainer;
 
 class CpuSbwtContainer: public SbwtContainer {
   protected:
-    const vector<bit_vector> acgt;
+    vector<unique_ptr<bit_vector>> acgt;
     vector<vector<u64>> layer_0;
     vector<vector<u64>> layer_1_2;
     vector<u64> c_map;
 
   public:
     CpuSbwtContainer(
-      const bit_vector &&a,
-      const bit_vector &&c,
-      const bit_vector &&g,
-      const bit_vector &&t
+      unique_ptr<bit_vector> &a,
+      unique_ptr<bit_vector> &c,
+      unique_ptr<bit_vector> &g,
+      unique_ptr<bit_vector> &t
     );
     auto set_index(
       vector<u64> &&new_c_map,
