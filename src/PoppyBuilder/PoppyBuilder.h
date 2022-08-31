@@ -26,14 +26,11 @@ class PoppyBuilder {
     vector<u64> layer_2_temps = vector<u64>(3, 0);
     size_t layer_2_temps_index = 0;
     u64 layer_0_count = 0, layer_1_count = 0, layer_2_count = 0;
-    const u64 hyperblock_bits, superblock_bits, basicblock_bits;
 
   public:
     PoppyBuilder(
       const size_t bits_total,
-      const u64 *bits_vector,
-      const u64 hyperblock_bits,
-      const u64 superblock_bits
+      const u64 *bits_vector
     );
 
     auto get_layer_0() -> vector<u64> &&;

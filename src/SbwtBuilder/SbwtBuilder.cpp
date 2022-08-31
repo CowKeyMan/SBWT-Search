@@ -44,12 +44,9 @@ auto SbwtBuilder::build_poppy(CpuSbwtContainer *container) -> void {
   vector<u64> c_map(5);
   c_map[0] = 1;
   for (int i = 0; i < 4; ++i) {
-    constexpr u64 hyperblock_bits = 1ULL << 32, superblock_bits = 1024;
     auto builder = PoppyBuilder(
       container->get_bits_total(),
-      container->get_acgt(static_cast<ACGT>(i)),
-      hyperblock_bits,
-      superblock_bits
+      container->get_acgt(static_cast<ACGT>(i))
     );
     builder.build();
     layer_0[i] = builder.get_layer_0();
