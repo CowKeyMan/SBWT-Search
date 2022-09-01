@@ -1,0 +1,3 @@
+benchmark_objects/FASTA1GB.fna
+benchmark_objects/FASTQ1GB.fnq
+test_objects/365.fna
