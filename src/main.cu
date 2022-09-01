@@ -140,10 +140,6 @@ auto main(int argc, char **argv) -> int {
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
 }
 
-#include <iostream>
-using namespace std;
-#include "Utils/DebugUtils.hpp"
-
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {
   Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::START);
   auto builder = SbwtBuilder(index_file);
