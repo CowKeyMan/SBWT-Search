@@ -34,9 +34,8 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
     acgt[i]->load(stream);
   }
   Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::STOP);
-  auto container = make_unique<CpuSbwtContainer>(
-    acgt[0], acgt[1], acgt[2], acgt[3]
-  );
+  auto container
+    = make_unique<CpuSbwtContainer>(acgt[0], acgt[1], acgt[2], acgt[3]);
   Logger::log_timed_event("Poppy", Logger::EVENT_STATE::START);
   if (build_index) { build_poppy(container.get()); }
   Logger::log_timed_event("Poppy", Logger::EVENT_STATE::START);
@@ -47,6 +46,7 @@ auto SbwtBuilder::build_poppy(CpuSbwtContainer *container) -> void {
   vector<vector<u64>> layer_0(4), layer_1_2(4);
   vector<u64> c_map(5);
   c_map[0] = 1;
+#pragma omp parallel for
   for (int i = 0; i < 4; ++i) {
     auto builder = PoppyBuilder(
       container->get_bits_total(), container->get_acgt(static_cast<ACGT>(i))

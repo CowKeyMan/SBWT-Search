@@ -136,7 +136,7 @@ add_library(
   sbwt_builder
   "${PROJECT_SOURCE_DIR}/SbwtBuilder/SbwtBuilder.cpp"
 )
-target_link_libraries(sbwt_builder PRIVATE libsdsl io_utils)
+target_link_libraries(sbwt_builder PRIVATE libsdsl io_utils OpenMP::OpenMP_CXX)
 if (NOT SDSL_FOUND)
 add_dependencies(sbwt_builder sdsl)
 endif()
