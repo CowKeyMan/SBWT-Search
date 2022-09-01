@@ -27,6 +27,8 @@ class SharedBatchesProducer {
   private:
     Semaphore start_semaphore, finish_semaphore;
     bool batches_initialised = false;
+    omp_lock_t step_lock_;
+    omp_lock_t *step_lock = &step_lock_;
 
   protected:
     CircularBuffer<shared_ptr<BatchType>> batches;
@@ -34,10 +36,12 @@ class SharedBatchesProducer {
     SharedBatchesProducer(const unsigned int max_batches):
         start_semaphore(max_batches - 1),
         finish_semaphore(0),
-        batches(max_batches) {}
+        batches(max_batches) {
+      omp_init_lock(step_lock);
+    }
 
   public:
-    virtual ~SharedBatchesProducer(){};
+    virtual ~SharedBatchesProducer() { omp_destroy_lock(step_lock); };
 
     auto virtual read_and_generate() -> void {
       throw_if_uninitialised();
@@ -54,7 +58,9 @@ class SharedBatchesProducer {
       finish_semaphore.acquire();
       if (batches.empty()) { return false; }
       out = batches.current_read();
+      omp_set_lock(step_lock);
       batches.step_read();
+      omp_unset_lock(step_lock);
       return true;
     }
 
@@ -78,7 +84,9 @@ class SharedBatchesProducer {
     }
     auto virtual generate() -> void { throw_uninitialised(); };
     auto virtual do_at_batch_finish(unsigned int batch_id = 0) -> void {
+      omp_set_lock(step_lock);
       batches.step_write();
+      omp_unset_lock(step_lock);
       finish_semaphore.release();
     }
     auto virtual do_at_generate_finish() -> void { finish_semaphore.release(); }
