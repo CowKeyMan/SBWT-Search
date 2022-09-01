@@ -28,9 +28,8 @@ class SearcherCpu {
   public:
     SearcherCpu(shared_ptr<Container> container): container(container) {}
 
-    template <u32 kmer_size>
     vector<u64>
-    search(const vector<u64> &kmer_positions, const vector<u64> &bit_seqs) {
+    search(const vector<u64> &kmer_positions, const vector<u64> &bit_seqs, u32 kmer_size) {
       auto rank = dummy_cpu_rank;
       auto result = vector<u64>(kmer_positions.size());
       for (int i = 0; i < kmer_positions.size(); ++i) {
