@@ -171,7 +171,7 @@ auto ContinuousSequenceFileParser::print_string_too_large(
   Logger::log(
     Logger::LOG_LEVEL::ERROR,
     format(
-      "The string in file {} at position {} of length {} is too large\n",
+      "The string in file {} at position {} of length {} is too large",
       filename,
       string_index,
       string_size
