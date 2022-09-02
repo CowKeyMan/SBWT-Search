@@ -38,7 +38,7 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
     = make_unique<CpuSbwtContainer>(acgt[0], acgt[1], acgt[2], acgt[3]);
   Logger::log_timed_event("Poppy", Logger::EVENT_STATE::START);
   if (build_index) { build_poppy(container.get()); }
-  Logger::log_timed_event("Poppy", Logger::EVENT_STATE::START);
+  Logger::log_timed_event("Poppy", Logger::EVENT_STATE::STOP);
   return container;
 }
 
