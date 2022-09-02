@@ -1,3 +1,0 @@
-results/combined_FASTA1GB.txt
-results/combined_FASTQ1GB.txt
-results/combined_365.txt

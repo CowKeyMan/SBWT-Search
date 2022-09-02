@@ -30,11 +30,6 @@ module purge
 ## Load in modules
 module load gcc cuda python-data bzip2
 
-## By default this is 1, which would halt our program
-unset OMP_NUM_THREADS
-## adjust this accordingly - by default it is warn
-export SPDLOG_LEVEL=TRACE
-
 ## We want to perform our work in LOCAL SCRATCh
 export OLD_PWD="${PWD}"
 cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
