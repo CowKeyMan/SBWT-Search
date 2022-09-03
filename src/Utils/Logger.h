@@ -30,7 +30,7 @@ class Logger {
       const string &component,
       EVENT_STATE start_stop,
       const string &message = "",
-      LOG_LEVEL level = LOG_LEVEL::TRACE
+      LOG_LEVEL level = LOG_LEVEL::DEBUG
     ) -> void;
 };
 
