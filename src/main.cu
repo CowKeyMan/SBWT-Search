@@ -122,19 +122,18 @@ auto main(int argc, char **argv) -> int {
     output_filenames,
     kmer_size
   );
-
 #pragma omp parallel sections default(shared)
   {
 #pragma omp section
-    sequence_file_parser->read_and_generate();
+    { sequence_file_parser->read_and_generate(); }
 #pragma omp section
-    seq_to_bit_converter->read_and_generate();
+    { seq_to_bit_converter->read_and_generate(); }
 #pragma omp section
-    positions_builder->read_and_generate();
+    { positions_builder->read_and_generate(); }
 #pragma omp section
-    searcher->read_and_generate();
+    { searcher->read_and_generate(); }
 #pragma omp section
-    results_printer->read_and_generate();
+    { results_printer->read_and_generate(); }
   }
   Logger::log(INFO, "DONE");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
@@ -169,7 +168,7 @@ auto get_max_chars_per_batch(
 auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t {
   size_t free = get_free_gpu_memory();
   auto max_chars_per_batch
-    = round_down<size_t>(free * 8 / 66 / (max_batches), threads_per_block);
+    = round_down<size_t>(free * 8 / 66 / max_batches, threads_per_block);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
