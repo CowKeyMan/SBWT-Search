@@ -56,9 +56,12 @@ class SharedBatchesProducer {
     auto operator>>(shared_ptr<BatchType> &out) -> bool {
       start_semaphore.release();
       finish_semaphore.acquire();
-      if (batches.empty()) { return false; }
-      out = batches.current_read();
       omp_set_lock(step_lock);
+      if (batches.empty()) {
+        omp_unset_lock(step_lock);
+        return false;
+      }
+      out = batches.current_read();
       batches.step_read();
       omp_unset_lock(step_lock);
       return true;
