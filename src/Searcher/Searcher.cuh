@@ -83,22 +83,24 @@ class SearcherGpu {
       d_kmer_positions.memset(
         kmer_positions.size(), memory_reserved - kmer_positions.size(), 0
       );
-      d_search<<<blocks_per_grid, threads_per_block>>>(
-        container->get_kmer_size(),
-        container->get_c_map().get(),
-        container->get_acgt_pointers().get(),
-        container->get_layer_0_pointers().get(),
-        container->get_layer_1_2_pointers().get(),
-        container->get_presearch_left().get(),
-        container->get_presearch_right().get(),
-        d_kmer_positions.get(),
-        d_bit_seqs.get(),
-        d_kmer_positions.get()
-      );
-      GPU_CHECK(cudaPeekAtLastError());
-      GPU_CHECK(cudaDeviceSynchronize());
       results.resize(kmer_positions.size());
-      d_kmer_positions.copy_to(results, kmer_positions.size());
+      if (kmer_positions.size() > 0) {
+        d_search<<<blocks_per_grid, threads_per_block>>>(
+          container->get_kmer_size(),
+          container->get_c_map().get(),
+          container->get_acgt_pointers().get(),
+          container->get_layer_0_pointers().get(),
+          container->get_layer_1_2_pointers().get(),
+          container->get_presearch_left().get(),
+          container->get_presearch_right().get(),
+          d_kmer_positions.get(),
+          d_bit_seqs.get(),
+          d_kmer_positions.get()
+        );
+        GPU_CHECK(cudaPeekAtLastError());
+        GPU_CHECK(cudaDeviceSynchronize());
+        d_kmer_positions.copy_to(results, kmer_positions.size());
+      }
     }
 };
 
