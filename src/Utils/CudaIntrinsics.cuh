@@ -1,8 +1,8 @@
-#ifndef CUDA_INTRINSICS_H
-#define CUDA_INTRINSICS_H
+#ifndef CUDA_INTRINSICS_CUH
+#define CUDA_INTRINSICS_CUH
 
 /**
- * @file CudaIntrinsics.h
+ * @file CudaIntrinsics.cuh
  * @brief Contains cuda functions which are not in any cuda header files but are
  * defined by the cuda compiler. Used for better autocompletion
  * */

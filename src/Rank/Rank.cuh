@@ -8,7 +8,7 @@
 
 #include "Utils/BitDefinitions.h"
 #include "Utils/BitVectorUtils.h"
-#include "Utils/CudaIntrinsics.h"
+#include "Utils/CudaIntrinsics.cuh"
 #include "Utils/GlobalDefinitions.h"
 #include "Utils/TypeDefinitions.h"
 #include "cuda_runtime.h"
