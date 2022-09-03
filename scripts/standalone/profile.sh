@@ -1,5 +1,4 @@
-# Build the benchmarks
-
+# First build the release build
 mkdir -p build
 cd build
 cmake \
@@ -10,11 +9,12 @@ cmake \
   -DENABLE_CLANG_FORMAT_CHECK=OFF \
   -DBUILD_CPU=ON \
   -DBUILD_CUDA=ON \
-  -DBUILD_MAIN=OFF \
+  -DBUILD_MAIN=ON \
   -DBUILD_TESTS=OFF \
-  -DBUILD_BENCHMARKS=ON \
+  -DBUILD_BENCHMARKS=OFF \
   -DBUILD_DOCS=OFF \
-  -DENABLE_PROFILING=OFF \
+  -DENABLE_PROFILING=ON \
   ..
 cmake --build . -j8
 cd ..
+gprof

@@ -13,7 +13,6 @@ cmake \
   -DBUILD_MAIN=ON \
   -DBUILD_TESTS=ON \
   -DBUILD_DOCS=OFF \
-  -DBUILD_BENCHMARKS=ON \
   -DENABLE_PROFILING=ON \
   ..
 cmake \
@@ -27,7 +26,6 @@ cmake \
   -DBUILD_MAIN=OFF \
   -DBUILD_TESTS=OFF \
   -DBUILD_DOCS=OFF \
-  -DBUILD_BENCHMARKS=OFF \
   -DENABLE_PROFILING=OFF \
   ..
 cd ..
@@ -35,6 +33,5 @@ cd ..
 
 sh scripts/build/release.sh
 # sh scripts/build/debug.sh
-# sh scripts/build/benchmarks.sh
 sh scripts/build/tests.sh
 sh scripts/build/docs.sh

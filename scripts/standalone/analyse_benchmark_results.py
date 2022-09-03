@@ -4,7 +4,7 @@ import json
 from matplotlib import pyplot as plt
 import numpy as np
 from collections import defaultdict
-
+from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', help='Input log file to analyse', required=True)
@@ -206,8 +206,10 @@ for index, name in enumerate(sorted_keys):
             ha="center",
             fontsize=8
         )
+        input_filename = name.split()[1]
         filename = (
-            name.split()[1].replace('/', '_').replace('.', '_')
+            str(Path(input_filename).parent)
+            + input_filename.replace('/', '_').replace('.', '_')
             + name.split()[3]
             + 'batches.svg'
         )

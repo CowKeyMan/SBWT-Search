@@ -12,7 +12,6 @@ results_folder="results/${DATETIME}"
 mkdir -p results
 mkdir -p ${results_folder}
 
-
 input_files=(
   "benchmark_objects/FASTA1GB.fna"
   "benchmark_objects/FASTQ1GB.fnq"
@@ -41,6 +40,7 @@ stdoutput="${results_folder}/benchmark_out.txt"
 
 for batch in ${batches[@]}; do
 for (( i=0; i<${#input_files[@]}; i++ )); do
+echo Now running: File ${input_files[i]} with ${batch} batches
 echo Now running: File ${input_files[i]} with ${batch} batches >> ${stdoutput}
 ./build/bin/main_cuda -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batch} >> ${stdoutput}
 done

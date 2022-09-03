@@ -120,7 +120,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/CumulativePropertiesBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringSequenceBatchProducer.cpp"
 )
-target_link_libraries(sequence_file_parser PRIVATE io_utils fmt::fmt)
+target_link_libraries(sequence_file_parser PRIVATE io_utils fmt::fmt logger OpenMP::OpenMP_CXX)
 if(NOT KSEQPP_FOUND)
 add_dependencies(sequence_file_parser kseqpp)
 endif()
