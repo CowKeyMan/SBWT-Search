@@ -18,32 +18,32 @@ using uint = unsigned int;
 
 class Semaphore {
   private:
-    omp_lock_t acquire_gate_;
-    omp_lock_t *acquire_gate = &acquire_gate_;
+    omp_lock_t acquire_gate_, count_protector_;
+    omp_lock_t *acquire_gate = &acquire_gate_,
+               *count_protector = &count_protector_;
     uint count;
 
   public:
     Semaphore(uint starting_count = 1): count(starting_count) {
       omp_init_lock(acquire_gate);
+      omp_init_lock(count_protector);
       if (starting_count == 0) { omp_set_lock(acquire_gate); }
     }
 
     void acquire() {
       omp_set_lock(acquire_gate);
-#pragma omp critical(SEMAPHORE_COUNT_PROTECTOR)
-      {
-        --count;
-        if (count > 0) { omp_unset_lock(acquire_gate); }
-      }
+      omp_set_lock(count_protector);
+      --count;
+      if (count > 0) { omp_unset_lock(acquire_gate); }
+      omp_unset_lock(count_protector);
     }
 
     void release() {
-#pragma omp critical(SEMAPHORE_COUNT_PROTECTOR)
-      {
-        int previous_count = count;
-        ++count;
-        if (previous_count == 0) { omp_unset_lock(acquire_gate); }
-      }
+      omp_set_lock(count_protector);
+      int previous_count = count;
+      ++count;
+      omp_unset_lock(count_protector);
+      if (previous_count == 0) { omp_unset_lock(acquire_gate); }
     }
 
     ~Semaphore() { omp_destroy_lock(acquire_gate); }

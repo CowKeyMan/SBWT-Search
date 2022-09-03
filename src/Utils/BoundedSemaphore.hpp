@@ -15,8 +15,9 @@ using uint = unsigned int;
 
 class BoundedSemaphore {
   private:
-    omp_lock_t acquire_gate_, release_gate_;
-    omp_lock_t *acquire_gate = &acquire_gate_, *release_gate = &release_gate_;
+    omp_lock_t acquire_gate_, release_gate_, count_protector_;
+    omp_lock_t *acquire_gate = &acquire_gate_, *release_gate = &release_gate_,
+               *count_protector = &count_protector_;
 
   public:
     uint count, maximum;
@@ -35,24 +36,22 @@ class BoundedSemaphore {
 
     void acquire() {
       omp_set_lock(acquire_gate);
-#pragma omp critical(BOUNDED_SEMAPHORE_COUNT_PROTECTOR)
-      {
-        uint previous_count = count;
-        --count;
-        if (count > 0) { omp_unset_lock(acquire_gate); }
-        if (previous_count == maximum) { omp_unset_lock(release_gate); }
-      }
+      omp_set_lock(count_protector);
+      uint previous_count = count;
+      --count;
+      if (count > 0) { omp_unset_lock(acquire_gate); }
+      if (previous_count == maximum) { omp_unset_lock(release_gate); }
+      omp_unset_lock(count_protector);
     }
 
     void release() {
       omp_set_lock(release_gate);
-#pragma omp critical(BOUNDED_SEMAPHORE_COUNT_PROTECTOR)
-      {
-        uint previous_count = count;
-        ++count;
-        if (previous_count == 0) { omp_unset_lock(acquire_gate); }
-        if (count < maximum) { omp_unset_lock(release_gate); }
-      }
+      omp_set_lock(count_protector);
+      uint previous_count = count;
+      ++count;
+      if (previous_count == 0) { omp_unset_lock(acquire_gate); }
+      if (count < maximum) { omp_unset_lock(release_gate); }
+      omp_unset_lock(count_protector);
     }
 
     ~BoundedSemaphore() {
