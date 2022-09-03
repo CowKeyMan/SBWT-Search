@@ -7,8 +7,6 @@
 using std::make_shared;
 using std::shared_ptr;
 
-#include "Utils/DebugUtils.hpp"
-
 namespace sbwt_search {
 
 template <class CpuContainer>
