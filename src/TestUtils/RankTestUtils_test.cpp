@@ -13,8 +13,8 @@ using std::string;
 namespace sbwt_search {
 
 TEST(RankTestUtilsTest, TestRank) {
-  ASSERT_EQ(1, dummy_cpu_rank(&bit_vector[0], 1));
-  ASSERT_EQ(20, dummy_cpu_rank(&bit_vector[0], 64 * 4 + 5));
+  ASSERT_EQ(1, dummy_cpu_rank(&bit_array[0], 1));
+  ASSERT_EQ(20, dummy_cpu_rank(&bit_array[0], 64 * 4 + 5));
 }
 
 }  // namespace sbwt_search

@@ -1,3 +1,12 @@
+#ifndef CUDA_INTRINSICS_H
+#define CUDA_INTRINSICS_H
+
+/**
+ * @file CudaIntrinsics.h
+ * @brief Contains cuda functions which are not in any cuda header files but are
+ * defined by the cuda compiler. Used for better autocompletion
+ * */
+
 #include "cuda_runtime.h"
 
 __device__ unsigned int __brev(unsigned int x);
@@ -31,3 +40,5 @@ __umul64hi(unsigned long long int x, unsigned long long int y);
 __device__ unsigned int __umulhi(unsigned int x, unsigned int y);
 __device__ unsigned int __urhadd(unsigned int x, unsigned int y);
 __device__ unsigned int __usad(unsigned int x, unsigned int y, unsigned int z);
+
+#endif

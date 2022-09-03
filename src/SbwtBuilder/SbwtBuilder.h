@@ -1,5 +1,11 @@
-#ifndef SBWT_BUILDER
-#define SBWT_BUILDER
+#ifndef SBWT_BUILDER_H
+#define SBWT_BUILDER_H
+
+/**
+ * @file SbwtBuilder.h
+ * @brief Loads SBWT from disk and can also build the index using other
+ * components. CPU only
+ * */
 
 #include <istream>
 #include <memory>

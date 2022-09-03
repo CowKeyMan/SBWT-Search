@@ -1,8 +1,8 @@
-#ifndef SBWT_CONTAINER_HPP
-#define SBWT_CONTAINER_HPP
+#ifndef SBWT_CONTAINER_H
+#define SBWT_CONTAINER_H
 
 /**
- * @file SbwtContainer.hpp
+ * @file SbwtContainer.h
  * @brief Contains data class for SBWT index
  * */
 

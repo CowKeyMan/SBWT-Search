@@ -1,6 +1,12 @@
 #ifndef GLOBAL_DEFINITIONS_H
 #define GLOBAL_DEFINITIONS_H
 
+/**
+ * @file GlobalDefinitions.h
+ * @brief Contains all items which are constant throughout the program after
+ * compilation
+ * */
+
 #include "Utils/TypeDefinitions.h"
 
 namespace sbwt_search {

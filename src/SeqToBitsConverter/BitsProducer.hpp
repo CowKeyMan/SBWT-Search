@@ -1,5 +1,5 @@
-#ifndef BITS_PRODUCER
-#define BITS_PRODUCER
+#ifndef BITS_PRODUCER_HPP
+#define BITS_PRODUCER_HPP
 
 /**
  * @file BitsProducer.hpp

@@ -1,8 +1,8 @@
-#ifndef RANK_INDEX_BUILDER_HPP
-#define RANK_INDEX_BUILDER_HPP
+#ifndef POPPY_BUILDER_H
+#define POPPY_BUILDER_H
 
 /**
- * @file RankIndexBuilder.hpp
+ * @file PoppyBuilder.h
  * @brief Module responsible for building the rank index of the SBWT file
  *        Assumptions made:
  *          * basicblock_bits is a multiple of 64
@@ -10,6 +10,7 @@
  *          * hyperblock_bits is a multiple of hyperblock_bits
  * */
 
+#include <stddef.h>
 #include <vector>
 
 #include "Utils/TypeDefinitions.h"
@@ -28,10 +29,7 @@ class PoppyBuilder {
     u64 layer_0_count = 0, layer_1_count = 0, layer_2_count = 0;
 
   public:
-    PoppyBuilder(
-      const size_t bits_total,
-      const u64 *bits_vector
-    );
+    PoppyBuilder(const size_t bits_total, const u64 *bits_vector);
 
     auto get_layer_0() -> vector<u64> &&;
     auto get_layer_1_2() -> vector<u64> &&;

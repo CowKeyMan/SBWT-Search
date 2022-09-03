@@ -12,8 +12,8 @@
 #include "SbwtContainer/SbwtContainer.hpp"
 #include "TestUtils/RankTestUtils.hpp"
 #include "Utils/BitDefinitions.h"
-#include "sdsl/bit_vectors.hpp"
 #include "Utils/GlobalDefinitions.h"
+#include "sdsl/bit_vectors.hpp"
 
 using std::shared_ptr;
 using std::vector;
@@ -28,8 +28,11 @@ class SearcherCpu {
   public:
     SearcherCpu(shared_ptr<Container> container): container(container) {}
 
-    vector<u64>
-    search(const vector<u64> &kmer_positions, const vector<u64> &bit_seqs, u32 kmer_size) {
+    vector<u64> search(
+      const vector<u64> &kmer_positions,
+      const vector<u64> &bit_seqs,
+      u32 kmer_size
+    ) {
       auto rank = dummy_cpu_rank;
       auto result = vector<u64>(kmer_positions.size());
       for (int i = 0; i < kmer_positions.size(); ++i) {

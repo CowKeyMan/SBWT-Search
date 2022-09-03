@@ -1,5 +1,7 @@
 #include <memory>
+#include <utility>
 
+#include <ext/alloc_traits.h>
 #include <sdsl/int_vector.hpp>
 
 #include "SbwtContainer/SbwtContainer.h"
