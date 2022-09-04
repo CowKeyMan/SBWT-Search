@@ -6,6 +6,7 @@
  * @brief Gets results, intervals and list of invalid characters and prints
  * these out to disk based on the given data and filenames.
  * */
+
 #include <chrono>
 #include <climits>
 #include <fstream>
@@ -35,21 +36,20 @@ template <
   class IntervalProducer,
   class InvalidCharsProducer>
 class ContinuousResultsPrinter {
-    // producers
+  private:
     shared_ptr<ResultsProducer> results_producer;
     shared_ptr<IntervalProducer> interval_producer;
     shared_ptr<InvalidCharsProducer> invalid_chars_producer;
-    // batch objects
-    shared_ptr<vector<u64>> results;
-    shared_ptr<vector<char>> invalid_chars;
     shared_ptr<IntervalBatch> interval_batch;
-    // other parameters
-    const uint kmer_size;
     vector<string> filenames;
-    // runtime objects
-    ofstream stream;
     vector<string>::iterator current_filename;
     size_t string_index = 0, char_index = 0, invalid_index = 0;
+
+  protected:
+    shared_ptr<vector<u64>> results;
+    shared_ptr<vector<char>> invalid_chars;
+    const uint kmer_size;
+    ofstream stream;
 
   public:
     ContinuousResultsPrinter(
@@ -119,31 +119,14 @@ class ContinuousResultsPrinter {
       }
     }
 
-    auto print_word(
+  protected:
+    virtual auto print_word(
       size_t char_index,
       size_t invalid_index,
       size_t num_chars,
       size_t string_length
-    ) -> void {
-      uint invalid_chars_left
-        = get_invalid_chars_left_first_kmer(invalid_index);
-      for (u64 i = char_index; i < char_index + num_chars; ++i) {
-        auto furthest_index = invalid_index + kmer_size - 1 + i - char_index;
-        if (furthest_index < invalid_index + string_length && (*invalid_chars)[furthest_index]) {
-          invalid_chars_left = kmer_size;
-        }
-        if (invalid_chars_left > 0) {
-          stream << "-2";
-          --invalid_chars_left;
-        } else if ((*results)[i] == u64(-1)) {
-          stream << "-1";
-        } else {
-          stream << (*results)[i];
-        }
-        if (i + 1 != char_index + num_chars) { stream << ' '; }
-      }
-      stream << '\n';
-    }
+    ) -> void
+      = 0;
 
     auto get_invalid_chars_left_first_kmer(size_t first_invalid_index) -> uint {
       for (uint i = kmer_size; i > 0; --i) {

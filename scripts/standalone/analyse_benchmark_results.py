@@ -233,6 +233,8 @@ for index, name in enumerate(sorted_keys):
             + input_filename.replace('/', '_').replace('.', '_')
             + name.split()[3]
             + 'batches'
+            + '_'
+            + name.split()[6]
         )
         if not benchmark_to_details[name]['valid']:
             filename += '-invalid'

@@ -19,6 +19,11 @@ input_files=(
   "benchmark_objects/combined_input.txt"
 )
 
+printing_modes=(
+  "ascii"
+  "binary"
+)
+
 # populate combined_input.txt
 printf "" > "benchmark_objects/combined_input.txt"
 printf "" > "benchmark_objects/combined_output.txt"
@@ -40,8 +45,10 @@ stdoutput="${results_folder}/benchmark_out.txt"
 
 for batch in ${batches[@]}; do
 for (( i=0; i<${#input_files[@]}; i++ )); do
-echo Now running: File ${input_files[i]} with ${batch} batches
-echo Now running: File ${input_files[i]} with ${batch} batches >> ${stdoutput}
-./build/bin/main_cuda -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batch} >> ${stdoutput}
+for (( p=0; p<${#printing_modes[@]}; p++ )); do
+echo Now running: File ${input_files[i]} with ${batch} batches in ${printing_modes[p]} format
+echo Now running: File ${input_files[i]} with ${batch} batches in ${printing_modes[p]} format >> ${stdoutput}
+./build/bin/main_cuda -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batch} -c ${printing_modes[p]} >> ${stdoutput}
+done
 done
 done

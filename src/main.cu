@@ -11,7 +11,8 @@
 #include "PoppyBuilder/PoppyBuilder.h"
 #include "PositionsBuilder/ContinuousPositionsBuilder.hpp"
 #include "Presearcher/Presearcher.cuh"
-#include "ResultsPrinter/ContinuousResultsPrinter.hpp"
+#include "ResultsPrinter/BinaryContinuousResultsPrinter.hpp"
+#include "ResultsPrinter/AsciiContinuousResultsPrinter.hpp"
 #include "SbwtBuilder/SbwtBuilder.h"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "SbwtContainer/SbwtContainer.h"
@@ -115,13 +116,34 @@ auto main(int argc, char **argv) -> int {
     Searcher,
     SequenceFileParser,
     SeqToBitsConverter>;
-  auto results_printer = make_shared<ResultsPrinter>(
-    searcher,
-    sequence_file_parser,
-    seq_to_bit_converter,
-    output_filenames,
-    kmer_size
-  );
+  using BinaryResultsPrinter = BinaryContinuousResultsPrinter<
+    Searcher,
+    SequenceFileParser,
+    SeqToBitsConverter>;
+  using AsciiResultsPrinter = AsciiContinuousResultsPrinter<
+    Searcher,
+    SequenceFileParser,
+    SeqToBitsConverter>;
+  shared_ptr<ResultsPrinter> results_printer;
+  if (args.get_print_mode() == "ascii") {
+    results_printer = make_shared<AsciiResultsPrinter>(
+      searcher,
+      sequence_file_parser,
+      seq_to_bit_converter,
+      output_filenames,
+      kmer_size
+    );
+  } else if (args.get_print_mode() == "binary") {
+    results_printer = make_shared<BinaryResultsPrinter>(
+      searcher,
+      sequence_file_parser,
+      seq_to_bit_converter,
+      output_filenames,
+      kmer_size
+    );
+  } else {
+    throw runtime_error("Invalid value passed by user for print_mode");
+  }
 #pragma omp parallel sections default(shared)
   {
 #pragma omp section
