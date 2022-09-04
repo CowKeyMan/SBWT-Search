@@ -7,9 +7,9 @@ unset OMP_NUM_THREADS
 ## adjust this accordingly - by default it is warn
 export SPDLOG_LEVEL=TRACE
 
-results_folder="results/${DATETIME}"
+results_folder="benchmark_results/${DATETIME}"
 
-mkdir -p results
+mkdir -p benchmark_results
 mkdir -p ${results_folder}
 
 input_files=(
@@ -33,7 +33,7 @@ output_files=(
   "${results_folder}/365.txt"
   "benchmark_objects/combined_output.txt"
 )
-sbwt_file="data/coli3.sbwt"
+sbwt_file="benchmark_objects/coli3.sbwt"
 batches=(1 3 10 30 70 100 200 1000)
 
 stdoutput="${results_folder}/benchmark_out.txt"

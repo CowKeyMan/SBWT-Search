@@ -6,10 +6,10 @@
 #SBATCH --account=dongelr1
 ## Maximum time
 #SBATCH --time=00:15:00
-## put stderr to err.txt
-#SBATCH --error err.txt
-## put stdout to out.txt
-#SBATCH --output out.txt
+## put stderr to main_err.txt
+#SBATCH --error main_err.txt
+## put stdout to main_out.txt
+#SBATCH --output main_out.txt
 ## We only need a single node
 #SBATCH --nodes 1
 ## Number of tasks per node.
@@ -23,28 +23,47 @@
 ## This partition on mahti has NVME
 #SBATCH --partition=gputest
 ## We only want a single a100 gpu and 10GB of NVME storage
-#SBATCH --gres=gpu:a100:1,nvme:100
+#SBATCH --gres=gpu:a100:1,nvme:300
+
 ## Remove unnecessary modules
 module purge
-## Load in-build modules
-module load cmake
-module load gcc
-module load cuda
-module load python-data
-module load bzip2
+## Load in modules
+module load cmake gcc cuda python-data bzip2
 
+## By default this is 1, which would halt our program
 unset OMP_NUM_THREADS
-export OLD_PWD="${PWD}"
+## adjust this accordingly - by default it is warn
+export SPDLOG_LEVEL=WARN
 
+## We want to perform our work in LOCAL SCRATCh
+export OLD_PWD="${PWD}"
 cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
 
+# Initialise results folder
+DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
+mkdir -p main_results
+results_folder="main_results/${DATETIME}"
+mkdir -p ${results_folder}
+
 rm -rf build
 
+## Build
 sh scripts/build/release.sh
-/usr/bin/time ./build/bin/main_cuda -i test_objects/parsed100.sbwt -q test_objects/queries.fna -o main_results/output.txt -u 429496729600
-/usr/bin/time ./build/bin/main_cuda -i test_objects/parsed100.sbwt -q test_objects/fasta.fasta -o main_results/output.txt -u 429496729600
-/usr/bin/time ./build/bin/main_cuda -i test_objects/parsed100.sbwt -q test_objects/fastq.fastq -o main_results/output.txt -u 429496729600
+
+input_files=(
+  "benchmark_objects/365.fna"
+)
+output_files=(
+  "${results_folder}/365.txt"
+)
+sbwt_file="benchmark_objects/coli3.sbwt"
+batches=30
+
+for (( i=0; i<${#input_files[@]}; i++ )); do
+echo Now running: File ${input_files[i]} with ${batch} batches
+/usr/bin/time ./build/bin/main_cuda -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batches}
+done
 
 cd "${OLD_PWD}"
 cp -r "${LOCAL_SCRATCH}/SBWT-Search/main_results" .

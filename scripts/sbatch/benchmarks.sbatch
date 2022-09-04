@@ -5,10 +5,10 @@
 ## The account to charge. Look at the unix group from https://my.csc.fi/myProjects
 #SBATCH --account=dongelr1
 ## Maximum time
-#SBATCH --time=01:00:00
+#SBATCH --time=03:00:00
 ## put stderr to benchmark_err.txt
-#SBATCH --error err.txt
-## put stdout to out.txt
+#SBATCH --error benchmark_err.txt
+## put stdout to benchmark_out.txt
 #SBATCH --output benchmark_out.txt
 ## We only need a single node
 #SBATCH --nodes 1
@@ -21,14 +21,14 @@
 ## Amount of memory per node
 #SBATCH --mem-per-cpu=29G
 ## This partition on mahti has NVME
-#SBATCH --partition=gputest
+#SBATCH --partition=gpusmall
 ## We only want a single a100 gpu and 10GB of NVME storage
 #SBATCH --gres=gpu:a100:1,nvme:300
 
 ## Remove unnecessary modules
 module purge
 ## Load in modules
-module load gcc cuda python-data bzip2
+module load cmake gcc cuda python-data bzip2
 
 ## We want to perform our work in LOCAL SCRATCh
 export OLD_PWD="${PWD}"
@@ -40,7 +40,7 @@ rm -rf build
 ## Build
 sh scripts/build/release.sh
 
-sh scripts/standalone/run_benchmarks.sh
+sh scripts/standalone/benchmark.sh
 
 cd "${OLD_PWD}"
-cp -r "${LOCAL_SCRATCH}/SBWT-Search/results" .
+cp -r "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results" .
