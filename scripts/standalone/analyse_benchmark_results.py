@@ -19,7 +19,18 @@ parser.add_argument(
     type=str
 )
 parser.add_argument(
-    '-s', help='show plots', required=False, default=False, type=bool
+    '-s',
+    help='show plots',
+    required=False,
+    default=False,
+    action='store_true'
+)
+parser.add_argument(
+    '-r',
+    help='remove invalid runs',
+    required=False,
+    default=False,
+    action='store_true'
 )
 args = vars(parser.parse_args())
 
@@ -77,12 +88,18 @@ for name, lines in benchmark_name_to_lines.items():
                 benchmark_to_details[name]['chars_per_batch'] = (
                     int(message.split()[1])
                 )
+            elif (
+                'too large' in j['log']['message']
+                or 'cannot be opened' in j['log']['message']
+            ):
+                benchmark_to_details[name]['valid'] = False
+                if args['r']:
+                    del benchmark_to_details[name]
+                    break
         elif j['log']['type'] == 'timed_event':
             benchmark_to_details[name]['timed_event'].append(
                 timed_event_to_df_entry(j)
             )
-            if 'too large' not in j['log']['message']:
-                benchmark_to_details[name]['valid'] = False
 
 
 def bits_to_gb(bits):
@@ -110,7 +127,8 @@ for index, name in enumerate(sorted_keys):
         fig.suptitle(name)
     details = benchmark_to_details[name]
     title = name
-    print(title)
+    valid_text = " (INVALID)" if not details["valid"] else ""
+    print(title + valid_text)
     gpu_bits = details['gpu_memory']
     gpu_characters = gpu_bits // 66
     cpu_bits = details['cpu_memory']
@@ -162,6 +180,7 @@ for index, name in enumerate(sorted_keys):
             'avg': np.average(timings),
             'stdev': np.std(timings),
             'median': np.median(timings),
+            'total': np.sum(timings),
         }
     df_summary = pd.DataFrame.from_dict(
         details['summary'], orient="index"
@@ -199,6 +218,7 @@ for index, name in enumerate(sorted_keys):
             range(len(unique_components)), unique_components, fontsize='small'
         )
         axs[0].set_xlabel('time (ms)')
+        axs[0].tick_params(axis='x', labelsize=8)
         plt.figtext(
             0.5,
             -0.2,
@@ -208,11 +228,25 @@ for index, name in enumerate(sorted_keys):
         )
         input_filename = name.split()[1]
         filename = (
-            str(Path(input_filename).parent)
+            str(Path(args['i']).parent)
+            + "/"
             + input_filename.replace('/', '_').replace('.', '_')
             + name.split()[3]
-            + 'batches.svg'
+            + 'batches'
         )
+        if not benchmark_to_details[name]['valid']:
+            filename += '-invalid'
+            props = dict(boxstyle='round', facecolor='red', alpha=0.5)
+            axs[0].text(
+                0.4,
+                1.2,
+                'INVALID',
+                transform=axs[0].transAxes,
+                fontsize=14,
+                verticalalignment='top',
+                bbox=props
+            )
+        filename += '.svg'
         fig.tight_layout()
         fig.figsize = (15, 10)
         plt.savefig(filename, bbox_inches='tight', format='svg', dpi=1200)
