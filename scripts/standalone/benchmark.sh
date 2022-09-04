@@ -1,6 +1,6 @@
 # Run the benchmark_main several times and save the results to a file
 
-DATETIME="$(date +"%Y-%m-%d_%I-%M-%S_%p")"
+DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
 
 ## By default this is 1, which would halt our program
 unset OMP_NUM_THREADS
@@ -15,7 +15,7 @@ mkdir -p ${results_folder}
 input_files=(
   "benchmark_objects/FASTA1GB.fna"
   "benchmark_objects/FASTQ1GB.fnq"
-  "test_objects/365.fna"
+  "benchmark_objects/365.fna"
   "benchmark_objects/combined_input.txt"
 )
 
