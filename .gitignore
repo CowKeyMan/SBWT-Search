@@ -10,6 +10,8 @@ data
 
 .cache
 benchmark_results/
+main_results/
+results/
 
 out.txt
 err.txt
