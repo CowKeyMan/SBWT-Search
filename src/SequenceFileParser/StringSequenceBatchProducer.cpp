@@ -62,7 +62,7 @@ auto StringSequenceBatchProducer::add_string(const string &s) -> void {
   batch.buffer.push_back(move(s));
 }
 
-auto StringSequenceBatchProducer::do_at_batch_finish(unsigned int batch_id)
+auto StringSequenceBatchProducer::do_at_batch_finish()
   -> void {
   auto &batch = batches.current_write();
   for (uint i = batch->string_indexes.size(); i < num_readers + 1; ++i) {
@@ -73,7 +73,7 @@ auto StringSequenceBatchProducer::do_at_batch_finish(unsigned int batch_id)
   SharedBatchesProducer<StringSequenceBatch>::do_at_batch_finish();
 }
 
-auto StringSequenceBatchProducer::do_at_batch_start(unsigned int batch_id)
+auto StringSequenceBatchProducer::do_at_batch_start()
   -> void {
   SharedBatchesProducer<StringSequenceBatch>::do_at_batch_start();
   reset_batch(batches.current_write());

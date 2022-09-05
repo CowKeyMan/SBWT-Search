@@ -13,12 +13,14 @@
 #include "Utils/GlobalDefinitions.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "Utils/Logger.h"
 
 using gpu_utils::get_idx;
 using math_utils::round_up;
 using std::make_unique;
 using std::move;
 using std::shared_ptr;
+using log_utils::Logger;
 
 namespace sbwt_search {
 
@@ -59,6 +61,7 @@ class Presearcher {
       auto blocks_per_grid = presearch_times / threads_per_block;
       auto presearch_left = make_unique<GpuPointer<u64>>(presearch_times);
       auto presearch_right = make_unique<GpuPointer<u64>>(presearch_times);
+      Logger::log_timed_event("PresearchFunction", Logger::EVENT_STATE::START);
       d_presearch<<<blocks_per_grid, threads_per_block>>>(
         container->get_c_map().get(),
         container->get_acgt_pointers().get(),
@@ -69,6 +72,7 @@ class Presearcher {
       );
       GPU_CHECK(cudaPeekAtLastError());
       GPU_CHECK(cudaDeviceSynchronize());
+      Logger::log_timed_event("PresearchFunction", Logger::EVENT_STATE::STOP);
       container->set_presearch(move(presearch_left), move(presearch_right));
     }
 };

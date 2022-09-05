@@ -69,7 +69,7 @@ class ContinuousPositionsBuilder: public SharedBatchesProducer<vector<u64>> {
       );
     }
 
-    auto do_at_batch_start(unsigned int batch_id) -> void override {
+    auto do_at_batch_start() -> void override {
       SharedBatchesProducer<vector<u64>>::do_at_batch_start();
       Logger::log_timed_event(
         "PositionsBuilder",
@@ -78,7 +78,7 @@ class ContinuousPositionsBuilder: public SharedBatchesProducer<vector<u64>> {
       );
     }
 
-    auto do_at_batch_finish(unsigned int batch_id) -> void override {
+    auto do_at_batch_finish() -> void override {
       Logger::log_timed_event(
         "PositionsBuilder",
         Logger::EVENT_STATE::STOP,

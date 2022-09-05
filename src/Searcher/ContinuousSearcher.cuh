@@ -61,17 +61,17 @@ class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
     }
 
     auto generate() -> void override {
-      searcher.search(*bit_seqs, *kmer_positions, *batches.current_write());
+      searcher.search(*bit_seqs, *kmer_positions, *batches.current_write(), batch_id);
     }
 
-    auto do_at_batch_start(unsigned int batch_id) -> void override {
+    auto do_at_batch_start() -> void override {
       SharedBatchesProducer<vector<u64>>::do_at_batch_start();
       Logger::log_timed_event(
         "Searcher", Logger::EVENT_STATE::START, format("batch {}", batch_id)
       );
     }
 
-    auto do_at_batch_finish(unsigned int batch_id) -> void override {
+    auto do_at_batch_finish() -> void override {
       Logger::log_timed_event(
         "Searcher", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
       );

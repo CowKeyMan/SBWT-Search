@@ -32,6 +32,7 @@ class SharedBatchesProducer {
 
   protected:
     CircularBuffer<shared_ptr<BatchType>> batches;
+    unsigned int batch_id;
 
     SharedBatchesProducer(const unsigned int max_batches):
         start_semaphore(max_batches - 1),
@@ -45,10 +46,10 @@ class SharedBatchesProducer {
 
     auto virtual read_and_generate() -> void {
       throw_if_uninitialised();
-      for (unsigned int batch_id = 0; continue_read_condition(); ++batch_id) {
-        do_at_batch_start(batch_id);
+      for (batch_id = 0; continue_read_condition(); ++batch_id) {
+        do_at_batch_start();
         generate();
-        do_at_batch_finish(batch_id);
+        do_at_batch_finish();
       }
       do_at_generate_finish();
     }
@@ -82,11 +83,11 @@ class SharedBatchesProducer {
       throw_uninitialised();
       return false;
     };
-    auto virtual do_at_batch_start(unsigned int batch_id = 0) -> void {
+    auto virtual do_at_batch_start() -> void {
       start_semaphore.acquire();
     }
     auto virtual generate() -> void { throw_uninitialised(); };
-    auto virtual do_at_batch_finish(unsigned int batch_id = 0) -> void {
+    auto virtual do_at_batch_finish() -> void {
       omp_set_lock(step_lock);
       batches.step_write();
       omp_unset_lock(step_lock);

@@ -37,12 +37,12 @@ auto IntervalBatchProducer::file_end() -> void {
   string_counter = 0;
 }
 
-auto IntervalBatchProducer::do_at_batch_finish(unsigned int batch_id) -> void {
+auto IntervalBatchProducer::do_at_batch_finish() -> void {
   batches.current_write()->strings_before_newfile.push_back(u64(-1));
   SharedBatchesProducer<IntervalBatch>::do_at_batch_finish();
 }
 
-auto IntervalBatchProducer::do_at_batch_start(unsigned int batch_id) -> void {
+auto IntervalBatchProducer::do_at_batch_start() -> void {
   SharedBatchesProducer<IntervalBatch>::do_at_batch_start();
   batches.current_write()->string_lengths.resize(0);
   batches.current_write()->strings_before_newfile.resize(0);

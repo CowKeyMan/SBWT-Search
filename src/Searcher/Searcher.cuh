@@ -10,15 +10,20 @@
 #include <utility>
 #include <vector>
 
+#include <fmt/core.h>
+
 #include "Rank/Rank.cuh"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Utils/CudaKernelUtils.cuh"
 #include "Utils/CudaUtils.cuh"
 #include "Utils/GlobalDefinitions.h"
+#include "Utils/Logger.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
+using fmt::format;
 using gpu_utils::get_idx;
+using log_utils::Logger;
 using math_utils::round_up;
 using std::shared_ptr;
 using std::vector;
@@ -70,8 +75,14 @@ class SearcherGpu {
     auto search(
       const vector<u64> &bit_seqs,
       vector<u64> &kmer_positions,
-      vector<u64> &results
+      vector<u64> &results,
+      const u64 batch_id
     ) -> void {
+      Logger::log_timed_event(
+        "SearcherCopyToGpu",
+        Logger::EVENT_STATE::START,
+        format("batch {}", batch_id)
+      );
       u32 blocks_per_grid
         = round_up<u64>(kmer_positions.size(), threads_per_block)
         / threads_per_block;
@@ -83,8 +94,18 @@ class SearcherGpu {
       d_kmer_positions.memset(
         kmer_positions.size(), memory_reserved - kmer_positions.size(), 0
       );
+      Logger::log_timed_event(
+        "SearcherCopyToGpu",
+        Logger::EVENT_STATE::STOP,
+        format("batch {}", batch_id)
+      );
       results.resize(kmer_positions.size());
       if (kmer_positions.size() > 0) {
+        Logger::log_timed_event(
+          "SearcherSearch",
+          Logger::EVENT_STATE::START,
+          format("batch {}", batch_id)
+        );
         d_search<<<blocks_per_grid, threads_per_block>>>(
           container->get_kmer_size(),
           container->get_c_map().get(),
@@ -97,9 +118,24 @@ class SearcherGpu {
           d_bit_seqs.get(),
           d_kmer_positions.get()
         );
+        Logger::log_timed_event(
+          "SearcherSearch",
+          Logger::EVENT_STATE::STOP,
+          format("batch {}", batch_id)
+        );
         GPU_CHECK(cudaPeekAtLastError());
         GPU_CHECK(cudaDeviceSynchronize());
+        Logger::log_timed_event(
+          "SearcherCopyFromGpu",
+          Logger::EVENT_STATE::START,
+          format("batch {}", batch_id)
+        );
         d_kmer_positions.copy_to(results, kmer_positions.size());
+        Logger::log_timed_event(
+          "SearcherCopyFromGpu",
+          Logger::EVENT_STATE::STOP,
+          format("batch {}", batch_id)
+        );
       }
     }
 };

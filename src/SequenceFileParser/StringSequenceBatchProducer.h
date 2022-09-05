@@ -46,8 +46,8 @@ class StringSequenceBatchProducer:
     void add_string(const string &s);
     shared_ptr<StringSequenceBatch> get_default_value() override;
     void reset_batch(shared_ptr<StringSequenceBatch> &batch);
-    void do_at_batch_start(unsigned int batch_id = 0) override;
-    void do_at_batch_finish(unsigned int batch_id = 0) override;
+    void do_at_batch_start() override;
+    void do_at_batch_finish() override;
 };
 
 }  // namespace sbwt_search

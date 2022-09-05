@@ -43,7 +43,7 @@ auto CumulativePropertiesBatchProducer::add_string(const string &s) -> void {
   );
 }
 
-auto CumulativePropertiesBatchProducer::do_at_batch_start(unsigned int batch_id)
+auto CumulativePropertiesBatchProducer::do_at_batch_start()
   -> void {
   SharedBatchesProducer<CumulativePropertiesBatch>::do_at_batch_start();
   reset_batch(batches.current_write());

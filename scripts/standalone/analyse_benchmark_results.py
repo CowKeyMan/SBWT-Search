@@ -70,36 +70,54 @@ for line in lines:
 # extract useful information from benchmark logs
 benchmark_to_details = defaultdict(dict)
 for name, lines in benchmark_name_to_lines.items():
-    benchmark_to_details[name]['timed_event'] = []
-    benchmark_to_details[name]['valid'] = True
+    details = benchmark_to_details[name]
+    details['timed_event'] = []
+    details['valid'] = True
+    details['num_strings'] = 0
+    details['num_chars'] = 0
+    details['num_batches'] = 0
     for line in lines:
-        j = json.loads(line)
-        if j['log']['type'] == 'message':
-            message = j['log']['message']
-            if message.startswith('Free gpu memory'):
-                benchmark_to_details[name]['gpu_memory'] = (
-                    int(message.split()[3])
+        try:
+            j = json.loads(line)
+            if j['log']['type'] == 'message':
+                message = j['log']['message']
+                if message.startswith('Free gpu memory'):
+                    details['gpu_memory'] = (
+                        int(message.split()[3])
+                    )
+                elif message.startswith('Free main memory'):
+                    details['cpu_memory'] = (
+                        int(message.split()[3])
+                    )
+                elif message.startswith('Using') and 'per batch' in message:
+                    details['chars_per_batch'] = (
+                        int(message.split()[1])
+                    )
+                elif message.startswith('Read'):
+                    details['num_chars'] += (
+                        int(message.split()[1])
+                    )
+                    details['num_strings'] += (
+                        int(message.split()[4])
+                    )
+                    details['num_batches'] += 1
+                elif (
+                    'too large' in j['log']['message']
+                    or 'cannot be opened' in j['log']['message']
+                ):
+                    details['valid'] = False
+                    if args['r']:
+                        del details
+                        break
+            elif j['log']['type'] == 'timed_event':
+                details['timed_event'].append(
+                    timed_event_to_df_entry(j)
                 )
-            elif message.startswith('Free main memory'):
-                benchmark_to_details[name]['cpu_memory'] = (
-                    int(message.split()[3])
-                )
-            elif message.startswith('Using') and 'per batch' in message:
-                benchmark_to_details[name]['chars_per_batch'] = (
-                    int(message.split()[1])
-                )
-            elif (
-                'too large' in j['log']['message']
-                or 'cannot be opened' in j['log']['message']
-            ):
-                benchmark_to_details[name]['valid'] = False
-                if args['r']:
-                    del benchmark_to_details[name]
-                    break
-        elif j['log']['type'] == 'timed_event':
-            benchmark_to_details[name]['timed_event'].append(
-                timed_event_to_df_entry(j)
-            )
+        except Exception:
+            if line.startswith("Input file size: "):
+                details["input_file_size"] = line.split()[3]
+            elif line.startswith("Output file size: "):
+                details["output_file_size"] = line.split()[3]
 
 
 def bits_to_gb(bits):
@@ -134,6 +152,11 @@ for index, name in enumerate(sorted_keys):
     cpu_bits = details['cpu_memory']
     cpu_characters = cpu_bits // 460
     start_text = (
+        f'Input file size is {details["input_file_size"]}\n'
+        f'Output file size is {details["output_file_size"]}\n'
+        f'Processed {details["num_chars"]} characters from '
+        f'{details["num_strings"]} strings in '
+        f'{details["num_batches"]} batches\n'
         f'Total time taken: {details["total_time"]:.2f}ms\n'
         f'Gpu memory available: {gpu_bits} '
         f'bits = {bits_to_gb(gpu_bits):.2f}GB\t({gpu_characters} characters)\n'
@@ -211,11 +234,11 @@ for index, name in enumerate(sorted_keys):
             colLabels=df_summary.columns,
             loc='center'
         )
-        table.set_fontsize(8)
+        table.set_fontsize(6)
         axs[1].axis('off')
         axs[1].axis('tight')
         axs[0].yaxis.set_ticks(
-            range(len(unique_components)), unique_components, fontsize='small'
+            range(len(unique_components)), unique_components, fontsize=5
         )
         axs[0].set_xlabel('time (ms)')
         axs[0].tick_params(axis='x', labelsize=8)

@@ -34,8 +34,8 @@ class IntervalBatchProducer: public SharedBatchesProducer<IntervalBatch> {
     IntervalBatchProducer(u64 max_batches, u64 max_strings_per_batch);
     auto add_string(const string &s) -> void;
     auto file_end() -> void;
-    auto do_at_batch_start(unsigned int batch_id = 0) -> void override;
-    auto do_at_batch_finish(unsigned int batch_id = 0) -> void override;
+    auto do_at_batch_start() -> void override;
+    auto do_at_batch_finish() -> void override;
     auto start_new_batch() -> void;
     auto set_finished_reading() -> void;
     auto no_more_sequences() -> bool;

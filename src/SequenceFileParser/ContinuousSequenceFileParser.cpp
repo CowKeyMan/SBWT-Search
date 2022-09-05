@@ -119,6 +119,15 @@ auto ContinuousSequenceFileParser::terminate_batch() -> void {
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_idx++)
   );
+  Logger::log(
+    Logger::LOG_LEVEL::DEBUG,
+    format(
+      "Read {} characters from {} strings in batch {}",
+      current_batch_size,
+      current_batch_strings,
+      batch_idx - 1
+    )
+  );
   string_sequence_batch_producer.do_at_batch_finish();
   cumulative_properties_batch_producer.do_at_batch_finish();
   interval_batch_producer.do_at_batch_finish();

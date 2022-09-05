@@ -82,6 +82,7 @@ auto main(int argc, char **argv) -> int {
   Logger::log(
     INFO, format("Running OpenMP with {} threads", omp_get_num_threads())
   );
+  Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   using SequenceFileParser = ContinuousSequenceFileParser;
   auto sequence_file_parser = make_shared<SequenceFileParser>(
     input_filenames,
@@ -158,6 +159,7 @@ auto main(int argc, char **argv) -> int {
   } else {
     throw runtime_error("Invalid value passed by user for print_mode");
   }
+  Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
 #pragma omp parallel sections default(shared)
   {
 #pragma omp section

@@ -42,7 +42,7 @@ class CumulativePropertiesBatchProducer:
     auto reset_batch(shared_ptr<CumulativePropertiesBatch> &batch) -> void;
     auto start_new_batch() -> void;
     auto set_finished_reading() -> void;
-    auto do_at_batch_start(unsigned int batch_id = 0) -> void override;
+    auto do_at_batch_start() -> void override;
 };
 }  // namespace sbwt_search
 
