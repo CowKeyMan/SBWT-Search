@@ -76,6 +76,7 @@ for name, lines in benchmark_name_to_lines.items():
     details['num_strings'] = 0
     details['num_chars'] = 0
     details['num_batches'] = 0
+    details['num_queries'] = 0
     for line in lines:
         try:
             j = json.loads(line)
@@ -101,6 +102,8 @@ for name, lines in benchmark_name_to_lines.items():
                         int(message.split()[4])
                     )
                     details['num_batches'] += 1
+                elif message.startswith('Batch ') and 'consists of' in message:
+                    details['num_queries'] += int(message.split()[4])
                 elif (
                     'too large' in j['log']['message']
                     or 'cannot be opened' in j['log']['message']
@@ -157,6 +160,7 @@ for index, name in enumerate(sorted_keys):
         f'Processed {details["num_chars"]} characters from '
         f'{details["num_strings"]} strings in '
         f'{details["num_batches"]} batches\n'
+        f'Total queries: {details["num_queries"]}\n'
         f'Total time taken: {details["total_time"]:.2f}ms\n'
         f'Gpu memory available: {gpu_bits} '
         f'bits = {bits_to_gb(gpu_bits):.2f}GB\t({gpu_characters} characters)\n'
@@ -244,7 +248,7 @@ for index, name in enumerate(sorted_keys):
         axs[0].tick_params(axis='x', labelsize=8)
         plt.figtext(
             0.5,
-            -0.2,
+            -0.25,
             (start_text + '\n' + end_text).replace('\t', ' '),
             ha="center",
             fontsize=8

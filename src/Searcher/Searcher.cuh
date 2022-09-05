@@ -78,6 +78,12 @@ class SearcherGpu {
       vector<u64> &results,
       const u64 batch_id
     ) -> void {
+      Logger::log(
+        Logger::LOG_LEVEL::DEBUG,
+        format(
+          "Batch {} consists of {} queries", batch_id, kmer_positions.size()
+        )
+      );
       Logger::log_timed_event(
         "SearcherCopyToGpu",
         Logger::EVENT_STATE::START,
