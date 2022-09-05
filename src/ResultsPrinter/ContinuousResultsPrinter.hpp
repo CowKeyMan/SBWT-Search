@@ -128,6 +128,7 @@ class ContinuousResultsPrinter {
     ) -> void
       = 0;
 
+  protected:
     auto get_invalid_chars_left_first_kmer(size_t first_invalid_index) -> uint {
       for (uint i = kmer_size; i > 0; --i) {
         if ((*invalid_chars)[i - 1 + first_invalid_index]) { return i; }

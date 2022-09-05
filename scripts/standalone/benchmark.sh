@@ -22,6 +22,7 @@ input_files=(
 printing_modes=(
   "ascii"
   "binary"
+  "bool"
 )
 
 # populate combined_input.txt

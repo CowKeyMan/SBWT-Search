@@ -82,7 +82,8 @@ class ArgumentParser {
         value<unsigned int>()->default_value(to_string(2))
       )("c,print-mode",
         "The mode used when printing the result to the output file. Options "
-        "are 'ascii' (default) or 'binary'. In ascii mode the results will be "
+        "are 'ascii' (default), 'binary' or 'boolean'. In ascii mode the "
+        "results will be "
         "printed in ASCII format so that the number viewed output represents "
         "the position in the SBWT index. The outputs are separated by spaces "
         "and each word is separated by a newline. Strings which are not found "
@@ -95,7 +96,16 @@ class ArgumentParser {
         "which are invalid are represented by -2 (ULLONG_MAX-1) and strings "
         "are separeted by a -3 (ULLONG_MAX-2). The binary version is much "
         "faster but requires decoding the file later when it needs to be "
-        "viewed",
+        "viewed. 'boolean' is the fastest mode however it is also the least "
+        "desriptive. In this mode the first unsigned 64-bit number (in binary) "
+        "represents the length of the string, followed by a series of binary "
+        "bits which tell if the kmer was found or not. If it was found, a 1 is "
+        "in that place, and if it was not found or the kmer is invalid, then a "
+        "0 is in that place. The binary bits are rounded up to the next "
+        "multiple of 8, so that the user may read the output file character by "
+        "character. This cycle then continues so that the length of the next "
+        "string is written followed by the binary boolean bit_vector of that "
+        "string padded to the next multiple of 8.",
         value<string>()->default_value("ascii")
       )("h,help", "Print usage", value<bool>()->default_value("false"));
       options.allow_unrecognised_options();

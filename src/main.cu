@@ -11,8 +11,9 @@
 #include "PoppyBuilder/PoppyBuilder.h"
 #include "PositionsBuilder/ContinuousPositionsBuilder.hpp"
 #include "Presearcher/Presearcher.cuh"
-#include "ResultsPrinter/BinaryContinuousResultsPrinter.hpp"
 #include "ResultsPrinter/AsciiContinuousResultsPrinter.hpp"
+#include "ResultsPrinter/BinaryContinuousResultsPrinter.hpp"
+#include "ResultsPrinter/BoolContinuousResultsPrinter.hpp"
 #include "SbwtBuilder/SbwtBuilder.h"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "SbwtContainer/SbwtContainer.h"
@@ -124,6 +125,10 @@ auto main(int argc, char **argv) -> int {
     Searcher,
     SequenceFileParser,
     SeqToBitsConverter>;
+  using BoolResultsPrinter = BoolContinuousResultsPrinter<
+    Searcher,
+    SequenceFileParser,
+    SeqToBitsConverter>;
   shared_ptr<ResultsPrinter> results_printer;
   if (args.get_print_mode() == "ascii") {
     results_printer = make_shared<AsciiResultsPrinter>(
@@ -140,6 +145,15 @@ auto main(int argc, char **argv) -> int {
       seq_to_bit_converter,
       output_filenames,
       kmer_size
+    );
+  } else if (args.get_print_mode() == "bool") {
+    results_printer = make_shared<BoolResultsPrinter>(
+      searcher,
+      sequence_file_parser,
+      seq_to_bit_converter,
+      output_filenames,
+      kmer_size,
+      max_chars_per_batch
     );
   } else {
     throw runtime_error("Invalid value passed by user for print_mode");
