@@ -48,15 +48,6 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
 auto SbwtBuilder::load_bit_vectors(
   u64 num_bits, vector<unique_ptr<vector<u64>>> &acgt
 ) -> void {
-  // serial version - yet to be tested and compared to parallel
-  /* auto bit_vector_bytes = round_up<u64>(num_bits, 64) / 8; */
-  /* ifstream st(filename); */
-  /* assert_plain_matrix(st); */
-  /* for (int i = 0; i < 4; ++i) { */
-  /*   acgt[i] = make_unique<vector<u64>>(bit_vector_bytes / 8); */
-  /*   st.read(reinterpret_cast<char *>(&(*acgt[i])[0]), 8); */
-  /*   st.read(reinterpret_cast<char *>(&(*acgt[i])[0]), bit_vector_bytes); */
-  /* } */
   auto bit_vector_bytes = round_up<u64>(num_bits, 64) / 8;
 #pragma omp parallel for
   for (int i = 0; i < 4; ++i) {
