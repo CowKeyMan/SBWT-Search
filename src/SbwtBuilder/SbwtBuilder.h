@@ -10,6 +10,9 @@
 #include <istream>
 #include <memory>
 #include <string>
+#include <vector>
+
+#include "Utils/TypeDefinitions.h"
 
 namespace sbwt_search {
 class CpuSbwtContainer;
@@ -18,6 +21,7 @@ class CpuSbwtContainer;
 using std::istream;
 using std::string;
 using std::unique_ptr;
+using std::vector;
 
 namespace sbwt_search {
 
@@ -32,6 +36,8 @@ class SbwtBuilder {
   private:
     auto assert_plain_matrix(istream &in) const -> void;
     auto build_poppy(CpuSbwtContainer *container) -> void;
+    auto load_bit_vectors(u64 bits_total, vector<unique_ptr<vector<u64>>> &acgt)
+      -> void;
 };
 
 }  // namespace sbwt_search

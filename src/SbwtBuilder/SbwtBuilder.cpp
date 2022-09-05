@@ -1,21 +1,24 @@
 #include <cstddef>
+#include <ios>
 #include <memory>
 #include <stdexcept>
 #include <utility>
 #include <vector>
 
 #include <ext/alloc_traits.h>
-#include <sdsl/int_vector.hpp>
 
 #include "PoppyBuilder/PoppyBuilder.h"
 #include "SbwtBuilder/SbwtBuilder.h"
 #include "SbwtContainer/SbwtContainer.h"
 #include "Utils/IOUtils.h"
 #include "Utils/Logger.h"
+#include "Utils/MathUtils.hpp"
 #include "Utils/TypeDefinitions.h"
 
 using io_utils::ThrowingIfstream;
 using log_utils::Logger;
+using math_utils::round_up;
+using std::ios_base;
 using std::make_unique;
 using std::move;
 using std::runtime_error;
@@ -27,19 +30,42 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   -> unique_ptr<CpuSbwtContainer> {
   ThrowingIfstream stream(filename, std::ios::in);
   assert_plain_matrix(stream);
-  vector<unique_ptr<bit_vector>> acgt(4);
+  u64 num_bits;
+  stream.read(reinterpret_cast<char *>(&num_bits), sizeof(u64));
+  vector<unique_ptr<vector<u64>>> acgt(4);
   Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::START);
-  for (int i = 0; i < 4; ++i) {
-    acgt[i] = make_unique<bit_vector>();
-    acgt[i]->load(stream);
-  }
+  load_bit_vectors(num_bits, acgt);
   Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::STOP);
-  auto container
-    = make_unique<CpuSbwtContainer>(acgt[0], acgt[1], acgt[2], acgt[3]);
+  auto container = make_unique<CpuSbwtContainer>(
+    num_bits, acgt[0], acgt[1], acgt[2], acgt[3]
+  );
   Logger::log_timed_event("Poppy", Logger::EVENT_STATE::START);
   if (build_index) { build_poppy(container.get()); }
   Logger::log_timed_event("Poppy", Logger::EVENT_STATE::STOP);
   return container;
+}
+
+auto SbwtBuilder::load_bit_vectors(
+  u64 num_bits, vector<unique_ptr<vector<u64>>> &acgt
+) -> void {
+  // serial version - yet to be tested and compared to parallel
+  /* auto bit_vector_bytes = round_up<u64>(num_bits, 64) / 8; */
+  /* ifstream st(filename); */
+  /* assert_plain_matrix(st); */
+  /* for (int i = 0; i < 4; ++i) { */
+  /*   acgt[i] = make_unique<vector<u64>>(bit_vector_bytes / 8); */
+  /*   st.read(reinterpret_cast<char *>(&(*acgt[i])[0]), 8); */
+  /*   st.read(reinterpret_cast<char *>(&(*acgt[i])[0]), bit_vector_bytes); */
+  /* } */
+  auto bit_vector_bytes = round_up<u64>(num_bits, 64) / 8;
+#pragma omp parallel for
+  for (int i = 0; i < 4; ++i) {
+    ifstream st(filename);
+    assert_plain_matrix(st);
+    st.seekg(bit_vector_bytes * i + (i + 1) * 8, ios_base::cur);
+    acgt[i] = make_unique<vector<u64>>(bit_vector_bytes / 8);
+    st.read(reinterpret_cast<char *>(&(*acgt[i])[0]), bit_vector_bytes);
+  }
 }
 
 auto SbwtBuilder::build_poppy(CpuSbwtContainer *container) -> void {

@@ -10,11 +10,8 @@
 #include <memory>
 #include <vector>
 
-#include <sdsl/int_vector.hpp>
-
 #include "Utils/TypeDefinitions.h"
 
-using sdsl::bit_vector;
 using std::shared_ptr;
 using std::size_t;
 using std::unique_ptr;
@@ -27,10 +24,10 @@ enum class ACGT { A = 0, C = 1, G = 2, T = 3 };
 class SbwtContainer {
   protected:
     const size_t bit_vector_size;
-    const size_t bits_total;
+    const size_t num_bits;
 
-    SbwtContainer(const size_t bits_total, const size_t bit_vector_size):
-        bits_total(bits_total), bit_vector_size(bit_vector_size) {}
+    SbwtContainer(const size_t num_bits, const size_t bit_vector_size):
+        num_bits(num_bits), bit_vector_size(bit_vector_size) {}
 
   public:
     auto get_bit_vector_size() const -> u64;
@@ -44,17 +41,18 @@ class GpuSbwtContainer;
 
 class CpuSbwtContainer: public SbwtContainer {
   protected:
-    vector<unique_ptr<bit_vector>> acgt;
+    vector<unique_ptr<vector<u64>>> acgt;
     vector<vector<u64>> layer_0;
     vector<vector<u64>> layer_1_2;
     vector<u64> c_map;
 
   public:
     CpuSbwtContainer(
-      unique_ptr<bit_vector> &a,
-      unique_ptr<bit_vector> &c,
-      unique_ptr<bit_vector> &g,
-      unique_ptr<bit_vector> &t
+      u64 num_bits,
+      unique_ptr<vector<u64>> &a,
+      unique_ptr<vector<u64>> &c,
+      unique_ptr<vector<u64>> &g,
+      unique_ptr<vector<u64>> &t
     );
     auto set_index(
       vector<u64> &&new_c_map,

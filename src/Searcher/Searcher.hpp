@@ -13,7 +13,6 @@
 #include "TestUtils/RankTestUtils.hpp"
 #include "Utils/BitDefinitions.h"
 #include "Utils/GlobalDefinitions.h"
-#include "sdsl/bit_vectors.hpp"
 
 using std::shared_ptr;
 using std::vector;

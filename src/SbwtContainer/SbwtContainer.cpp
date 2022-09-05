@@ -2,11 +2,9 @@
 #include <utility>
 
 #include <ext/alloc_traits.h>
-#include <sdsl/int_vector.hpp>
 
 #include "SbwtContainer/SbwtContainer.h"
 
-using sdsl::bit_vector;
 using std::move;
 using std::unique_ptr;
 
@@ -15,15 +13,16 @@ namespace sbwt_search {
 auto SbwtContainer::get_bit_vector_size() const -> u64 {
   return bit_vector_size;
 }
-auto SbwtContainer::get_bits_total() const -> u64 { return bits_total; }
+auto SbwtContainer::get_bits_total() const -> u64 { return num_bits; }
 
 CpuSbwtContainer::CpuSbwtContainer(
-  unique_ptr<bit_vector> &a,
-  unique_ptr<bit_vector> &c,
-  unique_ptr<bit_vector> &g,
-  unique_ptr<bit_vector> &t
+  u64 num_bits,
+  unique_ptr<vector<u64>> &a,
+  unique_ptr<vector<u64>> &c,
+  unique_ptr<vector<u64>> &g,
+  unique_ptr<vector<u64>> &t
 ):
-    SbwtContainer(a->size(), a->capacity() / 64) {
+    SbwtContainer(num_bits, a->size()) {
   acgt.push_back(move(a));
   acgt.push_back(move(c));
   acgt.push_back(move(g));

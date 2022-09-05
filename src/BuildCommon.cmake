@@ -51,23 +51,6 @@ include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include")
 ## Fetch ZLIB
 find_package(ZLIB)
 
-find_library(SDSL_FOUND NAMES libsdsl sdsl PATHS "${CMAKE_BINARY_DIR}/external/sdsl/lib/" "${CMAKE_BINARY_DIR}/external/sdsl/")
-if (NOT SDSL_FOUND)
-## Fetch sdsl
-  ExternalProject_Add(
-    sdsl
-    GIT_REPOSITORY  https://github.com/simongog/sdsl-lite/
-    GIT_TAG         v2.1.1
-    PREFIX          "${CMAKE_BINARY_DIR}/external/sdsl"
-    CMAKE_ARGS
-      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
-  )
-endif()
-add_library(libsdsl SHARED IMPORTED)
-set_target_properties(libsdsl PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/external/sdsl/lib/libsdsl.a")
-include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/sdsl/include")
-
-
 ## Fetch cxxopts
 FetchContent_Declare(
   cxxopts
@@ -136,18 +119,11 @@ add_library(
   sbwt_builder
   "${PROJECT_SOURCE_DIR}/SbwtBuilder/SbwtBuilder.cpp"
 )
-target_link_libraries(sbwt_builder PRIVATE libsdsl io_utils OpenMP::OpenMP_CXX)
-if (NOT SDSL_FOUND)
-add_dependencies(sbwt_builder sdsl)
-endif()
+target_link_libraries(sbwt_builder PRIVATE io_utils OpenMP::OpenMP_CXX)
 add_library(
   sbwt_container_cpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
 )
-if (NOT SDSL_FOUND)
-add_dependencies(sbwt_container_cpu sdsl)
-endif()
-target_link_libraries(sbwt_container_cpu PRIVATE libsdsl)
 add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"
@@ -162,16 +138,12 @@ set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "80;70;60
 if(NOT KSEQPP_FOUND)
 add_dependencies(sbwt_container_gpu kseqpp)
 endif()
-if (NOT SDSL_FOUND)
-add_dependencies(sbwt_container_gpu sdsl)
-endif()
 add_library(sbwt_container INTERFACE)
 target_link_libraries(
   sbwt_container
   INTERFACE
   sbwt_container_cpu
   sbwt_container_gpu
-  libsdsl
 )
 
 # Common libraries
@@ -183,7 +155,6 @@ target_link_libraries(
   sequence_file_parser
   filenames_parser
   sbwt_builder
-  libsdsl
   ZLIB::ZLIB
   cxxopts
   sbwt_container

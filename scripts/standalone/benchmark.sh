@@ -13,16 +13,16 @@ mkdir -p benchmark_results
 mkdir -p ${results_folder}
 
 input_files=(
-  # "benchmark_objects/FASTA1GB.fna"
-  # "benchmark_objects/FASTQ1GB.fnq"
+  "benchmark_objects/FASTA1GB.fna"
+  "benchmark_objects/FASTQ1GB.fnq"
   "benchmark_objects/365.fna"
-  # "benchmark_objects/combined_input.txt"
+  "benchmark_objects/combined_input.txt"
 )
 
 printing_modes=(
-  "ascii"
   "binary"
   "bool"
+  "ascii"
 )
 
 # populate combined_input.txt
@@ -41,7 +41,6 @@ output_files=(
 )
 sbwt_file="benchmark_objects/coli3.sbwt"
 batches=(1 3 10 30 70 100 200 1000)
-batches=(10 1000)
 
 stdoutput="${results_folder}/benchmark_out.txt"
 
