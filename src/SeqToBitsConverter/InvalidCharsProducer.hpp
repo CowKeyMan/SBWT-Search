@@ -49,8 +49,8 @@ class InvalidCharsProducer: public SharedBatchesProducer<vector<char>> {
       fill(batches.current_write()->begin(), batches.current_write()->end(), 0);
     }
 
-    auto set(u64 index, char value) {
-      (*batches.current_write())[index] = value;
+    auto set(u64 index) {
+      (*batches.current_write())[index] = true;
     }
 };
 

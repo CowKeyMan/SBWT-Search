@@ -133,7 +133,7 @@ class ContinuousSeqToBitsConverter {
         if (string_index >= buffer.size()) { return result; }
         u64 c = char_to_bits(buffer[string_index][char_index++]);
         if (c == invalid_char_to_bits_value) {
-          invalid_chars_producer.set(index + start_index, 1);
+          invalid_chars_producer.set(index + start_index);
           continue;
         }
         result |= c << internal_shift;
