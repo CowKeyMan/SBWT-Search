@@ -205,8 +205,7 @@ auto get_max_chars_per_batch(
 
 auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t {
   size_t free = get_free_gpu_memory() * 8;
-  auto max_chars_per_batch
-    = round_down<size_t>(free / 66 / max_batches, threads_per_block);
+  auto max_chars_per_batch = round_down<size_t>(free / 66, threads_per_block);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
