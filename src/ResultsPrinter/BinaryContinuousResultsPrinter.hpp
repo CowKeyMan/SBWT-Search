@@ -56,7 +56,10 @@ class BinaryContinuousResultsPrinter:
       for (u64 i = char_index; i < char_index + num_chars; ++i) {
         auto furthest_index
           = invalid_index + this->kmer_size - 1 + i - char_index;
-        if (furthest_index < invalid_index + string_length && (*this->invalid_chars)[furthest_index]) {
+        if (
+            furthest_index < invalid_index + string_length
+            && this->invalid_chars_batch->invalid_chars[furthest_index]
+        ) {
           invalid_chars_left = this->kmer_size;
         }
         if (invalid_chars_left > 0) {

@@ -13,7 +13,9 @@
 #include <string>
 #include <vector>
 
+#include "BatchObjects/BitSeqBatch.h"
 #include "BatchObjects/StringSequenceBatch.h"
+#include "BatchObjects/InvalidCharsBatch.h"
 #include "SeqToBitsConverter/BitsProducer.hpp"
 #include "SeqToBitsConverter/CharToBits.h"
 #include "SeqToBitsConverter/InvalidCharsProducer.hpp"
@@ -108,11 +110,11 @@ class ContinuousSeqToBitsConverter {
       bits_producer.do_at_generate_finish();
     }
 
-    auto operator>>(shared_ptr<vector<u64>> &batch) -> bool {
+    auto operator>>(shared_ptr<BitSeqBatch> &batch) -> bool {
       return bits_producer >> batch;
     }
 
-    auto operator>>(shared_ptr<vector<char>> &batch) -> bool {
+    auto operator>>(shared_ptr<InvalidCharsBatch> &batch) -> bool {
       return invalid_chars_producer >> batch;
     }
 

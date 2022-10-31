@@ -18,7 +18,7 @@ namespace sbwt_search {
 
 TEST(PoppyBuilderTest, BuildIndex) {
   auto v = vector_to_sdsl(bit_array, 64 * bit_array.size());
-  PoppyBuilder host(v.size(), v.data(), 64 * 8 * 2, 64 * 8);
+  PoppyBuilder host(v.size(), v.data());
   // 8 u64s = 1 super block, 2 super blocks = 1 hyper block
   host.build();
   assert_vectors_equal<u64>(

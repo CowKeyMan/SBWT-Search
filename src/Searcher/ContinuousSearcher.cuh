@@ -8,6 +8,8 @@
 
 #include <memory>
 
+#include "BatchObjects/BitSeqBatch.h"
+#include "BatchObjects/PositionsBatch.h"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Searcher/Searcher.cuh"
 #include "Utils/GlobalDefinitions.h"
@@ -30,7 +32,8 @@ class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
     SearcherGpu searcher;
     shared_ptr<BitSeqProducer> bit_seq_producer;
     shared_ptr<PositionsProducer> positions_producer;
-    shared_ptr<vector<u64>> bit_seqs, kmer_positions;
+    shared_ptr<BitSeqBatch> bit_seq_batch;
+    shared_ptr<PositionsBatch> kmer_positions;
     u64 max_positions_per_batch;
 
   public:
@@ -57,11 +60,16 @@ class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
 
     auto continue_read_condition() -> bool override {
       return (*positions_producer >> kmer_positions)
-           & (*bit_seq_producer >> bit_seqs);
+           & (*bit_seq_producer >> bit_seq_batch);
     }
 
     auto generate() -> void override {
-      searcher.search(*bit_seqs, *kmer_positions, *batches.current_write(), batch_id);
+      searcher.search(
+        bit_seq_batch->bit_seq,
+        kmer_positions->positions,
+        *batches.current_write(),
+        batch_id
+      );
     }
 
     auto do_at_batch_start() -> void override {

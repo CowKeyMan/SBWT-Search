@@ -9,6 +9,7 @@
 
 #include <algorithm>
 
+#include "BatchObjects/BitSeqBatch.h"
 #include "Utils/MathUtils.hpp"
 #include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
@@ -25,29 +26,31 @@ class ContinuousSeqToBitsConverter;
 namespace sbwt_search {
 
 template <class StringSequenceBatchProducer>
-class BitsProducer: public SharedBatchesProducer<vector<u64>> {
+class BitsProducer: public SharedBatchesProducer<BitSeqBatch> {
     friend ContinuousSeqToBitsConverter<StringSequenceBatchProducer>;
     const u64 max_chars_per_batch;
 
     BitsProducer(const u64 max_chars_per_batch, const uint max_batches):
         max_chars_per_batch(max_chars_per_batch),
-        SharedBatchesProducer<vector<u64>>(max_batches) {
+        SharedBatchesProducer<BitSeqBatch>(max_batches) {
       initialise_batches();
     }
 
-    auto get_default_value() -> shared_ptr<vector<u64>> override {
-      return make_shared<vector<u64>>(
-        round_up<u64>(max_chars_per_batch, 32) / 32
-      );
+    auto get_default_value() -> shared_ptr<BitSeqBatch> override {
+      auto batch = make_shared<BitSeqBatch>();
+      batch->bit_seq.resize(round_up<u64>(max_chars_per_batch, 32) / 32);
+      return batch;
     }
 
     auto start_new_batch(u64 num_chars) -> void {
-      SharedBatchesProducer<vector<u64>>::do_at_batch_start();
-      batches.current_write()->resize(round_up<u64>(num_chars, 32) / 32);
+      SharedBatchesProducer<BitSeqBatch>::do_at_batch_start();
+      batches.current_write()->bit_seq.resize(
+        round_up<u64>(num_chars, 32) / 32
+      );
     }
 
     auto set(u64 index, u64 value) {
-      (*batches.current_write())[index] = value;
+      batches.current_write()->bit_seq[index] = value;
     }
 };
 

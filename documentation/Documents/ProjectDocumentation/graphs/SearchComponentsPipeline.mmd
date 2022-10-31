@@ -25,14 +25,14 @@ flowchart TD
 
         </i>
     "])
-    Positions(["
+    PositionsBatch(["
         Positions
         <i>
         (max_characters * 64)
 
         </i>
     "])
-    BitSeqs(["
+    BitSeqBatch(["
         BitSeqs
         <i>
         (max_characters * 2)
@@ -46,7 +46,7 @@ flowchart TD
 
         </i>
     "])
-    InvalidChars(["
+    InvalidCharsBatch(["
         InvalidChars
         <i>
         (max_characters * 8)
@@ -63,17 +63,17 @@ flowchart TD
     StringSequenceBatchProducer --- StringSequenceBatch
     CumulativePropertiesBatchProducer --- CumulativePropertiesBatch
     IntervalBatchProducer --- IntervalBatch
-    ContinuousPositionsBuilder --- Positions
-    ContinuousSeqToBitsConverter --- BitSeqs
-    ContinuousSeqToBitsConverter --- InvalidChars
+    ContinuousPositionsBuilder --- PositionsBatch
+    ContinuousSeqToBitsConverter --- BitSeqsBatch
+    ContinuousSeqToBitsConverter --- InvalidCharsBatch
     ContinuousSearcher --- Results
 
     StringSequenceBatch-->ContinuousSeqToBitsConverter
     CumulativePropertiesBatch-->ContinuousPositionsBuilder
-    Positions --> ContinuousSearcher
-    BitSeqs --> ContinuousSearcher
+    PositionsBatch --> ContinuousSearcher
+    BitSeqsBatch --> ContinuousSearcher
     Results --> ContinuousResultsPrinter
-    InvalidChars --> ContinuousResultsPrinter
+    InvalidCharsBatch --> ContinuousResultsPrinter
     IntervalBatch --> ContinuousResultsPrinter
 
     ContinuousResultsPrinter--> ResultFiles{Results}

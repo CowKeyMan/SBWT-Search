@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "BatchObjects/IntervalBatch.h"
+#include "BatchObjects/InvalidCharsBatch.h"
 #include "BatchObjects/StringSequenceBatch.h"
 #include "Utils/Logger.h"
 #include "Utils/TypeDefinitions.h"
@@ -47,7 +48,7 @@ class ContinuousResultsPrinter {
 
   protected:
     shared_ptr<vector<u64>> results;
-    shared_ptr<vector<char>> invalid_chars;
+    shared_ptr<InvalidCharsBatch> invalid_chars_batch;
     const uint kmer_size;
     ofstream stream;
 
@@ -71,7 +72,7 @@ class ContinuousResultsPrinter {
       if (current_filename == filenames.end()) { return; }
       open_next_file();
       for (uint batch_idx = 0; (*interval_producer >> interval_batch)
-                               & (*invalid_chars_producer >> invalid_chars)
+                               & (*invalid_chars_producer >> invalid_chars_batch)
                                & (*results_producer >> results);
            ++batch_idx) {
         Logger::log_timed_event(
@@ -131,7 +132,7 @@ class ContinuousResultsPrinter {
   protected:
     auto get_invalid_chars_left_first_kmer(size_t first_invalid_index) -> uint {
       for (uint i = kmer_size; i > 0; --i) {
-        if ((*invalid_chars)[i - 1 + first_invalid_index]) { return i; }
+        if ((invalid_chars_batch->invalid_chars)[i - 1 + first_invalid_index]) { return i; }
       }
       return 0;
     }
