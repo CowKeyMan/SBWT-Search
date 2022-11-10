@@ -4,8 +4,8 @@
 /**
  * @file StringSequenceBatch.h
  * @brief Data class for the string sequences and associated data. The buffer
- * stores the strings themselves. the buffers are then split into some number of
- * readers. Thus, the rest are indexes. string_indexes is the index of the
+ * stores the strings themselves. the buffers are then split between some number
+ * of readers. Thus, the rest are indexes. string_indexes is the index of the
  * string itself, char_indexes are the indexes of the character within the
  * string while cumulative_char_indexes are the global index of the character.
  * So if we had the strings: "ABCD", "EF" and "GHI" in the buffer, and we wanted
