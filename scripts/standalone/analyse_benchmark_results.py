@@ -258,6 +258,7 @@ for index, name in enumerate(sorted_keys):
             str(Path(args['i']).parent)
             + "/"
             + input_filename.replace('/', '_').replace('.', '_')
+            + "_"
             + name.split()[3]
             + 'batches'
             + '_'
