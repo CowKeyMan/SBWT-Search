@@ -34,8 +34,7 @@ class RankTestClass {
       layer_1_2 = builder.get_layer_1_2();
       expected = vector<u64>(test_indexes.size());
       for (auto i = 0; i < test_indexes.size(); ++i) {
-        expected[i]
-          = dummy_cpu_rank(&bit_vector[0], test_indexes[i]);
+        expected[i] = dummy_cpu_rank(&bit_vector[0], test_indexes[i]);
       }
     }
 };

@@ -2,8 +2,8 @@
 
 #include "Rank/Rank.cuh"
 #include "Utils/CudaUtils.cuh"
-#include "Utils/TypeDefinitions.h"
 #include "Utils/GlobalDefinitions.h"
+#include "Utils/TypeDefinitions.h"
 
 using gpu_utils::GpuPointer;
 using std::vector;
