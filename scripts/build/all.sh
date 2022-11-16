@@ -15,23 +15,26 @@ cmake \
   -DBUILD_DOCS=OFF \
   -DENABLE_PROFILING=ON \
   ..
-cmake \
-  -DCMAKE_EXPORT_COMPILE_COMMANDS=OFF \
-  -DCMAKE_BUILD_TYPE=Debug \
-  -DENABLE_CLANG_TIDY=ON \
-  -DENABLE_HEADER_GUARDS_CHECK=ON \
-  -DENABLE_CLANG_FORMAT_CHECK=ON \
-  -DBUILD_CPU=OFF \
-  -DBUILD_CUDA=OFF \
-  -DBUILD_MAIN=OFF \
-  -DBUILD_TESTS=OFF \
-  -DBUILD_DOCS=OFF \
-  -DENABLE_PROFILING=OFF \
-  ..
+if [[ $# > 0 ]];
+then
+  cmake \
+    -DCMAKE_EXPORT_COMPILE_COMMANDS=OFF \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DENABLE_CLANG_TIDY=ON \
+    -DENABLE_HEADER_GUARDS_CHECK=ON \
+    -DENABLE_CLANG_FORMAT_CHECK=ON \
+    -DBUILD_CPU=OFF \
+    -DBUILD_CUDA=OFF \
+    -DBUILD_MAIN=OFF \
+    -DBUILD_TESTS=OFF \
+    -DBUILD_DOCS=OFF \
+    -DENABLE_PROFILING=OFF \
+    ..
+fi
 cd ..
 
 
 sh scripts/build/release.sh
 # sh scripts/build/debug.sh
-# sh scripts/build/tests.sh
+sh scripts/build/tests.sh
 sh scripts/build/docs.sh
