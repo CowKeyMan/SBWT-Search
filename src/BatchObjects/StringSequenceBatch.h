@@ -32,10 +32,7 @@ namespace sbwt_search {
 
 class StringSequenceBatch {
   public:
-    vector<string> buffer;
-    vector<u64> string_indexes;
-    vector<u64> char_indexes;
-    vector<u64> cumulative_char_indexes;
+    const string *seq;
 };
 
 }  // namespace sbwt_search

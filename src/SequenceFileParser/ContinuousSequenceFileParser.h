@@ -7,68 +7,62 @@
  * buffer. Then it can serve these sequences to its consumers
  * */
 
+#include <algorithm>
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "SequenceFileParser/CumulativePropertiesBatchProducer.h"
-#include "SequenceFileParser/IntervalBatchProducer.h"
-#include "SequenceFileParser/StringSequenceBatchProducer.h"
+#include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
+#include "kseqpp_read.hpp"
 
-namespace sbwt_search {
-class CumulativePropertiesBatch;
-class IntervalBatch;
-class StringSequenceBatch;
-}  // namespace sbwt_search
-
+using reklibpp::Seq;
+using reklibpp::SeqStreamIn;
 using std::shared_ptr;
 using std::string;
+using std::unique_ptr;
 using std::vector;
+using structure_utils::CircularBuffer;
 
 namespace sbwt_search {
+
+class StringSequenceBatchProducer;
+class StringBreakBatchProducer;
+class IntervalBatchProducer;
 
 class ContinuousSequenceFileParser {
   private:
-    const u64 max_chars_per_batch, max_strings_per_batch;
-    u64 current_batch_size = 0, current_batch_strings = 0;
-    const uint num_readers;
+    const size_t max_chars_per_batch;
     const vector<string> filenames;
-    StringSequenceBatchProducer string_sequence_batch_producer;
-    CumulativePropertiesBatchProducer cumulative_properties_batch_producer;
-    IntervalBatchProducer interval_batch_producer;
-    const uint bits_split = 64;
-    uint batch_idx = 0;
+    unique_ptr<SeqStreamIn> stream;
+    vector<string>::const_iterator filename_iterator;
+    uint batch_id = 0;
+    uint kmer_size = 0;
+    bool fail = false;
+    shared_ptr<StringSequenceBatchProducer> string_sequence_batch_producer;
+    shared_ptr<StringBreakBatchProducer> string_break_batch_producer;
+    shared_ptr<IntervalBatchProducer> interval_batch_producer;
+    CircularBuffer<shared_ptr<Seq>> batches;
 
   public:
     ContinuousSequenceFileParser(
-      const vector<string> &filenames,
-      const uint kmer_size,
-      const u64 max_chars_per_batch = 1000,
-      const u64 max_strings_per_batch = 1000,
-      const uint num_readers = 1,
-      const u64 max_batches = 5,
-      const uint bits_split = 64
+      const vector<string> &_filenames,
+      const uint _kmer_size,
+      const size_t _max_chars_per_batch,
+      const size_t max_batches,
+      shared_ptr<StringSequenceBatchProducer> string_sequence_batch_producer,
+      shared_ptr<StringBreakBatchProducer> string_break_batch_producer,
+      shared_ptr<IntervalBatchProducer> interval_batch_producer
     );
-
-    void read_and_generate();
-    bool operator>>(shared_ptr<StringSequenceBatch> &batch);
-    bool operator>>(shared_ptr<CumulativePropertiesBatch> &batch);
-    bool operator>>(shared_ptr<IntervalBatch> &batch);
+    auto read_and_generate() -> void;
 
   private:
-    u64 get_max_chars_per_batch(u64 value, uint bits_split);
-    void start_new_batch();
-    void terminate_batch();
-    void process_file(const string &filename);
-    void
-    process_string(const string &filename, string &s, const u64 string_index);
-    void add_string(string &s);
-    bool string_fits_in_batch(const string &s);
-    bool string_larger_than_limit(const string &s);
-    void print_string_too_large(
-      const string &filename, const u64 string_index, const u64 string_size
-    );
+    auto start_next_file() -> bool;
+    auto read_next() -> void;
+    auto reset_rec() -> void;
+    auto do_at_batch_start() -> void;
+    auto do_at_batch_finish() -> void;
+    auto do_at_generate_finish() -> void;
 };
 
 }  // namespace sbwt_search

@@ -28,26 +28,12 @@ class StringSequenceBatchProducer:
     public SharedBatchesProducer<StringSequenceBatch> {
     friend ContinuousSequenceFileParser;
 
-  private:
-    const uint bits_split = 64;
-    const uint max_strings_per_batch;
-    const uint num_readers;
-    uint current_batch_size = 0;
-    uint chars_to_next_index;
-    const uint chars_per_reader;
+  public:
+    StringSequenceBatchProducer(uint max_batches);
 
-    StringSequenceBatchProducer(
-      const size_t max_strings_per_batch,
-      const size_t max_chars_per_batch,
-      const uint max_batches,
-      const uint num_readers,
-      const uint bits_split = 64
-    );
-    void add_string(const string &s);
+  private:
+    void set_string(const string &s);
     shared_ptr<StringSequenceBatch> get_default_value() override;
-    void reset_batch(shared_ptr<StringSequenceBatch> &batch);
-    void do_at_batch_start() override;
-    void do_at_batch_finish() override;
 };
 
 }  // namespace sbwt_search
