@@ -84,6 +84,7 @@ auto ContinuousSequenceFileParser::reset_rec() -> void {
     prev_rec->seq.end() - amount_to_copy, prev_rec->seq.end(), rec->seq.begin()
   );
   rec->seq.resize(amount_to_copy);
+  rec->string_breaks.resize(0);
 }
 
 auto ContinuousSequenceFileParser::start_next_file() -> bool {
