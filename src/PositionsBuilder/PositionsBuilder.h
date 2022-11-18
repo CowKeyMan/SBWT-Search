@@ -21,17 +21,17 @@ class PositionsBuilder {
   public:
     PositionsBuilder(const uint kmer_size);
     void build_positions(
-      const vector<u64> &cumsum_positions_per_string,
-      const vector<u64> &cumsum_string_lengths,
-      vector<u64> &positions
+      const vector<size_t> &string_breaks,
+      const size_t &string_size,
+      vector<size_t> &positions
     );
 
   private:
     void process_one_string(
-      const u64 start_position_index,
-      const u64 end_position_index,
-      const u64 first_position,
-      vector<u64> &positions
+      const size_t start_position_index,
+      const size_t end_position_index,
+      const size_t first_position,
+      vector<size_t> &positions
     );
 };
 

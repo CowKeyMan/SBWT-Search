@@ -8,12 +8,10 @@
  * */
 
 #include <memory>
-#include <vector>
 
-#include "BatchObjects/CumulativePropertiesBatch.h"
+#include "BatchObjects/StringBreakBatch.h"
 #include "BatchObjects/PositionsBatch.h"
 #include "PositionsBuilder/PositionsBuilder.h"
-#include "Utils/CircularBuffer.hpp"
 #include "Utils/Logger.h"
 #include "Utils/SharedBatchesProducer.hpp"
 #include "Utils/TypeDefinitions.h"
@@ -23,31 +21,28 @@ using fmt::format;
 using log_utils::Logger;
 using std::make_shared;
 using std::shared_ptr;
-using std::vector;
 
 using design_utils::SharedBatchesProducer;
 
 namespace sbwt_search {
 
-template <class CumulativePropertiesProducer>
+template <class StringBreakBatchProducer>
 class ContinuousPositionsBuilder: public SharedBatchesProducer<PositionsBatch> {
   private:
-    shared_ptr<CumulativePropertiesProducer> producer;
+    shared_ptr<StringBreakBatchProducer> producer;
+    shared_ptr<StringBreakBatch> read_batch;
     PositionsBuilder builder;
-    const u64 max_positions_per_batch;
-    const uint kmer_size;
-    shared_ptr<CumulativePropertiesBatch> read_batch;
+    const size_t max_chars_per_batch;
 
   public:
     ContinuousPositionsBuilder(
-      shared_ptr<CumulativePropertiesProducer> producer,
+      shared_ptr<StringBreakBatchProducer> _producer,
       const uint kmer_size,
-      const u64 max_positions_per_batch = 999,
-      const unsigned int max_batches = 10
+      const size_t _max_chars_per_batch,
+      const uint max_batches
     ):
-        producer(producer),
-        kmer_size(kmer_size),
-        max_positions_per_batch(max_positions_per_batch),
+        producer(_producer),
+        max_chars_per_batch(_max_chars_per_batch),
         builder(kmer_size),
         SharedBatchesProducer<PositionsBatch>(max_batches) {
       initialise_batches();
@@ -56,18 +51,18 @@ class ContinuousPositionsBuilder: public SharedBatchesProducer<PositionsBatch> {
   protected:
     auto get_default_value() -> shared_ptr<PositionsBatch> override {
       auto batch = make_shared<PositionsBatch>();
-      batch->positions.resize(max_positions_per_batch);
+      batch->positions.resize(max_chars_per_batch);
       return batch;
     }
 
     auto continue_read_condition() -> bool override {
-      return *producer >> read_batch;
+      return (*producer) >> read_batch;
     }
 
     auto generate() -> void override {
       builder.build_positions(
-        read_batch->cumsum_positions_per_string,
-        read_batch->cumsum_string_lengths,
+        *read_batch->string_breaks,
+        read_batch->string_size,
         batches.current_write()->positions
       );
     }
