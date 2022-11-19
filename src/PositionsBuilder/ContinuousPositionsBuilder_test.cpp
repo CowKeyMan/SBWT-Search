@@ -18,14 +18,14 @@ using std::this_thread::sleep_for;
 
 namespace sbwt_search {
 
-class DummyProducer {
+class DummyStringBreakBatchProducer {
   private:
     int counter = 0;
     vector<vector<size_t>> string_breaks;
     vector<size_t> string_sizes;
 
   public:
-    DummyProducer(
+    DummyStringBreakBatchProducer(
       vector<vector<size_t>> &_string_breaks, vector<size_t> _string_sizes
     ):
         string_breaks(_string_breaks), string_sizes(_string_sizes) {}
@@ -55,8 +55,10 @@ class ContinuousPositionsBuilderTest: public ::testing::Test {
       uint max_batches = 7
     ) {
       auto max_chars_per_batch = 999;
-      auto producer = make_shared<DummyProducer>(string_breaks, string_sizes);
-      auto host = ContinuousPositionsBuilder<DummyProducer>(
+      auto producer = make_shared<DummyStringBreakBatchProducer>(
+        string_breaks, string_sizes
+      );
+      auto host = ContinuousPositionsBuilder<DummyStringBreakBatchProducer>(
         producer, kmer_size, max_chars_per_batch, max_batches
       );
       size_t expected_batches = string_breaks.size();
@@ -87,7 +89,8 @@ TEST_F(ContinuousPositionsBuilderTest, Basic) {
   vector<vector<size_t>> string_breaks = { { 7, 8, 10, 15 }, { 7, 8, 10, 15 } };
   vector<size_t> string_sizes = { 20, 15 };
   vector<vector<size_t>> expected_positions
-    = { { 0, 1, 2, 3, 4, 5, 11, 12, 13, 16, 17 },  { 0, 1, 2, 3, 4, 5, 11, 12, 13 }};
+    = { { 0, 1, 2, 3, 4, 5, 11, 12, 13, 16, 17 },
+        { 0, 1, 2, 3, 4, 5, 11, 12, 13 } };
   uint kmer_size = 3;
   for (auto max_batches: { 1, 2, 3, 7 }) {
     run_test(

@@ -26,13 +26,13 @@ using std::this_thread::sleep_for;
 
 namespace sbwt_search {
 
-class DummyProducer {
+class DummyStringSequenceBatchProducer {
   private:
     int counter = 0;
     vector<string> seqs;
 
   public:
-    DummyProducer(vector<string> &_seqs): seqs(_seqs) {}
+    DummyStringSequenceBatchProducer(vector<string> &_seqs): seqs(_seqs) {}
 
     auto operator>>(shared_ptr<StringSequenceBatch> &batch) -> bool {
       if (counter < seqs.size()) {
@@ -60,15 +60,17 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
 #pragma omp parallel
 #pragma omp single
       { threads = omp_get_num_threads(); }
-      auto producer = make_shared<DummyProducer>(seqs);
+      auto producer = make_shared<DummyStringSequenceBatchProducer>(seqs);
       auto invalid_chars_producer
-        = make_shared<InvalidCharsProducer<DummyProducer>>(
+        = make_shared<InvalidCharsProducer<DummyStringSequenceBatchProducer>>(
           kmer_size, max_chars_per_batch, max_batches
         );
-      auto bits_producer = make_shared<BitsProducer<DummyProducer>>(
-        max_chars_per_batch, max_batches
-      );
-      auto host = make_shared<ContinuousSeqToBitsConverter<DummyProducer>>(
+      auto bits_producer
+        = make_shared<BitsProducer<DummyStringSequenceBatchProducer>>(
+          max_chars_per_batch, max_batches
+        );
+      auto host = make_shared<
+        ContinuousSeqToBitsConverter<DummyStringSequenceBatchProducer>>(
         producer,
         invalid_chars_producer,
         bits_producer,
@@ -156,12 +158,11 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestAll) {
 
   const uint max_chars_per_batch = 200;
   for (auto kmer_size: { 3 }) {
-    vector<vector<char>> expected_invalid_chars = {
-        vector<char>(47 + kmer_size, 0), vector<char>(128 + kmer_size, 0)
-    };
+    vector<vector<char>> expected_invalid_chars
+      = { vector<char>(47 + kmer_size, 0), vector<char>(128 + kmer_size, 0) };
     expected_invalid_chars[0][5] = 1;
     for (auto i: { 0, 63, 64, 126 }) { expected_invalid_chars[1][i] = 1; }
-    for (auto max_batches: { 1}) {
+    for (auto max_batches: { 1 }) {
       run_test(
         kmer_size,
         seqs,
