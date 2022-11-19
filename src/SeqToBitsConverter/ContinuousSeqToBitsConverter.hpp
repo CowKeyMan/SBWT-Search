@@ -12,10 +12,11 @@
 #include <omp.h>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "BatchObjects/BitSeqBatch.h"
-#include "BatchObjects/StringSequenceBatch.h"
 #include "BatchObjects/InvalidCharsBatch.h"
+#include "BatchObjects/StringSequenceBatch.h"
 #include "SeqToBitsConverter/BitsProducer.hpp"
 #include "SeqToBitsConverter/CharToBits.h"
 #include "SeqToBitsConverter/InvalidCharsProducer.hpp"
@@ -31,6 +32,7 @@ using log_utils::Logger;
 using math_utils::round_up;
 using std::fill;
 using std::make_shared;
+using std::min;
 using std::shared_ptr;
 using std::string;
 using std::vector;
@@ -40,8 +42,9 @@ namespace sbwt_search {
 template <class StringSequenceBatchProducer>
 class ContinuousSeqToBitsConverter {
   private:
-    InvalidCharsProducer<StringSequenceBatchProducer> invalid_chars_producer;
-    BitsProducer<StringSequenceBatchProducer> bits_producer;
+    shared_ptr<InvalidCharsProducer<StringSequenceBatchProducer>>
+      invalid_chars_producer;
+    shared_ptr<BitsProducer<StringSequenceBatchProducer>> bits_producer;
 
     shared_ptr<StringSequenceBatchProducer> producer;
     const uint threads;
@@ -50,92 +53,70 @@ class ContinuousSeqToBitsConverter {
   public:
     ContinuousSeqToBitsConverter(
       shared_ptr<StringSequenceBatchProducer> producer,
+      shared_ptr<InvalidCharsProducer<StringSequenceBatchProducer>>
+        _invalid_chars_producer,
+      shared_ptr<BitsProducer<StringSequenceBatchProducer>> _bits_producer,
       uint threads,
-      uint kmer_size,
-      u64 max_chars_per_batch = 999,
-      u64 max_batches = 10
+      u64 max_chars_per_batch,
+      u64 max_batches
     ):
         producer(producer),
         threads(threads),
         char_to_bits(),
-        invalid_chars_producer(kmer_size, max_chars_per_batch, max_batches),
-        bits_producer(max_chars_per_batch, max_batches) {}
+        invalid_chars_producer(_invalid_chars_producer),
+        bits_producer(_bits_producer) {}
 
   public:
     auto read_and_generate() -> void {
       shared_ptr<StringSequenceBatch> read_batch;
-      for (uint batch_idx = 0; *producer >> read_batch; ++batch_idx) {
-        invalid_chars_producer.start_new_batch(
-          read_batch->cumulative_char_indexes.back()
-        );
-        bits_producer.start_new_batch(read_batch->cumulative_char_indexes.back()
-        );
+      for (uint batch_idx = 0; (*producer) >> read_batch; ++batch_idx) {
+        invalid_chars_producer->start_new_batch(read_batch->seq->size());
+        bits_producer->start_new_batch(read_batch->seq->size());
         Logger::log_timed_event(
           "SeqToBitsConverter",
           Logger::EVENT_STATE::START,
           format("batch {}", batch_idx)
         );
-#pragma omp parallel num_threads(threads) default(none) shared(read_batch)
-        {
-          uint idx = omp_get_thread_num();
-          auto char_index = read_batch->char_indexes[idx];
-          auto string_index = read_batch->string_indexes[idx];
-          auto cumulative_char_index = read_batch->cumulative_char_indexes[idx];
-          const auto next_cumulative_char_index
-            = read_batch->cumulative_char_indexes[idx + 1];
-          auto write_index = cumulative_char_index / 32;
-          while (cumulative_char_index < next_cumulative_char_index) {
-            bits_producer.set(
-              write_index,
-              convert_int(
-                read_batch->buffer,
-                string_index,
-                char_index,
-                cumulative_char_index
-              )
-            );
-            cumulative_char_index += 32;
-            ++write_index;
-          }
-        }
+        parallel_generate(*read_batch);
         Logger::log_timed_event(
           "SeqToBitsConverter",
           Logger::EVENT_STATE::STOP,
           format("batch {}", batch_idx)
         );
-        invalid_chars_producer.do_at_batch_finish();
-        bits_producer.do_at_batch_finish();
+        invalid_chars_producer->do_at_batch_finish();
+        bits_producer->do_at_batch_finish();
       }
-      invalid_chars_producer.do_at_generate_finish();
-      bits_producer.do_at_generate_finish();
-    }
-
-    auto operator>>(shared_ptr<BitSeqBatch> &batch) -> bool {
-      return bits_producer >> batch;
-    }
-
-    auto operator>>(shared_ptr<InvalidCharsBatch> &batch) -> bool {
-      return invalid_chars_producer >> batch;
+      invalid_chars_producer->do_at_generate_finish();
+      bits_producer->do_at_generate_finish();
     }
 
   private:
-    auto convert_int(
-      const vector<string> &buffer,
-      u64 &string_index,
-      u64 &char_index,
-      u64 start_index
-    ) -> u64 {
-      u64 result = 0;
-      for (u64 internal_shift = 62, index = 0; internal_shift < 64;
-           internal_shift -= 2, ++index) {
-        if (end_of_string(buffer, string_index, char_index)) {
-          ++string_index;
-          char_index = 0;
+    auto parallel_generate(StringSequenceBatch &read_batch) -> void {
+      auto seq_size = read_batch.seq->size();
+      size_t chars_per_thread = ceil(round_up<size_t>(seq_size, 32) / 32.0 / threads) * 32ULL;
+#pragma omp parallel num_threads(threads) shared(read_batch)
+      {
+        uint idx = omp_get_thread_num();
+        size_t start_index = min(idx * chars_per_thread, seq_size);
+        size_t end_index = min((idx + 1) * chars_per_thread, seq_size);
+        for (size_t index = start_index; index < end_index; index += 32) {
+          auto x = convert_int(*read_batch.seq, start_index, end_index);
+          bits_producer->set(
+            index / 32, convert_int(*read_batch.seq, start_index, end_index)
+          );
         }
-        if (string_index >= buffer.size()) { return result; }
-        u64 c = char_to_bits(buffer[string_index][char_index++]);
+      }
+    }
+
+    auto convert_int(const string &string, size_t start_index, size_t end_index)
+      -> u64 {
+      u64 result = 0;
+      for (u64 internal_shift = 62, index = 0;
+           internal_shift < 64 && index + start_index < end_index;
+           internal_shift -= 2, ++index) {
+        u64 c = char_to_bits(string[index + start_index]);
         if (c == invalid_char_to_bits_value) {
-          invalid_chars_producer.set(index + start_index);
+          invalid_chars_producer->set(index + start_index);
           continue;
         }
         result |= c << internal_shift;
@@ -143,12 +124,17 @@ class ContinuousSeqToBitsConverter {
       return result;
     }
 
-    auto end_of_string(
-      const vector<string> &buffer, const u64 string_index, const u64 char_index
-    ) -> bool {
-      return char_index == buffer[string_index].size();
+
+  public:
+    auto operator>>(shared_ptr<BitSeqBatch> &batch) -> bool {
+      return (*bits_producer) >> batch;
     }
-};
+
+    auto operator>>(shared_ptr<InvalidCharsBatch> &batch) -> bool {
+      return (*invalid_chars_producer) >> batch;
+    }
+
+};  // namespace sbwt_search
 }  // namespace sbwt_search
 
 #endif

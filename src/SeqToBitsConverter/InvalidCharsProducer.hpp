@@ -11,7 +11,6 @@
 
 #include "BatchObjects/InvalidCharsBatch.h"
 #include "Utils/SharedBatchesProducer.hpp"
-#include "Utils/TypeDefinitions.h"
 
 using design_utils::SharedBatchesProducer;
 using std::fill;
@@ -27,28 +26,30 @@ template <class StringSequenceBatchProducer>
 class InvalidCharsProducer: public SharedBatchesProducer<InvalidCharsBatch> {
     friend ContinuousSeqToBitsConverter<StringSequenceBatchProducer>;
     const uint kmer_size;
-    const u64 max_chars_per_batch;
+    const size_t max_chars_per_batch;
 
-    InvalidCharsProducer(
-      const uint kmer_size,
-      const u64 max_chars_per_batch,
-      const uint max_batches
-    ):
+    public:
+        InvalidCharsProducer(
+          const uint kmer_size,
+          const size_t max_chars_per_batch,
+          const uint max_batches
+        ):
         kmer_size(kmer_size),
         max_chars_per_batch(max_chars_per_batch),
         SharedBatchesProducer<InvalidCharsBatch>(max_batches) {
       initialise_batches();
     }
 
+  private:
     auto get_default_value() -> shared_ptr<InvalidCharsBatch> override {
       auto batch = make_shared<InvalidCharsBatch>();
       batch->invalid_chars.resize(max_chars_per_batch + kmer_size);
       return batch;
     }
 
-    auto start_new_batch(u64 num_chars) -> void {
+    auto start_new_batch(size_t num_chars) -> void {
       SharedBatchesProducer<InvalidCharsBatch>::do_at_batch_start();
-      batches.current_write()->invalid_chars.resize(num_chars);
+      batches.current_write()->invalid_chars.resize(num_chars + kmer_size);
       fill(
         batches.current_write()->invalid_chars.begin(),
         batches.current_write()->invalid_chars.end(),
@@ -56,7 +57,7 @@ class InvalidCharsProducer: public SharedBatchesProducer<InvalidCharsBatch> {
       );
     }
 
-    auto set(u64 index) {
+    auto set(size_t index) {
       batches.current_write()->invalid_chars[index] = true;
     }
 };

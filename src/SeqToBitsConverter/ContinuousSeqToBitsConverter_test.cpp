@@ -1,16 +1,20 @@
 #include <chrono>
+#include <cmath>
 #include <memory>
+#include <omp.h>
 #include <thread>
 #include <vector>
 
-#include "gtest/gtest_pred_impl.h"
-#include <gtest/gtest-message.h>
-#include <gtest/gtest-test-part.h>
+#include <gtest/gtest.h>
 
+#include "SeqToBitsConverter/BitsProducer.hpp"
 #include "SeqToBitsConverter/ContinuousSeqToBitsConverter.hpp"
+#include "SeqToBitsConverter/InvalidCharsProducer.hpp"
 #include "TestUtils/GeneralTestUtils.hpp"
+#include "Utils/RNGUtils.h"
 #include "Utils/TypeDefinitions.h"
 
+using rng_utils::get_uniform_generator;
 using std::make_shared;
 using std::string;
 using std::unique_ptr;
@@ -22,33 +26,18 @@ using std::this_thread::sleep_for;
 
 namespace sbwt_search {
 
-class DummyParser {
+class DummyProducer {
   private:
     int counter = 0;
+    vector<string> seqs;
 
   public:
-    vector<vector<u64>> string_indexes, char_indexes, cumulative_char_indexes;
-    vector<vector<string>> buffers;
-    DummyParser(
-      vector<vector<string>> &buffers,
-      vector<vector<u64>> &string_indexes,
-      vector<vector<u64>> &char_indexes,
-      vector<vector<u64>> &cumulative_char_indexes
-    ):
-        buffers(buffers),
-        string_indexes(string_indexes),
-        cumulative_char_indexes(cumulative_char_indexes),
-        char_indexes(char_indexes) {}
+    DummyProducer(vector<string> &_seqs): seqs(_seqs) {}
 
     auto operator>>(shared_ptr<StringSequenceBatch> &batch) -> bool {
-      if (counter < string_indexes.size()) {
-        auto result_batch = make_shared<StringSequenceBatch>();
-        result_batch->buffer = buffers[counter];
-        result_batch->string_indexes = string_indexes[counter];
-        result_batch->char_indexes = char_indexes[counter];
-        result_batch->cumulative_char_indexes
-          = cumulative_char_indexes[counter];
-        batch = result_batch;
+      if (counter < seqs.size()) {
+        batch = make_shared<StringSequenceBatch>();
+        batch->seq = &seqs[counter];
         ++counter;
         return true;
       }
@@ -58,137 +47,131 @@ class DummyParser {
 
 class ContinuousSeqToBitsConverterTest: public ::testing::Test {
   protected:
-    vector<string> buffer_example_1 = {
-      "ACgT",  // 00011011
-      "gn",  // 1000
-      "GAt",  // 100011 // n will be 99
-      "GtCa",  // 10110100
-      "AAAAaAAaAAAAAAAaAAAAAAAAAAAAAAAA",  // 32 As = 64 0s
-      "GC"  // 1001
-    };
-    // 1st 64b: 0001101110001000111011010000000000000000000000000000000000000000
-    // 2nd 64b: 0000000000000000000000000010010000000000000000000000000000000000
-    // We apply 0 padding on the right to get decimal equivalent
-    // Using some online converter, we get the following decimal equivalents:
-    vector<u64> expected_bits_1 = { 1984096220112486400, 154618822656 };
-
-    vector<string> buffer_example_2 = {
-      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAT",  // 63A+T
-      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG",  // 63A+G
-    };
-
-    const uint kmer_size = 30;
-    const uint max_ints_per_batch = 999;
-
-    vector<char> expected_invalid_1, expected_invalid_2;
-    ContinuousSeqToBitsConverterTest() {
-      expected_invalid_1 = vector<char>(47, 0);
-      expected_invalid_1[5] = 1;
-      expected_invalid_2 = vector<char>(63, 0);
-    }
-
-    vector<u64> expected_bits_2 = { 0, 3, 0, 2 };
-    vector<vector<string>> buffers;
-    vector<vector<u64>> expected_bits;
-    vector<vector<char>> expected_invalid;
-    vector<vector<u64>> string_indexes = { { 0, 6 } };
-    vector<vector<u64>> char_indexes = { { 0, 0 } };
-    vector<vector<u64>> cumulative_char_indexes = { { 0, 47 } };
-
-    auto shared_tests() -> void {
-      auto parser = make_shared<DummyParser>(
-        buffers, string_indexes, char_indexes, cumulative_char_indexes
-      );
-      auto host = ContinuousSeqToBitsConverter<DummyParser>(
-        parser, 1, kmer_size, max_ints_per_batch
-      );
-      host.read_and_generate();
-      shared_ptr<vector<u64>> bit_output;
-      shared_ptr<vector<char>> invalid_output;
-      for (int i = 0; (host >> bit_output) & (host >> invalid_output); ++i) {
-        assert_vectors_equal(expected_bits[i], *bit_output, __FILE__, __LINE__);
-        assert_vectors_equal(
-          expected_invalid[i], *invalid_output, __FILE__, __LINE__
+    auto run_test(
+      uint kmer_size,
+      vector<string> &seqs,
+      vector<vector<u64>> &bits,
+      vector<vector<char>> &invalid_chars,
+      size_t max_chars_per_batch,
+      size_t max_batches
+    ) {
+      omp_set_nested(1);
+      uint threads;
+#pragma omp parallel
+#pragma omp single
+      { threads = omp_get_num_threads(); }
+      auto producer = make_shared<DummyProducer>(seqs);
+      auto invalid_chars_producer
+        = make_shared<InvalidCharsProducer<DummyProducer>>(
+          kmer_size, max_chars_per_batch, max_batches
         );
+      auto bits_producer = make_shared<BitsProducer<DummyProducer>>(
+        max_chars_per_batch, max_batches
+      );
+      auto host = make_shared<ContinuousSeqToBitsConverter<DummyProducer>>(
+        producer,
+        invalid_chars_producer,
+        bits_producer,
+        threads,
+        max_chars_per_batch,
+        max_batches
+      );
+      size_t expected_batches = seqs.size();
+      size_t batches = 0;
+      uint time_to_wait = 100;
+#pragma omp parallel sections private(batches)
+      {
+#pragma omp section
+        {
+          auto rng = get_uniform_generator(0, 100);
+          sleep_for(milliseconds(rng()));
+          host->read_and_generate();
+        }
+#pragma omp section
+        {
+          auto rng = get_uniform_generator(0, 100);
+          shared_ptr<BitSeqBatch> bit_seq_batch;
+          for (batches = 0; (*bits_producer) >> bit_seq_batch; ++batches) {
+            sleep_for(milliseconds(rng()));
+            EXPECT_EQ(bits[batches], bit_seq_batch->bit_seq);
+          }
+          EXPECT_EQ(batches, expected_batches);
+        }
+#pragma omp section
+        {
+          auto rng = get_uniform_generator(0, 100);
+          shared_ptr<InvalidCharsBatch> invalid_chars_batch;
+          for (batches = 0; (*invalid_chars_producer) >> invalid_chars_batch;
+               ++batches) {
+            sleep_for(milliseconds(rng()));
+            EXPECT_EQ(
+              invalid_chars[batches], invalid_chars_batch->invalid_chars
+            );
+          }
+          EXPECT_EQ(batches, expected_batches);
+        }
       }
     }
 };
 
-TEST_F(ContinuousSeqToBitsConverterTest, SingleBatch) {
-  buffers = { { buffer_example_1 } };
-  expected_bits = { { expected_bits_1 } };
-  expected_invalid = { { expected_invalid_1 } };
-  shared_tests();
+u64 convert_binary(string bin) {
+  u64 total = 0;
+  for (int i = bin.size(); i > 0; --i) {
+    total += (bin[i - 1] == '1') * pow(2, bin.size() - i);
+  }
+  return total;
 }
 
-TEST_F(ContinuousSeqToBitsConverterTest, MultipleBatches) {
-  buffers = { buffer_example_1, buffer_example_1 };
-  expected_bits = { expected_bits_1, expected_bits_1 };
-  expected_invalid = { expected_invalid_1, expected_invalid_1 };
-  string_indexes = { { 0, 6 }, { 0, 6 } };
-  char_indexes = { { 0, 0 }, { 0, 0 } };
-  cumulative_char_indexes = { { 0, 47 }, { 0, 47 } };
-  shared_tests();
-}
+TEST_F(ContinuousSeqToBitsConverterTest, TestAll) {
+  vector<string> seqs
+    = { "ACgTgnGAtGtCa"  // A00 C01 g10 T11 g10 n00 G10 A00 t11 G10 t11 C01 a00
+        "AAAAaAAaAAAAAAAaAAAAAAAAAAAAAAAA"  // 32 As = 64 0s
+        "GC",  // 1001
+        "nTAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATn"
+        "nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAnG" };
 
-TEST_F(ContinuousSeqToBitsConverterTest, TestParallel) {
-  omp_set_nested(1);
-  // create 2 big buffers (example by generating random chars. Buffers can
-  // be a single large string) give the buffers and indexes to the test
-  const uint threads = 2, iterations = 60;
-  auto sleep_amount = 200;
-  auto max_ints_per_batch = 99;
-  auto max_batches = 3;
-  milliseconds::rep read_time;
-  buffers = {};
-  string_indexes = {};
-  char_indexes = {};
-  cumulative_char_indexes = {};
-  for (uint i = 0; i < iterations / 2; ++i) {
-    buffers.push_back(buffer_example_1);
-    expected_bits.push_back(expected_bits_1);
-    string_indexes.push_back({ 0, 4, 6 });
-    char_indexes.push_back({ 0, 32 - 13, 0 });
-    cumulative_char_indexes.push_back({ 0, 32, 47 });
+  vector<vector<u64>> expected_bits
+    = { {
+          convert_binary(
+            "0001101110001000111011010000000000000000000000000000000000000000"
+          ),
+          convert_binary(
+            "0000000000000000000000000010010000000000000000000000000000000000"
+          )  // We apply 0 padding on the right to get decimal equivalent
+        },
+        {
+          convert_binary(
+            "0011000000000000000000000000000000000000000000000000000000000000"
+          ),
+          convert_binary(
+            "0000000000000000000000000000000000000000000000000000000000001100"
+          ),
+          convert_binary(
+            "0000000000000000000000000000000000000000000000000000000000000000"
+          ),
+          convert_binary(
+            "0000000000000000000000000000000000000000000000000000000000000010"
+          )  // We apply 0 padding on the right to get decimal equivalent };
+        } };
 
-    buffers.push_back(buffer_example_2);
-    expected_bits.push_back(expected_bits_2);
-    string_indexes.push_back({ 0, 1, 2 });
-    char_indexes.push_back({ 0, 0, 0 });
-    cumulative_char_indexes.push_back({ 0, 64, 120 });
-  }
-  auto parser = make_shared<DummyParser>(
-    buffers, string_indexes, char_indexes, cumulative_char_indexes
-  );
-  auto host = ContinuousSeqToBitsConverter<DummyParser>(
-    parser, threads, kmer_size, max_ints_per_batch, max_batches
-  );
-  vector<vector<u64>> outputs;
-  int counter = 0;
-#pragma omp parallel sections
-  {
-#pragma omp section
-    {
-      auto start_time = high_resolution_clock::now();
-      host.read_and_generate();
-      auto end_time = high_resolution_clock::now();
-      read_time = duration_cast<milliseconds>(end_time - start_time).count();
-    }
-#pragma omp section
-    {
-      sleep_for(milliseconds(sleep_amount));
-      shared_ptr<vector<u64>> seq_output;
-      shared_ptr<vector<char>> invalid_output;
-      while (host >> seq_output & host >> invalid_output) {
-        outputs.push_back(*seq_output);
-      };
+  const uint max_chars_per_batch = 200;
+  for (auto kmer_size: { 3 }) {
+    vector<vector<char>> expected_invalid_chars = {
+        vector<char>(47 + kmer_size, 0), vector<char>(128 + kmer_size, 0)
+    };
+    expected_invalid_chars[0][5] = 1;
+    for (auto i: { 0, 63, 64, 126 }) { expected_invalid_chars[1][i] = 1; }
+    for (auto max_batches: { 1}) {
+      run_test(
+        kmer_size,
+        seqs,
+        expected_bits,
+        expected_invalid_chars,
+        max_chars_per_batch,
+        max_batches
+      );
     }
   }
-  ASSERT_EQ(outputs.size(), iterations);
-  for (uint i = 0; i < iterations; ++i) {
-    assert_vectors_equal(expected_bits[i], outputs[i], __FILE__, __LINE__);
-  }
-  ASSERT_GE(read_time, sleep_amount);
 }
 
 }  // namespace sbwt_search

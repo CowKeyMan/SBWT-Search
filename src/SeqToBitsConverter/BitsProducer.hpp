@@ -30,12 +30,14 @@ class BitsProducer: public SharedBatchesProducer<BitSeqBatch> {
     friend ContinuousSeqToBitsConverter<StringSequenceBatchProducer>;
     const u64 max_chars_per_batch;
 
+  public:
     BitsProducer(const u64 max_chars_per_batch, const uint max_batches):
         max_chars_per_batch(max_chars_per_batch),
         SharedBatchesProducer<BitSeqBatch>(max_batches) {
       initialise_batches();
     }
 
+  private:
     auto get_default_value() -> shared_ptr<BitSeqBatch> override {
       auto batch = make_shared<BitSeqBatch>();
       batch->bit_seq.resize(round_up<u64>(max_chars_per_batch, 32) / 32);
