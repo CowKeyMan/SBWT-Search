@@ -76,7 +76,7 @@ auto ContinuousSequenceFileParser::reset_rec() -> void {
     amount_to_copy = min<size_t>(kmer_size - 1, prev_rec->seq.size());
   } else {
     amount_to_copy = min<size_t>(
-      kmer_size - 1, prev_rec->seq.size() - prev_rec->string_breaks.back() - 1
+      kmer_size - 1, prev_rec->seq.size() - prev_rec->string_breaks.back()
     );
   }
   rec->seq.resize(rec->max_seq_size);

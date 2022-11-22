@@ -86,7 +86,7 @@ class ContinuousPositionsBuilderTest: public ::testing::Test {
 };
 
 TEST_F(ContinuousPositionsBuilderTest, Basic) {
-  vector<vector<size_t>> string_breaks = { { 7, 8, 10, 15 }, { 7, 8, 10, 15 } };
+  vector<vector<size_t>> string_breaks = { { 8, 9, 11, 16 }, { 8, 9, 11, 16 } };
   vector<size_t> string_sizes = { 20, 15 };
   vector<vector<size_t>> expected_positions
     = { { 0, 1, 2, 3, 4, 5, 11, 12, 13, 16, 17 },

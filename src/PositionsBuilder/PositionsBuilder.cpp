@@ -25,7 +25,7 @@ auto PositionsBuilder::build_positions(
   for (int i = 0; i < string_breaks.size() + 1; ++i) {
     if (i > 0) {
       start_position_index = max(start_position_index, end_position_index);
-      first_string_index = string_breaks[i - 1] + 1;
+      first_string_index = string_breaks[i - 1];
     }
     if (i == string_breaks.size()) {
       if (string_size > (kmer_size - 1 + first_string_index)) {
@@ -33,9 +33,9 @@ auto PositionsBuilder::build_positions(
           += string_size - (kmer_size - 1 + first_string_index);
       }
     } else {
-      if (string_breaks[i] + 1 > (kmer_size - 1 + first_string_index)) {
+      if (string_breaks[i] > (kmer_size - 1 + first_string_index)) {
         end_position_index
-          += string_breaks[i] + 1 - (kmer_size - 1 + first_string_index);
+          += string_breaks[i] - (kmer_size - 1 + first_string_index);
       }
     }
     process_one_string(

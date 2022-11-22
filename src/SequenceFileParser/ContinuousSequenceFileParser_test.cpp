@@ -134,7 +134,6 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
         "GATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6" };
   vector<vector<size_t>> string_breaks
     = { { 36, 36 * 2, 36 * 3, 36 * 4, 36 * 5, 36 * 6 } };
-  for (auto &i: string_breaks[0]) { --i; }
   vector<vector<size_t>> chars_before_newfile
     = { { 36 * 3, 36 * 6 } };
   for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }
@@ -161,10 +160,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
     "GAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6",
   };
   vector<vector<size_t>> string_breaks
-    = { { 36, 36 * 2, 36 * 3 }, { 36 * 1, 36 * 2, 36 * 3 } };
-  for (auto &sb: string_breaks) {
-    for (auto &i: sb) { --i; }
-  }
+    = { { 36, 36 * 2, 36 * 3 }, { 36, 36 * 2, 36 * 3 } };
   vector<vector<size_t>> chars_before_newfile
     = { { 36 * 3 }, { 36 * 3 } };
   for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }
@@ -191,9 +187,6 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
                          "AGGTGATAGTGACGTAGTGAGGA6" };
   vector<vector<size_t>> string_breaks
     = { { 36, 36 * 2 }, { 12, 12 + 36, 12 + 36 * 2 }, { 24 } };
-  for (auto &sb: string_breaks) {
-    for (auto &i: sb) { --i; }
-  }
   vector<vector<size_t>> chars_before_newfile
     = { { }, { 12 }, { 24 } };
   for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }
@@ -219,9 +212,6 @@ TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
                          {"AGGTGATAGTGACGTAGTGAGGA6" }
   };
   vector<vector<size_t>> string_breaks = { {}, { 8 }, { 16 }, { 24 } };
-  for (auto &sb: string_breaks) {
-    for (auto &i: sb) { --i; }
-  }
   vector<vector<size_t>> chars_before_newfile
     = { { }, { }, { }, {24, 24} };
   for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }

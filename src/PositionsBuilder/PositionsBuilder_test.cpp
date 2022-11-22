@@ -25,7 +25,7 @@ const vector<string> seqs = {
 auto kmer_size = 3;
 
 const vector<size_t> expected = { 0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20 };
-vector<size_t> string_breaks = { 3, 5, 8, 12, 18, 22 };
+vector<size_t> string_breaks = { 4, 6, 9, 13, 19, 23 };
 const auto seq_size = 23;
 
 TEST(PositionsBuilderTest, WithNoLastPosition) {
