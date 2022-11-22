@@ -63,7 +63,7 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
       size_t max_chars_per_batch,
       vector<string> &seq,
       vector<vector<size_t>> &string_breaks,
-      vector<vector<size_t>> &chars_before_newfile,
+      vector<vector<size_t>> &newlines_before_newfile,
       uint max_batches
     ) {
       set_host(filenames, kmer_size, max_chars_per_batch, max_batches);
@@ -114,8 +114,8 @@ class ContinuousSequenceFileParserTest: public ::testing::Test {
             sleep_for(milliseconds(rng()));
             EXPECT_EQ(string_breaks[batches], *interval_batch->string_breaks);
             EXPECT_EQ(
-              chars_before_newfile[batches],
-              interval_batch->characters_before_newfile
+              newlines_before_newfile[batches],
+              interval_batch->newlines_before_newfile
             );
           }
           EXPECT_EQ(batches, expected_batches);
@@ -134,9 +134,8 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
         "GATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6" };
   vector<vector<size_t>> string_breaks
     = { { 36, 36 * 2, 36 * 3, 36 * 4, 36 * 5, 36 * 6 } };
-  vector<vector<size_t>> chars_before_newfile
-    = { { 36 * 3, 36 * 6 } };
-  for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }
+  vector<vector<size_t>> newlines_before_newfile = { { 3, 6 } };
+  for (auto &v: newlines_before_newfile) { v.push_back(size_t(-1)); }
   for (auto max_batches: { 1, 2, 3, 7 }) {
     run_test(
       fasta_and_fastq,
@@ -144,7 +143,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
       max_chars_per_batch,
       seq,
       string_breaks,
-      chars_before_newfile,
+      newlines_before_newfile,
       max_batches
     );
   }
@@ -161,9 +160,8 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
   };
   vector<vector<size_t>> string_breaks
     = { { 36, 36 * 2, 36 * 3 }, { 36, 36 * 2, 36 * 3 } };
-  vector<vector<size_t>> chars_before_newfile
-    = { { 36 * 3 }, { 36 * 3 } };
-  for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }
+  vector<vector<size_t>> newlines_before_newfile = { { 3 }, { 3 } };
+  for (auto &v: newlines_before_newfile) { v.push_back(size_t(-1)); }
   for (auto max_batches: { 1, 2, 3, 7 }) {
     run_test(
       fasta_and_fastq,
@@ -171,7 +169,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
       max_chars_per_batch,
       seq,
       string_breaks,
-      chars_before_newfile,
+      newlines_before_newfile,
       max_batches
     );
   }
@@ -187,9 +185,8 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
                          "AGGTGATAGTGACGTAGTGAGGA6" };
   vector<vector<size_t>> string_breaks
     = { { 36, 36 * 2 }, { 12, 12 + 36, 12 + 36 * 2 }, { 24 } };
-  vector<vector<size_t>> chars_before_newfile
-    = { { }, { 12 }, { 24 } };
-  for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }
+  vector<vector<size_t>> newlines_before_newfile = { {}, { 1 }, { 1 } };
+  for (auto &v: newlines_before_newfile) { v.push_back(size_t(-1)); }
   for (auto max_batches: { 1, 2, 3, 7 }) {
     run_test(
       fasta_and_fastq,
@@ -197,7 +194,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
       max_chars_per_batch,
       seq,
       string_breaks,
-      chars_before_newfile,
+      newlines_before_newfile,
       max_batches
     );
   }
@@ -206,15 +203,13 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
 TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
   uint kmer_size = 3;
   size_t max_chars_per_batch = 30;
-  vector<string> seq = { {"1ACTGCAATGGGCAATATGTCTCTGTGTGG"},
-                         {"GGATTAC23TCTAGCTACTACTACTGATGG"},
-                         {"GGATGGAATGTGATG45TGAGTGAGATGAG"},
-                         {"AGGTGATAGTGACGTAGTGAGGA6" }
-  };
+  vector<string> seq = { { "1ACTGCAATGGGCAATATGTCTCTGTGTGG" },
+                         { "GGATTAC23TCTAGCTACTACTACTGATGG" },
+                         { "GGATGGAATGTGATG45TGAGTGAGATGAG" },
+                         { "AGGTGATAGTGACGTAGTGAGGA6" } };
   vector<vector<size_t>> string_breaks = { {}, { 8 }, { 16 }, { 24 } };
-  vector<vector<size_t>> chars_before_newfile
-    = { { }, { }, { }, {24, 24} };
-  for (auto &v: chars_before_newfile) { v.push_back(size_t(-1)); }
+  vector<vector<size_t>> newlines_before_newfile = { {}, {}, {}, { 1, 1 } };
+  for (auto &v: newlines_before_newfile) { v.push_back(size_t(-1)); }
   for (auto max_batches: { 1, 2, 3, 7 }) {
     run_test(
       { "test_objects/small_fasta.fna", "garbage_filename" },
@@ -222,7 +217,7 @@ TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
       max_chars_per_batch,
       seq,
       string_breaks,
-      chars_before_newfile,
+      newlines_before_newfile,
       max_batches
     );
   }

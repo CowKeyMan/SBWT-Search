@@ -20,8 +20,8 @@ auto IntervalBatchProducer::get_default_value() -> shared_ptr<IntervalBatch> {
   return make_shared<IntervalBatch>();
 }
 
-auto IntervalBatchProducer::add_file_end(size_t characters) -> void {
-  batches.current_write()->characters_before_newfile.push_back(characters);
+auto IntervalBatchProducer::add_file_end(size_t newlines) -> void {
+  batches.current_write()->newlines_before_newfile.push_back(newlines);
 }
 
 auto IntervalBatchProducer::set_string_breaks(
@@ -32,11 +32,11 @@ auto IntervalBatchProducer::set_string_breaks(
 
 auto IntervalBatchProducer::do_at_batch_start() -> void {
   SharedBatchesProducer<IntervalBatch>::do_at_batch_start();
-  batches.current_write()->characters_before_newfile.resize(0);
+  batches.current_write()->newlines_before_newfile.resize(0);
 }
 
 auto IntervalBatchProducer::do_at_batch_finish() -> void {
-  batches.current_write()->characters_before_newfile.push_back(size_t(-1));
+  batches.current_write()->newlines_before_newfile.push_back(size_t(-1));
   SharedBatchesProducer<IntervalBatch>::do_at_batch_finish();
 }
 

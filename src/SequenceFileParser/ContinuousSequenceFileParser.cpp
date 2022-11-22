@@ -89,7 +89,7 @@ auto ContinuousSequenceFileParser::reset_rec() -> void {
 
 auto ContinuousSequenceFileParser::start_next_file() -> bool {
   while (filename_iterator != filenames.end()) {
-    interval_batch_producer->add_file_end(batches.current_write()->seq.size());
+    interval_batch_producer->add_file_end(batches.current_write()->string_breaks.size());
     auto filename = *filename_iterator++;
     try {
       ThrowingIfstream::check_file_exists(filename);
@@ -102,7 +102,7 @@ auto ContinuousSequenceFileParser::start_next_file() -> bool {
       Logger::log(Logger::LOG_LEVEL::ERROR, e.what());
     }
   }
-  interval_batch_producer->add_file_end(batches.current_write()->seq.size());
+  interval_batch_producer->add_file_end(batches.current_write()->string_breaks.size());
   fail = true;
   return false;
 }

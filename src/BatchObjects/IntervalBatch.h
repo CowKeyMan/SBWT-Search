@@ -19,7 +19,7 @@ namespace sbwt_search {
 class IntervalBatch {
   public:
     const vector<size_t> *string_breaks;
-    vector<size_t> characters_before_newfile;
+    vector<size_t> newlines_before_newfile;
 };
 
 }  // namespace sbwt_search
