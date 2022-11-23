@@ -32,7 +32,8 @@ class IntervalBatchProducer: public SharedBatchesProducer<IntervalBatch> {
     auto do_at_batch_start() -> void override;
     auto do_at_batch_finish() -> void override;
     auto get_default_value() -> shared_ptr<IntervalBatch> override;
-    auto set_string_breaks(const vector<size_t> &string_breaks) -> void;
+    auto set_chars_before_newline(const vector<size_t> &chars_before_newline)
+      -> void;
 };
 
 }  // namespace sbwt_search

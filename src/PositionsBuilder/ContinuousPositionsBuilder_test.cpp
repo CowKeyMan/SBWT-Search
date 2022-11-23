@@ -21,19 +21,21 @@ namespace sbwt_search {
 class DummyStringBreakBatchProducer {
   private:
     int counter = 0;
-    vector<vector<size_t>> string_breaks;
+    vector<vector<size_t>> chars_before_newline;
     vector<size_t> string_sizes;
 
   public:
     DummyStringBreakBatchProducer(
-      vector<vector<size_t>> &_string_breaks, vector<size_t> _string_sizes
+      vector<vector<size_t>> &_chars_before_newline,
+      vector<size_t> _string_sizes
     ):
-        string_breaks(_string_breaks), string_sizes(_string_sizes) {}
+        chars_before_newline(_chars_before_newline),
+        string_sizes(_string_sizes) {}
 
     auto operator>>(shared_ptr<StringBreakBatch> &batch) -> bool {
-      if (counter < string_breaks.size()) {
+      if (counter < chars_before_newline.size()) {
         batch = make_shared<StringBreakBatch>();
-        batch->string_breaks = &string_breaks[counter];
+        batch->chars_before_newline = &chars_before_newline[counter];
         batch->string_size = string_sizes[counter];
         ++counter;
         return true;
@@ -49,19 +51,19 @@ class ContinuousPositionsBuilderTest: public ::testing::Test {
 
     auto run_test(
       uint kmer_size,
-      vector<vector<size_t>> string_breaks,
+      vector<vector<size_t>> chars_before_newline,
       vector<size_t> string_sizes,
       vector<vector<size_t>> expected_positions,
       uint max_batches = 7
     ) {
       auto max_chars_per_batch = 999;
       auto producer = make_shared<DummyStringBreakBatchProducer>(
-        string_breaks, string_sizes
+        chars_before_newline, string_sizes
       );
       auto host = ContinuousPositionsBuilder<DummyStringBreakBatchProducer>(
         producer, kmer_size, max_chars_per_batch, max_batches
       );
-      size_t expected_batches = string_breaks.size();
+      size_t expected_batches = chars_before_newline.size();
       size_t batches = 0;
 #pragma omp parallel sections private(batches)
       {
@@ -86,7 +88,8 @@ class ContinuousPositionsBuilderTest: public ::testing::Test {
 };
 
 TEST_F(ContinuousPositionsBuilderTest, Basic) {
-  vector<vector<size_t>> string_breaks = { { 8, 9, 11, 16 }, { 8, 9, 11, 16 } };
+  vector<vector<size_t>> chars_before_newline
+    = { { 8, 9, 11, 16 }, { 8, 9, 11, 16 } };
   vector<size_t> string_sizes = { 20, 15 };
   vector<vector<size_t>> expected_positions
     = { { 0, 1, 2, 3, 4, 5, 11, 12, 13, 16, 17 },
@@ -94,7 +97,11 @@ TEST_F(ContinuousPositionsBuilderTest, Basic) {
   uint kmer_size = 3;
   for (auto max_batches: { 1, 2, 3, 7 }) {
     run_test(
-      kmer_size, string_breaks, string_sizes, expected_positions, max_batches
+      kmer_size,
+      chars_before_newline,
+      string_sizes,
+      expected_positions,
+      max_batches
     );
   }
 }

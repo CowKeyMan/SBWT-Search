@@ -3,11 +3,11 @@
 
 /**
  * @file IntervalBatch.h
- * @brief Data class for the intervals. The string_breaks is a vector which
- * gives the index of each last character for each string in the current batch.
- * characters_before_newfile is a vector which tells us how many characters we
- * need before we need to insert a linefeed symbol. Note: the last character
- * will always be the max value (ULLONG_MAX)
+ * @brief Data class for the intervals. The chars_before_newline is a vector
+ * which gives the number of characters that a string contains, before the new
+ * one ends. This is cumulative. characters_before_newfile is a vector which
+ * tells us how many characters we need before we need to insert a linefeed
+ * symbol. Note: the last character will always be the max value (ULLONG_MAX)
  * */
 
 #include <vector>
@@ -18,7 +18,7 @@ namespace sbwt_search {
 
 class IntervalBatch {
   public:
-    const vector<size_t> *string_breaks;
+    const vector<size_t> *chars_before_newline;
     vector<size_t> newlines_before_newfile;
 };
 

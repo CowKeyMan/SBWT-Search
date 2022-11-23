@@ -3,7 +3,8 @@
 
 /**
  * @file StringBreakBatch.h
- * @brief String breaks are the last character for a string before it ends
+ * @brief Data which contains data about the points where strings end and
+ * another starts
  */
 
 #include <vector>
@@ -14,7 +15,7 @@ namespace sbwt_search {
 
 class StringBreakBatch {
   public:
-    const vector<size_t> *string_breaks;
+    const vector<size_t> *chars_before_newline;
     size_t string_size;
 };
 

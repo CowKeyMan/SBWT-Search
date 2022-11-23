@@ -13,9 +13,9 @@ auto StringBreakBatchProducer::get_default_value()
 }
 
 auto StringBreakBatchProducer::set(
-  const vector<size_t> &string_breaks, size_t string_size
+  const vector<size_t> &chars_before_newline, size_t string_size
 ) -> void {
-  batches.current_write()->string_breaks = &string_breaks;
+  batches.current_write()->chars_before_newline = &chars_before_newline;
   batches.current_write()->string_size = string_size;
 }
 

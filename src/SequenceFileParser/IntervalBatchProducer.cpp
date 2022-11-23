@@ -24,10 +24,10 @@ auto IntervalBatchProducer::add_file_end(size_t newlines) -> void {
   batches.current_write()->newlines_before_newfile.push_back(newlines);
 }
 
-auto IntervalBatchProducer::set_string_breaks(
-  const vector<size_t> &string_breaks
+auto IntervalBatchProducer::set_chars_before_newline(
+  const vector<size_t> &chars_before_newline
 ) -> void {
-  batches.current_write()->string_breaks = &string_breaks;
+  batches.current_write()->chars_before_newline = &chars_before_newline;
 }
 
 auto IntervalBatchProducer::do_at_batch_start() -> void {

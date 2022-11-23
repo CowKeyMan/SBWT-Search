@@ -13,7 +13,7 @@ PositionsBuilder::PositionsBuilder(const uint _kmer_size):
     kmer_size(_kmer_size){};
 
 auto PositionsBuilder::build_positions(
-  const vector<size_t> &string_breaks,
+  const vector<size_t> &chars_before_newline,
   const size_t &string_size,
   vector<size_t> &positions
 ) -> void {
@@ -22,20 +22,20 @@ auto PositionsBuilder::build_positions(
   size_t first_string_index = 0;
   size_t string_position_index = 0;
   size_t previous_string_break = 0;
-  for (int i = 0; i < string_breaks.size() + 1; ++i) {
+  for (int i = 0; i < chars_before_newline.size() + 1; ++i) {
     if (i > 0) {
       start_position_index = max(start_position_index, end_position_index);
-      first_string_index = string_breaks[i - 1];
+      first_string_index = chars_before_newline[i - 1];
     }
-    if (i == string_breaks.size()) {
+    if (i == chars_before_newline.size()) {
       if (string_size > (kmer_size - 1 + first_string_index)) {
         end_position_index
           += string_size - (kmer_size - 1 + first_string_index);
       }
     } else {
-      if (string_breaks[i] > (kmer_size - 1 + first_string_index)) {
+      if (chars_before_newline[i] > (kmer_size - 1 + first_string_index)) {
         end_position_index
-          += string_breaks[i] - (kmer_size - 1 + first_string_index);
+          += chars_before_newline[i] - (kmer_size - 1 + first_string_index);
       }
     }
     process_one_string(

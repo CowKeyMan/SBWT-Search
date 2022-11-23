@@ -61,7 +61,7 @@ class ContinuousPositionsBuilder: public SharedBatchesProducer<PositionsBatch> {
 
     auto generate() -> void override {
       builder.build_positions(
-        *read_batch->string_breaks,
+        *read_batch->chars_before_newline,
         read_batch->string_size,
         batches.current_write()->positions
       );

@@ -25,21 +25,21 @@ const vector<string> seqs = {
 auto kmer_size = 3;
 
 const vector<size_t> expected = { 0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20 };
-vector<size_t> string_breaks = { 4, 6, 9, 13, 19, 23 };
+vector<size_t> chars_before_newline = { 4, 6, 9, 13, 19, 23 };
 const auto seq_size = 23;
 
 TEST(PositionsBuilderTest, WithNoLastPosition) {
   auto host = PositionsBuilder(kmer_size);
   vector<size_t> positions;
-  host.build_positions(string_breaks, seq_size, positions);
+  host.build_positions(chars_before_newline, seq_size, positions);
   ASSERT_EQ(positions, expected);
 }
 
 TEST(PositionsBuilderTest, WithLastPosition) {
-  string_breaks.pop_back();
+  chars_before_newline.pop_back();
   auto host = PositionsBuilder(kmer_size);
   vector<size_t> positions;
-  host.build_positions(string_breaks, seq_size, positions);
+  host.build_positions(chars_before_newline, seq_size, positions);
   ASSERT_EQ(positions, expected);
 }
 

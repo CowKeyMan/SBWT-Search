@@ -72,24 +72,26 @@ auto ContinuousSequenceFileParser::reset_rec() -> void {
     return;
   }
   size_t amount_to_copy;
-  if (prev_rec->string_breaks.size() == 0) {
+  if (prev_rec->chars_before_newline.size() == 1) {
     amount_to_copy = min<size_t>(kmer_size - 1, prev_rec->seq.size());
   } else {
-    amount_to_copy = min<size_t>(
-      kmer_size - 1, prev_rec->seq.size() - prev_rec->string_breaks.back()
-    );
+    auto &cbn = prev_rec->chars_before_newline;
+    amount_to_copy
+      = min<size_t>(kmer_size - 1, prev_rec->seq.size() - cbn[cbn.size() - 2]);
   }
   rec->seq.resize(rec->max_seq_size);
   copy(
     prev_rec->seq.end() - amount_to_copy, prev_rec->seq.end(), rec->seq.begin()
   );
   rec->seq.resize(amount_to_copy);
-  rec->string_breaks.resize(0);
+  rec->chars_before_newline.resize(0);
 }
 
 auto ContinuousSequenceFileParser::start_next_file() -> bool {
   while (filename_iterator != filenames.end()) {
-    interval_batch_producer->add_file_end(batches.current_write()->string_breaks.size());
+    interval_batch_producer->add_file_end(
+      batches.current_write()->chars_before_newline.size()
+    );
     auto filename = *filename_iterator++;
     try {
       ThrowingIfstream::check_file_exists(filename);
@@ -102,7 +104,9 @@ auto ContinuousSequenceFileParser::start_next_file() -> bool {
       Logger::log(Logger::LOG_LEVEL::ERROR, e.what());
     }
   }
-  interval_batch_producer->add_file_end(batches.current_write()->string_breaks.size());
+  interval_batch_producer->add_file_end(
+    batches.current_write()->chars_before_newline.size()
+  );
   fail = true;
   return false;
 }
@@ -125,13 +129,14 @@ auto ContinuousSequenceFileParser::read_next() -> void {
     ++batch_id;
   }
   string_sequence_batch_producer->set_string(rec->seq);
-  string_break_batch_producer->set(rec->string_breaks, rec->seq.size());
-  interval_batch_producer->set_string_breaks(rec->string_breaks);
+  string_break_batch_producer->set(rec->chars_before_newline, rec->seq.size());
+  interval_batch_producer->set_chars_before_newline(rec->chars_before_newline);
 }
 
 auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
-  auto str_breaks = batches.current_write()->string_breaks;
   auto seq_size = batches.current_write()->seq.size();
+  auto &str_breaks = batches.current_write()->chars_before_newline;
+  str_breaks.push_back(size_t(-1));
   auto strings_in_batch
     = str_breaks.size()
     + (str_breaks.size() != 0 && str_breaks.back() != (seq_size - 1));

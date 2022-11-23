@@ -21,7 +21,7 @@ class PositionsBuilder {
   public:
     PositionsBuilder(const uint kmer_size);
     void build_positions(
-      const vector<size_t> &string_breaks,
+      const vector<size_t> &chars_before_newline,
       const size_t &string_size,
       vector<size_t> &positions
     );
