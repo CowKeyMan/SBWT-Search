@@ -8,12 +8,14 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <gtest/gtest.h>
 
 using std::string;
 using std::to_string;
 using std::vector;
+using std::shared_ptr;
 
 template <class T>
 auto assert_arrays_equals(const T *v1, const T *v2, const size_t size) -> void {
@@ -46,5 +48,21 @@ auto assert_vectors_equal(
     << " unequal at " << filename << ":" << to_string(line);
   assert_arrays_equals(&v1[0], &v2[0], v1.size(), filename, line);
 }
+
+template <class T>
+class DummyBatchProducer {
+    vector<shared_ptr<T>> results;
+    uint counter = 0;
+
+  public:
+    DummyBatchProducer(vector<shared_ptr<T>> _results): results(_results) {}
+
+    auto operator>>(shared_ptr<T> &out) -> bool {
+      if (counter == results.size()) { return false; }
+      out = results[counter];
+      ++counter;
+      return true;
+    }
+};
 
 #endif

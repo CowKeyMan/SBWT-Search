@@ -10,6 +10,7 @@
 #include "SeqToBitsConverter/BitsProducer.hpp"
 #include "SeqToBitsConverter/ContinuousSeqToBitsConverter.hpp"
 #include "SeqToBitsConverter/InvalidCharsProducer.hpp"
+#include "BatchObjects/StringSequenceBatch.h"
 #include "TestUtils/GeneralTestUtils.hpp"
 #include "Utils/RNGUtils.h"
 #include "Utils/TypeDefinitions.h"
@@ -26,24 +27,7 @@ using std::this_thread::sleep_for;
 
 namespace sbwt_search {
 
-class DummyStringSequenceBatchProducer {
-  private:
-    int counter = 0;
-    vector<string> seqs;
-
-  public:
-    DummyStringSequenceBatchProducer(vector<string> &_seqs): seqs(_seqs) {}
-
-    auto operator>>(shared_ptr<StringSequenceBatch> &batch) -> bool {
-      if (counter < seqs.size()) {
-        batch = make_shared<StringSequenceBatch>();
-        batch->seq = &seqs[counter];
-        ++counter;
-        return true;
-      }
-      return false;
-    }
-};
+using DummyStringSequenceBatchProducer = DummyBatchProducer<StringSequenceBatch>;
 
 class ContinuousSeqToBitsConverterTest: public ::testing::Test {
   protected:
@@ -60,7 +44,12 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
 #pragma omp parallel
 #pragma omp single
       { threads = omp_get_num_threads(); }
-      auto producer = make_shared<DummyStringSequenceBatchProducer>(seqs);
+      vector<shared_ptr<StringSequenceBatch>> shared_seqs;
+      for (uint i = 0; i < seqs.size(); ++i) {
+        auto a = make_shared<StringSequenceBatch>(StringSequenceBatch({&seqs[i]}));
+        shared_seqs.push_back(a);
+      }
+      auto producer = make_shared<DummyStringSequenceBatchProducer>(shared_seqs);
       auto invalid_chars_producer
         = make_shared<InvalidCharsProducer<DummyStringSequenceBatchProducer>>(
           kmer_size, max_chars_per_batch, max_batches
