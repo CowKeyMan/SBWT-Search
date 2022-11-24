@@ -1,62 +1,3 @@
-#include <climits>
-#include <filesystem>
-#include <fstream>
-#include <memory>
-#include <string>
-
-#include "gtest/gtest.h"
-
-#include "BatchObjects/CumulativePropertiesBatch.h"
-#include "BatchObjects/IntervalBatch.h"
-#include "ResultsPrinter/ContinuousResultsPrinter.hpp"
-#include "Utils/TypeDefinitions.h"
-
-using std::getline;
-using std::ifstream;
-using std::make_shared;
-using std::string;
-using std::filesystem::remove;
-
-namespace sbwt_search {
-
-template <typename T>
-class DummyVectorProducer {
-    vector<vector<T>> v;
-    uint counter = 0;
-
-  public:
-    DummyVectorProducer(vector<vector<T>> v): v(v) {}
-
-    auto operator>>(shared_ptr<vector<T>> &out) -> bool {
-      if (counter == v.size()) { return false; }
-      out = make_shared<vector<T>>(v[counter]);
-      ++counter;
-      return true;
-    }
-};
-
-class DummyIntervalProducer {
-    vector<vector<u64>> string_lengths, strings_before_newfile;
-    int counter = 0;
-
-  public:
-    DummyIntervalProducer(
-      vector<vector<u64>> string_lengths,
-      vector<vector<u64>> strings_before_newfile
-    ):
-        string_lengths(string_lengths),
-        strings_before_newfile(strings_before_newfile) {}
-
-    auto operator>>(shared_ptr<IntervalBatch> &out) -> bool {
-      if (counter == string_lengths.size()) { return false; }
-      out = make_shared<IntervalBatch>();
-      out->string_lengths = string_lengths[counter];
-      out->strings_before_newfile = strings_before_newfile[counter];
-      ++counter;
-      return true;
-    }
-};
-
 /*
 Simulating the following 4 files, kmer_size = 3:
   File 1:
@@ -77,93 +18,193 @@ Simulating the following 4 files, kmer_size = 3:
     80 invalid 100 | valid valid
 */
 
-class ContinuousResultsPrinterTest: public ::testing::Test {
-  protected:
-    const uint kmer_size = 3;
-    vector<vector<u64>> results
-      = { { 10, ULLONG_MAX, 30, 40, 50, 60, 70, 80, 90, 100 } };
-    vector<vector<char>> invalid_chars = { {
-      0,
-      0,
-      0,
-      0,  // end of first string
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,  // end of second string
-      0,
-      0,
-      0,  // end of third string
-      0,
-      1,
-      0,
-      0,
-      0  // end of last string
-    } };
-    vector<vector<u64>> string_lengths
-      = { { 0, 0, 2 + 2, 0, 0, 4 + 2, 0, 0, 0, 1 + 2, 0, 3 + 2 } };
-    vector<vector<u64>> strings_before_newfile = { { 7, 0, 2, 3, ULLONG_MAX } };
-    vector<string> filenames = { "tmp/results_file1.txt",
-                                 "tmp/results_file2.txt",
-                                 "tmp/results_file3.txt",
-                                 "tmp/results_file4.txt" };
-    vector<vector<string>> expected_file_lines
-      = { { "", "", "10 -1", "", "", "30 40 -2 -2", "" },
-          {},
-          { "", "" },
-          { "70", "", "-2 -2 100" } };
-    // NOTE: at the end of each string there is a linefeed (\n) character
+#include <climits>
+#include <filesystem>
+#include <fstream>
+#include <memory>
+#include <string>
 
-    auto get_results_producer() -> shared_ptr<DummyVectorProducer<u64>> {
-      return make_shared<DummyVectorProducer<u64>>(results);
+#include "gtest/gtest.h"
+
+#include "BatchObjects/IntervalBatch.h"
+#include "BatchObjects/InvalidCharsBatch.h"
+#include "BatchObjects/ResultsBatch.h"
+#include "ResultsPrinter/ContinuousResultsPrinter.hpp"
+#include "TestUtils/GeneralTestUtils.hpp"
+#include "Utils/TypeDefinitions.h"
+
+using std::getline;
+using std::ifstream;
+using std::make_shared;
+using std::shared_ptr;
+using std::string;
+using std::to_string;
+using std::filesystem::remove;
+
+namespace sbwt_search {
+
+using DummyResultsProducer = DummyBatchProducer<ResultsBatch>;
+using DummyIntervalProducer = DummyBatchProducer<IntervalBatch>;
+using DummyInvalidCharsProducer = DummyBatchProducer<InvalidCharsBatch>;
+
+class DummyContinuousResultsPrinter:
+    public ContinuousResultsPrinter<
+      DummyResultsProducer,
+      DummyIntervalProducer,
+      DummyInvalidCharsProducer> {
+    bool is_at_newline = true;
+
+  public:
+    vector<string> result_string;
+    DummyContinuousResultsPrinter(
+      shared_ptr<DummyResultsProducer> _results_producer,
+      shared_ptr<DummyIntervalProducer> _interval_producer,
+      shared_ptr<DummyInvalidCharsProducer> _invalid_chars_producer,
+      uint kmer_size,
+      uint files
+    ):
+        ContinuousResultsPrinter(
+          _results_producer,
+          _interval_producer,
+          _invalid_chars_producer,
+          kmer_size,
+          vector<string>(files)
+        ) {}
+
+  protected:
+    auto do_start_next_file() -> void override { result_string.push_back(""); }
+
+    auto do_invalid_result() -> void override {
+      if (!is_at_newline) { result_string.back() += " "; }
+      result_string.back() += "INVALID";
+      is_at_newline = false;
     }
-    auto get_invalid_producer() -> shared_ptr<DummyVectorProducer<char>> {
-      return make_shared<DummyVectorProducer<char>>(invalid_chars);
+    auto do_not_found_result() -> void override {
+      if (!is_at_newline) { result_string.back() += " "; }
+      result_string.back() += "NOTFOUND";
+      is_at_newline = false;
     }
-    auto get_interval_producer() -> shared_ptr<DummyIntervalProducer> {
-      return make_shared<DummyIntervalProducer>(
-        string_lengths, strings_before_newfile
-      );
+    auto do_result(size_t result) -> void override {
+      if (!is_at_newline) { result_string.back() += " "; }
+      result_string.back() += to_string(result);
+      is_at_newline = false;
     }
-    auto shared_tests() {
-      auto host = ContinuousResultsPrinter<
-        DummyVectorProducer<u64>,
-        DummyIntervalProducer,
-        DummyVectorProducer<char>>(
-        get_results_producer(),
-        get_interval_producer(),
-        get_invalid_producer(),
-        filenames,
-        kmer_size
-      );
-      host.read_and_generate();
-      for (uint file_index = 0; file_index < filenames.size(); ++file_index) {
-        ifstream stream(filenames[file_index]);
-        string line;
-        for (uint line_index = 0; getline(stream, line); ++line_index) {
-          ASSERT_EQ(expected_file_lines[file_index][line_index], line)
-            << " unequal at index " << file_index << ":" << line_index << '\n';
-        }
-      }
-    }
-    auto TearDown() -> void override {
-      for (auto &filename: filenames) { remove(filename); }
+
+    auto do_with_newline() -> void override {
+      is_at_newline = true;
+      result_string.back() += "\n";
     }
 };
 
-TEST_F(ContinuousResultsPrinterTest, SingleBatch) { shared_tests(); }
+auto get_results_producer(vector<ResultsBatch> results)
+  -> shared_ptr<DummyResultsProducer> {
+  return make_shared<DummyResultsProducer>(results);
+}
+
+auto get_invalid_producer(vector<InvalidCharsBatch> invalid_chars)
+  -> shared_ptr<DummyInvalidCharsProducer> {
+  return make_shared<DummyInvalidCharsProducer>(invalid_chars);
+}
+
+auto get_interval_producer(
+  const vector<vector<size_t>> &chars_before_newline,
+  vector<vector<size_t>> newlines_before_newfile
+) -> shared_ptr<DummyIntervalProducer> {
+  vector<IntervalBatch> intervals;
+  for (int i = 0; i < chars_before_newline.size(); ++i) {
+    intervals.push_back({ &chars_before_newline[i], newlines_before_newfile[i] }
+    );
+  }
+  return make_shared<DummyIntervalProducer>(intervals);
+}
+
+class ContinuousResultsPrinterTest: public ::testing::Test {
+  protected:
+    auto run_test(
+      uint kmer_size,
+      vector<string> expected,
+      vector<InvalidCharsBatch> invalid_chars,
+      vector<ResultsBatch> results,
+      vector<vector<u64>> chars_before_newline,
+      vector<vector<u64>> newlines_before_newfile,
+      uint files
+    ) -> void {
+      auto results_producer = get_results_producer(results);
+      auto invalid_producer = get_invalid_producer(invalid_chars);
+      auto interval_producer
+        = get_interval_producer(chars_before_newline, newlines_before_newfile);
+      auto results_printer = make_shared<DummyContinuousResultsPrinter>(
+        results_producer, interval_producer, invalid_producer, kmer_size, files
+      );
+      results_printer->read_and_generate();
+      ASSERT_EQ(results_printer->result_string, expected);
+    }
+};
+
+vector<string> expected = { "\n\n10 NOTFOUND\n\n\n30 40 INVALID INVALID\n\n",
+                            "",
+                            "\n\n",
+                            "70\n\nINVALID INVALID 100\n" };
+
+TEST_F(ContinuousResultsPrinterTest, SingleBatch) {
+  const uint kmer_size = 3;
+  vector<InvalidCharsBatch> invalid_chars = { { {
+    0,
+    0,
+    0,
+    0,  // end of first string of first file
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,  // end of second string of first file
+    0,
+    0,
+    0,  // end of 4th files first string
+    0,
+    1,
+    0,
+    0,
+    0  // end of last string
+  } } };
+  vector<ResultsBatch> results
+    = { { { 10, size_t(-1), 30, 40, 50, 60, 70, 80, 123456, 100 } } };
+  vector<vector<u64>> chars_before_newline
+    = { { 0, 0, 4, 4, 4, 10, 10, 10, 10, 13, 13, 18, size_t(-1) } };
+  vector<vector<u64>> newlines_before_newfile = { { 7, 7, 9, 12, size_t(-1) } };
+  run_test(
+    kmer_size,
+    expected,
+    invalid_chars,
+    results,
+    chars_before_newline,
+    newlines_before_newfile,
+    4
+  );
+}
 
 TEST_F(ContinuousResultsPrinterTest, MultipleBatches) {
-  results = { { 10, ULLONG_MAX }, { 30, 40, 50, 60, 70 }, { 80, 90, 100 } };
-  invalid_chars = { { 0, 0, 0, 0 },  // end of first string
-                    { 0, 0, 0, 0, 1, 0, 0, 0, 0 },  // end of third string
-                    { 0, 1, 0, 0, 0 } };  // end of last string
-  string_lengths
-    = { { 0, 0, 2 + 2, 0, 0 }, { 4 + 2, 0, 0, 0, 1 + 2, 0 }, { 3 + 2 } };
-  strings_before_newfile
-    = { { ULLONG_MAX }, { 2, 0, 2, ULLONG_MAX }, { 1, ULLONG_MAX } };
-  shared_tests();
+  const uint kmer_size = 3;
+  vector<ResultsBatch> results = { { { 10, size_t(-1) } },
+                                   { { 30, 40, 50, 60, 70 } },
+                                   { { 80, 123456, 100 } } };
+  vector<InvalidCharsBatch> invalid_chars
+    = { { { 0, 0, 0, 0 } },  // end of first string
+        { { 0, 0, 0, 0, 1, 0, 0, 0, 0 } },  // end of third
+        { { 0, 1, 0, 0, 0 } } };  // end of last string
+  vector<vector<u64>> chars_before_newline
+    = { { 0, 0, 4, }, { 0, 0, 6, 6, 6, 6, 9 }, { 0, 5 } };
+  vector<vector<u64>> newlines_before_newfile
+    = { { ULLONG_MAX }, { 4, 4, 6, ULLONG_MAX }, { 3, ULLONG_MAX } };
+  run_test(
+    kmer_size,
+    expected,
+    invalid_chars,
+    results,
+    chars_before_newline,
+    newlines_before_newfile,
+    4
+  );
 }
 }  // namespace sbwt_search

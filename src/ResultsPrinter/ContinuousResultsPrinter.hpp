@@ -3,10 +3,11 @@
 
 /**
  * @file ContinuousResultsPrinter.hpp
- * @brief Gets results, intervals and list of invalid characters and prints
+ * @brief Gets results, intervals and list of invalid chars and prints
  * these out to disk based on the given data and filenames.
  * */
 
+#include <algorithm>
 #include <chrono>
 #include <climits>
 #include <fstream>
@@ -19,6 +20,7 @@
 
 #include "BatchObjects/IntervalBatch.h"
 #include "BatchObjects/InvalidCharsBatch.h"
+#include "BatchObjects/ResultsBatch.h"
 #include "BatchObjects/StringSequenceBatch.h"
 #include "Utils/Logger.h"
 #include "Utils/TypeDefinitions.h"
@@ -26,6 +28,7 @@
 
 using fmt::format;
 using log_utils::Logger;
+using std::min;
 using std::next;
 using std::ofstream;
 using std::shared_ptr;
@@ -44,10 +47,12 @@ class ContinuousResultsPrinter {
     shared_ptr<IntervalBatch> interval_batch;
     vector<string> filenames;
     vector<string>::iterator current_filename;
-    size_t string_index = 0, char_index = 0, invalid_index = 0;
+    size_t chars_index = 0, results_index = 0, line_index = 0;
+    size_t invalid_chars_left = 0;
+    size_t chars_before_newline_index = 0;
 
   protected:
-    shared_ptr<vector<u64>> results;
+    shared_ptr<ResultsBatch> results_batch;
     shared_ptr<InvalidCharsBatch> invalid_chars_batch;
     const uint kmer_size;
     ofstream stream;
@@ -57,8 +62,8 @@ class ContinuousResultsPrinter {
       shared_ptr<ResultsProducer> results_producer,
       shared_ptr<IntervalProducer> interval_producer,
       shared_ptr<InvalidCharsProducer> invalid_chars_producer,
-      vector<string> &filenames,
-      uint kmer_size
+      uint kmer_size,
+      const vector<string> &filenames
     ):
         results_producer(results_producer),
         interval_producer(interval_producer),
@@ -70,10 +75,11 @@ class ContinuousResultsPrinter {
 
     auto read_and_generate() -> void {
       if (current_filename == filenames.end()) { return; }
-      open_next_file();
-      for (uint batch_idx = 0; (*interval_producer >> interval_batch)
-                               & (*invalid_chars_producer >> invalid_chars_batch)
-                               & (*results_producer >> results);
+      do_start_next_file();
+      for (uint batch_idx = 0;
+           (*interval_producer >> interval_batch)
+           & (*invalid_chars_producer >> invalid_chars_batch)
+           & (*results_producer >> results_batch);
            ++batch_idx) {
         Logger::log_timed_event(
           "ResultsPrinter",
@@ -91,51 +97,82 @@ class ContinuousResultsPrinter {
 
   private:
     auto process_batch() -> void {
-      string_index = 0, char_index = 0, invalid_index = 0;
-      for (auto file_length: interval_batch->strings_before_newfile) {
-        if (!stream.is_open()) { open_next_file(); }
-        print_words(string_index, file_length);
-        string_index += file_length;
-        if (file_length != ULLONG_MAX) { stream.close(); }
+      chars_index = results_index = line_index = 0;
+      chars_before_newline_index = 0;
+      for (auto newlines_before_newfile:
+           interval_batch->newlines_before_newfile) {
+        process_file(newlines_before_newfile);
+        if (results_index >= results_batch->results.size()) { return; }
+        do_start_next_file();
       }
     }
 
-    auto open_next_file() {
+    auto process_file(size_t newlines_before_newfile) -> void {
+      for (; line_index < newlines_before_newfile
+             && results_index < results_batch->results.size();
+           ++line_index) {
+        process_line((*interval_batch->chars_before_newline
+        )[chars_before_newline_index]);
+        do_with_newline();
+        chars_index
+          = (*interval_batch->chars_before_newline)[chars_before_newline_index];
+        ++chars_before_newline_index;
+      }
+    }
+
+    auto process_line(size_t chars_before_newline) {
+      if (chars_before_newline < kmer_size - 1) { return; }
+      invalid_chars_left = get_invalid_chars_left_first_kmer();
+      while (chars_index < chars_before_newline - (kmer_size - 1)
+             && results_index < results_batch->results.size()) {
+        if (invalid_chars_batch->invalid_chars[chars_index + kmer_size - 1]) {
+          invalid_chars_left = kmer_size;
+        }
+        process_result(
+          results_batch->results[results_index],
+          results_batch->results[results_index] != size_t(-1),
+          invalid_chars_left == 0
+        );
+        if (invalid_chars_left > 0) { --invalid_chars_left; }
+        ++results_index;
+        ++chars_index;
+      }
+    }
+
+  protected:
+    auto get_invalid_chars_left_first_kmer() -> size_t {
+      auto &invalid_chars = invalid_chars_batch->invalid_chars;
+      auto limit = min({ chars_index + kmer_size,
+                         invalid_chars.size(),
+                         (*interval_batch->chars_before_newline
+                         )[chars_before_newline_index] });
+      if (limit <= chars_index) { return 0; }
+      for (size_t i = limit; i > chars_index; --i) {
+        if (invalid_chars[i - 1] == 1) { return i - chars_index; }
+      }
+      return 0;
+    }
+
+    virtual auto do_start_next_file() -> void {
       stream.open(*current_filename, std::ios::out);
       current_filename = next(current_filename);
     }
 
-    auto print_words(size_t string_index, size_t file_length) {
-      auto total_strings = interval_batch->string_lengths.size();
-      for (size_t i = string_index;
-           (file_length == ULLONG_MAX || i < file_length + string_index)
-           && i < total_strings;
-           ++i) {
-        auto string_length = interval_batch->string_lengths[i];
-        auto num_chars = string_length - kmer_size + 1;
-        if (string_length < kmer_size) { num_chars = 0; }
-        print_word(char_index, invalid_index, num_chars, string_length);
-        char_index += num_chars;
-        invalid_index += string_length;
+    auto process_result(size_t result, bool found, bool valid) {
+      if (!valid) {
+        do_invalid_result();
+      } else if (!found) {
+        do_not_found_result();
+      } else {
+        do_result(result);
       }
     }
 
-  protected:
-    virtual auto print_word(
-      size_t char_index,
-      size_t invalid_index,
-      size_t num_chars,
-      size_t string_length
-    ) -> void
-      = 0;
-
-  protected:
-    auto get_invalid_chars_left_first_kmer(size_t first_invalid_index) -> uint {
-      for (uint i = kmer_size; i > 0; --i) {
-        if ((invalid_chars_batch->invalid_chars)[i - 1 + first_invalid_index]) { return i; }
-      }
-      return 0;
-    }
+    virtual auto do_invalid_result() -> void = 0;
+    virtual auto do_not_found_result() -> void = 0;
+    virtual auto do_result(size_t result) -> void = 0;
+    virtual auto do_with_newline() -> void = 0;
 };
+
 }  // namespace sbwt_search
 #endif

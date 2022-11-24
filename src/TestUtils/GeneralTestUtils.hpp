@@ -6,16 +6,17 @@
  * @brief Contains functions to make testing functions cleaner
  * */
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include <gtest/gtest.h>
 
+using std::make_shared;
+using std::shared_ptr;
 using std::string;
 using std::to_string;
 using std::vector;
-using std::shared_ptr;
 
 template <class T>
 auto assert_arrays_equals(const T *v1, const T *v2, const size_t size) -> void {
@@ -51,15 +52,18 @@ auto assert_vectors_equal(
 
 template <class T>
 class DummyBatchProducer {
-    vector<shared_ptr<T>> results;
+    vector<shared_ptr<T>> batches;
     uint counter = 0;
 
   public:
-    DummyBatchProducer(vector<shared_ptr<T>> _results): results(_results) {}
+    DummyBatchProducer(vector<shared_ptr<T>> _batches): batches(_batches) {}
+    DummyBatchProducer(vector<T> _batches) {
+      for (auto b: _batches) { batches.push_back(make_shared<T>(b)); }
+    }
 
     auto operator>>(shared_ptr<T> &out) -> bool {
-      if (counter == results.size()) { return false; }
-      out = results[counter];
+      if (counter == batches.size()) { return false; }
+      out = batches[counter];
       ++counter;
       return true;
     }
