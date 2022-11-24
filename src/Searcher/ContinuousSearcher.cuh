@@ -10,6 +10,7 @@
 
 #include "BatchObjects/BitSeqBatch.h"
 #include "BatchObjects/PositionsBatch.h"
+#include "BatchObjects/ResultsBatch.h"
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "Searcher/Searcher.cuh"
 #include "Utils/GlobalDefinitions.h"
@@ -28,7 +29,7 @@ using std::shared_ptr;
 namespace sbwt_search {
 
 template <class PositionsProducer, class BitSeqProducer>
-class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
+class ContinuousSearcher: public SharedBatchesProducer<ResultsBatch> {
     SearcherGpu searcher;
     shared_ptr<BitSeqProducer> bit_seq_producer;
     shared_ptr<PositionsProducer> positions_producer;
@@ -48,12 +49,12 @@ class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
         bit_seq_producer(bit_seq_producer),
         positions_producer(positions_producer),
         max_positions_per_batch(max_positions_per_batch),
-        SharedBatchesProducer<vector<u64>>(max_batches) {
+        SharedBatchesProducer<ResultsBatch>(max_batches) {
       initialise_batches();
     }
 
-    auto get_default_value() -> shared_ptr<vector<u64>> override {
-      return make_shared<vector<u64>>(
+    auto get_default_value() -> shared_ptr<ResultsBatch> override {
+      return make_shared<ResultsBatch>(
         round_up<u64>(max_positions_per_batch, superblock_bits)
       );
     }
@@ -67,13 +68,13 @@ class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
       searcher.search(
         bit_seq_batch->bit_seq,
         kmer_positions->positions,
-        *batches.current_write(),
+        batches.current_write()->results,
         batch_id
       );
     }
 
     auto do_at_batch_start() -> void override {
-      SharedBatchesProducer<vector<u64>>::do_at_batch_start();
+      SharedBatchesProducer<ResultsBatch>::do_at_batch_start();
       Logger::log_timed_event(
         "Searcher", Logger::EVENT_STATE::START, format("batch {}", batch_id)
       );
@@ -83,7 +84,7 @@ class ContinuousSearcher: public SharedBatchesProducer<vector<u64>> {
       Logger::log_timed_event(
         "Searcher", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
       );
-      SharedBatchesProducer<vector<u64>>::do_at_batch_finish();
+      SharedBatchesProducer<ResultsBatch>::do_at_batch_finish();
     }
 };
 
