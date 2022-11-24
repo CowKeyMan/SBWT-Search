@@ -56,9 +56,7 @@ class ContinuousSeqToBitsConverter {
       shared_ptr<InvalidCharsProducer<StringSequenceBatchProducer>>
         _invalid_chars_producer,
       shared_ptr<BitsProducer<StringSequenceBatchProducer>> _bits_producer,
-      uint threads,
-      u64 max_chars_per_batch,
-      u64 max_batches
+      uint threads
     ):
         producer(producer),
         threads(threads),

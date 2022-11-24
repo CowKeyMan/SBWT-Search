@@ -54,9 +54,8 @@ class ContinuousSearcher: public SharedBatchesProducer<ResultsBatch> {
     }
 
     auto get_default_value() -> shared_ptr<ResultsBatch> override {
-      return make_shared<ResultsBatch>(
-        round_up<u64>(max_positions_per_batch, superblock_bits)
-      );
+      return make_shared<ResultsBatch>(ResultsBatch{
+        vector<u64>(round_up<u64>(max_positions_per_batch, superblock_bits)) });
     }
 
     auto continue_read_condition() -> bool override {

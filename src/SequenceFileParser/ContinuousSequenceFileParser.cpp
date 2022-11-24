@@ -126,7 +126,6 @@ auto ContinuousSequenceFileParser::read_next() -> void {
   auto rec = batches.current_write();
   while ((rec->seq.size() < max_chars_per_batch)
          && ((*stream) >> (*rec) || start_next_file())) {
-    ++batch_id;
   }
   string_sequence_batch_producer->set_string(rec->seq);
   string_break_batch_producer->set(rec->chars_before_newline, rec->seq.size());
@@ -154,6 +153,7 @@ auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_id)
   );
+  ++batch_id;
   string_sequence_batch_producer->do_at_batch_finish();
   string_break_batch_producer->do_at_batch_finish();
   interval_batch_producer->do_at_batch_finish();

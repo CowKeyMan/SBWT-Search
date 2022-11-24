@@ -63,9 +63,7 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
         producer,
         invalid_chars_producer,
         bits_producer,
-        threads,
-        max_chars_per_batch,
-        max_batches
+        threads
       );
       size_t expected_batches = seqs.size();
       size_t batches = 0;

@@ -139,7 +139,6 @@ class ContinuousResultsPrinter {
       }
     }
 
-  protected:
     auto get_invalid_chars_left_first_kmer() -> size_t {
       auto &invalid_chars = invalid_chars_batch->invalid_chars;
       auto limit = min({ chars_index + kmer_size,
@@ -153,11 +152,6 @@ class ContinuousResultsPrinter {
       return 0;
     }
 
-    virtual auto do_start_next_file() -> void {
-      stream.open(*current_filename, std::ios::out);
-      current_filename = next(current_filename);
-    }
-
     auto process_result(size_t result, bool found, bool valid) {
       if (!valid) {
         do_invalid_result();
@@ -166,6 +160,12 @@ class ContinuousResultsPrinter {
       } else {
         do_result(result);
       }
+    }
+
+  protected:
+    virtual auto do_start_next_file() -> void {
+      stream.open(*current_filename, std::ios::out);
+      current_filename = next(current_filename);
     }
 
     virtual auto do_invalid_result() -> void = 0;

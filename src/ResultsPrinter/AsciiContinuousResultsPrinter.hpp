@@ -23,6 +23,7 @@ class AsciiContinuousResultsPrinter:
       ResultsProducer,
       IntervalProducer,
       InvalidCharsProducer>;
+    bool is_at_newline = true;
 
   public:
     AsciiContinuousResultsPrinter(
@@ -36,39 +37,28 @@ class AsciiContinuousResultsPrinter:
           results_producer,
           interval_producer,
           invalid_chars_producer,
-          filenames,
-          kmer_size
+          kmer_size,
+          filenames
         ) {}
 
   protected:
-    auto print_word(
-      size_t char_index,
-      size_t invalid_index,
-      size_t num_chars,
-      size_t string_length
-    ) -> void override {
-      uint invalid_chars_left
-        = this->get_invalid_chars_left_first_kmer(invalid_index);
-      for (u64 i = char_index; i < char_index + num_chars; ++i) {
-        auto furthest_index
-          = invalid_index + this->kmer_size - 1 + i - char_index;
-        if (
-            furthest_index < invalid_index + string_length
-            && this->invalid_chars_batch->invalid_chars[furthest_index]
-        ) {
-          invalid_chars_left = this->kmer_size;
-        }
-        if (invalid_chars_left > 0) {
-          this->stream << "-2";
-          --invalid_chars_left;
-        } else if ((*this->results)[i] == u64(-1)) {
-          this->stream << "-1";
-        } else {
-          this->stream << (*this->results)[i];
-        }
-        if (i + 1 != char_index + num_chars) { this->stream << ' '; }
-      }
-      this->stream << '\n';
+    auto do_invalid_result() -> void override{
+      if (!is_at_newline) { this->stream << " "; }
+      this->stream << "-2";
+      is_at_newline = false;
+    }
+    auto do_not_found_result() -> void override{
+      if (!is_at_newline) { this->stream << " "; }
+      this->stream << "-1";
+      is_at_newline = false;
+    }
+    auto do_result(size_t result) -> void override{
+      if (!is_at_newline) { this->stream << " "; }
+      this->stream << result;
+      is_at_newline = false;
+    }
+    auto do_with_newline() -> void override{
+      this->stream << "\n";
     }
 };
 

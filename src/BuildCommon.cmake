@@ -30,26 +30,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(fmt)
 
-if(EXISTS "${CMAKE_BINARY_DIR}/external/kseqpp/lib/pkgconfig/kseq++.pc")
-  set(KSEQPP_FOUND TRUE)
-else()
-  set(KSEQPP_FOUND FALSE)
-endif()
-if (NOT KSEQPP_FOUND)
-## Fetch kseqpp
-ExternalProject_Add(
-  kseqpp
-  GIT_REPOSITORY https://github.com/cartoonist/kseqpp
-  GIT_TAG        v0.2.1
-  PREFIX         "${CMAKE_BINARY_DIR}/external/kseqpp"
-  CMAKE_ARGS
-		-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+## Fetch kseqpp_read
+FetchContent_Declare(
+  reklibpp
+  QUIET
+  GIT_REPOSITORY       "https://github.com/CowKeyMan/kseqpp_REad"
+  GIT_TAG              v1.1.0
+  GIT_SHALLOW          TRUE
 )
-endif()
-include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/kseqpp/include")
-
-## Fetch ZLIB
-find_package(ZLIB)
+FetchContent_MakeAvailable(reklibpp)
 
 ## Fetch cxxopts
 FetchContent_Declare(
@@ -85,6 +74,11 @@ add_library(
   io_utils
   "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
 )
+target_link_libraries(
+  io_utils
+  PRIVATE
+  fmt::fmt
+)
 add_library(
   error_utils
   "${PROJECT_SOURCE_DIR}/Utils/ErrorUtils.cpp"
@@ -97,16 +91,21 @@ target_link_libraries(logger PRIVATE spdlog::spdlog)
 
 add_library(
   sequence_file_parser
-  "${PROJECT_SOURCE_DIR}/SequenceFileParser/SequenceFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/IntervalBatchProducer.cpp"
-  "${PROJECT_SOURCE_DIR}/SequenceFileParser/CumulativePropertiesBatchProducer.cpp"
+  "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringBreakBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/StringSequenceBatchProducer.cpp"
 )
-target_link_libraries(sequence_file_parser PRIVATE io_utils fmt::fmt logger OpenMP::OpenMP_CXX)
-if(NOT KSEQPP_FOUND)
-add_dependencies(sequence_file_parser kseqpp)
-endif()
+target_link_libraries(
+  sequence_file_parser
+  PRIVATE
+  kseqpp_read
+  io_utils
+  error_utils
+  fmt::fmt
+  logger
+  OpenMP::OpenMP_CXX
+)
 add_library(
   filenames_parser
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
@@ -135,15 +134,13 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cu"
 )
 set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "80;70;60")
-if(NOT KSEQPP_FOUND)
-add_dependencies(sbwt_container_gpu kseqpp)
-endif()
 add_library(sbwt_container INTERFACE)
 target_link_libraries(
   sbwt_container
   INTERFACE
   sbwt_container_cpu
   sbwt_container_gpu
+  kseqpp_read
 )
 
 # Common libraries
@@ -151,20 +148,24 @@ add_library(common_libraries INTERFACE)
 target_link_libraries(
   common_libraries
   INTERFACE
-  io_utils
-  sequence_file_parser
-  filenames_parser
-  sbwt_builder
-  ZLIB::ZLIB
+  # external libraries
+  fmt::fmt
+  kseqpp_read
+  OpenMP::OpenMP_CXX
   cxxopts
+
+  # Internal libraries
+  io_utils
+  logger
+  error_utils
+  filenames_parser
+  sequence_file_parser
+  positions_builder
+
+  ## SBWT Loading libraries
+  sbwt_builder
   sbwt_container
   poppy_builder
-  positions_builder
-  OpenMP::OpenMP_CXX
-  logger
-  fmt::fmt
-  error_utils
-  # TODO: Link more libraries here
 )
 add_library(
   cuda_utils
@@ -181,7 +182,6 @@ if (BUILD_CPU)
     libraries_cpu
     INTERFACE
     common_libraries
-    # TODO: Combine more libraries here which are cpu specific
   )
 endif()
 
@@ -197,6 +197,5 @@ if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
     INTERFACE
     common_libraries
     cuda_utils
-    # TODO: Combine more libraries here which are cuda specific
   )
 endif()

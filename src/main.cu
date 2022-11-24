@@ -18,8 +18,13 @@
 #include "SbwtContainer/GpuSbwtContainer.cuh"
 #include "SbwtContainer/SbwtContainer.h"
 #include "Searcher/ContinuousSearcher.cuh"
+#include "SeqToBitsConverter/BitsProducer.hpp"
 #include "SeqToBitsConverter/ContinuousSeqToBitsConverter.hpp"
+#include "SeqToBitsConverter/InvalidCharsProducer.hpp"
 #include "SequenceFileParser/ContinuousSequenceFileParser.h"
+#include "SequenceFileParser/IntervalBatchProducer.h"
+#include "SequenceFileParser/StringBreakBatchProducer.h"
+#include "SequenceFileParser/StringSequenceBatchProducer.h"
 #include "Utils/BenchmarkUtils.hpp"
 #include "Utils/CudaUtils.cuh"
 #include "Utils/Logger.h"
@@ -54,7 +59,6 @@ const auto program_name = "SBWT Search";
 const auto program_description
   = "An application to search for k-mers in a genome given an SBWT index";
 const uint kmer_size = 30;
-const auto num_seq_to_bit_converters = 3;
 
 auto main(int argc, char **argv) -> int {
   Logger::initialise_global_logging(WARN);
@@ -77,100 +81,120 @@ auto main(int argc, char **argv) -> int {
     INFO, "Using " + to_string(max_chars_per_batch) + " characters per batch"
   );
   omp_set_nested(1);
+  uint threads = 1;
 #pragma omp parallel
 #pragma omp single
-  Logger::log(
-    INFO, format("Running OpenMP with {} threads", omp_get_num_threads())
-  );
+  threads = omp_get_num_threads();
+  Logger::log(INFO, format("Running OpenMP with {} threads", threads));
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   using SequenceFileParser = ContinuousSequenceFileParser;
+  auto string_sequence_batch_producer
+    = make_shared<StringSequenceBatchProducer>(max_batches);
+  auto string_break_batch_producer
+    = make_shared<StringBreakBatchProducer>(max_batches);
+  auto interval_batch_producer
+    = make_shared<IntervalBatchProducer>(max_batches);
   auto sequence_file_parser = make_shared<SequenceFileParser>(
     input_filenames,
     kmer_size,
     max_chars_per_batch,
-    max_chars_per_batch,
-    num_seq_to_bit_converters,
-    max_batches
+    max_batches,
+    string_sequence_batch_producer,
+    string_break_batch_producer,
+    interval_batch_producer
   );
+
   using SeqToBitsConverter
-    = ContinuousSeqToBitsConverter<ContinuousSequenceFileParser>;
+    = ContinuousSeqToBitsConverter<StringSequenceBatchProducer>;
+  using InvalidCharsProducer
+    = InvalidCharsProducer<StringSequenceBatchProducer>;
+  using BitsProducer = BitsProducer<StringSequenceBatchProducer>;
+  auto invalid_chars_producer = make_shared<InvalidCharsProducer>(
+    kmer_size, max_chars_per_batch, max_batches
+  );
+  auto bits_producer
+    = make_shared<BitsProducer>(max_chars_per_batch, max_batches);
   auto seq_to_bit_converter = make_shared<SeqToBitsConverter>(
-    sequence_file_parser,
-    num_seq_to_bit_converters,
-    kmer_size,
-    max_chars_per_batch,
-    max_batches
+    string_sequence_batch_producer,
+    invalid_chars_producer,
+    bits_producer,
+    threads
   );
+
   using PositionsBuilder
-    = ContinuousPositionsBuilder<ContinuousSequenceFileParser>;
+    = ContinuousPositionsBuilder<StringBreakBatchProducer>;
   auto positions_builder = make_shared<PositionsBuilder>(
-    sequence_file_parser, kmer_size, max_chars_per_batch, max_batches
+    string_break_batch_producer, kmer_size, max_chars_per_batch, max_batches
   );
-  using Searcher = ContinuousSearcher<PositionsBuilder, SeqToBitsConverter>;
+
+  using Searcher = ContinuousSearcher<PositionsBuilder, BitsProducer>;
   auto searcher = make_shared<Searcher>(
     gpu_container,
-    seq_to_bit_converter,
+    bits_producer,
     positions_builder,
     max_batches,
     max_chars_per_batch
   );
+
   using ResultsPrinter = ContinuousResultsPrinter<
     Searcher,
-    SequenceFileParser,
-    SeqToBitsConverter>;
-  using BinaryResultsPrinter = BinaryContinuousResultsPrinter<
-    Searcher,
-    SequenceFileParser,
-    SeqToBitsConverter>;
+    IntervalBatchProducer,
+    InvalidCharsProducer>;
   using AsciiResultsPrinter = AsciiContinuousResultsPrinter<
     Searcher,
-    SequenceFileParser,
-    SeqToBitsConverter>;
-  using BoolResultsPrinter = BoolContinuousResultsPrinter<
-    Searcher,
-    SequenceFileParser,
-    SeqToBitsConverter>;
+    IntervalBatchProducer,
+    InvalidCharsProducer>;
+  /* using BinaryResultsPrinter = BinaryContinuousResultsPrinter< */
+  /*   Searcher, */
+  /*   SequenceFileParser, */
+  /*   SeqToBitsConverter>; */
+  /* using BoolResultsPrinter = BoolContinuousResultsPrinter< */
+  /*   Searcher, */
+  /*   SequenceFileParser, */
+  /*   SeqToBitsConverter>; */
   shared_ptr<ResultsPrinter> results_printer;
   if (args.get_print_mode() == "ascii") {
     results_printer = make_shared<AsciiResultsPrinter>(
       searcher,
-      sequence_file_parser,
-      seq_to_bit_converter,
+      interval_batch_producer,
+      invalid_chars_producer,
       output_filenames,
       kmer_size
     );
-  } else if (args.get_print_mode() == "binary") {
-    results_printer = make_shared<BinaryResultsPrinter>(
-      searcher,
-      sequence_file_parser,
-      seq_to_bit_converter,
-      output_filenames,
-      kmer_size
-    );
-  } else if (args.get_print_mode() == "bool") {
-    results_printer = make_shared<BoolResultsPrinter>(
-      searcher,
-      sequence_file_parser,
-      seq_to_bit_converter,
-      output_filenames,
-      kmer_size,
-      max_chars_per_batch
-    );
-  } else {
+  }
+  /* else if (args.get_print_mode() == "binary") { */
+  /*   results_printer = make_shared<BinaryResultsPrinter>( */
+  /*     searcher, */
+  /*     sequence_file_parser, */
+  /*     seq_to_bit_converter, */
+  /*     output_filenames, */
+  /*     kmer_size */
+  /*   ); */
+  /* } else if (args.get_print_mode() == "bool") { */
+  /*   results_printer = make_shared<BoolResultsPrinter>( */
+  /*     searcher, */
+  /*     sequence_file_parser, */
+  /*     seq_to_bit_converter, */
+  /*     output_filenames, */
+  /*     kmer_size, */
+  /*     max_chars_per_batch */
+  /*   ); */
+  /* } */
+  else {
     throw runtime_error("Invalid value passed by user for print_mode");
   }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
-#pragma omp parallel sections default(shared)
+  #pragma omp parallel sections default(shared)
   {
-#pragma omp section
+  #pragma omp section
     { sequence_file_parser->read_and_generate(); }
-#pragma omp section
+  #pragma omp section
     { seq_to_bit_converter->read_and_generate(); }
-#pragma omp section
+  #pragma omp section
     { positions_builder->read_and_generate(); }
-#pragma omp section
+  #pragma omp section
     { searcher->read_and_generate(); }
-#pragma omp section
+  #pragma omp section
     { results_printer->read_and_generate(); }
   }
   Logger::log(INFO, "DONE");
