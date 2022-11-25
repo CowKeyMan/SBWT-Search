@@ -5,8 +5,8 @@
 #include "gtest/gtest.h"
 
 #include "BatchObjects/StringBreakBatch.h"
-#include "TestUtils/GeneralTestUtils.hpp"
 #include "PositionsBuilder/ContinuousPositionsBuilder.hpp"
+#include "TestUtils/GeneralTestUtils.hpp"
 #include "Utils/RNGUtils.h"
 
 using rng_utils::get_uniform_generator;
@@ -74,11 +74,11 @@ class ContinuousPositionsBuilderTest: public ::testing::Test {
 
 TEST_F(ContinuousPositionsBuilderTest, Basic) {
   vector<vector<size_t>> chars_before_newline
-    = { { 8, 9, 11, 16 }, { 8, 9, 11, 17 } };
+    = { { 8, 9, 11, 16, size_t(-1) }, { 8, 9, 11, 17, size_t(-1) } };
   vector<size_t> string_sizes = { 20, 15 };
   vector<vector<size_t>> expected_positions
     = { { 0, 1, 2, 3, 4, 5, 11, 12, 13, 16, 17 },
-        { 0, 1, 2, 3, 4, 5, 11, 12, 13, 14} };
+        { 0, 1, 2, 3, 4, 5, 11, 12, 13, 14 } };
   uint kmer_size = 3;
   for (auto max_batches: { 1, 2, 3, 7 }) {
     run_test(

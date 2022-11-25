@@ -41,7 +41,6 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
     "${PROJECT_SOURCE_DIR}/PositionsBuilder/ContinuousPositionsBuilder_test.cpp"
     "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/ContinuousSeqToBitsConverter_test.cpp"
-
     "${PROJECT_SOURCE_DIR}/ResultsPrinter/ContinuousResultsPrinter_test.cpp"
 
     # "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"

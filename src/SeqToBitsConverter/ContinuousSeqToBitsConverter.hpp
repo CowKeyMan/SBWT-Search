@@ -100,7 +100,7 @@ class ContinuousSeqToBitsConverter {
         for (size_t index = start_index; index < end_index; index += 32) {
           auto x = convert_int(*read_batch.seq, start_index, end_index);
           bits_producer->set(
-            index / 32, convert_int(*read_batch.seq, start_index, end_index)
+            index / 32, convert_int(*read_batch.seq, index, min(index + 32, end_index))
           );
         }
       }

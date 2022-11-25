@@ -17,17 +17,17 @@ auto PositionsBuilder::build_positions(
   const size_t &string_size,
   vector<size_t> &positions
 ) -> void {
-  positions.resize(string_size);
   size_t start_position_index = 0, end_position_index = 0;
   size_t first_string_index = 0;
   size_t string_position_index = 0;
   size_t previous_string_break = 0;
-  for (int i = 0; i < chars_before_newline.size() + 1; ++i) {
+  positions.resize(string_size);
+  for (int i = 0; i < chars_before_newline.size(); ++i) {
     if (i > 0) {
       start_position_index = max(start_position_index, end_position_index);
       first_string_index = chars_before_newline[i - 1];
     }
-    if (i == chars_before_newline.size()) {
+    if (i == chars_before_newline.size() - 1) {
       if (string_size > (kmer_size - 1 + first_string_index)) {
         end_position_index
           += string_size - (kmer_size - 1 + first_string_index);

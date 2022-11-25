@@ -34,7 +34,7 @@ class ContinuousSearcher: public SharedBatchesProducer<ResultsBatch> {
     shared_ptr<BitSeqProducer> bit_seq_producer;
     shared_ptr<PositionsProducer> positions_producer;
     shared_ptr<BitSeqBatch> bit_seq_batch;
-    shared_ptr<PositionsBatch> kmer_positions;
+    shared_ptr<PositionsBatch> positions_batch;
     u64 max_positions_per_batch;
 
   public:
@@ -59,14 +59,14 @@ class ContinuousSearcher: public SharedBatchesProducer<ResultsBatch> {
     }
 
     auto continue_read_condition() -> bool override {
-      return (*positions_producer >> kmer_positions)
+      return (*positions_producer >> positions_batch)
            & (*bit_seq_producer >> bit_seq_batch);
     }
 
     auto generate() -> void override {
       searcher.search(
         bit_seq_batch->bit_seq,
-        kmer_positions->positions,
+        positions_batch->positions,
         batches.current_write()->results,
         batch_id
       );
