@@ -59,6 +59,7 @@ class AsciiContinuousResultsPrinter:
     }
     auto do_with_newline() -> void override{
       this->stream << "\n";
+      is_at_newline = true;
     }
 };
 

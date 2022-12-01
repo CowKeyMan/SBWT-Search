@@ -1,7 +1,7 @@
 /*
 Simulating the following 4 files, kmer_size = 3:
   File 1:
-    --empty--
+    valid
     --empty--
     10 not_found | valid valid
     --empty--
@@ -152,6 +152,7 @@ TEST_F(ContinuousResultsPrinterTest, SingleBatch) {
     0,
     0,
     0,
+    0,
     0,  // end of first string of first file
     0,
     0,
@@ -171,7 +172,7 @@ TEST_F(ContinuousResultsPrinterTest, SingleBatch) {
   vector<ResultsBatch> results
     = { { { 10, size_t(-1), 30, 40, 50, 60, 70, 80, 123456, 100 } } };
   vector<vector<u64>> chars_before_newline
-    = { { 0, 0, 4, 4, 4, 10, 10, 10, 10, 13, 13, 18, size_t(-1) } };
+    = { { 1, 1, 5, 5, 5, 11, 11, 11, 11, 14, 14, 19, size_t(-1) } };
   vector<vector<u64>> newlines_before_newfile = { { 7, 7, 9, 12, size_t(-1) } };
   run_test(
     kmer_size,
@@ -190,11 +191,11 @@ TEST_F(ContinuousResultsPrinterTest, MultipleBatches) {
                                    { { 30, 40, 50, 60, 70 } },
                                    { { 80, 123456, 100 } } };
   vector<InvalidCharsBatch> invalid_chars
-    = { { { 0, 0, 0, 0 } },  // end of first string
+    = { { { 0, 0, 0, 0, 0 } },  // end of first string
         { { 0, 0, 0, 0, 1, 0, 0, 0, 0 } },  // end of third
         { { 0, 1, 0, 0, 0 } } };  // end of last string
   vector<vector<u64>> chars_before_newline
-    = { { 0, 0, 4, }, { 0, 0, 6, 6, 6, 6, 9 }, { 0, 5 } };
+    = { { 1, 1, 5, }, { 0, 0, 6, 6, 6, 6, 9 }, { 0, 5 } };
   vector<vector<u64>> newlines_before_newfile
     = { { ULLONG_MAX }, { 4, 4, 6, ULLONG_MAX }, { 3, ULLONG_MAX } };
   run_test(

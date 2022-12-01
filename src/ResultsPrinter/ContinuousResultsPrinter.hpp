@@ -111,9 +111,12 @@ class ContinuousResultsPrinter {
       for (; line_index < newlines_before_newfile
              && results_index < results_batch->results.size();
            ++line_index) {
-        process_line((*interval_batch->chars_before_newline
-        )[chars_before_newline_index]);
-        do_with_newline();
+        auto chars_before_newline
+          = (*interval_batch->chars_before_newline)[chars_before_newline_index];
+        process_line(chars_before_newline);
+        if (chars_index + kmer_size > chars_before_newline) {
+          do_with_newline();
+        }
         chars_index
           = (*interval_batch->chars_before_newline)[chars_before_newline_index];
         ++chars_before_newline_index;
