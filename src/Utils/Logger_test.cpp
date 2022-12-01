@@ -40,6 +40,7 @@ class LogUtilsTest: public ::testing::Test {
     auto TearDown() -> void override {
       spdlog::drop_all();
       spdlog::set_default_logger(spdlog::stdout_color_mt(""));
+      Logger::initialise_global_logging(Logger::LOG_LEVEL::OFF);
     }
 };
 
@@ -93,7 +94,7 @@ TEST_F(LogUtilsTest, TimeEvent) {
   auto s = stream.str();
   sscanf(
     s.c_str(),
-    R"({"time": "%d-%d-%dT%d:%d:%d.%d+%d:%d", "level": "trace", "process": %d, "thread": %d, "log": {"type": %s "state": "start", "component": "test", "message": %s)",
+    R"({"time": "%d-%d-%dT%d:%d:%d.%d+%d:%d", "level": "debug", "process": %d, "thread": %d, "log": {"type": %s "state": "start", "component": "test", "message": %s)",
     &i,
     &i,
     &i,
