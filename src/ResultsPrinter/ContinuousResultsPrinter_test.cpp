@@ -67,8 +67,8 @@ class DummyContinuousResultsPrinter:
           _results_producer,
           _interval_producer,
           _invalid_chars_producer,
-          kmer_size,
-          vector<string>(files)
+          vector<string>(files),
+          kmer_size
         ) {}
 
   protected:

@@ -34,8 +34,7 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/Utils/IOUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/Semaphore_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
-    # "${PROJECT_SOURCE_DIR}/Utils/BoundedSemaphore_test.cpp" # BROKEN
-    "${PROJECT_SOURCE_DIR}/Utils/Logger_test.cpp" # BROKEN
+    "${PROJECT_SOURCE_DIR}/Utils/Logger_test.cpp"
 
     "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser_test.cpp"
     "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
@@ -44,8 +43,6 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/ResultsPrinter/ContinuousResultsPrinter_test.cpp"
 
     "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
-    # "${PROJECT_SOURCE_DIR}/PoppyBuilder/PoppyBuilder_test.cpp" # BROKEN
-    "${PROJECT_SOURCE_DIR}/TestUtils/RankTestUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser_test.cpp"
   )
   add_test(NAME test_main_cpu COMMAND test_main_cpu)
