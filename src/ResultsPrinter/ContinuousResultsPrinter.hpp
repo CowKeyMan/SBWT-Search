@@ -22,16 +22,21 @@
 #include "BatchObjects/InvalidCharsBatch.h"
 #include "BatchObjects/ResultsBatch.h"
 #include "BatchObjects/StringSequenceBatch.h"
+#include "Utils/IOUtils.h"
 #include "Utils/Logger.h"
 #include "Utils/TypeDefinitions.h"
 #include "fmt/core.h"
 
 using fmt::format;
+using io_utils::ThrowingOfstream;
 using log_utils::Logger;
+using std::ios_base;
+using std::make_unique;
 using std::min;
 using std::next;
 using std::ofstream;
 using std::shared_ptr;
+using std::unique_ptr;
 
 namespace sbwt_search {
 
@@ -46,24 +51,24 @@ class ContinuousResultsPrinter {
     shared_ptr<InvalidCharsProducer> invalid_chars_producer;
     shared_ptr<IntervalBatch> interval_batch;
     vector<string> filenames;
-    vector<string>::iterator current_filename;
     size_t chars_index = 0, results_index = 0, line_index = 0;
     size_t invalid_chars_left = 0;
     size_t chars_before_newline_index = 0;
 
   protected:
+    vector<string>::iterator current_filename;
     shared_ptr<ResultsBatch> results_batch;
     shared_ptr<InvalidCharsBatch> invalid_chars_batch;
     const uint kmer_size;
-    ofstream stream;
+    unique_ptr<ThrowingOfstream> stream;
 
   public:
     ContinuousResultsPrinter(
       shared_ptr<ResultsProducer> results_producer,
       shared_ptr<IntervalProducer> interval_producer,
       shared_ptr<InvalidCharsProducer> invalid_chars_producer,
-      uint kmer_size,
-      const vector<string> &filenames
+      const vector<string> &filenames,
+      uint kmer_size
     ):
         results_producer(results_producer),
         interval_producer(interval_producer),
@@ -167,7 +172,9 @@ class ContinuousResultsPrinter {
 
   protected:
     virtual auto do_start_next_file() -> void {
-      stream.open(*current_filename, std::ios::out);
+      stream = make_unique<ThrowingOfstream>(
+        *current_filename, ios_base::binary | ios_base::out
+      );
       current_filename = next(current_filename);
     }
 

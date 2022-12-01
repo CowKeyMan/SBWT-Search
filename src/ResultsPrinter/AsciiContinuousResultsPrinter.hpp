@@ -37,28 +37,28 @@ class AsciiContinuousResultsPrinter:
           results_producer,
           interval_producer,
           invalid_chars_producer,
-          kmer_size,
-          filenames
+          filenames,
+          kmer_size
         ) {}
 
   protected:
     auto do_invalid_result() -> void override{
-      if (!is_at_newline) { this->stream << " "; }
-      this->stream << "-2";
+      if (!is_at_newline) { (*this->stream) << " "; }
+      (*this->stream) << "-2";
       is_at_newline = false;
     }
     auto do_not_found_result() -> void override{
-      if (!is_at_newline) { this->stream << " "; }
-      this->stream << "-1";
+      if (!is_at_newline) { (*this->stream) << " "; }
+      (*this->stream) << "-1";
       is_at_newline = false;
     }
     auto do_result(size_t result) -> void override{
-      if (!is_at_newline) { this->stream << " "; }
-      this->stream << result;
+      if (!is_at_newline) { (*this->stream) << " "; }
+      (*this->stream) << result;
       is_at_newline = false;
     }
     auto do_with_newline() -> void override{
-      this->stream << "\n";
+      (*this->stream) << "\n";
       is_at_newline = true;
     }
 };

@@ -7,6 +7,7 @@
  * */
 
 #include <algorithm>
+#include <memory>
 
 #include "ResultsPrinter/ContinuousResultsPrinter.hpp"
 #include "Utils/MathUtils.hpp"
@@ -14,6 +15,8 @@
 
 using math_utils::round_up;
 using std::fill;
+using std::ios_base;
+using std::unique_ptr;
 
 namespace sbwt_search {
 
@@ -33,6 +36,9 @@ class BoolContinuousResultsPrinter:
 
   private:
     vector<char> batch;
+    u64 working_bits = 0, working_seq_size = 0;
+    u8 shift_bits = 63;
+    unique_ptr<ThrowingOfstream> seq_size_stream;
 
   public:
     BoolContinuousResultsPrinter(
@@ -50,39 +56,49 @@ class BoolContinuousResultsPrinter:
           filenames,
           kmer_size
         ),
-        batch(round_up<u64>(max_chars_per_batch, 8) / 8) {}
+        batch(round_up<u64>(max_chars_per_batch, 8) / 8) {
+      reset_working_bits();
+    }
 
   protected:
-    auto print_word(
-      size_t char_index,
-      size_t invalid_index,
-      size_t num_chars,
-      size_t string_length
-    ) -> void override {
-      auto to_write = round_up<u64>(num_chars, 8) / 8;
-      fill(batch.begin(), batch.begin() + to_write, 0);
-      uint invalid_chars_left
-        = this->get_invalid_chars_left_first_kmer(invalid_index);
-      for (u64 i = char_index; i < char_index + num_chars; ++i) {
-        auto furthest_index
-          = invalid_index + this->kmer_size - 1 + i - char_index;
-        if (
-            furthest_index < invalid_index + string_length
-            && this->invalid_chars_batch->invalid_chars[furthest_index]
-        ) {
-          invalid_chars_left = this->kmer_size;
-        }
-        if (invalid_chars_left > 0) {
-          --invalid_chars_left;
-        } else if ((*this->results)[i] != u64(-1)) {
-          auto batch_index = (i - char_index);
-          this->batch[batch_index / 8] |= (1 << (7 - batch_index % 8));
-        }
-      }
-      this->stream.write(
-        reinterpret_cast<char *>(&num_chars), sizeof(num_chars)
+    auto do_invalid_result() -> void override { shift(); }
+    auto do_not_found_result() -> void override { shift(); }
+    auto do_result(size_t result) -> void override {
+      working_bits |= (1 << shift_bits);
+      shift();
+    }
+    auto do_with_newline() -> void override {
+      this->seq_size_stream->write(
+        reinterpret_cast<char *>(&working_seq_size), sizeof(u64)
       );
-      this->stream.write(&batch[0], to_write);
+      dump_working_bits();
+      reset_working_bits();
+    }
+
+    auto do_start_next_file() -> void override {
+      seq_size_stream = make_unique<ThrowingOfstream>(
+        (*this->current_filename) + "_seq_sizes",
+        ios_base::binary | ios_base::out
+      );
+      Base::do_start_next_file();
+    }
+
+  private:
+    auto reset_working_bits() -> void {
+      working_bits = 0;
+      shift_bits = 63;
+    }
+    auto shift() -> void {
+      ++working_seq_size;
+      if (shift_bits == 0) {
+        dump_working_bits();
+        reset_working_bits();
+        return;
+      }
+      --shift_bits;
+    }
+    auto dump_working_bits() -> void {
+      this->stream->write(reinterpret_cast<char *>(&working_bits), sizeof(u64));
     }
 };
 

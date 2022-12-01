@@ -45,35 +45,17 @@ class BinaryContinuousResultsPrinter:
         ) {}
 
   protected:
-    auto print_word(
-      size_t char_index,
-      size_t invalid_index,
-      size_t num_chars,
-      size_t string_length
-    ) -> void override {
-      uint invalid_chars_left
-        = this->get_invalid_chars_left_first_kmer(invalid_index);
-      for (u64 i = char_index; i < char_index + num_chars; ++i) {
-        auto furthest_index
-          = invalid_index + this->kmer_size - 1 + i - char_index;
-        if (
-            furthest_index < invalid_index + string_length
-            && this->invalid_chars_batch->invalid_chars[furthest_index]
-        ) {
-          invalid_chars_left = this->kmer_size;
-        }
-        if (invalid_chars_left > 0) {
-          this->stream.write(reinterpret_cast<char *>(&minus2), sizeof(u64));
-          --invalid_chars_left;
-        } else if ((*this->results)[i] == u64(-1)) {
-          this->stream.write(reinterpret_cast<char *>(&minus1), sizeof(u64));
-        } else {
-          this->stream.write(
-            reinterpret_cast<char *>(&(*this->results)[i]), sizeof(u64)
-          );
-        }
-      }
-      this->stream.write(reinterpret_cast<char *>(&minus3), sizeof(u64));
+    auto do_invalid_result() -> void override {
+      this->stream->write(reinterpret_cast<char *>(&minus2), sizeof(u64));
+    }
+    auto do_not_found_result() -> void override {
+      this->stream->write(reinterpret_cast<char *>(&minus1), sizeof(u64));
+    }
+    auto do_result(size_t result) -> void override {
+      this->stream->write(reinterpret_cast<char *>(&result), sizeof(u64));
+    }
+    auto do_with_newline() -> void override {
+      this->stream->write(reinterpret_cast<char *>(&minus3), sizeof(u64));
     }
 };
 

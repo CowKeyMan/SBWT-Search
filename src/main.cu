@@ -72,6 +72,9 @@ auto main(int argc, char **argv) -> int {
   );
   auto input_filenames = filenames_parser.get_input_filenames();
   auto output_filenames = filenames_parser.get_output_filenames();
+  if (input_filenames != output_filenames) {
+    runtime_error("Input and output file sizes differ");
+  }
   const auto max_batches = args.get_batches();
   const auto max_chars_per_batch = get_max_chars_per_batch(
     args.get_unavailable_ram(), max_batches, args.get_max_cpu_memory()
@@ -121,8 +124,7 @@ auto main(int argc, char **argv) -> int {
     threads
   );
 
-  using PositionsBuilder
-    = ContinuousPositionsBuilder<StringBreakBatchProducer>;
+  using PositionsBuilder = ContinuousPositionsBuilder<StringBreakBatchProducer>;
   auto positions_builder = make_shared<PositionsBuilder>(
     string_break_batch_producer, kmer_size, max_chars_per_batch, max_batches
   );
@@ -144,14 +146,14 @@ auto main(int argc, char **argv) -> int {
     Searcher,
     IntervalBatchProducer,
     InvalidCharsProducer>;
-  /* using BinaryResultsPrinter = BinaryContinuousResultsPrinter< */
-  /*   Searcher, */
-  /*   SequenceFileParser, */
-  /*   SeqToBitsConverter>; */
-  /* using BoolResultsPrinter = BoolContinuousResultsPrinter< */
-  /*   Searcher, */
-  /*   SequenceFileParser, */
-  /*   SeqToBitsConverter>; */
+  using BinaryResultsPrinter = BinaryContinuousResultsPrinter<
+    Searcher,
+    IntervalBatchProducer,
+    InvalidCharsProducer>;
+  using BoolResultsPrinter = BoolContinuousResultsPrinter<
+    Searcher,
+    IntervalBatchProducer,
+    InvalidCharsProducer>;
   shared_ptr<ResultsPrinter> results_printer;
   if (args.get_print_mode() == "ascii") {
     results_printer = make_shared<AsciiResultsPrinter>(
@@ -161,40 +163,38 @@ auto main(int argc, char **argv) -> int {
       output_filenames,
       kmer_size
     );
-  }
-  /* else if (args.get_print_mode() == "binary") { */
-  /*   results_printer = make_shared<BinaryResultsPrinter>( */
-  /*     searcher, */
-  /*     sequence_file_parser, */
-  /*     seq_to_bit_converter, */
-  /*     output_filenames, */
-  /*     kmer_size */
-  /*   ); */
-  /* } else if (args.get_print_mode() == "bool") { */
-  /*   results_printer = make_shared<BoolResultsPrinter>( */
-  /*     searcher, */
-  /*     sequence_file_parser, */
-  /*     seq_to_bit_converter, */
-  /*     output_filenames, */
-  /*     kmer_size, */
-  /*     max_chars_per_batch */
-  /*   ); */
-  /* } */
-  else {
+  } else if (args.get_print_mode() == "binary") {
+    results_printer = make_shared<BinaryResultsPrinter>(
+      searcher,
+      interval_batch_producer,
+      invalid_chars_producer,
+      output_filenames,
+      kmer_size
+    );
+  } else if (args.get_print_mode() == "bool") {
+    results_printer = make_shared<BoolResultsPrinter>(
+      searcher,
+      interval_batch_producer,
+      invalid_chars_producer,
+      output_filenames,
+      kmer_size,
+      max_chars_per_batch
+    );
+  } else {
     throw runtime_error("Invalid value passed by user for print_mode");
   }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
-  #pragma omp parallel sections default(shared)
+#pragma omp parallel sections default(shared)
   {
-  #pragma omp section
+#pragma omp section
     { sequence_file_parser->read_and_generate(); }
-  #pragma omp section
+#pragma omp section
     { seq_to_bit_converter->read_and_generate(); }
-  #pragma omp section
+#pragma omp section
     { positions_builder->read_and_generate(); }
-  #pragma omp section
+#pragma omp section
     { searcher->read_and_generate(); }
-  #pragma omp section
+#pragma omp section
     { results_printer->read_and_generate(); }
   }
   Logger::log(INFO, "DONE");
