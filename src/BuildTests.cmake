@@ -35,6 +35,7 @@ if (BUILD_CPU)
     "${PROJECT_SOURCE_DIR}/Utils/Semaphore_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/MathUtils_test.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/Logger_test.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/MemoryUnitsParser_test.cpp"
 
     "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser_test.cpp"
     "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"

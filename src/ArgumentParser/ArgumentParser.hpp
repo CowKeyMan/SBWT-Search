@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 
+#include "Utils/MemoryUnitsParser.h"
 #include "cxxopts.hpp"
 
 using cxxopts::Options;
@@ -19,6 +20,7 @@ using std::make_unique;
 using std::string;
 using std::to_string;
 using std::unique_ptr;
+using units_parser::MemoryUnitsParser;
 
 namespace sbwt_search {
 
@@ -64,7 +66,7 @@ class ArgumentParser {
         "bits. This means that the program will hog as much main memory it "
         "can, provided that the VRAM can also keep up with it, except for the "
         "amount specified by this value. By default it is set to 4GB",
-        value<size_t>()->default_value(to_string(4ULL * 8 * 1024 * 1024 * 1024))
+        value<string>()->default_value(to_string(4ULL * 8 * 1024 * 1024 * 1024))
       )("m,max-main-memory",
         "The maximum amount of main memory (RAM) which may be used by the "
         "searching step, in bits. The default is that the program will occupy "
@@ -72,7 +74,7 @@ class ArgumentParser {
         "value may be skipped by a few megabytes for its operation. It is only "
         "recommended to change this when you have a few small queries to "
         "process.",
-        value<size_t>()->default_value(to_string(ULLONG_MAX))
+        value<string>()->default_value(to_string(ULLONG_MAX))
       )("b,batches",
         "The number of batches to use. The default is 2. 1 is the minimum, and "
         "is equivalent to serial processing in terms of speed. The more "
@@ -129,10 +131,12 @@ class ArgumentParser {
       return args["output-file"].as<string>();
     }
     auto get_unavailable_ram() -> size_t {
-      return args["unavailable-main-memory"].as<size_t>();
+      return MemoryUnitsParser::convert(
+        args["unavailable-main-memory"].as<string>()
+      );
     }
     auto get_max_cpu_memory() -> size_t {
-      return args["max-main-memory"].as<size_t>();
+      return MemoryUnitsParser::convert(args["max-main-memory"].as<string>());
     }
     auto get_batches() -> unsigned int {
       return args["batches"].as<unsigned int>();

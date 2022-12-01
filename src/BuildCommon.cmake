@@ -88,6 +88,10 @@ add_library(
   "${PROJECT_SOURCE_DIR}/Utils/Logger.cpp"
 )
 target_link_libraries(logger PRIVATE spdlog::spdlog)
+add_library(
+  memory_units_parser
+  "${PROJECT_SOURCE_DIR}/Utils/MemoryUnitsParser.cpp"
+)
 
 add_library(
   sequence_file_parser
@@ -159,6 +163,7 @@ target_link_libraries(
   logger
   error_utils
   filenames_parser
+  memory_units_parser
   sequence_file_parser
   positions_builder
 
