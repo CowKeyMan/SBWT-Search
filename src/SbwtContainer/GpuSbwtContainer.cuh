@@ -22,7 +22,6 @@ class GpuSbwtContainer: public SbwtContainer {
     unique_ptr<GpuPointer<u64>> c_map, presearch_left, presearch_right;
     unique_ptr<GpuPointer<u64 *>> acgt_pointers, layer_0_pointers,
       layer_1_2_pointers;
-    u32 kmer_size;
 
   public:
     GpuSbwtContainer(

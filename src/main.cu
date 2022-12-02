@@ -58,7 +58,6 @@ auto get_max_chars_per_batch_cpu(
 const auto program_name = "SBWT Search";
 const auto program_description
   = "An application to search for k-mers in a genome given an SBWT index";
-const uint kmer_size = 30;
 
 auto main(int argc, char **argv) -> int {
   Logger::initialise_global_logging(WARN);
@@ -66,6 +65,7 @@ auto main(int argc, char **argv) -> int {
   Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::START);
   auto args = ArgumentParser(program_name, program_description, argc, argv);
   auto gpu_container = get_gpu_container(args.get_index_file());
+  const uint kmer_size = gpu_container->get_kmer_size();
   Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::STOP);
   FilenamesParser filenames_parser(
     args.get_sequence_file(), args.get_output_file()
@@ -84,7 +84,7 @@ auto main(int argc, char **argv) -> int {
     INFO, "Using " + to_string(max_chars_per_batch) + " characters per batch"
   );
   omp_set_nested(1);
-  uint threads = 1;
+  uint threads = 0;
 #pragma omp parallel
 #pragma omp single
   threads = omp_get_num_threads();

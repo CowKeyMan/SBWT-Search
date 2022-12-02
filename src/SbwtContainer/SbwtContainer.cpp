@@ -31,6 +31,7 @@ CpuSbwtContainer::CpuSbwtContainer(
   layer_1_2.resize(4);
   c_map.resize(5);
   c_map[0] = 1;
+  kmer_size = 30;
 }
 
 auto CpuSbwtContainer::get_layer_0() const -> const vector<vector<u64>> {
@@ -46,6 +47,8 @@ auto CpuSbwtContainer::get_layer_1_2() const -> const vector<vector<u64>> {
 auto CpuSbwtContainer::get_layer_1_2(ACGT letter) const -> const vector<u64> {
   return layer_1_2[static_cast<int>(letter)];
 }
+
+auto CpuSbwtContainer::get_kmer_size() const -> uint { return kmer_size; }
 
 auto CpuSbwtContainer::set_index(
   vector<u64> &&new_c_map,

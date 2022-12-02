@@ -25,6 +25,7 @@ class SbwtContainer {
   protected:
     const size_t bit_vector_size;
     const size_t num_bits;
+    uint kmer_size;
 
     SbwtContainer(const size_t num_bits, const size_t bit_vector_size):
         num_bits(num_bits), bit_vector_size(bit_vector_size) {}
@@ -66,6 +67,7 @@ class CpuSbwtContainer: public SbwtContainer {
     auto get_c_map() const -> const vector<u64>;
     auto to_gpu() -> shared_ptr<GpuSbwtContainer>;
     auto get_acgt(ACGT letter) const -> const u64 *;
+    auto get_kmer_size() const -> uint;
 };
 
 }  // namespace sbwt_search
