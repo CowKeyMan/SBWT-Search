@@ -22,6 +22,7 @@ auto PositionsBuilder::build_positions(
   size_t string_position_index = 0;
   size_t previous_string_break = 0;
   positions.resize(string_size);
+#pragma omp parallel for
   for (int i = 0; i < chars_before_newline.size(); ++i) {
     if (i > 0) {
       start_position_index = max(start_position_index, end_position_index);
