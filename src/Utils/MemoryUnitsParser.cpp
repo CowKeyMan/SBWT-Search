@@ -20,7 +20,7 @@ unordered_map<string, size_t> MemoryUnitsParser::units_to_multiplier
 
 auto MemoryUnitsParser::convert(const string &s) -> size_t {
   size_t str_size = s.size();
-  size_t multiplier;
+  size_t multiplier = 1;
   string str_number = s;
   if (units_to_multiplier.find(s.substr(str_size - 2, 2)) != units_to_multiplier.end()) {
     auto sub = s.substr(str_size - 2, 2);
