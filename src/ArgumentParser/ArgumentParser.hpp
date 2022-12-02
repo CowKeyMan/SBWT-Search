@@ -57,15 +57,13 @@ class ArgumentParser {
         "files "
         "in the same manner, one line for each input file.",
         value<string>()
-      )("z,gzip-output",
-        "Writes output in gzipped form. "
-        "This can shrink the output files by an order of magnitude.",
-        value<bool>()->default_value("false")
       )("u,unavailable-main-memory",
         "The amount of main memory not to consume from the operating system in "
         "bits. This means that the program will hog as much main memory it "
         "can, provided that the VRAM can also keep up with it, except for the "
-        "amount specified by this value. By default it is set to 4GB",
+        "amount specified by this value. By default it is set to 4GB. The "
+        "value can be in the following formats: 12345 (12345 bits), 12345B "
+        "(12345 bytes), 12345KB, 12345MB or 12345GB",
         value<string>()->default_value(to_string(4ULL * 8 * 1024 * 1024 * 1024))
       )("m,max-main-memory",
         "The maximum amount of main memory (RAM) which may be used by the "
@@ -73,20 +71,23 @@ class ArgumentParser {
         "as much memory as it can, minus the unavailable main-memory. This "
         "value may be skipped by a few megabytes for its operation. It is only "
         "recommended to change this when you have a few small queries to "
-        "process.",
+        "process. The format of this value is the same as that for the "
+        "unavailable-main-memory option",
         value<string>()->default_value(to_string(ULLONG_MAX))
       )("b,batches",
-        "The number of batches to use. The default is 2. 1 is the minimum, and "
-        "is equivalent to serial processing in terms of speed. The more "
-        "batches, the more multiprocessing may be available, but if one step "
-        "of the pipeline is much slower, then this may be a bottleneck to the "
-        "rest of the steps",
-        value<unsigned int>()->default_value(to_string(2))
+        "The number of batches to use. The default is 5. 1 is the minimum, and "
+        "is equivalent to serial processing in terms of speed. This will split "
+        "the main memory between the components. The more batches, the lower "
+        "that a single batch's size. 5 is the recommended because there are 5 "
+        "components so they can all keep processing without interruption from "
+        "the start (this is assuming you have 5 threads running). If you have "
+        "less threads, maybe set to to the number of available threads instead",
+        value<unsigned int>()->default_value(to_string(5))
       )("c,print-mode",
         "The mode used when printing the result to the output file. Options "
         "are 'ascii' (default), 'binary' or 'boolean'. In ascii mode the "
-        "results will be "
-        "printed in ASCII format so that the number viewed output represents "
+        "results will be printed in ASCII format so that the number viewed "
+        "output represents "
         "the position in the SBWT index. The outputs are separated by spaces "
         "and each word is separated by a newline. Strings which are not found "
         "are represented by -1 and strings which are invalid are represented "
@@ -99,15 +100,17 @@ class ArgumentParser {
         "are separeted by a -3 (ULLONG_MAX-2). The binary version is much "
         "faster but requires decoding the file later when it needs to be "
         "viewed. 'boolean' is the fastest mode however it is also the least "
-        "desriptive. In this mode the first unsigned 64-bit number (in binary) "
-        "represents the length of the string, followed by a series of binary "
-        "bits which tell if the kmer was found or not. If it was found, a 1 is "
-        "in that place, and if it was not found or the kmer is invalid, then a "
-        "0 is in that place. The binary bits are rounded up to the next "
-        "multiple of 8, so that the user may read the output file character by "
-        "character. This cycle then continues so that the length of the next "
-        "string is written followed by the binary boolean bit_vector of that "
-        "string padded to the next multiple of 8.",
+        "desriptive. In this mode, 2 files are output. The first file is named "
+        "by the given output file name, and contains 1 bit for each result. "
+        "The string sizes are given in another file, where every 64 bit "
+        "integer here is a string size. This is the fastest and most condensed "
+        "way of printing the results, but we lose some information because we "
+        "cannot say wether the result is invalid or just not found. At the end "
+        "of this data file, the final number is padded by 0s to the next "
+        "64-bit integer. The second file is called "
+        "<output_filename>_seq_sizes. Here, every 64 bit binary integer "
+        "represents the amount of results for each string in the original "
+        "input file.",
         value<string>()->default_value("ascii")
       )("h,help", "Print usage", value<bool>()->default_value("false"));
       options.allow_unrecognised_options();
