@@ -62,17 +62,23 @@ class BoolContinuousResultsPrinter:
 
   protected:
     auto do_invalid_result() -> void override { shift(); }
+
     auto do_not_found_result() -> void override { shift(); }
+
     auto do_result(size_t result) -> void override {
-      working_bits |= (1 << shift_bits);
+      working_bits |= (1ULL << shift_bits);
       shift();
     }
+
     auto do_with_newline() -> void override {
       this->seq_size_stream->write(
         reinterpret_cast<char *>(&working_seq_size), sizeof(u64)
       );
+      working_seq_size = 0;
+    }
+
+    auto do_at_file_end() -> void override {
       dump_working_bits();
-      reset_working_bits();
     }
 
     auto do_start_next_file() -> void override {
@@ -88,17 +94,19 @@ class BoolContinuousResultsPrinter:
       working_bits = 0;
       shift_bits = 63;
     }
+
     auto shift() -> void {
       ++working_seq_size;
       if (shift_bits == 0) {
         dump_working_bits();
-        reset_working_bits();
         return;
       }
       --shift_bits;
     }
+
     auto dump_working_bits() -> void {
       this->stream->write(reinterpret_cast<char *>(&working_bits), sizeof(u64));
+      reset_working_bits();
     }
 };
 

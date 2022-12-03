@@ -98,6 +98,7 @@ class ContinuousResultsPrinter {
           format("batch {}", batch_idx)
         );
       }
+      do_at_file_end();
     }
 
   private:
@@ -172,12 +173,14 @@ class ContinuousResultsPrinter {
 
   protected:
     virtual auto do_start_next_file() -> void {
+      if (current_filename != filenames.begin()) { do_at_file_end(); }
       stream = make_unique<ThrowingOfstream>(
         *current_filename, ios_base::binary | ios_base::out
       );
       current_filename = next(current_filename);
     }
 
+    virtual auto do_at_file_end() -> void {}
     virtual auto do_invalid_result() -> void = 0;
     virtual auto do_not_found_result() -> void = 0;
     virtual auto do_result(size_t result) -> void = 0;

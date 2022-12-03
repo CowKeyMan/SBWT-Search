@@ -17,7 +17,7 @@ if (BUILD_MAIN)
 # endif()
 
 if (BUILD_CUDA)
-  add_executable(main_cuda main.cu)
+  add_executable(main_cuda "${PROJECT_SOURCE_DIR}/main.cu")
   target_link_libraries(
     main_cuda
     PRIVATE

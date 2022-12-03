@@ -146,6 +146,13 @@ target_link_libraries(
   sbwt_container_gpu
   kseqpp_read
 )
+add_library(
+  output_parser
+  "${PROJECT_SOURCE_DIR}/OutputParser/AsciiOutputParser.cpp"
+  "${PROJECT_SOURCE_DIR}/OutputParser/BinaryOutputParser.cpp"
+  "${PROJECT_SOURCE_DIR}/OutputParser/BoolOutputParser.cpp"
+)
+target_link_libraries(output_parser PRIVATE io_utils)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
