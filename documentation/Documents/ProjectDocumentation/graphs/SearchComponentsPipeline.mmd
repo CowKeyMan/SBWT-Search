@@ -1,55 +1,52 @@
 flowchart TD
     StringSequenceBatch(["
-        StringSequenceBatch
+    StringSequenceBatch
         <i>
-        buffers (max_characters * 64 + max_characters * 8)
-        string_indexes ((num_readers + 1) * 64)
-        cumulative_char_indexes ((num_readers + 1) * 64)
-        char_indexes ((num_readers + 1) * 64)
-
-        </i>
-    "])
-    CumulativePropertiesBatch(["
-        CumulativePropertiesBatch
-        <i>
-        cumsum_positions_per_string (max_characters * 64)
-        cumsum_string_lengths (max_characters * 64)
-
-        </i>
-    "])
-    IntervalBatch(["
-        IntervalBatch
-        <i>
-        string_before_newfile (max_characters * 64)
-        string_lengths (max_characters * 64)
-
-        </i>
-    "])
-    PositionsBatch(["
-        PositionsBatch
-        <i>
-        (max_characters * 64)
-
-        </i>
-    "])
-    BitSeqBatch(["
-        BitSeqBatch
-        <i>
-        (max_characters * 2)
-
-        </i>
-    "])
-    Results(["
-        Results
-        <i>
-        (max_characters * 64)
+        seq (max_characters * 8 bits)
 
         </i>
     "])
     InvalidCharsBatch(["
         InvalidCharsBatch
         <i>
-        (max_characters * 8)
+        invalid_chars (max_characters * 8 bits)
+
+        </i>
+    "])
+    PositionsBatch(["
+        PositionsBatch
+        <i>
+        positions (max_characters * 64 bits)
+
+        </i>
+    "])
+    IntervalBatch(["
+        IntervalBatch
+        <i>
+        chars_before_newline (scales as necessary - linearly proportional to chars_before_newline)
+        newlines_before_newfile (scales as necessary - linearly proportional to chars_before_newline)
+
+        </i>
+    "])
+    ResultsBatch(["
+        ResultsBatch
+        <i>
+        results (max_characters * 64)
+
+        </i>
+    "])
+    StringBreakBatch(["
+        CumulativePropertiesBatch
+        <i>
+        chars_before_newline (shared with IntervalBatch:chars_before_newline)
+        string_size (64 bits)
+
+        </i>
+    "])
+    BitSeqBatch(["
+        BitSeqBatch
+        <i>
+        bit_seq (max_characters * 2 bits)
 
         </i>
     "])
@@ -57,23 +54,29 @@ flowchart TD
     FASTA{FASTA}-->ContinuousSequenceFileParser
     subgraph ContinuousSequenceFileParser
         StringSequenceBatchProducer
-        CumulativePropertiesBatchProducer
+        StringBreakBatchProducer
         IntervalBatchProducer
     end
+
+    subgraph ContinuousSeqToBitsConverter
+        InvalidCharsProducer
+        BitsProducer
+    end
+
     StringSequenceBatchProducer --- StringSequenceBatch
-    CumulativePropertiesBatchProducer --- CumulativePropertiesBatch
+    StringBreakBatchProducer --- StringBreakBatch
     IntervalBatchProducer --- IntervalBatch
+    InvalidCharsProducer --- InvalidCharsBatch
+    BitsProducer --- BitSeqBatch
     ContinuousPositionsBuilder --- PositionsBatch
-    ContinuousSeqToBitsConverter --- BitSeqBatch
-    ContinuousSeqToBitsConverter --- InvalidCharsBatch
-    ContinuousSearcher --- Results
+    ContinuousSearcher --- ResultsBatch
 
     StringSequenceBatch-->ContinuousSeqToBitsConverter
-    CumulativePropertiesBatch-->ContinuousPositionsBuilder
-    PositionsBatch --> ContinuousSearcher
-    BitSeqBatch --> ContinuousSearcher
-    Results --> ContinuousResultsPrinter
-    InvalidCharsBatch --> ContinuousResultsPrinter
+    StringBreakBatch-->ContinuousPositionsBuilder
     IntervalBatch --> ContinuousResultsPrinter
+    InvalidCharsBatch --> ContinuousResultsPrinter
+    BitSeqBatch --> ContinuousSearcher
+    PositionsBatch --> ContinuousSearcher
+    ResultsBatch --> ContinuousResultsPrinter
 
     ContinuousResultsPrinter--> ResultFiles{Results}

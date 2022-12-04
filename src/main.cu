@@ -253,7 +253,7 @@ auto get_max_chars_per_batch_cpu(
   size_t free = get_total_system_memory() * 8 - unavailable_memory;
   if (max_memory < free) { free = max_memory; }
   auto max_chars_per_batch
-    = round_down<size_t>(free / 460 / max_batches, threads_per_block);
+    = round_down<size_t>(free / (146 * 1.06) / max_batches, threads_per_block);
   Logger::log(
     DEBUG,
     format(
