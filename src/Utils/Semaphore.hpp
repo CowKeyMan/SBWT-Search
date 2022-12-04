@@ -14,17 +14,15 @@
 
 namespace threading_utils {
 
-using uint = unsigned int;
-
 class Semaphore {
   private:
     omp_lock_t acquire_gate_, count_protector_;
     omp_lock_t *acquire_gate = &acquire_gate_,
                *count_protector = &count_protector_;
-    uint count;
+    unsigned int count;
 
   public:
-    Semaphore(uint starting_count = 1): count(starting_count) {
+    Semaphore(unsigned int starting_count = 1): count(starting_count) {
       omp_init_lock(acquire_gate);
       omp_init_lock(count_protector);
       if (starting_count == 0) { omp_set_lock(acquire_gate); }
