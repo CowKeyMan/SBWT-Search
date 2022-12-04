@@ -25,7 +25,7 @@ void semaphore_basic_test() {
   int counter = 0, counter_1, counter_2;
   Sem sem(3);
 
-#pragma omp parallel sections
+#pragma omp parallel sections num_threads(2)
   {
 #pragma omp section
     {
@@ -55,7 +55,7 @@ void semaphore_test_start_0() {
   int counter = 0, counter_1;
   Sem sem(0);
 
-#pragma omp parallel sections
+#pragma omp parallel sections num_threads(2)
   {
 #pragma omp section
     {

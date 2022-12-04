@@ -50,7 +50,7 @@ class ContinuousPositionsBuilderTest: public ::testing::Test {
       );
       size_t expected_batches = chars_before_newline.size();
       size_t batches = 0;
-#pragma omp parallel sections private(batches)
+#pragma omp parallel sections private(batches) num_threads(2)
       {
 #pragma omp section
         {

@@ -68,7 +68,7 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
       size_t expected_batches = seqs.size();
       size_t batches = 0;
       uint time_to_wait = 100;
-#pragma omp parallel sections private(batches)
+#pragma omp parallel sections private(batches) num_threads(3)
       {
 #pragma omp section
         {
