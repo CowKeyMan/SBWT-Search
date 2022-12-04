@@ -44,7 +44,10 @@ class Semaphore {
       if (previous_count == 0) { omp_unset_lock(acquire_gate); }
     }
 
-    ~Semaphore() { omp_destroy_lock(acquire_gate); }
+    ~Semaphore() {
+      omp_destroy_lock(count_protector);
+      omp_destroy_lock(acquire_gate);
+    }
 };
 
 }  // namespace threading_utils
