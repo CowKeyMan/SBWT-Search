@@ -53,7 +53,8 @@ class CpuSbwtContainer: public SbwtContainer {
       unique_ptr<vector<u64>> &a,
       unique_ptr<vector<u64>> &c,
       unique_ptr<vector<u64>> &g,
-      unique_ptr<vector<u64>> &t
+      unique_ptr<vector<u64>> &t,
+      uint _kmer_size
     );
     auto set_index(
       vector<u64> &&new_c_map,

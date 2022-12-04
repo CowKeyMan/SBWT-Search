@@ -20,7 +20,8 @@ CpuSbwtContainer::CpuSbwtContainer(
   unique_ptr<vector<u64>> &a,
   unique_ptr<vector<u64>> &c,
   unique_ptr<vector<u64>> &g,
-  unique_ptr<vector<u64>> &t
+  unique_ptr<vector<u64>> &t,
+  uint _kmer_size
 ):
     SbwtContainer(num_bits, a->size()) {
   acgt.push_back(move(a));
@@ -31,7 +32,7 @@ CpuSbwtContainer::CpuSbwtContainer(
   layer_1_2.resize(4);
   c_map.resize(5);
   c_map[0] = 1;
-  kmer_size = 30;
+  kmer_size = _kmer_size;
 }
 
 auto CpuSbwtContainer::get_layer_0() const -> const vector<vector<u64>> {

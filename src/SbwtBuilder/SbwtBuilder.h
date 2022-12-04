@@ -34,10 +34,15 @@ class SbwtBuilder {
     auto get_cpu_sbwt(bool build_index = true) -> unique_ptr<CpuSbwtContainer>;
 
   private:
-    auto assert_plain_matrix(istream &in) const -> void;
+    auto load_string(istream &in) const -> string;
     auto build_poppy(CpuSbwtContainer *container) -> void;
-    auto load_bit_vectors(u64 bits_total, vector<unique_ptr<vector<u64>>> &acgt)
-      -> void;
+    auto load_bit_vectors(
+      u64 bit_vector_bytes,
+      vector<unique_ptr<vector<u64>>> &acgt,
+      size_t start_position
+    ) -> void;
+    auto skip_bits_vector(istream &stream) const -> void;
+    auto skip_bytes_vector(istream &stream) const -> void;
 };
 
 }  // namespace sbwt_search
