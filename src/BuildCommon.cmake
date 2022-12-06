@@ -122,7 +122,7 @@ add_library(
   sbwt_builder
   "${PROJECT_SOURCE_DIR}/SbwtBuilder/SbwtBuilder.cpp"
 )
-target_link_libraries(sbwt_builder PRIVATE io_utils OpenMP::OpenMP_CXX)
+target_link_libraries(sbwt_builder PRIVATE io_utils OpenMP::OpenMP_CXX fmt::fmt)
 add_library(
   sbwt_container_cpu
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"

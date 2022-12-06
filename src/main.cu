@@ -184,6 +184,7 @@ auto main(int argc, char **argv) -> int {
     throw runtime_error("Invalid value passed by user for print_mode");
   }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
+  Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
 #pragma omp parallel sections num_threads(5)
   {
 #pragma omp section
@@ -197,6 +198,7 @@ auto main(int argc, char **argv) -> int {
 #pragma omp section
     { results_printer->read_and_generate(); }
   }
+  Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
   Logger::log(INFO, "DONE");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
 }

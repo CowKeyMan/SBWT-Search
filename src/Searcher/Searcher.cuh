@@ -1,3 +1,6 @@
+#include <iostream>
+using std::cout; using std::cerr; using std::endl;
+
 #ifndef SEARCHER_CUH
 #define SEARCHER_CUH
 
@@ -68,9 +71,14 @@ __global__ void d_search(
 class SearcherGpu {
   private:
     shared_ptr<GpuSbwtContainer> container;
+    cudaEvent_t search_start, search_stop;
+    float milliseconds;
 
   public:
-    SearcherGpu(shared_ptr<GpuSbwtContainer> container): container(container) {}
+    SearcherGpu(shared_ptr<GpuSbwtContainer> container): container(container) {
+      cudaEventCreate(&search_start);
+      cudaEventCreate(&search_stop);
+    }
 
     auto search(
       const vector<u64> &bit_seqs,
@@ -112,6 +120,7 @@ class SearcherGpu {
           Logger::EVENT_STATE::START,
           format("batch {}", batch_id)
         );
+        cudaEventRecord(search_start);
         d_search<<<blocks_per_grid, threads_per_block>>>(
           container->get_kmer_size(),
           container->get_c_map().get(),
@@ -124,13 +133,19 @@ class SearcherGpu {
           d_bit_seqs.get(),
           d_kmer_positions.get()
         );
+        cudaEventRecord(search_stop);
+        GPU_CHECK(cudaPeekAtLastError());
+        GPU_CHECK(cudaDeviceSynchronize());
         Logger::log_timed_event(
           "SearcherSearch",
           Logger::EVENT_STATE::STOP,
           format("batch {}", batch_id)
         );
-        GPU_CHECK(cudaPeekAtLastError());
-        GPU_CHECK(cudaDeviceSynchronize());
+        cudaEventElapsedTime(&milliseconds, search_start, search_stop);
+        Logger::log(
+          Logger::LOG_LEVEL::DEBUG,
+          format("Batch {} took {} ms to search in the GPU", batch_id, milliseconds)
+        );
         Logger::log_timed_event(
           "SearcherCopyFromGpu",
           Logger::EVENT_STATE::START,

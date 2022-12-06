@@ -9,6 +9,12 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', help='Input log file to analyse', required=True)
+parser.add_argument(
+    '-t',
+    help='Include timings which include copying the SBWT index to GPU',
+    action='store_true',
+    default=False,
+)
 args = vars(parser.parse_args())
 
 # read all lines from file
@@ -33,7 +39,7 @@ for line in lines:
             continue
         if (
             j['log']['type'] == 'timed_event'
-            and j['log']['component'] == 'main'
+            and j['log']['component'] == ('main' if args['t'] else 'Querier')
         ):
             if j['log']['state'] == 'start':
                 start = j['time']

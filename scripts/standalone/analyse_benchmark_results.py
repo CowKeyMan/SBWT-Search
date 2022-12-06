@@ -9,7 +9,11 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', help='Input log file to analyse', required=True)
 parser.add_argument(
-    '-p', help='Generate Plots', required=False, default=0, type=int
+    '-p', help='Generate Plots of first p values. Set to some large number to '
+    'generate all plots',
+    required=False,
+    default=0,
+    type=int
 )
 parser.add_argument(
     '-f',
@@ -21,13 +25,6 @@ parser.add_argument(
 parser.add_argument(
     '-s',
     help='show plots',
-    required=False,
-    default=False,
-    action='store_true'
-)
-parser.add_argument(
-    '-r',
-    help='remove invalid runs',
     required=False,
     default=False,
     action='store_true'
@@ -59,24 +56,25 @@ with open(args['i'], 'r') as f:
 benchmark_name_to_lines = defaultdict(list)
 for line in lines:
     line = line.strip()
+    if line.startswith('Time taken to copy to LOCAL_SCRATCH'):
+        continue
     start_string = 'Now running: '
     if line.startswith(start_string):
         current_benchmark_name = line[len(start_string):]
         current_filename = line.split()[3]
-    else:
-        if not args['f'] or current_filename == args['f']:
-            benchmark_name_to_lines[current_benchmark_name].append(line)
+    elif not args['f'] or current_filename == args['f']:
+        benchmark_name_to_lines[current_benchmark_name].append(line)
 
 # extract useful information from benchmark logs
 benchmark_to_details = defaultdict(dict)
 for name, lines in benchmark_name_to_lines.items():
     details = benchmark_to_details[name]
     details['timed_event'] = []
-    details['valid'] = True
     details['num_strings'] = 0
     details['num_chars'] = 0
     details['num_batches'] = 0
     details['num_queries'] = 0
+    details['gpu_time'] = 0
     for line in lines:
         try:
             j = json.loads(line)
@@ -102,16 +100,13 @@ for name, lines in benchmark_name_to_lines.items():
                         int(message.split()[4])
                     )
                     details['num_batches'] += 1
+                elif (
+                    message.startswith('Batch ')
+                    and ' ms to search in the GPU' in message
+                ):
+                    details['gpu_time'] += float(message.split()[3])
                 elif message.startswith('Batch ') and 'consists of' in message:
                     details['num_queries'] += int(message.split()[4])
-                elif (
-                    'too large' in j['log']['message']
-                    or 'cannot be opened' in j['log']['message']
-                ):
-                    details['valid'] = False
-                    if args['r']:
-                        del details
-                        break
             elif j['log']['type'] == 'timed_event':
                 details['timed_event'].append(
                     timed_event_to_df_entry(j)
@@ -148,12 +143,11 @@ for index, name in enumerate(sorted_keys):
         fig.suptitle(name)
     details = benchmark_to_details[name]
     title = name
-    valid_text = " (INVALID)" if not details["valid"] else ""
-    print(title + valid_text)
     gpu_bits = details['gpu_memory']
     gpu_characters = gpu_bits // 66
     cpu_bits = details['cpu_memory']
     cpu_characters = cpu_bits // 460
+    print(f'{index + 1}. Results for {name}:')
     start_text = (
         f'Input file size is {details["input_file_size"]}\n'
         f'Output file size is {details["output_file_size"]}\n'
@@ -220,13 +214,36 @@ for index, name in enumerate(sorted_keys):
     time_saved_query_components = (
         total_query_components - actual_query_components
     )
+    nanoseconds_per_query_gpu = (
+        details['gpu_time'] * 1000000 / details['num_queries']
+    )
+    nanoseconds_per_query_cpu = (
+        details['summary']['SearcherSearch']['total']
+        * 1000000
+        / details['num_queries']
+    )
+    nanoseconds_per_query_with_memory = (
+        details['summary']['Searcher']['total']
+        * 1000000
+        / details['num_queries']
+    )
     end_text = (
         'Total time taken by query components: '
         f'{total_query_components:.2f}ms\n'
         'Actual time taken by query components: '
         f'{actual_query_components:.2f}ms\n'
         'Time saved by multithreading when querying: '
-        f'{time_saved_query_components:.2f}ms'
+        f'{time_saved_query_components:.2f}ms\n'
+        'Gpu searching according to Event Timers '
+        f'time took {details["gpu_time"]}ms\n'
+        '\tThis means that the search speed is '
+        f'{nanoseconds_per_query_gpu} ns/query\n'
+        'Gpu searching according to CPU times '
+        f'time took {details["summary"]["SearcherSearch"]["total"]}ms\n'
+        '\tThis means that the search speed is '
+        f'{nanoseconds_per_query_cpu} ns/query\n'
+        'Considering memory transfers as well, we have '
+        f'{nanoseconds_per_query_with_memory} ns/query'
     )
     print(end_text)
     print()
@@ -264,18 +281,6 @@ for index, name in enumerate(sorted_keys):
             + '_'
             + name.split()[6]
         )
-        if not benchmark_to_details[name]['valid']:
-            filename += '-invalid'
-            props = dict(boxstyle='round', facecolor='red', alpha=0.5)
-            axs[0].text(
-                0.4,
-                1.2,
-                'INVALID',
-                transform=axs[0].transAxes,
-                fontsize=14,
-                verticalalignment='top',
-                bbox=props
-            )
         filename += '.svg'
         fig.tight_layout()
         fig.figsize = (15, 10)

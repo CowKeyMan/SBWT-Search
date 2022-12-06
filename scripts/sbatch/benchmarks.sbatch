@@ -32,7 +32,11 @@ module load cmake gcc cuda python-data bzip2
 
 ## We want to perform our work in LOCAL SCRATCh
 export OLD_PWD="${PWD}"
+# time the copy
+t1=$(date +%s%3N)
 cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
+t2=$(date +%s%3N)
+echo "Time taken to copy to LOCAL_SCRATCH: $((t2-t1)) ms"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
 
 rm -rf build
@@ -40,7 +44,7 @@ rm -rf build
 ## Build
 sh scripts/build/release.sh
 
-sh scripts/standalone/benchmark.sh
+sh -x scripts/standalone/benchmark.sh
 
 cd "${OLD_PWD}"
 cp -r "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results" .
