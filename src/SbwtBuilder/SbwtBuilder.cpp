@@ -36,8 +36,8 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   if (variant != "plain-matrix") {
     throw runtime_error("Error input is not a plain-matrix SBWT");
   }
-  /* string version = load_string(stream); // */
-  /* if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); } // */
+  string version = load_string(stream); //
+  if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); } //
   u64 num_bits;
   stream.read(reinterpret_cast<char *>(&num_bits), sizeof(u64));
   size_t vectors_start_position = stream.tellg();
@@ -53,7 +53,7 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   skip_bytes_vector(stream);  // skip C map
   skip_bytes_vector(stream);  // skip kmer_prefix_calc
   u64 kmer_size;
-  /* stream.seekg(sizeof(u64), ios_base::cur);  // skip precalc_k // */
+  stream.seekg(sizeof(u64), ios_base::cur);  // skip precalc_k //
   stream.seekg(sizeof(u64), ios_base::cur);  // skip n_nodes
   stream.seekg(sizeof(u64), ios_base::cur);  // skip n_kmers
   stream.read(reinterpret_cast<char *>(&kmer_size), sizeof(u64));
