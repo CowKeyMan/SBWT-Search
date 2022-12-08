@@ -265,7 +265,7 @@ for index, name in enumerate(sorted_keys):
         axs[0].tick_params(axis='x', labelsize=8)
         plt.figtext(
             0.5,
-            -0.25,
+            -0.40,  # change this if you have more text
             (start_text + '\n' + end_text).replace('\t', ' '),
             ha="center",
             fontsize=8
@@ -283,7 +283,6 @@ for index, name in enumerate(sorted_keys):
         )
         filename += '.svg'
         fig.tight_layout()
-        fig.figsize = (15, 10)
         plt.savefig(filename, bbox_inches='tight', format='svg', dpi=1200)
         if args['s']:
             plt.show()
