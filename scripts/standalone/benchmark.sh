@@ -1,25 +1,23 @@
 # Run the benchmark_main several times and save the results to a file
 
-DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
+results_folder_name="$1"
 
 ## By default this is 1, which would halt our program
 unset OMP_NUM_THREADS
 ## adjust this accordingly - by default it is warn
 export SPDLOG_LEVEL=TRACE
 
+# top_level_directory="/dev/shm"
 top_level_directory="."
 input_folder="${top_level_directory}/benchmark_objects"
-results_folder_parent="${top_level_directory}/benchmark_results"
-results_folder="${results_folder_parent}/${DATETIME}"
+results_folder="${top_level_directory}/benchmark_results/${results_folder_name}"
+
+mkdir -p "${results_folder}"
 
 if [ "${top_level_directory}" != "." ]; then
-  mkdir -p "benchmark_results"
-  mkdir -p "benchmark_results/${DATETIME}"
   cp -r "benchmark_objects" "${input_folder}"
+  cp -r "benchmark_results/${results_folder_name}/" "${top_level_directory}/benchmark_results/${results_folder_name}/"
 fi
-
-mkdir -p "${results_folder_parent}"
-mkdir -p ${results_folder}
 
 input_files=(
   "${input_folder}/FASTA1GB.fna"
@@ -35,7 +33,7 @@ output_files=(
   "${input_folder}/combined_output.txt"
 )
 
-sbwt_file="test_objects/search_test_index.sbwt"
+sbwt_file="${input_folder}/coli3.sbwt"
 batches=(1 2 3 4 5 6 10 30 70 100 200 1000)
 
 stdoutput="${results_folder}/benchmark_out.txt"
@@ -54,7 +52,7 @@ for (( i=0; i<${#input_files[@]}-1; i++ )); do
   printf "file_${i}\n" >> "${input_folder}/combined_output.txt"
 done
 
-echo Running at ${DATETIME}
+echo Running at ${results_folder_name}
 for batch in ${batches[@]}; do
   for (( i=0; i<${#input_files[@]}; i++ )); do
     for (( p=0; p<${#printing_modes[@]}; p++ )); do
@@ -70,7 +68,7 @@ for batch in ${batches[@]}; do
 done
 
 if [ "${top_level_directory}" != "." ]; then
-  cp -r "${results_folder}" "benchmark_results/${DATETIME}"
+  cp -r "${results_folder}" "benchmark_results/${results_folder_name}"
 fi
 
 if [ "${top_level_directory}" == "/dev/shm" ]; then

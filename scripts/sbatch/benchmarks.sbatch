@@ -28,23 +28,35 @@
 ## Remove unnecessary modules
 module purge
 ## Load in modules
-module load cmake gcc cuda python-data bzip2
+module load cmake gcc cuda python-data bzip2 git
 
-## We want to perform our work in LOCAL SCRATCh
+chmod +777 scripts/**/*
+DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
+## We want to perform our work in LOCAL_SCRATCH
 export OLD_PWD="${PWD}"
 # time the copy
 t1=$(date +%s%3N)
-cp -r . "${LOCAL_SCRATCH}/SBWT-Search/"
+mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/build/bin"
+cp "${PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt"
+cp -r "${PWD}/src/" "${LOCAL_SCRATCH}/SBWT-Search/src"
+mkdir "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
+cp "${PWD}/benchmark_objects/"*.fnq "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
+cp "${PWD}/benchmark_objects/"*.fna "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
+cp "${PWD}/benchmark_objects/"*.sbwt "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
+cp -r "${PWD}/cmake/" "${LOCAL_SCRATCH}/SBWT-Search/cmake"
+cp -r "${PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts"
 t2=$(date +%s%3N)
-echo "Time taken to copy to LOCAL_SCRATCH: $((t2-t1)) ms"
+
 cd "${LOCAL_SCRATCH}/SBWT-Search"
+mkdir -p "benchmark_results/${DATETIME}"
+echo "Time taken to copy to LOCAL_SCRATCH: $((t2-t1)) ms" >> "benchmark_results/${DATETIME}/benchmark_out.txt"
 
 rm -rf build
 
 ## Build
-sh scripts/build/release.sh
+sh scripts/build/release.sh a
 
-sh -x scripts/standalone/benchmark.sh
+sh -x scripts/standalone/benchmark.sh "${DATETIME}"
 
 cd "${OLD_PWD}"
 cp -r "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results" .
