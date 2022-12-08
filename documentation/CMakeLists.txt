@@ -1,12 +1,6 @@
 # Configures the files related to doxygen as well as sphinx for RST documentation
 # The actual building is done in a scrips/build/build_docs.sh
 
-option(
-  BUILD_DOCS
-  "Build the documentations"
-  ON
-)
-
 if (BUILD_DOCS)
 
 find_package(Doxygen)

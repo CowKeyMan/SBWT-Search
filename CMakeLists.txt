@@ -31,5 +31,13 @@ include(cmake/Profiling.cmake)
 include(cmake/Options.cmake)
 include(cmake/CCache.cmake)
 
+option(
+  BUILD_DOCS
+  "Build the documentations"
+  ON
+)
+
 add_subdirectory(src)
-add_subdirectory (documentation)
+if (BUILD_DOCS)
+  add_subdirectory (documentation)
+endif()
