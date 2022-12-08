@@ -84,9 +84,15 @@ for name, lines in benchmark_name_to_lines.items():
                     details['gpu_memory'] = (
                         int(message.split()[3])
                     )
+                    details['gpu_characters'] = (
+                        int(message.split()[9])
+                    )
                 elif message.startswith('Free main memory'):
                     details['cpu_memory'] = (
                         int(message.split()[3])
+                    )
+                    details['cpu_characters'] = (
+                        int(message.split()[9])
                     )
                 elif message.startswith('Using') and 'per batch' in message:
                     details['chars_per_batch'] = (
@@ -144,9 +150,9 @@ for index, name in enumerate(sorted_keys):
     details = benchmark_to_details[name]
     title = name
     gpu_bits = details['gpu_memory']
-    gpu_characters = gpu_bits // 66
+    gpu_characters = details['gpu_characters']
     cpu_bits = details['cpu_memory']
-    cpu_characters = cpu_bits // 460
+    cpu_characters = details['cpu_characters']
     print(f'{index + 1}. Results for {name}:')
     start_text = (
         f'Input file size is {details["input_file_size"]}\n'
