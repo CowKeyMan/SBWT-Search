@@ -1,3 +1,4 @@
+#!/bin/bash
 # Build the main executable in debug mode
 
 mkdir -p build
@@ -11,8 +12,6 @@ then
     -DENABLE_HEADER_GUARDS_CHECK=OFF \
     -DENABLE_CLANG_FORMAT_CHECK=OFF \
     -DBUILD_VERIFY=OFF \
-    -DBUILD_CPU=ON \
-    -DBUILD_CUDA=ON \
     -DBUILD_MAIN=ON \
     -DBUILD_TESTS=OFF \
     -DBUILD_DOCS=OFF \

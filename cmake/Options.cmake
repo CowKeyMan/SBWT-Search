@@ -6,18 +6,6 @@ option(
   OFF
 )
 
-option(
-  BUILD_CUDA
-  "Build CUDA version of the program"
-  ON
-)
-
-option(
-  BUILD_CPU
-  "Build CPU version of the program"
-  ON
-)
-
 # suitable for shared libraries to make them executable from anywhere in memory
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 

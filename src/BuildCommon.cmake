@@ -153,6 +153,11 @@ add_library(
   "${PROJECT_SOURCE_DIR}/OutputParser/BoolOutputParser.cpp"
 )
 target_link_libraries(output_parser PRIVATE io_utils)
+add_library(
+  cuda_utils
+  "${PROJECT_SOURCE_DIR}/Utils/CudaUtils.cu"
+)
+set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "80;70;60")
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -164,6 +169,7 @@ target_link_libraries(
   kseqpp_read
   OpenMP::OpenMP_CXX
   cxxopts
+  spdlog::spdlog
 
   # Internal libraries
   io_utils
@@ -179,35 +185,9 @@ target_link_libraries(
   sbwt_container
   poppy_builder
 )
-add_library(
-  cuda_utils
-  "${PROJECT_SOURCE_DIR}/Utils/CudaUtils.cu"
-)
-set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "80;70;60")
 
 
-# Build Cpu Libraries
-if (BUILD_CPU)
-  # Combine Libaries
-  add_library(libraries_cpu INTERFACE)
-  target_link_libraries(
-    libraries_cpu
-    INTERFACE
-    common_libraries
-  )
-endif()
-
-# Build CUDA Libraries
-if (CMAKE_CUDA_COMPILER AND BUILD_CUDA)
-  # Combine Libaries
-  add_library(
-    libraries_cuda
-    INTERFACE
-  )
-  target_link_libraries(
-    libraries_cuda
-    INTERFACE
-    common_libraries
-    cuda_utils
-  )
+# Link cuda items
+if (CMAKE_CUDA_COMPILER)
+  target_link_libraries(common_libraries INTERFACE cuda_utils)
 endif()

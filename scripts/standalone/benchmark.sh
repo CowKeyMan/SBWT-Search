@@ -1,3 +1,4 @@
+#!/bin/sh
 # Run the benchmark_main several times and save the results to a file
 
 results_folder_name="$1"
