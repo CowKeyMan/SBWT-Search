@@ -47,32 +47,38 @@ using DummyResultsProducer = DummyBatchProducer<ResultsBatch>;
 using DummyIntervalProducer = DummyBatchProducer<IntervalBatch>;
 using DummyInvalidCharsProducer = DummyBatchProducer<InvalidCharsBatch>;
 
-class DummyContinuousResultsPrinter;
-using Base = ContinuousResultsPrinter<
-  DummyContinuousResultsPrinter,
-  DummyResultsProducer,
-  DummyIntervalProducer,
-  DummyInvalidCharsProducer>;
-class DummyContinuousResultsPrinter: public Base {
+class DummyContinuousResultsPrinter:
+    public ContinuousResultsPrinter<
+      DummyContinuousResultsPrinter,
+      DummyResultsProducer,
+      DummyIntervalProducer,
+      DummyInvalidCharsProducer> {
+    using Base = ContinuousResultsPrinter<
+      DummyContinuousResultsPrinter,
+      DummyResultsProducer,
+      DummyIntervalProducer,
+      DummyInvalidCharsProducer>;
     friend Base;
 
   private:
     bool is_at_newline = true;
+    vector<string> filenames;
 
   public:
     vector<string> result_string;
     DummyContinuousResultsPrinter(
-      shared_ptr<DummyResultsProducer> _results_producer,
-      shared_ptr<DummyIntervalProducer> _interval_producer,
-      shared_ptr<DummyInvalidCharsProducer> _invalid_chars_producer,
+      shared_ptr<DummyResultsProducer> results_producer,
+      shared_ptr<DummyIntervalProducer> interval_producer,
+      shared_ptr<DummyInvalidCharsProducer> invalid_chars_producer,
       uint kmer_size,
       uint files
     ):
+        filenames(files),
         ContinuousResultsPrinter(
-          _results_producer,
-          _interval_producer,
-          _invalid_chars_producer,
-          vector<string>(files),
+          results_producer,
+          interval_producer,
+          invalid_chars_producer,
+          filenames,
           kmer_size
         ) {}
 
