@@ -16,13 +16,24 @@ template <
   class InvalidCharsProducer>
 class AsciiContinuousResultsPrinter:
     public ContinuousResultsPrinter<
+      AsciiContinuousResultsPrinter<
+        ResultsProducer,
+        IntervalProducer,
+        InvalidCharsProducer>,
       ResultsProducer,
       IntervalProducer,
       InvalidCharsProducer> {
     using Base = ContinuousResultsPrinter<
+      AsciiContinuousResultsPrinter<
+        ResultsProducer,
+        IntervalProducer,
+        InvalidCharsProducer>,
       ResultsProducer,
       IntervalProducer,
       InvalidCharsProducer>;
+    friend Base;
+
+  private:
     bool is_at_newline = true;
 
   public:
@@ -42,22 +53,22 @@ class AsciiContinuousResultsPrinter:
         ) {}
 
   protected:
-    auto do_invalid_result() -> void override{
+    auto do_invalid_result() -> void {
       if (!is_at_newline) { (*this->stream) << " "; }
       (*this->stream) << "-2";
       is_at_newline = false;
     }
-    auto do_not_found_result() -> void override{
+    auto do_not_found_result() -> void {
       if (!is_at_newline) { (*this->stream) << " "; }
       (*this->stream) << "-1";
       is_at_newline = false;
     }
-    auto do_result(size_t result) -> void override{
+    auto do_result(size_t result) -> void {
       if (!is_at_newline) { (*this->stream) << " "; }
       (*this->stream) << result;
       is_at_newline = false;
     }
-    auto do_with_newline() -> void override{
+    auto do_with_newline() -> void {
       (*this->stream) << "\n";
       is_at_newline = true;
     }

@@ -17,13 +17,22 @@ template <
   class InvalidCharsProducer>
 class BinaryContinuousResultsPrinter:
     public ContinuousResultsPrinter<
+      BinaryContinuousResultsPrinter<
+        ResultsProducer,
+        IntervalProducer,
+        InvalidCharsProducer>,
       ResultsProducer,
       IntervalProducer,
       InvalidCharsProducer> {
     using Base = ContinuousResultsPrinter<
+      BinaryContinuousResultsPrinter<
+        ResultsProducer,
+        IntervalProducer,
+        InvalidCharsProducer>,
       ResultsProducer,
       IntervalProducer,
       InvalidCharsProducer>;
+    friend Base;
 
   private:
     u64 minus1 = u64(-1), minus2 = u64(-2), minus3 = u64(-3);
@@ -45,16 +54,16 @@ class BinaryContinuousResultsPrinter:
         ) {}
 
   protected:
-    auto do_invalid_result() -> void override {
+    auto do_invalid_result() -> void {
       this->stream->write(reinterpret_cast<char *>(&minus2), sizeof(u64));
     }
-    auto do_not_found_result() -> void override {
+    auto do_not_found_result() -> void {
       this->stream->write(reinterpret_cast<char *>(&minus1), sizeof(u64));
     }
-    auto do_result(size_t result) -> void override {
+    auto do_result(size_t result) -> void {
       this->stream->write(reinterpret_cast<char *>(&result), sizeof(u64));
     }
-    auto do_with_newline() -> void override {
+    auto do_with_newline() -> void {
       this->stream->write(reinterpret_cast<char *>(&minus3), sizeof(u64));
     }
 };

@@ -47,11 +47,16 @@ using DummyResultsProducer = DummyBatchProducer<ResultsBatch>;
 using DummyIntervalProducer = DummyBatchProducer<IntervalBatch>;
 using DummyInvalidCharsProducer = DummyBatchProducer<InvalidCharsBatch>;
 
-class DummyContinuousResultsPrinter:
-    public ContinuousResultsPrinter<
-      DummyResultsProducer,
-      DummyIntervalProducer,
-      DummyInvalidCharsProducer> {
+class DummyContinuousResultsPrinter;
+using Base = ContinuousResultsPrinter<
+  DummyContinuousResultsPrinter,
+  DummyResultsProducer,
+  DummyIntervalProducer,
+  DummyInvalidCharsProducer>;
+class DummyContinuousResultsPrinter: public Base {
+    friend Base;
+
+  private:
     bool is_at_newline = true;
 
   public:
@@ -72,25 +77,24 @@ class DummyContinuousResultsPrinter:
         ) {}
 
   protected:
-    auto do_start_next_file() -> void override { result_string.push_back(""); }
+    auto do_start_next_file() -> void { result_string.push_back(""); }
 
-    auto do_invalid_result() -> void override {
+    auto do_invalid_result() -> void {
       if (!is_at_newline) { result_string.back() += " "; }
       result_string.back() += "INVALID";
       is_at_newline = false;
     }
-    auto do_not_found_result() -> void override {
+    auto do_not_found_result() -> void {
       if (!is_at_newline) { result_string.back() += " "; }
       result_string.back() += "NOTFOUND";
       is_at_newline = false;
     }
-    auto do_result(size_t result) -> void override {
+    auto do_result(size_t result) -> void {
       if (!is_at_newline) { result_string.back() += " "; }
       result_string.back() += to_string(result);
       is_at_newline = false;
     }
-
-    auto do_with_newline() -> void override {
+    auto do_with_newline() -> void {
       is_at_newline = true;
       result_string.back() += "\n";
     }
@@ -194,8 +198,13 @@ TEST_F(ContinuousResultsPrinterTest, MultipleBatches) {
     = { { { 0, 0, 0, 0, 0 } },  // end of first string
         { { 0, 0, 0, 0, 1, 0, 0, 0, 0 } },  // end of third
         { { 0, 1, 0, 0, 0 } } };  // end of last string
-  vector<vector<u64>> chars_before_newline
-    = { { 1, 1, 5, }, { 0, 0, 6, 6, 6, 6, 9 }, { 0, 5 } };
+  vector<vector<u64>> chars_before_newline = { {
+                                                 1,
+                                                 1,
+                                                 5,
+                                               },
+                                               { 0, 0, 6, 6, 6, 6, 9 },
+                                               { 0, 5 } };
   vector<vector<u64>> newlines_before_newfile
     = { { ULLONG_MAX }, { 4, 4, 6, ULLONG_MAX }, { 3, ULLONG_MAX } };
   run_test(

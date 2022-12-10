@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <variant>
 
 #include <type_traits>
 
@@ -36,6 +37,7 @@ using memory_utils::get_total_system_memory;
 using std::remove_reference;
 using std::runtime_error;
 using std::string;
+using std::variant;
 using namespace sbwt_search;
 using fmt::format;
 using gpu_utils::get_free_gpu_memory;
@@ -46,6 +48,30 @@ constexpr auto WARN = Logger::LOG_LEVEL::WARN;
 constexpr auto INFO = Logger::LOG_LEVEL::INFO;
 constexpr auto DEBUG = Logger::LOG_LEVEL::DEBUG;
 
+using SequenceFileParser = ContinuousSequenceFileParser;
+using SeqToBitsConverter
+  = ContinuousSeqToBitsConverter<StringSequenceBatchProducer>;
+using MainInvalidCharsProducer
+  = InvalidCharsProducer<StringSequenceBatchProducer>;
+using MainBitsProducer = BitsProducer<StringSequenceBatchProducer>;
+using MainPositionsBuilder
+  = ContinuousPositionsBuilder<StringBreakBatchProducer>;
+using Searcher = ContinuousSearcher<MainPositionsBuilder, MainBitsProducer>;
+using AsciiResultsPrinter = AsciiContinuousResultsPrinter<
+  Searcher,
+  IntervalBatchProducer,
+  MainInvalidCharsProducer>;
+using BinaryResultsPrinter = BinaryContinuousResultsPrinter<
+  Searcher,
+  IntervalBatchProducer,
+  MainInvalidCharsProducer>;
+using BoolResultsPrinter = BoolContinuousResultsPrinter<
+  Searcher,
+  IntervalBatchProducer,
+  MainInvalidCharsProducer>;
+using ResultsPrinter
+  = variant<AsciiResultsPrinter, BinaryResultsPrinter, BoolResultsPrinter>;
+
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer>;
 auto get_max_chars_per_batch(
   size_t unavailable_memory, uint max_batches, size_t max_cpu_memory
@@ -54,6 +80,15 @@ auto get_max_chars_per_batch_gpu(uint max_batches) -> size_t;
 auto get_max_chars_per_batch_cpu(
   size_t unavailable_memory, uint max_batches, size_t max_memory
 ) -> size_t;
+auto get_results_printer(
+  string print_mode,
+  shared_ptr<Searcher> searcher,
+  shared_ptr<IntervalBatchProducer> interval_batch_producer,
+  shared_ptr<MainInvalidCharsProducer> invalid_chars_producer,
+  vector<string> &output_filenames,
+  uint kmer_size,
+  size_t max_chars_per_batch
+) -> ResultsPrinter;
 
 const auto program_name = "SBWT Search";
 const auto program_description
@@ -90,7 +125,6 @@ auto main(int argc, char **argv) -> int {
   threads = omp_get_num_threads();
   Logger::log(INFO, format("Running OpenMP with {} threads", threads));
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
-  using SequenceFileParser = ContinuousSequenceFileParser;
   auto string_sequence_batch_producer
     = make_shared<StringSequenceBatchProducer>(max_batches);
   auto string_break_batch_producer
@@ -107,16 +141,11 @@ auto main(int argc, char **argv) -> int {
     interval_batch_producer
   );
 
-  using SeqToBitsConverter
-    = ContinuousSeqToBitsConverter<StringSequenceBatchProducer>;
-  using InvalidCharsProducer
-    = InvalidCharsProducer<StringSequenceBatchProducer>;
-  using BitsProducer = BitsProducer<StringSequenceBatchProducer>;
-  auto invalid_chars_producer = make_shared<InvalidCharsProducer>(
+  auto invalid_chars_producer = make_shared<MainInvalidCharsProducer>(
     kmer_size, max_chars_per_batch, max_batches
   );
   auto bits_producer
-    = make_shared<BitsProducer>(max_chars_per_batch, max_batches);
+    = make_shared<MainBitsProducer>(max_chars_per_batch, max_batches);
   auto seq_to_bit_converter = make_shared<SeqToBitsConverter>(
     string_sequence_batch_producer,
     invalid_chars_producer,
@@ -124,12 +153,10 @@ auto main(int argc, char **argv) -> int {
     threads
   );
 
-  using PositionsBuilder = ContinuousPositionsBuilder<StringBreakBatchProducer>;
-  auto positions_builder = make_shared<PositionsBuilder>(
+  auto positions_builder = make_shared<MainPositionsBuilder>(
     string_break_batch_producer, kmer_size, max_chars_per_batch, max_batches
   );
 
-  using Searcher = ContinuousSearcher<PositionsBuilder, BitsProducer>;
   auto searcher = make_shared<Searcher>(
     gpu_container,
     bits_producer,
@@ -138,51 +165,15 @@ auto main(int argc, char **argv) -> int {
     max_chars_per_batch
   );
 
-  using ResultsPrinter = ContinuousResultsPrinter<
-    Searcher,
-    IntervalBatchProducer,
-    InvalidCharsProducer>;
-  using AsciiResultsPrinter = AsciiContinuousResultsPrinter<
-    Searcher,
-    IntervalBatchProducer,
-    InvalidCharsProducer>;
-  using BinaryResultsPrinter = BinaryContinuousResultsPrinter<
-    Searcher,
-    IntervalBatchProducer,
-    InvalidCharsProducer>;
-  using BoolResultsPrinter = BoolContinuousResultsPrinter<
-    Searcher,
-    IntervalBatchProducer,
-    InvalidCharsProducer>;
-  shared_ptr<ResultsPrinter> results_printer;
-  if (args.get_print_mode() == "ascii") {
-    results_printer = make_shared<AsciiResultsPrinter>(
-      searcher,
-      interval_batch_producer,
-      invalid_chars_producer,
-      output_filenames,
-      kmer_size
-    );
-  } else if (args.get_print_mode() == "binary") {
-    results_printer = make_shared<BinaryResultsPrinter>(
-      searcher,
-      interval_batch_producer,
-      invalid_chars_producer,
-      output_filenames,
-      kmer_size
-    );
-  } else if (args.get_print_mode() == "bool") {
-    results_printer = make_shared<BoolResultsPrinter>(
-      searcher,
-      interval_batch_producer,
-      invalid_chars_producer,
-      output_filenames,
-      kmer_size,
-      max_chars_per_batch
-    );
-  } else {
-    throw runtime_error("Invalid value passed by user for print_mode");
-  }
+  ResultsPrinter results_printer = get_results_printer(
+    args.get_print_mode(),
+    searcher,
+    interval_batch_producer,
+    invalid_chars_producer,
+    output_filenames,
+    kmer_size,
+    max_chars_per_batch
+  );
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
 #pragma omp parallel sections num_threads(5)
@@ -196,11 +187,54 @@ auto main(int argc, char **argv) -> int {
 #pragma omp section
     { searcher->read_and_generate(); }
 #pragma omp section
-    { results_printer->read_and_generate(); }
+    {
+      std::visit(
+        [](auto &arg) -> void { arg.read_and_generate(); }, results_printer
+      );
+    }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
   Logger::log(INFO, "DONE");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
+}
+
+auto get_results_printer(
+  string print_mode,
+  shared_ptr<Searcher> searcher,
+  shared_ptr<IntervalBatchProducer> interval_batch_producer,
+  shared_ptr<MainInvalidCharsProducer> invalid_chars_producer,
+  vector<string> &output_filenames,
+  uint kmer_size,
+  size_t max_chars_per_batch
+) -> ResultsPrinter {
+  if (print_mode == "ascii") {
+    return AsciiResultsPrinter(
+      searcher,
+      interval_batch_producer,
+      invalid_chars_producer,
+      output_filenames,
+      kmer_size
+    );
+  } else if (print_mode == "binary") {
+    return BinaryResultsPrinter(
+      searcher,
+      interval_batch_producer,
+      invalid_chars_producer,
+      output_filenames,
+      kmer_size
+    );
+  } else if (print_mode == "bool") {
+    return BoolResultsPrinter(
+      searcher,
+      interval_batch_producer,
+      invalid_chars_producer,
+      output_filenames,
+      kmer_size,
+      max_chars_per_batch
+    );
+  } else {
+    throw runtime_error("Invalid value passed by user for print_mode");
+  }
 }
 
 auto get_gpu_container(string index_file) -> shared_ptr<GpuSbwtContainer> {

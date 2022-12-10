@@ -26,13 +26,22 @@ template <
   class InvalidCharsProducer>
 class BoolContinuousResultsPrinter:
     public ContinuousResultsPrinter<
+      BoolContinuousResultsPrinter<
+        ResultsProducer,
+        IntervalProducer,
+        InvalidCharsProducer>,
       ResultsProducer,
       IntervalProducer,
       InvalidCharsProducer> {
     using Base = ContinuousResultsPrinter<
+      BoolContinuousResultsPrinter<
+        ResultsProducer,
+        IntervalProducer,
+        InvalidCharsProducer>,
       ResultsProducer,
       IntervalProducer,
       InvalidCharsProducer>;
+    friend Base;
 
   private:
     vector<char> batch;
@@ -61,27 +70,25 @@ class BoolContinuousResultsPrinter:
     }
 
   protected:
-    auto do_invalid_result() -> void override { shift(); }
+    auto do_invalid_result() -> void { shift(); }
 
-    auto do_not_found_result() -> void override { shift(); }
+    auto do_not_found_result() -> void { shift(); }
 
-    auto do_result(size_t result) -> void override {
+    auto do_result(size_t result) -> void {
       working_bits |= (1ULL << shift_bits);
       shift();
     }
 
-    auto do_with_newline() -> void override {
+    auto do_with_newline() -> void {
       this->seq_size_stream->write(
         reinterpret_cast<char *>(&working_seq_size), sizeof(u64)
       );
       working_seq_size = 0;
     }
 
-    auto do_at_file_end() -> void override {
-      dump_working_bits();
-    }
+    auto do_at_file_end() -> void { dump_working_bits(); }
 
-    auto do_start_next_file() -> void override {
+    auto do_start_next_file() -> void {
       seq_size_stream = make_unique<ThrowingOfstream>(
         (*this->current_filename) + "_seq_sizes",
         ios_base::binary | ios_base::out

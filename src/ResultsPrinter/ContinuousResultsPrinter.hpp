@@ -41,16 +41,18 @@ using std::unique_ptr;
 namespace sbwt_search {
 
 template <
+  class TImplementation,
   class ResultsProducer,
   class IntervalProducer,
   class InvalidCharsProducer>
 class ContinuousResultsPrinter {
   private:
+    auto &impl() { return static_cast<TImplementation &>(*this); }
     shared_ptr<ResultsProducer> results_producer;
     shared_ptr<IntervalProducer> interval_producer;
     shared_ptr<InvalidCharsProducer> invalid_chars_producer;
     shared_ptr<IntervalBatch> interval_batch;
-    vector<string> filenames;
+    vector<string> &filenames;
     size_t chars_index = 0, results_index = 0, line_index = 0;
     size_t invalid_chars_left = 0;
     size_t chars_before_newline_index = 0;
@@ -67,20 +69,19 @@ class ContinuousResultsPrinter {
       shared_ptr<ResultsProducer> results_producer,
       shared_ptr<IntervalProducer> interval_producer,
       shared_ptr<InvalidCharsProducer> invalid_chars_producer,
-      const vector<string> &filenames,
+      vector<string> &_filenames,
       uint kmer_size
     ):
         results_producer(results_producer),
         interval_producer(interval_producer),
         invalid_chars_producer(invalid_chars_producer),
-        filenames(filenames),
-        kmer_size(kmer_size) {
-      current_filename = this->filenames.begin();
-    }
+        filenames(_filenames),
+        kmer_size(kmer_size) {}
 
     auto read_and_generate() -> void {
+      current_filename = filenames.begin();
       if (current_filename == filenames.end()) { return; }
-      do_start_next_file();
+      impl().do_start_next_file();
       for (uint batch_idx = 0;
            (*interval_producer >> interval_batch)
            & (*invalid_chars_producer >> invalid_chars_batch)
@@ -98,7 +99,7 @@ class ContinuousResultsPrinter {
           format("batch {}", batch_idx)
         );
       }
-      do_at_file_end();
+      impl().do_at_file_end();
     }
 
   private:
@@ -109,7 +110,7 @@ class ContinuousResultsPrinter {
            interval_batch->newlines_before_newfile) {
         process_file(newlines_before_newfile);
         if (results_index >= results_batch->results.size()) { return; }
-        do_start_next_file();
+        impl().do_start_next_file();
       }
     }
 
@@ -121,7 +122,7 @@ class ContinuousResultsPrinter {
           = (*interval_batch->chars_before_newline)[chars_before_newline_index];
         process_line(chars_before_newline);
         if (chars_index + kmer_size > chars_before_newline) {
-          do_with_newline();
+          impl().do_with_newline();
         }
         chars_index
           = (*interval_batch->chars_before_newline)[chars_before_newline_index];
@@ -163,28 +164,24 @@ class ContinuousResultsPrinter {
 
     auto process_result(size_t result, bool found, bool valid) {
       if (!valid) {
-        do_invalid_result();
+        impl().do_invalid_result();
       } else if (!found) {
-        do_not_found_result();
+        impl().do_not_found_result();
       } else {
-        do_result(result);
+        impl().do_result(result);
       }
     }
 
   protected:
-    virtual auto do_start_next_file() -> void {
-      if (current_filename != filenames.begin()) { do_at_file_end(); }
+    auto do_start_next_file() -> void {
+      if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
       stream = make_unique<ThrowingOfstream>(
         *current_filename, ios_base::binary | ios_base::out
       );
       current_filename = next(current_filename);
     }
 
-    virtual auto do_at_file_end() -> void {}
-    virtual auto do_invalid_result() -> void = 0;
-    virtual auto do_not_found_result() -> void = 0;
-    virtual auto do_result(size_t result) -> void = 0;
-    virtual auto do_with_newline() -> void = 0;
+    auto do_at_file_end() -> void {}
 };
 
 }  // namespace sbwt_search
