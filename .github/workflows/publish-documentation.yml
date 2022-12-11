@@ -44,10 +44,11 @@ jobs:
 
       - name: Build all main, tests and documentation
         run: |
-          ./scripts/build/build_all.sh
+          chmod +777 scripts/**/*
+          ./scripts/build/all.sh
 
       - name: Run tests
-        run: sh ./scripts/standalone/run_tests.sh
+        run: sh ./scripts/standalone/test.sh
 
       - name: Setup documentation git repository
         run: |
