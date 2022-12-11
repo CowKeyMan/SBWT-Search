@@ -8,12 +8,12 @@ option(
 
 if (BUILD_MAIN)
 
-add_executable(main_cuda "${PROJECT_SOURCE_DIR}/main.cu")
+add_executable(main "${PROJECT_SOURCE_DIR}/main.cu")
 target_link_libraries(
-  main_cuda
+  main
   PRIVATE
   common_libraries
 )
-set_target_properties(main_cuda PROPERTIES CUDA_ARCHITECTURES "80;70;60")
+set_target_properties(main PROPERTIES CUDA_ARCHITECTURES "80;70;60")
 
 endif()

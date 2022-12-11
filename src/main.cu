@@ -90,7 +90,7 @@ auto get_results_printer(
   size_t max_chars_per_batch
 ) -> ResultsPrinter;
 
-const auto program_name = "SBWT Search";
+const auto program_name = "SBWT_Search";
 const auto program_description
   = "An application to search for k-mers in a genome given an SBWT index";
 

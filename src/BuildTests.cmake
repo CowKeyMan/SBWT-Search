@@ -25,7 +25,7 @@ target_link_libraries(
 
 # Create cpu test executable
 add_executable(
-  test_main_cpu
+  test_main
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
 
   "${PROJECT_SOURCE_DIR}/Utils/CircularQueue_test.cpp"
@@ -45,9 +45,9 @@ add_executable(
   "${PROJECT_SOURCE_DIR}/Utils/BenchmarkUtils_test.cpp"
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser_test.cpp"
 )
-add_test(NAME test_main_cpu COMMAND test_main_cpu)
+add_test(NAME test_main COMMAND test_main)
 target_link_libraries(
-  test_main_cpu
+  test_main
   PRIVATE
   common_libraries
   test_lib
