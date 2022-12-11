@@ -175,12 +175,6 @@ for index, name in enumerate(sorted_keys):
     min_time = df['time'].min()
     details['summary'] = {}
     total_query_components = 0
-    start_query_components = df[
-        [c in query_components for c in df['component']]
-    ]['time'].min()
-    end_query_components = df[
-        [c in query_components for c in df['component']]
-    ]['time'].max()
     for i, component in enumerate(unique_components):
         timings = []
         df_component = df[df['component'] == component]
@@ -214,11 +208,12 @@ for index, name in enumerate(sorted_keys):
     )
     df_summary = df_summary.round(2)
     print(df_summary.reindex(index=df_summary.index[::-1]))
-    actual_query_components = (
-        end_query_components - start_query_components
-    ).total_seconds() * 1000
+    actual_query_components = df_summary.loc['Querier', 'total']
     time_saved_query_components = (
         total_query_components - actual_query_components
+    )
+    nanoseconds_per_query = (
+        df_summary.loc['Querier']['total'] * 1000000 / details['num_queries']
     )
     nanoseconds_per_query_gpu = (
         details['gpu_time'] * 1000000 / details['num_queries']
@@ -238,6 +233,8 @@ for index, name in enumerate(sorted_keys):
         f'{total_query_components:.2f}ms\n'
         'Actual time taken by query components: '
         f'{actual_query_components:.2f}ms\n'
+        '\tThis means that the actual search speed is '
+        f'{nanoseconds_per_query} ns/query\n'
         'Time saved by multithreading when querying: '
         f'{time_saved_query_components:.2f}ms\n'
         'Gpu searching according to Event Timers '
