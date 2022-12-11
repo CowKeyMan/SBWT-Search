@@ -82,7 +82,7 @@ for form in df_full['format'].unique():
     plt.subplots_adjust(wspace=0.4, hspace=0.4)
     plt.savefig(
         f'{str(Path(args["i"]).parent)}/'
-        f'{form}_timings.svg', format='svg', dpi=10000
+        f'{form}_timings.svg', format='svg', dpi=20000
     )
     plt.close(fig)
 
@@ -111,7 +111,7 @@ for name in df_full['name'].unique():
         ax.bar_label(
             container,
             labels=[f'{x.get_height() / 1000:.0f}s' for x in container],
-            fontsize=5
+            fontsize=3
         )
     plt.savefig(title, bbox_inches='tight', format='svg')
     plt.close(fig)

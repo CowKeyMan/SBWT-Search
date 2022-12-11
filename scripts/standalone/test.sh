@@ -6,10 +6,8 @@
 TMP_SPDLOG_LEVEL=${SPDLOG_LEVEL}
 unset SPDLOG_LEVEL
 find build/src -name "*.gcda" -type f -delete
-printf "\nRunning CUDA Tests:\n"
-./build/bin/test_main_cuda
-printf "\nRunning CPU Tests:\n"
-./build/bin/test_main_cpu
+printf "\nRunning Tests:\n"
+./build/bin/test_main
 printf "\nRunning Lcov..."
 lcov --directory . --capture -q --output-file build/code_coverage.info --exclude "*/usr/**/*" --exclude "*_deps/**/*" --exclude "*main.cpp" --exclude "/tmp/*" --exclude "*.cuh" --exclude "*/external/*"
 printf "\nRunning genhtml..."
