@@ -34,20 +34,17 @@ jobs:
 
       - name: Install Sphinx and extentions
         run: |
-          pip3 install breathe exhale sphinx sphinx-rtd-theme sphinx-rtd-dark-mode sphinxcontrib-mermaid
+          pip3 install breathe exhale sphinx sphinx-rtd-theme sphinx-rtd-dark-mode sphinxcontrib-mermaid matplotlib pandas
           cd documentation
           npm install @mermaid-js/mermaid-cli
           cd ..
 
-      - name: Install kseqpp dependencies
-        run: sudo apt install zlib1g-dev # a dependency
+      - name: Install dependencies
+        run: sudo apt install zlib1g-dev git
 
       - name: Build all main, tests and documentation
         run: |
-          sh ./scripts/build/build_benchmarks.sh
-          sh ./scripts/build/build_release.sh
-          sh ./scripts/build/build_docs.sh
-          sh ./scripts/build/build_tests.sh
+          ./scripts/build/build_all.sh
 
       - name: Run tests
         run: sh ./scripts/standalone/run_tests.sh
