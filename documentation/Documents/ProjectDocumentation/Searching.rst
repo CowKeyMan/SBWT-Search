@@ -1,13 +1,21 @@
 Searching
 =========
 
-The following diagram shows the search components. The diamonds show the items stored on disk, the rectangles with sharp edges are the class components and the rectangles with round corners are the data objects which are passed around between components.
+The following diagram shows the search components. The diamonds show the items stored on disk, the rectangles with sharp edges are the class components and the rectangles with round corners are the data objects which are passed around between components. We also show how many bits are necessary per component.
 
 .. _SearchComponentsPipeline:
 .. mermaid:: graphs/SearchComponentsPipeline.mmd
 
+Search Components
++++++++++++++++++
+
+The searching is divided into 5 components. These are the SequenceFileParser, SeqToBitsConverter, PositionsBuilder, Searching, and ResultsPrinter. They are described in :ref:`Components` and above one can see how they share data with one another. It is also important to note that the 'Continuous' aspect of these means that they can operate while their dependency is processing. The repository contains an implementation of a multithreaded pipeline, with the help of the **SharedBatchesProducer** class, which each continuous component inherits from, and I recommended checking out if you wish to contribute to the project. Since we want to share memory between the components so as not to waste cpu cycles copying data, we must have a lot of memory, and allocate multiple batches, which is where the **SharedBatchesProducer** also comes into play, by cycling through a semaphore protected buffer of batches.
+
+Memory
+++++++
+
 Main Memory
-+++++++++++
+-----------
 
 In terms of main memory, we will use:
 
@@ -29,7 +37,7 @@ We should aim for 5 parallel batches, since we have 5 components which can run i
 Note that we will need to round down the number of characters to a multiple of 1024 so that they can be easily used in the GPU
 
 VRAM
-++++
+----
 
 We must also be wary of GPU memory. In VRAM we will only have a single batch at a time. We will have
 
@@ -44,7 +52,7 @@ This means that for every 1GB of VRAM, we can have *121,212,121 characters*
 However, please note that from in VRAM, we must also store the SBWT index, so we will have much less of this available usually.
 
 Example of memory usage
-+++++++++++++++++++++++
+-----------------------
 
 As an example:
 

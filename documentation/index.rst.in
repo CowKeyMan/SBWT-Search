@@ -5,8 +5,8 @@ Welcome to @CMAKE_PROJECT_NAME@'s documentation!
    :maxdepth: 1
    :caption: Contents:
 
-   Documents/WorkflowDocumentation/WorkflowDocumentation
    Documents/ProjectDocumentation/ProjectDocumentation
+   Documents/WorkflowDocumentation/WorkflowDocumentation
 
    RST/modules
 

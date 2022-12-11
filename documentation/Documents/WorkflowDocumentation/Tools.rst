@@ -92,24 +92,6 @@ Installation
   cd documentation/
   npm install @mermaid-js/mermaid-cli
 
-clang-tidy
-++++++++++
-
-This is a linter tool which can deduce common programming errors or formatting mistakes. For example, if you assign ``NULL`` to a pointer, it might warn you and tell you to use ``nullptr`` instead.
-
-If you get the following error: *warning: LF will be replaced by CRLF in tmp/Functions_original.cpp. The file will have its original line endings in your working directory*, try running the following:
-
-.. code-block:: bash
-
-  git config --global core.autocrlf false
-
-
-Installation
-------------
-
-See clang-format's installation, it is the same
-
-
 clang-format
 ++++++++++++
 
@@ -130,8 +112,6 @@ Go to https://github.com/llvm/llvm-project/releases and download the latest vers
   sudo wget https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.0/clang+llvm-14.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz -O clang+llvm.tar.xz # download your version (make sure to change the link!) and save it as a file named clang+llvm.tar.xz
   sudo tar xf clang+llvm.tar.xz # extract it
   sudo printf "\n#add clang to path\nexport PATH=\"/opt/clang+llvm-14.0.0-x86_64-linux-gnu-ubuntu-18.04/bin:\${PATH}\"" >> ~/.bashrc # Add to PATH (make sure to change the folder name version!)
-
-
 
 googletest
 ++++++++++
@@ -167,12 +147,12 @@ CUDA
 
 This template also supports CUDA. Check the official installation guides for more info, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can turn the build off. For more information look at the **build** folder section in :ref:`Workflow Files`.
 
-On github actions we do not have GPUs, but we can still compile and test our code. Thus, our tests will fail but we will still have the code coverage report on the site.
+On github actions we do not have GPUs, but we can still compile and test our code. Thus, our gpu tests will fail but we will still have the code coverage report on the site.
 
-kseq++
-++++++
+kseqpp_REad
++++++++++++
 
-kseq++ is a program to read FASTA/Q files. Its repository is at https://github.com/cartoonist/kseqpp and we install it directly using cmake. However, it may neeed a dependency which is zlib.
+kseq++ is a program to read FASTA/Q files. Its repository is at https://github.com/cartoonist/kseqpp. We use another version of it which is kseqpp_Read whose repository is at: https://github.com/CowKeyMan/kseqpp_REad. However, it may neeed a dependency which is zlib.
 
 Installation
 ------------
@@ -181,12 +161,11 @@ Installation
 
   sudo apt install zlib1g-dev # a dependency
 
-cxxopts
-+++++++
+spdlog
+++++++
 
-To parse command line arguments it is handy to have a tool to do that for us rather than creating a command line parser for ourselves, as such we use cxxopts to help us, which is based here: https://github.com/jarro2783/cxxopts.
+This is our logging tool. It is installed automatically by CMake. To see the logs when running the main program, simply run the below code and you will see a lot of logs. This is used for timing our code as well.
 
-Installation
-------------
+.. code-block:: bash
 
-Installation will be automatic when you run cmake as it will be done using FetchContect.
+ export SPDLOG_LEVEL=TRACE

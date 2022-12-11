@@ -14,17 +14,17 @@ This section will describe a typical workflow from writing a new piece of code, 
 #. Write a new header file template
 #. Write a new cpp file for it
 #. Write a test for it to test that the new functions work
-#. Run `./scripts/build/build_tests.sh` to build the testing executable
+#. Run `./scripts/build/tests.sh` to build the testing executable
 #. If clang-tidy or clang-format say that there is some misformatted code or if there are errors in the build, then fix them and run again.
 
    #. At this point you may want to consider running `./scripts/standalone/apply_clang_format.py` if you agree with the changes proposed by clang-format
 
-#. Run `./scripts/standalone/run_tests.sh` to run the tests and generate the code coverage report which can be found by opening *docs/index.html* in a browser and choose the *Code Coverage* option
+#. Run `./scripts/standalone/test.sh` to run the tests and generate the code coverage report which can be found by opening *docs/index.html* in a browser and choose the *Code Coverage* option
 #. Integrate the new functions into the program and test again
 #. Once you have a main executable ready to be run you can run `./scripts/build/build_all.sh` to generate a debug build of your code.
-#. You can run your code by running `./build/src/main`, which is the main executable generated
+#. You can run your code by running `./build/bin/main`, which is the main executable generated
 #. Here you may update the documentation. You can run `./scripts/build/build_docs.sh`, which will generate the documentation in the docs folder. Similarly with the code coverage, you may open *docs/index.html* in a browser and this time choose the *Documentation* option.
-#. After you are satisfied and wish to generate a release executable, you may run `./scripts/build/build_release.sh` and then you may execute it by running `./build/src/main`.
+#. After you are satisfied and wish to generate a release executable, you may run `./scripts/build/release.sh` and then you may execute it by running `./build/bin/main`.
 
 Working with CMake
 ++++++++++++++++++
@@ -42,27 +42,22 @@ Our strategy is to combine modules into libraries, shown with ellipses. Then we 
 
 * `BuildCommon.cmake`
 
-  * `common_options`: An interface library containing options which will be used by everyone, such as the any additional compiler flags or the debug/release mode.
-  * `common_libraries`: Interface library which combines modules/implementation files that are used by both the cpu and gpu versions of the appliction. These are usually cpu implementations with no CUDA equivalent
-  * `libraries_cpu`: Similar to `common_libraries` but combines only cpu files.
-  * `libraries_cuda`: Similar to `common_libraries` but combines only CUDA files.
+  * `common_libraries`: Interface library which combines modules/implementation files of the application
 
 * `BuildMain.cmake`:
 
-  * `main_cpu`: A target which builds the cpu version of the main executable
-  * `main_cuda`: A target which builds the cuda version of the main executable
+  * `main`: A target which builds the main executable
 
 * `BuildTests.cmake`:
 
-  * `test_cpu`: A target which builds the cpu version of the test executable
-  * `test_cuda`: A target which builds the cuda version of the test executable
+  * `test_main`: A target which builds the test executable
 
 This means that when adding a new module, we will follow the following steps:
 
 #. Create the module and write some code for it
-#. Go to `BuildCommon.cmake` and create a library for it. In this file you will find a *TODO* with the message *Add more libraries here*
-#. Link the library with either `common_libraries`, `libraries_cpu` or `libraries_cuda`, depending on the library itself.
-#. If you also have a test file, add the test source file to the `test_common_sources` found in `BuildTests.cmake`. You will find a *TODO* in this file with the message *add more source files here*.
+#. Go to `BuildCommon.cmake` and create a library for it.
+#. Link the library with `common_libraries`.
+#. If you also have a test file, add the test source file to the `test_main` executable found in `BuildTests.cmake`.
 
 There may be some special cases apart from the ones mentioned above, in which case you will need to do some research how to get started, however this should cover the most general use case.
 
@@ -72,15 +67,11 @@ CMake Options
 The following section describes the available options I created and what each of them does:
 
 * `CMAKE_EXPORT_COMPILE_COMMANDS`: Export `compile_command.json`
-* `BUILD_SHARED_LIBS`: Use shared (on) vs static libraries (off)
-* `CMAKE_POSITION_INDEPENDENT_CODE`: Make libraries executale from anywhere in memory
 * `DCMAKE_BUILD_TYPE`: (Options: Debug/Release). Debug mode does not do optimisations
-* `DENABLE_CLANG_TIDY`: Run clang-tidy check
 * `DENABLE_HEADER_GUARDS_CHECK`: Run header guards check
 * `DENABLE_CLANG_FORMAT_CHECK`: Run clang-format check
-* `BUILD_CPU`: Build the CPU version of the programs
-* `BUILD_CUDA`: Build the CUDA version of the programs
+* `DBUILD_VERIFY`: Build the verify target
 * `DBUILD_MAIN`: Build the main target
 * `DBUILD_TESTS`: Build the test target
-* `DBUILD_BENCHMARKS`: Build the benchmarks target
 * `DBUILD_DOCS`: Build the documentation
+* `DENABLE_PROFILING`: Allow inspection of the program through gprof

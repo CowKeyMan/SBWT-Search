@@ -7,6 +7,6 @@ This part of the documentation will describe the project documentation, which is
    :maxdepth: 1
    :caption: Contents:
 
-   BenchmarkingNotes
    Components
    Searching
+   BenchmarkResults
