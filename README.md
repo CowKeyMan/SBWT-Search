@@ -2,9 +2,6 @@
 
 An application to search for k-mers in a genome given an SBWT index (which indexes k-mers of genomes)
 
-The CUDA search function is based on this repository: <https://version.helsinki.fi/harrikah/gpu-computing>
-The API is based on this repository: <https://github.com/algbio/SBWT>
-
 ## For Users
 
 This respository takes 2 inputs: An SBWT index which can be produced by using this repository: <https://github.com/algbio/SBWT>, and a FASTA/FASTQ file to search within the SBWT index.
@@ -134,5 +131,10 @@ This repository makes use of the following papers:
 * Zhou, D., Andersen, D. G., & Kaminsky, M. (2013). Space-Efficient, High-Performance Rank and Select Structures on Uncompressed Bit Sequences. In V. Bonifaci, C. Demetrescu, & A. Marchetti-Spaccamela (Eds.), Experimental Algorithms (pp. 151–163). Springer Berlin Heidelberg.
 * Alanko, J. N., Puglisi, S. J., & Vuohtoniemi, J. (2022). Succinct k-mer Set Representations Using Subset Rank Queries on the Spectral Burrows-Wheeler Transform (SBWT). BioRxiv. https://doi.org/10.1101/2022.05.19.492613
 * GPU Searching function by Harri Kähkönen, University of Helsinki (Master's thesis in progress)
+
+Furthermore, we make use of code and ideas from other code repositories:
+
+* The CUDA search function is based on this repository: <https://version.helsinki.fi/harrikah/gpu-computing>
+* The API is based on this repository: <https://github.com/algbio/SBWT>
 
 The repository also makes use of a number of other tools/code bases, however we do not distribute these as part of our code base. Instead they are downloaded automatically using CMake, or are shown in the tools section of the github pages documentation.
