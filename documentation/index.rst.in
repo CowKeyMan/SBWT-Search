@@ -1,6 +1,8 @@
 Welcome to @CMAKE_PROJECT_NAME@'s documentation!
 ====================================================================
 
+Here you will find the Project and Workflow documentation. If you simply want to read the codebase and see what is going on, the project documentation should be enough. However, if you wish to contribute, it is **strongly recommended** that you read the workflow documentation as well.
+
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
