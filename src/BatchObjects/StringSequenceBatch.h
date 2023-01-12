@@ -18,21 +18,21 @@
  * {0, 3, 0, 0, 0}, cumulative_char_indexes = {0, 3, 6, 9, 9}. Notice how if we
  * have more readers than characters to give it, we simply duplicate the maximum
  * or 0s at the end.
- * */
+ */
 
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-
-#include "Utils/TypeDefinitions.h"
+#include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
+using std::string;
+using std::vector;
+
 class StringSequenceBatch {
-  public:
-    const string *seq;
+public:
+  const string *seq;
 };
 
 }  // namespace sbwt_search

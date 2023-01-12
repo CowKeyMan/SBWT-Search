@@ -1,0 +1,9 @@
+# This file indicates to the clang compiler (which is used for linting) certain
+# options. This includes for example ignoring certain flags which are specific
+# to the nvcc compiler
+
+CompileFlags:
+  Remove:
+    - -forward-unknown-to-host-compiler
+    - --generate-code*
+    - -Xcompiler=*

@@ -1,11 +1,19 @@
-import pandas as pd
-import json
-from matplotlib import pyplot as plt
-import numpy as np
+#!/bin/python3
+
+"""
+Output graphs of batches vs time taken for the files in the log file
+"""
+
 import argparse
+import json
 from collections import defaultdict
-import seaborn as sns
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from matplotlib import pyplot as plt
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', help='Input log file to analyse', required=True)
@@ -18,7 +26,7 @@ parser.add_argument(
 args = vars(parser.parse_args())
 
 # read all lines from file
-with open(args['i'], 'r') as f:
+with open(args['i'], 'r', encoding="utf-8") as f:
     lines = f.readlines()
 
 
@@ -35,7 +43,7 @@ for line in lines:
     else:
         try:
             j = json.loads(line)
-        except Exception:
+        except json.JSONDecodeError:
             continue
         if (
             j['log']['type'] == 'timed_event'

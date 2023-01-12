@@ -8,29 +8,37 @@
  */
 
 #include <algorithm>
+#include <memory>
 #include <vector>
 
 #include "BatchObjects/StringBreakBatch.h"
-#include "Utils/SharedBatchesProducer.hpp"
+#include "Tools/SharedBatchesProducer.hpp"
+
+namespace sbwt_search {
+
+class ContinuousSequenceFileParser;
 
 using design_utils::SharedBatchesProducer;
+using std::shared_ptr;
 using std::vector;
 
-namespace sbwt_search {
-class ContinuousSequenceFileParser;
-}  // namespace sbwt_search
-
-namespace sbwt_search {
-
 class StringBreakBatchProducer: public SharedBatchesProducer<StringBreakBatch> {
-    friend ContinuousSequenceFileParser;
+  friend ContinuousSequenceFileParser;
 
-  public:
-    StringBreakBatchProducer(const uint max_batches);
+public:
+  StringBreakBatchProducer(StringBreakBatchProducer &) = delete;
+  StringBreakBatchProducer(StringBreakBatchProducer &&) = delete;
+  auto operator=(StringBreakBatchProducer &) = delete;
+  auto operator=(StringBreakBatchProducer &&) = delete;
 
-  private:
-    auto get_default_value() -> shared_ptr<StringBreakBatch> override;
-    auto set(const vector<size_t> &chars_before_newline, size_t string_size) -> void;
+  explicit StringBreakBatchProducer(uint max_batches);
+
+  ~StringBreakBatchProducer() override = default;
+
+private:
+  auto get_default_value() -> shared_ptr<StringBreakBatch> override;
+  auto set(const vector<size_t> &chars_before_newline, size_t string_size)
+    -> void;
 };
 
 }  // namespace sbwt_search

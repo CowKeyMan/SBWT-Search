@@ -1,4 +1,5 @@
-# This enables or disables several CMake options
+# This enables or disables several CMake options, such as having Interprodecural
+# optimisation, and positioning independent code
 
 option(
   BUILD_SHARED_LIBS
@@ -26,3 +27,15 @@ function(activate_ipo THIS_TARGET)
     set_target_properties(THIS_TARGET PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
   endif()
 endfunction()
+
+option(
+  ENABLE_MARCH_NATIVE
+  "Enable native compilation optimisations. Warning: removes compatibility with other architectures"
+  OFF
+)
+
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-march=native" COMPILER_SUPPORTS_MARCH_NATIVE)
+if(COMPILER_SUPPORTS_MARCH_NATIVE AND ENABLE_MARCH_NATIVE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+endif()

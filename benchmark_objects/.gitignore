@@ -1,2 +1,4 @@
+# Gitignore to ignore everything but keep the folder in git
+
 *
 !.gitignore

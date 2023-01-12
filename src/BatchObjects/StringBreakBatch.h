@@ -9,14 +9,15 @@
 
 #include <vector>
 
-using std::vector;
-
 namespace sbwt_search {
 
+using std::size_t;
+using std::vector;
+
 class StringBreakBatch {
-  public:
-    const vector<size_t> *chars_before_newline;
-    size_t string_size;
+public:
+  const vector<size_t> *chars_before_newline;
+  size_t string_size;
 };
 
 }  // namespace sbwt_search

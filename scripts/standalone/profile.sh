@@ -1,5 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
 # First build the release build
+
 mkdir -p build
 cd build
 cmake \

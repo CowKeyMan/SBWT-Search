@@ -1,5 +1,7 @@
 #!/bin/bash
-# Run the tests as well as generate code coverage
+
+# Run the tests as well as generate code coverage. Also generates html so that
+# code coverage can easily be seen in the docs.
 
 # gcno files are built when object is compiled
 # gcda files are built after execution

@@ -7,10 +7,10 @@
 #include "SequenceFileParser/IntervalBatchProducer.h"
 #include "SequenceFileParser/StringBreakBatchProducer.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
-#include "Utils/IOUtils.h"
-#include "Utils/Logger.h"
-#include "Utils/SharedBatchesProducer.hpp"
-#include "Utils/TypeDefinitions.h"
+#include "Tools/IOUtils.h"
+#include "Tools/Logger.h"
+#include "Tools/SharedBatchesProducer.hpp"
+#include "Tools/TypeDefinitions.h"
 #include "fmt/core.h"
 #include "kseqpp_read.hpp"
 
@@ -38,13 +38,13 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
   shared_ptr<StringBreakBatchProducer> _string_break_batch_producer,
   shared_ptr<IntervalBatchProducer> _interval_batch_producer
 ):
-    filenames(_filenames),
-    kmer_size(_kmer_size),
-    batches(max_batches),
-    max_chars_per_batch(_max_chars_per_batch),
-    string_sequence_batch_producer(_string_sequence_batch_producer),
-    string_break_batch_producer(_string_break_batch_producer),
-    interval_batch_producer(_interval_batch_producer) {
+  filenames(_filenames),
+  kmer_size(_kmer_size),
+  batches(max_batches),
+  max_chars_per_batch(_max_chars_per_batch),
+  string_sequence_batch_producer(_string_sequence_batch_producer),
+  string_break_batch_producer(_string_break_batch_producer),
+  interval_batch_producer(_interval_batch_producer) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {
     batches.set(i, make_shared<Seq>(Seq(max_chars_per_batch)));
@@ -125,8 +125,7 @@ auto ContinuousSequenceFileParser::do_at_batch_start() -> void {
 auto ContinuousSequenceFileParser::read_next() -> void {
   auto rec = batches.current_write();
   while ((rec->seq.size() < max_chars_per_batch)
-         && ((*stream) >> (*rec) || start_next_file())) {
-  }
+         && ((*stream) >> (*rec) || start_next_file())) {}
   string_sequence_batch_producer->set_string(rec->seq);
   string_break_batch_producer->set(rec->chars_before_newline, rec->seq.size());
   interval_batch_producer->set_chars_before_newline(rec->chars_before_newline);
@@ -136,8 +135,7 @@ auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
   auto seq_size = batches.current_write()->seq.size();
   auto &str_breaks = batches.current_write()->chars_before_newline;
   str_breaks.push_back(size_t(-1));
-  auto strings_in_batch
-    = str_breaks.size()
+  auto strings_in_batch = str_breaks.size()
     + (str_breaks.size() != 0 && str_breaks.back() != (seq_size - 1));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,

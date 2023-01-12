@@ -6,23 +6,21 @@
  * @brief Parses the binary output file
  */
 
-#include <sstream>
+#include <memory>
 #include <string>
 
 #include "OutputParser/OutputParser.h"
 
-using std::stringstream;
-
 namespace sbwt_search {
 
 class BinaryOutputParser: public OutputParser {
-  private:
-    size_t current_value;
+private:
+  size_t current_value = 0;
 
-  public:
-    BinaryOutputParser(string filename);
-    auto get_next() -> ITEM_TYPE override;
-    auto get_value() -> size_t override;
+public:
+  explicit BinaryOutputParser(const string &filename);
+  auto get_next() -> ITEM_TYPE override;
+  auto get_value() -> size_t override;
 };
 
 }  // namespace sbwt_search

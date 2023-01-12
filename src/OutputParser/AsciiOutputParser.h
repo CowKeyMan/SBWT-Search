@@ -11,21 +11,21 @@
 
 #include "OutputParser/OutputParser.h"
 
-using std::stringstream;
-
 namespace sbwt_search {
 
-class AsciiOutputParser: public OutputParser {
-  private:
-    size_t current_value;
-    bool at_end_of_line = true;
-    string line_buffer, result_buffer;
-    stringstream line_stream;
+using std::stringstream;
 
-  public:
-    AsciiOutputParser(string filename);
-    auto get_next() -> ITEM_TYPE override;
-    auto get_value() -> size_t override;
+class AsciiOutputParser: public OutputParser {
+private:
+  size_t current_value;
+  bool at_end_of_line = true;
+  string line_buffer, result_buffer;
+  stringstream line_stream;
+
+public:
+  explicit AsciiOutputParser(string filename);
+  auto get_next() -> ITEM_TYPE override;
+  auto get_value() -> size_t override;
 };
 
 }  // namespace sbwt_search

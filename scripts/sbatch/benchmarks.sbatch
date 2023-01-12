@@ -1,5 +1,8 @@
 #!/bin/bash
-## Meant to be run on Mahti supercomputer by CSC: https://research.csc.fi/-/mahti
+
+# This will configure items for benchmarking and then run the benchmarks
+# through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti
+# supercomputer by CSC: https://research.csc.fi/-/mahti
 
 #SBATCH --job-name=Main
 ## The account to charge. Look at the unix group from https://my.csc.fi/myProjects

@@ -1,6 +1,10 @@
+#!/bin/python3
+
 """
-Rather than simply checking for clang-format, this file executes it
-and changes files
+Applies the changes proposed by clang format. Warning: This actually changes
+the source code. While it would not change the contents, make sure that you
+agree with the changes (you can check what changes will be applied if you run
+./scripts/static_analysers/clang_format.py)
 """
 
 from pathlib import Path
@@ -15,4 +19,5 @@ file_names = [
 
 
 for file_name in file_names:
-    Popen("clang-format -i " + str(file_name), shell=True).wait()
+    with Popen("clang-format -i " + str(file_name), shell=True) as p:
+        p.wait()

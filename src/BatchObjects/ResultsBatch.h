@@ -9,11 +9,16 @@
 
 #include <vector>
 
+namespace sbwt_search {
+
+using std::size_t;
 using std::vector;
 
 class ResultsBatch {
-  public:
-    vector<size_t> results;
+public:
+  vector<size_t> results;
 };
+
+}  // namespace sbwt_search
 
 #endif

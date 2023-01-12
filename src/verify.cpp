@@ -72,7 +72,7 @@ auto err_and_exit() -> void {
 
 auto get_output_parser(string filename, string format)
   -> unique_ptr<OutputParser> {
-  for (auto &c: format) { c = tolower(c); }
+  for (auto &c : format) { c = tolower(c); }
   if (format == "ascii") {
     return make_unique<AsciiOutputParser>(filename);
   } else if (format == "binary") {

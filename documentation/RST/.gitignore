@@ -1,2 +1,5 @@
+# Ignore everything in the folder except for itself and the .doc_string
+
 *
 !.gitignore
+!.doc_string

@@ -1,0 +1,64 @@
+{
+    "configurations": {
+        "main": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [
+                "cpp",
+                "c",
+                "cu",
+                "objc",
+                "rust"
+            ],
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceRoot}/build/bin/main_cuda",
+                "args": ["-i", "data/coli3.sbwt", "-q", "data/querydata/365.fna", "-o", "tmp/out_DELETE.txt", "-c", "bool", "-b", "1", "-m", "80000000"],
+                "cwd": "${workspaceRoot}",
+                "environment": [],
+                "externalConsole": true,
+                "MIMode": "gdb",
+                "stopAtEntry": true
+            }
+        },
+        "test": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [
+                "cpp",
+                "c",
+                "cu",
+                "objc",
+                "rust"
+            ],
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceRoot}/build/bin/test_main",
+                "args": [],
+                "cwd": "${workspaceRoot}",
+                "environment": [],
+                "externalConsole": true,
+                "MIMode": "gdb",
+                "stopAtEntry": true
+            }
+        },
+        "verify": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [
+                "cpp",
+                "c",
+                "cu",
+                "objc",
+                "rust"
+            ],
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceRoot}/build/bin/verify",
+                "args": [ "-i", "a2.bool", "-x", "bool", "-o", "a2.txt", "-y", "ascii" ],
+                "cwd": "${workspaceRoot}",
+                "environment": [],
+                "externalConsole": true,
+                "MIMode": "gdb",
+                "stopAtEntry": true
+            }
+        }
+    }
+}

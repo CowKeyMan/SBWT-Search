@@ -8,24 +8,33 @@
 
 #include <string>
 
-#include "Utils/IOUtils.h"
+#include "Tools/IOUtils.h"
+
+namespace sbwt_search {
 
 using io_utils::ThrowingIfstream;
 using std::ios;
 using std::string;
 
-namespace sbwt_search {
-
 enum class ITEM_TYPE { NEWLINE, VALUE, EOF_T };
 
 class OutputParser {
-  protected:
-    ThrowingIfstream stream;
+private:
+  ThrowingIfstream stream;
 
-  public:
-    OutputParser(string filename): stream(filename, ios::binary | ios::in) {}
-    virtual auto get_next() -> ITEM_TYPE = 0;
-    virtual auto get_value() -> size_t = 0;
+protected:
+  auto get_stream() -> ThrowingIfstream & { return stream; }
+
+public:
+  OutputParser(const OutputParser &) = delete;
+  OutputParser(const OutputParser &&) = delete;
+  auto operator=(const OutputParser &) = delete;
+  auto operator=(const OutputParser &&) = delete;
+  explicit OutputParser(const string &filename):
+    stream(filename, ios::binary | ios::in) {}
+  virtual auto get_next() -> ITEM_TYPE = 0;
+  virtual auto get_value() -> size_t = 0;
+  virtual ~OutputParser() = default;
 };
 
 }  // namespace sbwt_search

@@ -1,0 +1,3 @@
+Scripts used to build executables and documentation. Within this script, cmake
+configuration options are set. Change these if you wish to set different
+options.

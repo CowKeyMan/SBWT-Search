@@ -10,28 +10,28 @@
 #include <string>
 
 #include "OutputParser/OutputParser.h"
-#include "Utils/TypeDefinitions.h"
-
-using std::stringstream;
+#include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
+using std::stringstream;
+
 class BoolOutputParser: public OutputParser {
-  private:
-    bool is_eof = false;
-    size_t current_value = 0, current_seq_size = 0, seq_idx = 0;
-    u64 bits_buffer;
-    ThrowingIfstream seqsize_stream;
-    uint shift = 0;
+private:
+  bool is_eof = false;
+  size_t current_value = 0, current_seq_size = 0, seq_idx = 0;
+  u64 bits_buffer = 0;
+  ThrowingIfstream seqsize_stream;
+  uint shift = 0;
 
-  public:
-    BoolOutputParser(string filename);
-    auto get_next() -> ITEM_TYPE override;
-    auto get_value() -> size_t override;
+public:
+  explicit BoolOutputParser(const string &filename);
+  auto get_next() -> ITEM_TYPE override;
+  auto get_value() -> size_t override;
 
-  private:
-    auto read_next_seq_size() -> void;
-    auto read_next_bool() -> void;
+private:
+  auto read_next_seq_size() -> void;
+  auto read_next_bool() -> void;
 };
 
 }  // namespace sbwt_search

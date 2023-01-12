@@ -1,10 +1,19 @@
-import pandas as pd
+#!/bin/python3
+
+"""
+Produces timeline graphs of when each component is active alongside a table
+containing other statistics calculated from the given log file
+"""
+
 import argparse
 import json
-from matplotlib import pyplot as plt
-import numpy as np
 from collections import defaultdict
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', help='Input log file to analyse', required=True)
@@ -37,19 +46,19 @@ query_components = set((
 ).split())
 
 
-def timed_event_to_df_entry(j: dict) -> dict:
+def timed_event_to_df_entry(js: dict) -> dict:
     return {
-        'time': j['time'],
-        'process': j['process'],
-        'thread': j['thread'],
-        'state': j['log']['state'],
-        'component': j['log']['component'],
-        'section': j['log']['message'],
+        'time': js['time'],
+        'process': js['process'],
+        'thread': js['thread'],
+        'state': js['log']['state'],
+        'component': js['log']['component'],
+        'section': js['log']['message'],
     }
 
 
 # read all lines from file
-with open(args['i'], 'r') as f:
+with open(args['i'], 'r', encoding="utf-8") as f:
     lines = f.readlines()
 
 # separate individual benchmarks
@@ -117,7 +126,7 @@ for name, lines in benchmark_name_to_lines.items():
                 details['timed_event'].append(
                     timed_event_to_df_entry(j)
                 )
-        except Exception:
+        except json.JSONDecodeError:
             if line.startswith("Input file size: "):
                 details["input_file_size"] = line.split()[3]
             elif line.startswith("Output file size: "):

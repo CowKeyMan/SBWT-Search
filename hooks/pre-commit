@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Used as a pre-commit check for git. Adding or removing commands is extremely
+# easy by changing the 'hook_commands' list. If any of the commands fail, then
+# the hook will fail.
+
+bad_exits=0
+
+# Easily add more commands here
+hook_commands=(
+  "sh hooks/ascii_and_whitespace.sh"
+  "python3 scripts/static_analysers/clang_format.py"
+  "python3 scripts/static_analysers/headers.py"
+  "python3 scripts/standalone/generate_file_documentation.py --no-print"
+  "flake8"
+  "pylint ."
+  "python scripts/static_analysers/clang_tidy.py"
+)
+
+for ((i = 0; i < ${#hook_commands[@]}; i++))
+do
+  ${hook_commands[$i]}
+  last_exit=$?
+  if [ ${last_exit} -gt 0 ]
+  then
+    printf "The hook \"${hook_commands[$i]}\" failed\n"
+    ((++bad_exits))
+  fi
+done
+
+filename=$(basename $0)
+if [ ${bad_exits} == 0 ]
+then
+    printf "All $filename git hooks passed!\n"
+else
+    printf "$filename git hooks not passed: ${bad_exits}\n"
+    exit 1
+fi
