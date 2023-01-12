@@ -3,7 +3,7 @@
 
 #include "BatchObjects/StringSequenceBatch.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
-#include "Utils/TypeDefinitions.h"
+#include "Tools/TypeDefinitions.h"
 
 using std::make_shared;
 using std::shared_ptr;
@@ -12,7 +12,7 @@ using std::string;
 namespace sbwt_search {
 
 StringSequenceBatchProducer::StringSequenceBatchProducer(uint max_batches):
-    SharedBatchesProducer<StringSequenceBatch>(max_batches) {
+  SharedBatchesProducer<StringSequenceBatch>(max_batches) {
   initialise_batches();
 }
 
@@ -22,7 +22,7 @@ auto StringSequenceBatchProducer::get_default_value()
 }
 
 auto StringSequenceBatchProducer::set_string(const string &s) -> void {
-  batches.current_write()->seq = &s;
+  get_batches().current_write()->seq = &s;
 }
 
 }  // namespace sbwt_search

@@ -1,5 +1,7 @@
-#!/bin/sh
-# Run the benchmark_main several times and save the results to a file
+#!/bin/bash
+
+# Run the benchmark_main several times and save the results to a file. Called by
+# scipts/sbatch/benchmark.sbatch
 
 results_folder_name="$1"
 

@@ -1,6 +1,10 @@
+# Ignores unnecessary files and files which are generated on the fly when
+# building
+
 Doxyfile
 conf.py
 index.rst
 build
 html
 latex
+Documents/FileDocumentation.rst

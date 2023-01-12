@@ -1,6 +1,8 @@
-# Obtained from: https://github.com/lefticus/cpp_starter_project/blob/master/cmake/CompilerWarnings.cmake
-# This file creates a function to enable compiler warnings for both MSVC
-# as well as other compilers
+# This file creates a function to enable compiler warnings for both gcc and MSVC
+# as well
+
+# Obtained from:
+# https://github.com/lefticus/cpp_starter_project/blob/master/cmake/CompilerWarnings.cmake
 
 function(enable_warnings THIS_TARGET ENCAPSULATION)
   if(MSVC)

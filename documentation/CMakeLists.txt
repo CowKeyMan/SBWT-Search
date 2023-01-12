@@ -1,7 +1,21 @@
-# Configures the files related to doxygen as well as sphinx for RST documentation
-# The actual building is done in a scrips/build/build_docs.sh
+# Looks for Doxygen and fails if it cannot find it. If it finds it, it will
+# replace any text within the specified files (usually these files will end
+# with the .in extension) which is surrounded by @ by the parameters provided
+# by cmake. For example, if we look at the first line of
+# documentation/index.rst, you will notice that part of the title is surrounded
+# by @. This part will be replaced by the same value as it is within cmake. The
+# output file is the same file but without the .in extension, so that the
+# original file is unmodified. So if the input is a.txt.in, the output will be
+# a.txt. Look at the configure_file cmake command here:
+# https://cmake.org/cmake/help/latest/command/configure_file.html. This
+# CMakeLists.txt is not to be used directly, but rather through the
+# scripts/build/build_docs.sh script.
 
-if (BUILD_DOCS)
+option(
+  BUILD_DOCS
+  "Build the documentations"
+  ON
+)
 
 find_package(Doxygen)
 

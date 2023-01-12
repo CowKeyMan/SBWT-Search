@@ -1,9 +1,11 @@
 #!/bin/bash
-# Build the release build with profiling capabilities
+
+# Build the release build with profiling capabilities.
+# If any argument at all is passed to this script, it will skip the cmake step and just execute the build step only.
 
 mkdir -p build
 cd build
-if [[ $# > 0 ]];
+if [[ $# == 0 ]];
 then
   cmake \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=OFF \
@@ -16,6 +18,7 @@ then
     -DBUILD_BENCHMARKS=OFF \
     -DBUILD_DOCS=OFF \
     -DENABLE_PROFILING=ON \
+    -DENABLE_MARCH_NATIVE=OFF \
     ..
 fi
 cmake --build . -j8

@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "FilenamesParser/FilenamesParser.h"
-#include "Utils/IOUtils.h"
+#include "Tools/IOUtils.h"
 
 using io_utils::ThrowingIfstream;
 using std::getline;
@@ -23,8 +23,8 @@ FilenamesParser::FilenamesParser(
     input_filenames = file_lines_to_vector(input_filename);
     output_filenames = file_lines_to_vector(output_filename);
   } else {
-    input_filenames = { input_filename };
-    output_filenames = { output_filename };
+    input_filenames = {input_filename};
+    output_filenames = {output_filename};
   }
 }
 

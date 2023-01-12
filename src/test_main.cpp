@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Utils/Logger.h"
+#include "Tools/Logger.h"
 
 using log_utils::Logger;
 

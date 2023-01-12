@@ -1,34 +1,15 @@
 # Builds items which are commonly used between the main program and the tests.
 # Usually these are classes, files and options which are used by the main program but
-# are also tested individually
-
+# are also tested individually.
 # Any common options are put as an interface
 # rather than putting it with each file individually
 
 include_directories("${PROJECT_SOURCE_DIR}")
 include_directories("${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}")
 
-# common options
-add_compile_options(
-  "$<$<CONFIG:Debug>:--coverage>" # only in debug mode
-)
-add_compile_options(
-  "$<$<CONFIG:Release>:-O3>" # only in release mode
-)
-link_libraries(gcov)
-
 # External Dependencies
 include(ExternalProject)
 include(FetchContent)
-
-FetchContent_Declare(
-  fmt
-  QUIET
-  GIT_REPOSITORY       https://github.com/fmtlib/fmt.git
-  GIT_TAG              9.1.0
-  GIT_SHALLOW          TRUE
-)
-FetchContent_MakeAvailable(fmt)
 
 ## Fetch kseqpp_read
 FetchContent_Declare(
@@ -58,41 +39,22 @@ FetchContent_MakeAvailable(cxxopts)
 find_package(OpenMP REQUIRED)
 add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
 
-# Fetch spdlog
-FetchContent_Declare(
-  spdlog
-  QUIET
-  GIT_REPOSITORY       https://github.com/gabime/spdlog
-  GIT_TAG              v1.10.0
-  GIT_SHALLOW          TRUE
-  )
-FetchContent_MakeAvailable(spdlog)
-include_directories(SYSTEM "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
-
-# My libraries
 add_library(
-  io_utils
-  "${PROJECT_SOURCE_DIR}/Utils/IOUtils.cpp"
+  argument_parser
+  "${PROJECT_SOURCE_DIR}/ArgumentParser/ArgumentParser.cpp"
 )
-target_link_libraries(
-  io_utils
-  PRIVATE
-  fmt::fmt
-)
+target_link_libraries(argument_parser PRIVATE cxxopts memory_units_parser)
 add_library(
-  error_utils
-  "${PROJECT_SOURCE_DIR}/Utils/ErrorUtils.cpp"
+  presearcher_cpu
+  "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cpp"
 )
+target_link_libraries(presearcher_cpu PRIVATE cuda_utils)
 add_library(
-  logger
-  "${PROJECT_SOURCE_DIR}/Utils/Logger.cpp"
+  presearcher_cuda
+  "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cu"
 )
-target_link_libraries(logger PRIVATE spdlog::spdlog)
-add_library(
-  memory_units_parser
-  "${PROJECT_SOURCE_DIR}/Utils/MemoryUnitsParser.cpp"
-)
-
+set_target_properties(presearcher_cuda PROPERTIES CUDA_ARCHITECTURES "80;70;60")
+target_link_libraries(presearcher_cuda PRIVATE cuda_utils)
 add_library(
   sequence_file_parser
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser.cpp"
@@ -111,6 +73,15 @@ target_link_libraries(
   OpenMP::OpenMP_CXX
 )
 add_library(
+  seq_to_bits_converter
+  "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/ContinuousSeqToBitsConverter.cpp"
+  "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/InvalidCharsProducer.cpp"
+  "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/BitsProducer.cpp"
+)
+target_link_libraries(
+  seq_to_bits_converter PRIVATE fmt::fmt logger OpenMP::OpenMP_CXX
+)
+add_library(
   filenames_parser
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
 )
@@ -122,29 +93,28 @@ add_library(
   sbwt_builder
   "${PROJECT_SOURCE_DIR}/SbwtBuilder/SbwtBuilder.cpp"
 )
-target_link_libraries(sbwt_builder PRIVATE io_utils OpenMP::OpenMP_CXX fmt::fmt)
-add_library(
-  sbwt_container_cpu
-  "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
+target_link_libraries(
+  sbwt_builder
+  PRIVATE
+  io_utils
+  OpenMP::OpenMP_CXX
+  fmt::fmt
+  cuda_utils
 )
+add_library(
+  sbwt_container
+  "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
+  "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cpp"
+  "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cpp"
+)
+target_link_libraries(sbwt_container PUBLIC cuda_utils)
 add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"
+  "${PROJECT_SOURCE_DIR}/PositionsBuilder/ContinuousPositionsBuilder.cpp"
 )
-target_link_libraries(positions_builder PRIVATE OpenMP::OpenMP_CXX)
-add_library(
-  sbwt_container_gpu
-  "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cu"
-  "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cu"
-)
-set_target_properties(sbwt_container_gpu PROPERTIES CUDA_ARCHITECTURES "80;70;60")
-add_library(sbwt_container INTERFACE)
 target_link_libraries(
-  sbwt_container
-  INTERFACE
-  sbwt_container_cpu
-  sbwt_container_gpu
-  kseqpp_read
+  positions_builder PRIVATE fmt::fmt logger OpenMP::OpenMP_CXX
 )
 add_library(
   output_parser
@@ -154,10 +124,28 @@ add_library(
 )
 target_link_libraries(output_parser PRIVATE io_utils)
 add_library(
-  cuda_utils
-  "${PROJECT_SOURCE_DIR}/Utils/CudaUtils.cu"
+  searcher_cpu
+  "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cpp"
 )
-set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "80;70;60")
+target_link_libraries(searcher_cpu PRIVATE fmt::fmt)
+add_library(
+  searcher_cuda
+  "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cu"
+)
+set_target_properties(searcher_cuda PROPERTIES CUDA_ARCHITECTURES "80;70;60")
+target_link_libraries(searcher_cuda PRIVATE fmt::fmt cuda_utils)
+add_library(
+  continuous_searcher
+  "${PROJECT_SOURCE_DIR}/Searcher/ContinuousSearcher.cpp"
+)
+target_link_libraries(continuous_searcher PRIVATE fmt::fmt searcher_cpu searcher_cuda)
+add_library(
+  results_printer
+  "${PROJECT_SOURCE_DIR}/ResultsPrinter/AsciiContinuousResultsPrinter.cpp"
+  "${PROJECT_SOURCE_DIR}/ResultsPrinter/BinaryContinuousResultsPrinter.cpp"
+  "${PROJECT_SOURCE_DIR}/ResultsPrinter/BoolContinuousResultsPrinter.cpp"
+)
+target_link_libraries(results_printer PRIVATE io_utils fmt::fmt)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -175,15 +163,25 @@ target_link_libraries(
   io_utils
   logger
   error_utils
-  filenames_parser
   memory_units_parser
-  sequence_file_parser
-  positions_builder
+  memory_utils
+  omp_lock
+  semaphore
 
-  ## SBWT Loading libraries
+  ## SBWT_SEARCH libraries
+  argument_parser
+  filenames_parser
   sbwt_builder
   sbwt_container
   poppy_builder
+  results_printer
+  presearcher_cpu
+  presearcher_cuda
+
+  sequence_file_parser
+  seq_to_bits_converter
+  positions_builder
+  continuous_searcher
 )
 
 

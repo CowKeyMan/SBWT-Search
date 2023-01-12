@@ -3,26 +3,15 @@
 
 /**
  * @file Presearcher.cuh
- * @brief Does the presearch for the sbwt index searching
- * */
+ * @brief Device function for presearching
+ */
 
 #include "Rank/Rank.cuh"
-#include "SbwtContainer/GpuSbwtContainer.cuh"
-#include "Utils/CudaKernelUtils.cuh"
-#include "Utils/CudaUtils.cuh"
-#include "Utils/GlobalDefinitions.h"
-#include "Utils/MathUtils.hpp"
-#include "Utils/TypeDefinitions.h"
-#include "Utils/Logger.h"
-
-using gpu_utils::get_idx;
-using math_utils::round_up;
-using std::make_unique;
-using std::move;
-using std::shared_ptr;
-using log_utils::Logger;
+#include "Tools/KernelUtils.cuh"
 
 namespace sbwt_search {
+
+using gpu_utils::get_idx;
 
 __global__ void d_presearch(
   const u64 *const c_map,
@@ -48,34 +37,6 @@ __global__ void d_presearch(
   presearch_left[kmer] = node_left;
   presearch_right[kmer] = node_right;
 }
-
-class Presearcher {
-  private:
-    shared_ptr<GpuSbwtContainer> container;
-
-  public:
-    Presearcher(shared_ptr<GpuSbwtContainer> container): container(container) {}
-    void presearch() {
-      constexpr const auto presearch_times
-        = round_up<size_t>(1ULL << (presearch_letters * 2), threads_per_block);
-      auto blocks_per_grid = presearch_times / threads_per_block;
-      auto presearch_left = make_unique<GpuPointer<u64>>(presearch_times);
-      auto presearch_right = make_unique<GpuPointer<u64>>(presearch_times);
-      Logger::log_timed_event("PresearchFunction", Logger::EVENT_STATE::START);
-      d_presearch<<<blocks_per_grid, threads_per_block>>>(
-        container->get_c_map().get(),
-        container->get_acgt_pointers().get(),
-        container->get_layer_0_pointers().get(),
-        container->get_layer_1_2_pointers().get(),
-        presearch_left->get(),
-        presearch_right->get()
-      );
-      GPU_CHECK(cudaPeekAtLastError());
-      GPU_CHECK(cudaDeviceSynchronize());
-      Logger::log_timed_event("PresearchFunction", Logger::EVENT_STATE::STOP);
-      container->set_presearch(move(presearch_left), move(presearch_right));
-    }
-};
 
 }  // namespace sbwt_search
 

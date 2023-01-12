@@ -1,0 +1,3 @@
+This folder contains scripts written in multiple languages which are used to
+combine multiple commands into a single file. It is advised to only build using
+these scripts rather than using the individual Tools directly.

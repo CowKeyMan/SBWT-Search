@@ -1,1 +1,53 @@
-Checks:          '-fuchsia-*,-google-*,-zircon-*,-abseil-*,-llvm*'
+# This is the file used by the clang-tidy tool, which performs static analysis.
+# Inside the file we specify which files to ignore when going through the
+# codebase. Rather than using clang-tidy directly, we make use of a python
+# script: scripts/cmake_checks/clang_tidy.py. Note: clang-tidy may fail the
+# first time we run scripts/build/build_all.sh since the compilation database
+# would not have been built by then. So when we run it afterwards it will be
+# successful.
+
+---
+Checks:
+'
+  *,
+  android-*,
+  boost-*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  cert-*,
+  clang-analyzer-core*,
+  clang-analyzer-cplusplus*,
+  clang-analyzer-nullability*,
+  clang-analyzer-optin*,
+  clang-analyzer-osx*,
+  clang-analyzer-valist*,
+  concurrency-*,
+  cppcoreguidelines-*,
+  -darwin-*,
+  -fuchsia-*,
+  google-*,
+  hicpp-*,
+  linuxkernel-*,
+  llvm-*,
+  -llvm-header-guard,
+  -llvmlibc-*,
+  misc-*
+  -misc-const-correctness
+  modernize-*,
+  mpi-*,
+  objc-*,
+  openmp-*,
+  -openmp-use-default-none
+  performance-*,
+  portability-*,
+  readability-*,
+  -readability-identifier-length,
+  -readability-convert-member-functions-to-static,
+  zircon-*,
+  altera-*
+  -altera-unroll-loops
+  -altera-id-dependent-backward-branch
+'
+
+WarningsAsErrors: ''
+HeaderFilterRegex: 'src/**/*'

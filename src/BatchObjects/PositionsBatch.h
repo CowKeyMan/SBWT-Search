@@ -9,19 +9,19 @@
  * example, given the string ABCDE and FGHIJ, and k-mer size 3, positions 0, 1,
  * 2 are valid positions, but position 3, which is the k-mer starting at D, is
  * not valid. Hence, our final position list will be: [0, 1, 2, 5, 6, 7]
- * */
+ */
 
 #include <vector>
 
-#include "Utils/TypeDefinitions.h"
-
-using std::vector;
+#include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
+using std::vector;
+
 class PositionsBatch {
-  public:
-    vector<u64> positions;
+public:
+  vector<u64> positions;
 };
 
 }  // namespace sbwt_search

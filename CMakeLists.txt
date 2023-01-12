@@ -1,6 +1,10 @@
-# This is the root cmake file where the sources lie
-# Different CMake versions have more features.
-# Since we will be using CUDA, we want a pretty high version
+# This is the root CMakeLists which calls all other cmake files. It is used by
+# the cmake tool to build the Makefile which would then be used to compile our
+# program. Inside it, we specify the project name and details, we load all
+# files within the cmake folder and then add the src and documentation folder,
+# which also contain a CMakeLists.txt file, as subdirectories, so that the
+# CMakeLists.txt file within them is also executed (sequentially).
+# Since we will be using CUDA, we want to use a pretty high version of CMake.
 
 cmake_minimum_required(VERSION 3.19)
 
@@ -11,7 +15,7 @@ project(
   HOMEPAGE_URL https://github.com/CowKeyMan/SBWT-Search
   LANGUAGES CXX
 )
-set (CMAKE_CXX_STANDARD 17)
+set (CMAKE_CXX_STANDARD 20)
 
 include(CheckLanguage)
 check_language(CUDA)
@@ -24,7 +28,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include(cmake/PreventBuildingInCmakeDirectory.cmake)
-include(cmake/ExportCompileCommands.cmake)
 include(cmake/CompilerWarnings.cmake)
 include(cmake/StaticAnalyzers.cmake)
 include(cmake/Profiling.cmake)

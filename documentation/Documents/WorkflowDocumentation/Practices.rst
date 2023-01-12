@@ -21,7 +21,13 @@ Naming Conventions
 File naming convention
 ----------------------
 
-When naming files, we name the related header, source and test files with the same prefix. This way when we sort by name we can see them grouped together. For example, if our *Functions.cpp* file has a corresponding *Functions.h*, then our test file will be called *Functions_test.cpp* (as opposed to *Test_Functions.cpp*, which would end up grouping the tests together instead). File names use CamelCase, and then we separate tags (tags such as *test*) with underscores. These are valid file names: File1.cpp, File2.h, FileThree.cpp, FileThree_test.cpp.
+When naming files, we name the related header, source and test files with the same prefix, and they are also usually put to the same folder. This way when we sort by name we can see them grouped together. For example, if our *Functions.cpp* file has a corresponding *Functions.h*, then our test file will be called *Functions_test.cpp* (as opposed to *Test_Functions.cpp*, which would end up grouping the tests together instead). File names use CamelCase, and then we separate tags (tags such as *test*) with underscores. These are valid file names: File1.cpp, File2.h, FileThree.cpp, FileThree_test.cpp.
+
+* \*.cuh files will contain `__device__` functions
+
+* \*.cu files will contain cuda specific items
+
+* \*.hpp will contain templated files
 
 Function and variable names
 ---------------------------

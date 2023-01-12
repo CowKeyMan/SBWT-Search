@@ -4,14 +4,14 @@
 /**
  * @file StringSequenceBatchProducer.h
  * @brief takes care of building and sending the stringsequencebatch
- * */
+ */
 
 #include <memory>
 #include <stddef.h>
 #include <string>
 
-#include "Utils/SharedBatchesProducer.hpp"
-#include "Utils/TypeDefinitions.h"
+#include "Tools/SharedBatchesProducer.hpp"
+#include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 class StringSequenceBatch;
@@ -25,15 +25,15 @@ using std::string;
 namespace sbwt_search {
 
 class StringSequenceBatchProducer:
-    public SharedBatchesProducer<StringSequenceBatch> {
-    friend ContinuousSequenceFileParser;
+  public SharedBatchesProducer<StringSequenceBatch> {
+  friend ContinuousSequenceFileParser;
 
-  public:
-    StringSequenceBatchProducer(uint max_batches);
+public:
+  StringSequenceBatchProducer(uint max_batches);
 
-  private:
-    void set_string(const string &s);
-    shared_ptr<StringSequenceBatch> get_default_value() override;
+private:
+  void set_string(const string &s);
+  shared_ptr<StringSequenceBatch> get_default_value() override;
 };
 
 }  // namespace sbwt_search

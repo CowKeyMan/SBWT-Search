@@ -9,7 +9,7 @@ AsciiOutputParser::AsciiOutputParser(string filename): OutputParser(filename) {}
 auto AsciiOutputParser::get_next() -> ITEM_TYPE {
   if (at_end_of_line) {
     at_end_of_line = false;
-    if (!getline(stream, line_buffer)) { return ITEM_TYPE::EOF_T; }
+    if (!getline(get_stream(), line_buffer)) { return ITEM_TYPE::EOF_T; }
     line_stream = stringstream(line_buffer);
   }
   if (line_stream >> result_buffer) {

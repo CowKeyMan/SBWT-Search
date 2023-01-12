@@ -86,11 +86,31 @@ For diagrams in the docentation we use Mermaid, which is a text based graph crea
 Installation
 ------------
 
+You may need an updated version of nodejs for this to work, as such, you can uninstall the current version you have using these commands
+
+.. code-block:: bash
+
+  sudo apt remove npm
+  sudo apt remove nodejs
+  sudo apt autoremove
+
+Then install a newer version of nodejs (in this case version 18) using the following command:
+
+.. code-block:: bash
+
+  cd ~
+  curl -sL https://deb.nodesource.com/setup_18.x -o nodesource_setup.sh
+  sudo bash nodesource_setup.sh
+  rm nodesource_setup.sh
+
+Then you can install mermaid using the following:
+
 .. code-block:: bash
 
   pip install sphinxcontrib-mermaid
   cd documentation/
   npm install @mermaid-js/mermaid-cli
+
 
 clang-format
 ++++++++++++

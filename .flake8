@@ -1,0 +1,6 @@
+[flake8]
+ignore = E402, W503, E131
+exclude=
+  build/
+  documentation/
+  .ycm_extra_conf.py

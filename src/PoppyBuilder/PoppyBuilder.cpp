@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "PoppyBuilder/PoppyBuilder.h"
-#include "Utils/GlobalDefinitions.h"
-#include "Utils/MathUtils.hpp"
+#include "Tools/GlobalDefinitions.h"
+#include "Tools/MathUtils.hpp"
 
 using math_utils::divisible_by_power_of_two;
 using math_utils::round_up;
@@ -17,7 +17,7 @@ using std::vector;
 namespace sbwt_search {
 
 PoppyBuilder::PoppyBuilder(const size_t bits_total, const u64 *bits_vector):
-    bits_total(bits_total), bits_vector(bits_vector) {
+  bits_total(bits_total), bits_vector(bits_vector) {
   layer_0.reserve(round_up(bits_total, hyperblock_bits) / hyperblock_bits);
   layer_1_2.reserve(round_up(bits_total, superblock_bits) / superblock_bits);
 }
@@ -36,7 +36,7 @@ auto PoppyBuilder::build() -> void {
       do_divisble_by_superblock(bits);
     }
     auto condition = divisible_by_power_of_two(bits, basicblock_bits)
-                  && !divisible_by_power_of_two(bits, superblock_bits);
+      && !divisible_by_power_of_two(bits, superblock_bits);
     if (condition) { do_divisible_by_basicblock(); }
     if (bits < round_up<u64>(bits_total, 64)) {
       auto set_bits = __builtin_popcountll(bits_vector[i]);

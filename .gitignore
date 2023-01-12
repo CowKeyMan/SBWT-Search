@@ -1,3 +1,5 @@
+# Specifies which files should be ignored by our git repository
+
 *.obj
 *.o
 
@@ -16,14 +18,11 @@ results/
 out.txt
 err.txt
 
-.ycm_extra_conf.py
 *.vim
 
 node_modules
 package-lock.json
 package.json
-
-.vimspector.json
 
 tmp/
 gmon*

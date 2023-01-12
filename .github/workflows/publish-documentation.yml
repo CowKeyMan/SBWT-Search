@@ -1,5 +1,7 @@
-# Build documentation and test reports and publish them on
-# github pages
+# This is the file responsible for building the documentation and tests on
+# github using github-actions and then publishing both the documentation and
+# test results + code coverage as a github page. Within the file, each step has
+# a name which describes its purpose.
 
 name: publish-documentation
 on:
@@ -9,7 +11,7 @@ on:
 
 # While some jobs should be parallisable, it was opted not to parallelise
 # since jobs run on different machines on github actions, and there is
-# no build in support for paralellising steps.
+# no built in support for paralellising steps.
 jobs:
 
   build_documentation:
@@ -50,6 +52,9 @@ jobs:
       - name: Run tests
         run: sh ./scripts/standalone/test.sh
 
+      # The website is put inside the docs folder, which is why
+      # the .gitignore within that folder is removed when we push to github pages
+      # since otherwise the website would not be pushed to the gh-pages branch.
       - name: Setup documentation git repository
         run: |
           cd docs/

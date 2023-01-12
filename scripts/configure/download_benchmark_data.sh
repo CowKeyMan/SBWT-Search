@@ -1,7 +1,9 @@
 #!/bin/bash
 
-MODE=1 # 1 = the proper mode
+# Download the data used for benchmarking from public databases.
 # If any argument at all is passed to this script, it will instead run the 'debug' version, ie it will only download some small files, for local testing
+
+MODE=1 # 1 = the proper mode
 if [ $# -ne 0 ]; then
 	echo $#
 	MODE=0

@@ -1,3 +1,6 @@
+Rem This is the Windows equivalent of the Makefile for the documentation. It is
+Rem usually unused.
+
 @ECHO OFF
 
 pushd %~dp0
