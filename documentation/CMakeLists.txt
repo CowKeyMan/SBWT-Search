@@ -47,5 +47,3 @@ else ()
     message("######################################################\n")
     message(FATAL_ERROR "")
 endif (DOXYGEN_FOUND)
-
-endif()

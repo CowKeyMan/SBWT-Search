@@ -29,7 +29,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include(cmake/PreventBuildingInCmakeDirectory.cmake)
 include(cmake/CompilerWarnings.cmake)
-include(cmake/StaticAnalyzers.cmake)
 include(cmake/Profiling.cmake)
 include(cmake/Options.cmake)
 include(cmake/CCache.cmake)

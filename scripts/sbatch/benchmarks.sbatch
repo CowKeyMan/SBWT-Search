@@ -57,7 +57,7 @@ echo "Time taken to copy to LOCAL_SCRATCH: $((t2-t1)) ms" >> "benchmark_results/
 rm -rf build
 
 ## Build
-sh scripts/build/release.sh a
+sh scripts/build/release.sh
 
 sh -x scripts/standalone/benchmark.sh "${DATETIME}"
 
