@@ -4,12 +4,12 @@
 
 #include "ArgumentParser/IndexSearchArgumentParser.h"
 #include "FilenamesParser/FilenamesParser.h"
+#include "Global/GlobalDefinitions.h"
 #include "Main/IndexSearchMain.h"
 #include "Presearcher/Presearcher.h"
 #include "SbwtBuilder/SbwtBuilder.h"
 #include "SbwtContainer/CpuSbwtContainer.h"
 #include "SbwtContainer/GpuSbwtContainer.h"
-#include "Tools/GlobalDefinitions.h"
 #include "Tools/GpuUtils.h"
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"

@@ -1,7 +1,7 @@
+#include "Global/GlobalDefinitions.h"
 #include "Presearcher/Presearcher.cuh"
 #include "Presearcher/Presearcher.h"
 #include "Tools/BitDefinitions.h"
-#include "Tools/GlobalDefinitions.h"
 #include "Tools/GpuUtils.h"
 
 namespace sbwt_search {

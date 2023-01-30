@@ -1,5 +1,5 @@
+#include "Global/GlobalDefinitions.h"
 #include "Searcher/Searcher.h"
-#include "Tools/GlobalDefinitions.h"
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"
 #include "Tools/TypeDefinitions.h"

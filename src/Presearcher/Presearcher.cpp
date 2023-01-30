@@ -1,7 +1,7 @@
 #include <memory>
 
+#include "Global/GlobalDefinitions.h"
 #include "Presearcher/Presearcher.h"
-#include "Tools/GlobalDefinitions.h"
 #include "Tools/GpuPointer.h"
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"

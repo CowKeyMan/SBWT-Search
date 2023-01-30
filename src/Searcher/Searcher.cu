@@ -1,6 +1,6 @@
+#include "Global/GlobalDefinitions.h"
 #include "Rank/Rank.cuh"
 #include "Searcher/Searcher.h"
-#include "Tools/GlobalDefinitions.h"
 #include "Tools/GpuUtils.h"
 #include "Tools/KernelUtils.cuh"
 #include "Tools/Logger.h"

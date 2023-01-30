@@ -8,8 +8,8 @@
 
 #include <memory>
 
+#include "Global/GlobalDefinitions.h"
 #include "Tools/BitDefinitions.h"
-#include "Tools/GlobalDefinitions.h"
 #include "Tools/GpuIntrinsics.cuh"
 #include "Tools/TypeDefinitions.h"
 

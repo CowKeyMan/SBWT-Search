@@ -4,8 +4,8 @@
 #include <utility>
 #include <vector>
 
+#include "Global/GlobalDefinitions.h"
 #include "PoppyBuilder/PoppyBuilder.h"
-#include "Tools/GlobalDefinitions.h"
 #include "Tools/MathUtils.hpp"
 
 using math_utils::divisible_by_power_of_two;
