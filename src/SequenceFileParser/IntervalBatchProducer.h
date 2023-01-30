@@ -8,18 +8,16 @@
 
 #include <memory>
 
+#include "BatchObjects/IntervalBatch.h"
 #include "Tools/SharedBatchesProducer.hpp"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
-class IntervalBatch;
+
 class ContinuousSequenceFileParser;
-}  // namespace sbwt_search
 
 using design_utils::SharedBatchesProducer;
 using std::shared_ptr;
-
-namespace sbwt_search {
 
 class IntervalBatchProducer: public SharedBatchesProducer<IntervalBatch> {
   friend ContinuousSequenceFileParser;

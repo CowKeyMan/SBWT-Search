@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 
-#include "ArgumentParser/ArgumentParser.h"
+#include "ArgumentParser/IndexSearchArgumentParser.h"
 #include "cxxopts.hpp"
 
 namespace sbwt_search {
@@ -15,7 +15,7 @@ using std::string;
 using std::to_string;
 using units_parser::MemoryUnitsParser;
 
-ArgumentParser::ArgumentParser(
+IndexSearchArgumentParser::IndexSearchArgumentParser(
   const string &program_name,
   const string &program_description,
   int argc,
@@ -25,7 +25,7 @@ ArgumentParser::ArgumentParser(
   )),
   args{parse_arguments(argc, argv)} {}
 
-auto ArgumentParser::create_options(
+auto IndexSearchArgumentParser::create_options(
   const string &program_name, const string &program_description
 ) -> Options {
   auto options = Options(program_name, program_description);
@@ -64,7 +64,7 @@ auto ArgumentParser::create_options(
       "components so they can all keep processing without interruption from "
       "the start (this is assuming you have 5 threads running). If you have "
       "less threads, maybe set to to the number of available threads instead",
-      value<unsigned int>()->default_value(to_string(5))
+      value<size_t>()->default_value(to_string(5))
     )("c,print-mode",
       "The mode used when printing the result to the output file. Options "
       "are 'ascii' (default), 'binary' or 'boolean'. In ascii mode the "
@@ -98,7 +98,8 @@ auto ArgumentParser::create_options(
   return options;
 }
 
-auto ArgumentParser::parse_arguments(int argc, char **argv) -> ParseResult {
+auto IndexSearchArgumentParser::parse_arguments(int argc, char **argv)
+  -> ParseResult {
   auto arguments = options->parse(argc, argv);
   if (argc == 1 || arguments["help"].as<bool>()) {
     std::cout << options->help() << std::endl;
@@ -107,26 +108,26 @@ auto ArgumentParser::parse_arguments(int argc, char **argv) -> ParseResult {
   return arguments;
 }
 
-auto ArgumentParser::get_sequence_file() -> string {
+auto IndexSearchArgumentParser::get_sequence_file() -> string {
   return args["query-file"].as<string>();
 }
-auto ArgumentParser::get_index_file() -> string {
+auto IndexSearchArgumentParser::get_index_file() -> string {
   return args["index-file"].as<string>();
 }
-auto ArgumentParser::get_output_file() -> string {
+auto IndexSearchArgumentParser::get_output_file() -> string {
   return args["output-prefix"].as<string>();
 }
-auto ArgumentParser::get_unavailable_ram() -> size_t {
+auto IndexSearchArgumentParser::get_unavailable_ram() -> size_t {
   return MemoryUnitsParser::convert(args["unavailable-main-memory"].as<string>()
   );
 }
-auto ArgumentParser::get_max_cpu_memory() -> size_t {
+auto IndexSearchArgumentParser::get_max_cpu_memory() -> size_t {
   return MemoryUnitsParser::convert(args["max-main-memory"].as<string>());
 }
-auto ArgumentParser::get_batches() -> unsigned int {
-  return args["batches"].as<unsigned int>();
+auto IndexSearchArgumentParser::get_batches() -> size_t {
+  return args["batches"].as<size_t>();
 }
-auto ArgumentParser::get_print_mode() -> string {
+auto IndexSearchArgumentParser::get_print_mode() -> string {
   return args["print-mode"].as<string>();
 }
 

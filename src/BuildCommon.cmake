@@ -40,10 +40,15 @@ find_package(OpenMP REQUIRED)
 add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
 
 add_library(
-  argument_parser
-  "${PROJECT_SOURCE_DIR}/ArgumentParser/ArgumentParser.cpp"
+  index_search_argument_parser
+  "${PROJECT_SOURCE_DIR}/ArgumentParser/IndexSearchArgumentParser.cpp"
 )
-target_link_libraries(argument_parser PRIVATE cxxopts memory_units_parser)
+target_link_libraries(
+  index_search_argument_parser
+  PRIVATE
+  memory_units_parser
+  cxxopts
+)
 add_library(
   presearcher_cpu
   "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cpp"
@@ -156,8 +161,8 @@ target_link_libraries(
   fmt::fmt
   kseqpp_read
   OpenMP::OpenMP_CXX
-  cxxopts
   spdlog::spdlog
+  cxxopts
 
   # Internal libraries
   io_utils
@@ -169,7 +174,7 @@ target_link_libraries(
   semaphore
 
   ## SBWT_SEARCH libraries
-  argument_parser
+  index_search_argument_parser
   filenames_parser
   sbwt_builder
   sbwt_container

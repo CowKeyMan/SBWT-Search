@@ -12,9 +12,14 @@
 #include <string>
 #include <vector>
 
+#include "SequenceFileParser/IntervalBatchProducer.h"
+#include "SequenceFileParser/StringBreakBatchProducer.h"
+#include "SequenceFileParser/StringSequenceBatchProducer.h"
 #include "Tools/SharedBatchesProducer.hpp"
 #include "Tools/TypeDefinitions.h"
 #include "kseqpp_read.hpp"
+
+namespace sbwt_search {
 
 using reklibpp::Seq;
 using reklibpp::SeqStreamIn;
@@ -23,12 +28,6 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 using structure_utils::CircularBuffer;
-
-namespace sbwt_search {
-
-class StringSequenceBatchProducer;
-class StringBreakBatchProducer;
-class IntervalBatchProducer;
 
 class ContinuousSequenceFileParser {
 private:

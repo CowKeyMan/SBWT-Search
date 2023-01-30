@@ -10,19 +10,17 @@
 #include <stddef.h>
 #include <string>
 
+#include "BatchObjects/StringSequenceBatch.h"
 #include "Tools/SharedBatchesProducer.hpp"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
-class StringSequenceBatch;
+
 class ContinuousSequenceFileParser;
-}  // namespace sbwt_search
 
 using design_utils::SharedBatchesProducer;
 using std::shared_ptr;
 using std::string;
-
-namespace sbwt_search {
 
 class StringSequenceBatchProducer:
   public SharedBatchesProducer<StringSequenceBatch> {

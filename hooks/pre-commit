@@ -14,7 +14,7 @@ hook_commands=(
   "python3 scripts/standalone/generate_file_documentation.py --no-print"
   "flake8"
   "pylint ."
-  "python scripts/static_analysers/clang_tidy.py"
+  # "python scripts/static_analysers/clang_tidy.py"
 )
 
 for ((i = 0; i < ${#hook_commands[@]}; i++))

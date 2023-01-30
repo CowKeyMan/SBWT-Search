@@ -12,11 +12,10 @@
 #include <string>
 #include <vector>
 
+#include "SbwtContainer/CpuSbwtContainer.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
-
-class CpuSbwtContainer;
 
 using std::istream;
 using std::string;
@@ -28,7 +27,7 @@ private:
   string filename;
 
 public:
-  explicit SbwtBuilder(string &filename): filename(filename) {}
+  explicit SbwtBuilder(string filename): filename(std::move(filename)) {}
   auto get_cpu_sbwt(bool build_index = true) -> unique_ptr<CpuSbwtContainer>;
 
 private:

@@ -1,8 +1,8 @@
-#ifndef ARGUMENT_PARSER_H
-#define ARGUMENT_PARSER_H
+#ifndef INDEX_SEARCH_ARGUMENT_PARSER_H
+#define INDEX_SEARCH_ARGUMENT_PARSER_H
 
 /**
- * @file ArgumentParser.h
+ * @file IndexSearchArgumentParser.h
  * @brief Contains functions to parse the main program's arguments
  */
 
@@ -20,13 +20,13 @@ using std::string;
 using std::unique_ptr;
 using units_parser::MemoryUnitsParser;
 
-class ArgumentParser {
+class IndexSearchArgumentParser {
 private:
   unique_ptr<cxxopts::Options> options = nullptr;
   cxxopts::ParseResult args = {};
 
 public:
-  ArgumentParser(
+  IndexSearchArgumentParser(
     const string &program_name,
     const string &program_description,
     int argc,
@@ -43,7 +43,7 @@ public:
   auto get_output_file() -> string;
   auto get_unavailable_ram() -> size_t;
   auto get_max_cpu_memory() -> size_t;
-  auto get_batches() -> unsigned int;
+  auto get_batches() -> size_t;
   auto get_print_mode() -> string;
 };
 
