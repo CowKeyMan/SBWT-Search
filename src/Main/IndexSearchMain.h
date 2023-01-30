@@ -47,7 +47,6 @@ private:
   u64 max_batches = 0;
   u64 threads = 0;
 
-private:
   auto get_gpu_container(const string &index_file)
     -> shared_ptr<GpuSbwtContainer>;
   auto load_input_output_filenames(

@@ -63,7 +63,7 @@ for batch in ${batches[@]}; do
       echo Now running: File ${input_files[i]} with ${batch} batches in ${printing_modes[p]} format >> ${stdoutput}
       printf "Input file size: " >> ${stdoutput}
       ls -lh ${input_files[i]} | awk '{print  $5}' >> ${stdoutput}
-      ./build/bin/main -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batch} -c ${printing_modes[p]} >> ${stdoutput}
+      ./build/bin/sbwt_search index -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batch} -c ${printing_modes[p]} >> ${stdoutput}
       printf "Output file size: " >> ${stdoutput}
       ls -lh ${output_files[i]} | awk '{print  $5}' >> ${stdoutput}
     done

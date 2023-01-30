@@ -64,7 +64,7 @@ batches=30
 
 for (( i=0; i<${#input_files[@]}; i++ )); do
 echo Now running: File ${input_files[i]} with ${batch} batches
-/usr/bin/time ./build/bin/main -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batches}
+/usr/bin/time ./build/bin/sbwt_search index -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batches}
 done
 
 cd "${OLD_PWD}"

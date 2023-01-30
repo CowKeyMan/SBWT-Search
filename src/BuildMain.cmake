@@ -12,17 +12,20 @@ add_library(
   index_search_main
   "${PROJECT_SOURCE_DIR}/Main/IndexSearchMain.cpp"
 )
-target_link_libraries(
-  index_search_main
-  PRIVATE
-  common_libraries
-)
+target_link_libraries(index_search_main PRIVATE common_libraries)
 
-add_executable(main "${PROJECT_SOURCE_DIR}/main.cpp")
+add_library(
+  color_search_main
+  "${PROJECT_SOURCE_DIR}/Main/ColorSearchMain.cpp"
+)
+target_link_libraries(color_search_main PRIVATE common_libraries)
+
+add_executable(sbwt_search "${PROJECT_SOURCE_DIR}/main.cpp")
 target_link_libraries(
-  main
+  sbwt_search
   PRIVATE
   index_search_main
+  color_search_main
   common_libraries
 )
 

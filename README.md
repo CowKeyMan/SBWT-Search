@@ -14,7 +14,7 @@ To build the program, simply run the following commands:
 
 Note, you may be missing some depenencies, in which case follow the instructions or errors given by CMake. A common dependency is libgz, which can be downloaded using the following command: `sudo apt install zlib1g-dev`
 
-Afterwards, an executable will be generated at `build/bin/main`. You can run this and a help text will appear. Here is the API of this binary:
+Afterwards, an executable will be generated at `build/bin/sbwt_search`. You can run this and a help text will appear. Here is the API of this binary:
 
 ```
 Usage:

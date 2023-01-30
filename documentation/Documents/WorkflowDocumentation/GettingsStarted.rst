@@ -22,9 +22,9 @@ This section will describe a typical workflow from writing a new piece of code, 
 #. Run `./scripts/standalone/test.sh` to run the tests and generate the code coverage report which can be found by opening *docs/index.html* in a browser and choose the *Code Coverage* option
 #. Integrate the new functions into the program and test again
 #. Once you have a main executable ready to be run you can run `./scripts/build/build_all.sh` to generate a debug build of your code.
-#. You can run your code by running `./build/bin/main`, which is the main executable generated
+#. You can run your code by running `./build/bin/sbwt_search`, which is the main executable generated
 #. Here you may update the documentation. You can run `./scripts/build/build_docs.sh`, which will generate the documentation in the docs folder. Similarly with the code coverage, you may open *docs/index.html* in a browser and this time choose the *Documentation* option.
-#. After you are satisfied and wish to generate a release executable, you may run `./scripts/build/release.sh` and then you may execute it by running `./build/bin/main`.
+#. After you are satisfied and wish to generate a release executable, you may run `./scripts/build/release.sh` and then you may execute it by running `./build/bin/sbwt_search`.
 
 Working with CMake
 ++++++++++++++++++
