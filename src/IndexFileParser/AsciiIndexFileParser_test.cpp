@@ -39,7 +39,9 @@ protected:
       buffer_size
     );
     for (int i = 0; i < expected_indexes.size(); ++i) {
-      host.generate_batch();
+      indexes_batch->indexes.resize(0);
+      indexes_starts_batch->indexes_starts.resize(0);
+      host.generate_batch(0);
       actual_indexes.push_back(indexes_batch->indexes);
       actual_starts.push_back(indexes_starts_batch->indexes_starts);
     }

@@ -48,7 +48,7 @@ public:
     size_t max_indexes_,
     size_t read_padding_
   );
-  virtual auto generate_batch() -> void = 0;
+  virtual auto generate_batch(size_t start_index) -> void = 0;
   virtual ~IndexFileParser() = default;
   IndexFileParser(IndexFileParser &) = delete;
   IndexFileParser(IndexFileParser &&) = delete;

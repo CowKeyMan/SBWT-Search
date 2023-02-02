@@ -38,18 +38,17 @@ auto AsciiIndexFileParser::assert_version() -> void {
   }
 }
 
-auto AsciiIndexFileParser::generate_batch() -> void {
-  get_indexes().resize(0);
-  get_starts().resize(0);
-  current_index = 0;
+auto AsciiIndexFileParser::generate_batch(size_t start_index) -> void {
+  current_index = start_index;
   char c = '\0';
   while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
+    c = getc();
+    if (c == '\0') { return; }  // EOF
     if (new_read) {
       get_starts().push_back(current_index);
       new_read = false;
     }
-    c = getc();
     if (c == '-') { c = skip_until_next_whitespace(); }
     if (c == '\n') { end_read(); }
     // if it is a number (note: all special characters are smaller than '0')

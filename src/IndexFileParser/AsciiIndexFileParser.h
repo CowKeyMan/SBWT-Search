@@ -42,7 +42,7 @@ public:
     size_t read_padding_,
     size_t buffer_size = sixteen_kB
   );
-  auto generate_batch() -> void override;
+  auto generate_batch(size_t start_index) -> void override;
 
 private:
   auto load_buffer(uint num_copy_from_end = 0) -> void;
