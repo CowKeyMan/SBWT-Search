@@ -13,14 +13,16 @@ using std::string;
 AsciiIndexFileParser::AsciiIndexFileParser(
   shared_ptr<ThrowingIfstream> in_stream_,
   shared_ptr<IndexesBatch> indexes_,
-  shared_ptr<IndexesIntervalsBatch> indexes_intervals_batch_,
+  shared_ptr<IndexesStartsBatch> indexes_starts_batch_,
+  size_t max_indexes_,
   size_t read_padding_,
   size_t buffer_size_
 ):
   IndexFileParser(
     std::move(in_stream_),
     std::move(indexes_),
-    std::move(indexes_intervals_batch_),
+    std::move(indexes_starts_batch_),
+    max_indexes_,
     read_padding_
   ),
   buffer_size(buffer_size_) {
@@ -37,15 +39,19 @@ auto AsciiIndexFileParser::assert_version() -> void {
 }
 
 auto AsciiIndexFileParser::generate_batch() -> void {
-  string buffer;
-  size_t current_read_size = 0;
+  get_indexes().resize(0);
+  get_starts().resize(0);
   current_index = 0;
   char c = '\0';
   while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
+    if (new_read) {
+      get_starts().push_back(current_index);
+      new_read = false;
+    }
     c = getc();
     if (c == '-') { c = skip_until_next_whitespace(); }
-    if (c == '\n') { skip_to_next_read(); }
+    if (c == '\n') { end_read(); }
     // if it is a number (note: all special characters are smaller than '0')
     if (c >= '0') {
       get_indexes().push_back(read_number(c - '0'));
@@ -83,12 +89,12 @@ inline auto AsciiIndexFileParser::read_number(u64 starting_number) -> u64 {
   return result;
 }
 
-inline auto AsciiIndexFileParser::skip_to_next_read() -> void {
+inline auto AsciiIndexFileParser::end_read() -> void {
   while (current_index % get_read_padding() != 0) {
     get_indexes().push_back(static_cast<u64>(-1));
     ++current_index;
   }
-  get_intervals().push_back(current_index);
+  new_read = true;
 }
 
 }  // namespace sbwt_search

@@ -15,7 +15,7 @@
 #include <memory>
 
 #include "BatchObjects/IndexesBatch.h"
-#include "BatchObjects/IndexesIntervalsBatch.h"
+#include "BatchObjects/IndexesStartsBatch.h"
 #include "Tools/IOUtils.h"
 #include "Tools/SharedBatchesProducer.hpp"
 
@@ -29,21 +29,23 @@ class IndexFileParser {
 private:
   shared_ptr<ThrowingIfstream> in_stream;
   shared_ptr<IndexesBatch> indexes;
-  shared_ptr<IndexesIntervalsBatch> indexes_intervals_batch;
+  shared_ptr<IndexesStartsBatch> indexes_starts_batch;
+  size_t max_indexes;
   size_t read_padding;
 
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
   [[nodiscard]] auto get_indexes() const -> vector<u64> &;
   [[nodiscard]] auto get_max_indexes() const -> u64;
-  [[nodiscard]] auto get_intervals() const -> vector<u64> &;
+  [[nodiscard]] auto get_starts() const -> vector<u64> &;
   [[nodiscard]] auto get_read_padding() const -> u64;
 
 public:
   IndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
     shared_ptr<IndexesBatch> indexes_,
-    shared_ptr<IndexesIntervalsBatch> indexes_intervals_batch_,
+    shared_ptr<IndexesStartsBatch> indexes_starts_batch_,
+    size_t max_indexes_,
     size_t read_padding_
   );
   virtual auto generate_batch() -> void = 0;

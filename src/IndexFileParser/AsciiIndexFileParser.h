@@ -12,7 +12,7 @@
 #include <sstream>
 
 #include "BatchObjects/IndexesBatch.h"
-#include "BatchObjects/IndexesIntervalsBatch.h"
+#include "BatchObjects/IndexesStartsBatch.h"
 #include "IndexFileParser/IndexFileParser.h"
 #include "Tools/IOUtils.h"
 
@@ -31,12 +31,14 @@ private:
   size_t buffer_size = 0;
   size_t buffer_index = 0;
   size_t current_index = 0;
+  bool new_read = true;
 
 public:
   AsciiIndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
     shared_ptr<IndexesBatch> indexes_,
-    shared_ptr<IndexesIntervalsBatch> indexes_intervals_batch_,
+    shared_ptr<IndexesStartsBatch> indexes_starts_batch_,
+    size_t max_indexes_,
     size_t read_padding_,
     size_t buffer_size = sixteen_kB
   );
@@ -48,7 +50,7 @@ private:
   auto skip_until_next_whitespace() -> char;
   auto getc() -> char;
   auto read_number(u64 starting_number) -> u64;
-  auto skip_to_next_read() -> void;
+  auto end_read() -> void;
 };
 
 }  // namespace sbwt_search

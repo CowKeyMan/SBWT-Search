@@ -17,31 +17,34 @@ class AsciiIndexFileParserTest: public ::testing::Test {
 protected:
   auto run_test(
     const string &filename,
-    size_t max_indexes_per_batch,
+    size_t max_indexes,
     size_t padding,
     const vector<vector<u64>> &expected_indexes,
-    const vector<vector<size_t>> &expected_intervals,
+    const vector<vector<size_t>> &expected_starts,
     size_t buffer_size
   ) -> void {
     auto in_stream = make_shared<ThrowingIfstream>(filename, ios_base::in);
     auto format_name = read_string_with_size(*in_stream);
     ASSERT_EQ(format_name, "ascii");
-    vector<vector<u64>> actual_indexes;
-    vector<vector<size_t>> actual_intervals;
-    auto indexes_batch = make_shared<IndexesBatch>(max_indexes_per_batch);
-    auto indexes_intervals_batch = make_shared<IndexesIntervalsBatch>();
+    vector<vector<u64>> actual_indexes{};
+    vector<vector<size_t>> actual_starts{};
+    auto indexes_batch = make_shared<IndexesBatch>();
+    auto indexes_starts_batch = make_shared<IndexesStartsBatch>();
     auto host = AsciiIndexFileParser(
-      in_stream, indexes_batch, indexes_intervals_batch, padding, buffer_size
+      in_stream,
+      indexes_batch,
+      indexes_starts_batch,
+      max_indexes,
+      padding,
+      buffer_size
     );
     for (int i = 0; i < expected_indexes.size(); ++i) {
       host.generate_batch();
       actual_indexes.push_back(indexes_batch->indexes);
-      actual_intervals.push_back(indexes_intervals_batch->indexes_intervals);
-      indexes_batch.reset();
-      indexes_intervals_batch.reset();
+      actual_starts.push_back(indexes_starts_batch->indexes_starts);
     }
     EXPECT_EQ(expected_indexes, actual_indexes);
-    EXPECT_EQ(expected_intervals, actual_intervals);
+    EXPECT_EQ(expected_starts, actual_starts);
   }
 };
 
@@ -55,7 +58,7 @@ auto to_u64s(const vector<vector<int>> &int_vec) -> vector<vector<u64>> {
 }
 
 TEST_F(AsciiIndexFileParserTest, OneBatch) {
-  const size_t max_indexes_per_batch = 999;
+  const size_t max_indexes = 999;
   const size_t padding = 4;
   const int pad = -1;
   const vector<vector<int>> ints = {{
@@ -77,17 +80,43 @@ TEST_F(AsciiIndexFileParserTest, OneBatch) {
     pad,
     pad  // end of 4th read
   }};
-
-  const vector<vector<u64>> intervals = {{4, 4, 8, 8, 16}};
+  const vector<vector<u64>> starts = {{0, 4, 4, 8, 8}};
   // 22 is how many characters are on the first line, 23 includes '\n'
   // 63 is how many characters are in entire file, 24 includes EOF
   for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {
     run_test(
       "test_objects/example_index_search_result.txt",
-      max_indexes_per_batch,
+      max_indexes,
       padding,
       to_u64s(ints),
-      intervals,
+      starts,
+      buffer_size
+    );
+  }
+}
+
+TEST_F(AsciiIndexFileParserTest, MultipleBatches) {
+  const size_t max_indexes = 4;
+  const size_t padding = 4;
+  const int pad = -1;
+  const vector<vector<int>> ints = {
+    {39, 164, 216, 59},  // end of 1st read
+                         // 2nd read is empty
+    {1, 2, 3, 4},  // end of 3rd read
+                   // empty line
+    {0, 1, 2, 4},
+    {5, 6, pad, pad}  // end of 4th read
+  };
+  const vector<vector<u64>> starts = {{0}, {0, 0}, {0, 0}, {}};
+  // 22 is how many characters are on the first line, 23 includes '\n'
+  // 63 is how many characters are in entire file, 24 includes EOF
+  for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {
+    run_test(
+      "test_objects/example_index_search_result.txt",
+      max_indexes,
+      padding,
+      to_u64s(ints),
+      starts,
       buffer_size
     );
   }
