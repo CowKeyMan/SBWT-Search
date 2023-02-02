@@ -3,9 +3,9 @@
 
 /**
  * @file AsciiIndexFileParser.h
- * @brief Reads the input text file integer by integer, and pads each read to
- * the given parameter. It also takes note of the starting index of where each
- * read starts in our vector of integers.
+ * @brief Reads the input text file integer by integer, and pads each line/read
+ * to the given parameter. It also takes note of the starting index of where
+ * each read starts in our vector of integers.
  */
 
 #include <memory>

@@ -38,8 +38,7 @@ ContinuousSearcher::ContinuousSearcher(
 }
 
 auto ContinuousSearcher::get_default_value() -> shared_ptr<ResultsBatch> {
-  return make_shared<ResultsBatch>(ResultsBatch{
-    vector<u64>(round_up<u64>(max_chars_per_batch, superblock_bits))});
+  return make_shared<ResultsBatch>(vector<u64>(max_chars_per_batch));
 }
 
 auto ContinuousSearcher::continue_read_condition() -> bool {

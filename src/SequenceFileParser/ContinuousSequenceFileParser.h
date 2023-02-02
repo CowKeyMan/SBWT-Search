@@ -31,8 +31,8 @@ using structure_utils::CircularBuffer;
 
 class ContinuousSequenceFileParser {
 private:
-  const size_t max_chars_per_batch;
-  const vector<string> filenames;
+  size_t max_chars_per_batch;
+  vector<string> filenames;
   unique_ptr<SeqStreamIn> stream;
   vector<string>::const_iterator filename_iterator;
   uint batch_id = 0;
@@ -46,9 +46,9 @@ private:
 public:
   ContinuousSequenceFileParser(
     const vector<string> &_filenames,
-    const uint _kmer_size,
-    const size_t _max_chars_per_batch,
-    const size_t max_batches,
+    uint _kmer_size,
+    size_t _max_chars_per_batch,
+    size_t max_batches,
     shared_ptr<StringSequenceBatchProducer> string_sequence_batch_producer,
     shared_ptr<StringBreakBatchProducer> string_break_batch_producer,
     shared_ptr<IntervalBatchProducer> interval_batch_producer

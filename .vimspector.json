@@ -11,8 +11,8 @@
             ],
             "configuration": {
                 "request": "launch",
-                "program": "${workspaceRoot}/build/bin/main_cuda",
-                "args": ["-i", "data/coli3.sbwt", "-q", "data/querydata/365.fna", "-o", "tmp/out_DELETE.txt", "-c", "bool", "-b", "1", "-m", "80000000"],
+                "program": "${workspaceRoot}/build/bin/sbwt_search",
+                "args": ["index", "-i", "test_objects/search_test_index.sbwt.sbwt", "-q", "test_objects/search_test_indexed.fna", "-o", "tmp/out_DELETE", "-c", "bool", "-b", "1", "-m", "80000000"],
                 "cwd": "${workspaceRoot}",
                 "environment": [],
                 "externalConsole": true,

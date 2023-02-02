@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "ResultsPrinter/BoolContinuousResultsPrinter.h"
+#include "Tools/IOUtils.h"
 #include "Tools/MathUtils.hpp"
 #include "Tools/TypeDefinitions.h"
 
@@ -94,18 +95,13 @@ auto BoolContinuousResultsPrinter::shift() -> void {
 }
 
 auto BoolContinuousResultsPrinter::dump_working_bits() -> void {
-  write(bit_cast<char *>(&working_bits), sizeof(u64));
+  get_ostream().write(bit_cast<char *>(&working_bits), sizeof(u64));
 }
 
 auto BoolContinuousResultsPrinter::do_write_file_header() -> void {
   Base::do_write_file_header();
-
-  size_t size = get_seq_sizes_format().size();
-  seq_size_stream->write(bit_cast<char *>(&size), sizeof(size_t));
-  (*seq_size_stream) << get_seq_sizes_format();
-  size = get_seq_sizes_version().size();
-  seq_size_stream->write(bit_cast<char *>(&size), sizeof(size_t));
-  (*seq_size_stream) << get_seq_sizes_version();
+  write_string_with_size(get_ostream(), get_seq_sizes_format());
+  write_string_with_size(get_ostream(), get_seq_sizes_version());
 }
 
 }  // namespace sbwt_search

@@ -193,12 +193,8 @@ protected:
   };
 
   auto do_write_file_header() -> void {
-    size_t size = impl().do_get_format().size();
-    write(bit_cast<char *>(&size), sizeof(size_t));
-    write(impl().do_get_format());
-    size = impl().do_get_version().size();
-    write(bit_cast<char *>(&size), sizeof(size_t));
-    write(impl().do_get_version());
+    write_string_with_size(get_ostream(), impl().do_get_format());
+    write_string_with_size(get_ostream(), impl().do_get_version());
   }
 
   auto do_at_file_end() -> void{};
@@ -207,14 +203,7 @@ protected:
   auto do_get_format() -> string { return "format_goes_here"; }
   auto do_get_version() -> string { return "version_number_goes_here"; }
 
-  auto write(const char *content, std::streamsize size) {
-    out_stream->write(content, size);
-  }
-
-  template <class T>
-  auto write(const T &content) {
-    (*out_stream) << content;
-  }
+  auto get_ostream() -> ThrowingOfstream & { return *out_stream; }
 };
 
 }  // namespace sbwt_search

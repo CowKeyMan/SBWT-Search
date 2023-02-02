@@ -35,11 +35,11 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   -> unique_ptr<CpuSbwtContainer> {
   ThrowingIfstream stream(filename, std::ios::in);
   Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::START);
-  const string variant = load_string(stream);
+  const string variant = read_string_with_size(stream);
   if (variant != "plain-matrix") {
     throw runtime_error("Error input is not a plain-matrix SBWT");
   }
-  const string version = load_string(stream);
+  const string version = read_string_with_size(stream);
   if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); }
   u64 num_bits = 0;
   stream.read(bit_cast<char *>(&num_bits), sizeof(u64));
@@ -117,15 +117,6 @@ auto SbwtBuilder::build_poppy(CpuSbwtContainer *container) -> void {
   container->set_index(
     std::move(c_map), std::move(layer_0), std::move(layer_1_2)
   );
-}
-
-auto SbwtBuilder::load_string(istream &stream) -> string {
-  size_t size = 0;
-  stream.read(bit_cast<char *>(&size), sizeof(u64));
-  string s;
-  s.resize(size);
-  stream.read(bit_cast<char *>(s.data()), static_cast<std::streamsize>(size));
-  return s;
 }
 
 auto SbwtBuilder::skip_bits_vector(istream &stream) -> void {

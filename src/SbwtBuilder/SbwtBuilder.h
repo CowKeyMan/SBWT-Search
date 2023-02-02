@@ -31,7 +31,6 @@ public:
   auto get_cpu_sbwt(bool build_index = true) -> unique_ptr<CpuSbwtContainer>;
 
 private:
-  auto load_string(istream &in) -> string;
   auto build_poppy(CpuSbwtContainer *container) -> void;
   auto load_bit_vectors(
     u64 bit_vector_bytes,

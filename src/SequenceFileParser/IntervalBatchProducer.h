@@ -23,7 +23,7 @@ class IntervalBatchProducer: public SharedBatchesProducer<IntervalBatch> {
   friend ContinuousSequenceFileParser;
 
 public:
-  IntervalBatchProducer(uint max_batches);
+  explicit IntervalBatchProducer(uint max_batches);
 
 private:
   auto add_file_end(size_t newlines) -> void;

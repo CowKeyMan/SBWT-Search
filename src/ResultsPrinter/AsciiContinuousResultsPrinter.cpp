@@ -1,5 +1,7 @@
 #include <bit>
 
+#include <fmt/format.h>
+
 #include "ResultsPrinter/AsciiContinuousResultsPrinter.h"
 
 namespace sbwt_search {
@@ -30,23 +32,43 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
   ) {}
 
 auto AsciiContinuousResultsPrinter::do_invalid_result() -> void {
-  if (!is_at_newline) { write(" "); }
-  write("-2");
+  if (!is_at_newline) { get_ostream() << " "; }
+  get_ostream() << "-2";
   is_at_newline = false;
 }
 auto AsciiContinuousResultsPrinter::do_not_found_result() -> void {
-  if (!is_at_newline) { write(" "); }
-  write("-1");
+  if (!is_at_newline) { get_ostream() << " "; }
+  get_ostream() << "-1";
   is_at_newline = false;
 }
+
+auto fast_int_to_string(int64_t x, char *buffer) -> void {
+  int64_t i = 0;
+  // Write the digits in reverse order (reversed back at the end)
+  if (x == 0) {
+    buffer[0] = '0';
+    i = 1;
+  } else {
+    while (x > 0) {
+      buffer[i++] = '0' + (x % 10);
+      x /= 10;
+    }
+  }
+  std::reverse(buffer, buffer + i);
+  buffer[i] = '\0';
+}
+
 auto AsciiContinuousResultsPrinter::do_result(size_t result) -> void {
-  if (!is_at_newline) { write(" "); }
-  write(result);
+  if (!is_at_newline) { get_ostream() << " "; }
+  get_ostream() << fmt::format_int(result).c_str();
+  /* get_ostream().write(result); */
+  /* fast_int_to_string(result, buffer); */
+  /* get_ostream().write(buffer); */
   is_at_newline = false;
 }
 
 auto AsciiContinuousResultsPrinter::do_with_newline() -> void {
-  write("\n");
+  get_ostream() << "\n";
   is_at_newline = true;
 }
 

@@ -83,15 +83,15 @@ TEST_F(AsciiIndexFileParserTest, OneBatch) {
   const vector<vector<u64>> intervals = {{4, 4, 8, 8, 16}};
   // 22 is how many characters are on the first line, 23 includes '\n'
   // 63 is how many characters are in entire file, 24 includes EOF
-  for (auto buffer_size: {1, 2, 3, 4, 22, 23, 63, 64, 999} ) {
-  run_test(
-    "test_objects/example_index_search_result.txt",
-    max_indexes_per_batch,
-    padding,
-    to_u64s(ints),
-    intervals,
-    buffer_size
-  );
+  for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {
+    run_test(
+      "test_objects/example_index_search_result.txt",
+      max_indexes_per_batch,
+      padding,
+      to_u64s(ints),
+      intervals,
+      buffer_size
+    );
   }
 }
 

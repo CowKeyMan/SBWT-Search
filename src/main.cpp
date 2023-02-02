@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <span>
 #include <string>
 
 #include <unordered_map>
@@ -18,14 +19,16 @@ using std::make_shared;
 using std::shared_ptr;
 using std::string;
 using std::unordered_map;
+using std::span;
 
 auto main(int argc, char **argv) -> int {
+  auto args = span{argv, static_cast<size_t>(argc)};
   const unordered_map<string, shared_ptr<Main>> str_to_item{
     {"index", make_shared<IndexSearchMain>()},
     {"color", make_shared<ColorSearchMain>()}};
-  if (argc == 1 || !str_to_item.contains(argv[1])) {
+  if (argc == 1 || !str_to_item.contains(args[1])) {
     cout << "Usage: sbwt_search [index|colors]" << endl;
     return 1;
   }
-  str_to_item.at(argv[1])->main(argc, argv);
+  str_to_item.at(args[1])->main(argc, argv);
 }

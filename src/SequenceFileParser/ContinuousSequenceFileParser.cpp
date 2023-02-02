@@ -1,7 +1,11 @@
 #include <ios>
+#include <iterator>
+#include <limits>
 #include <memory>
 #include <string>
 #include <vector>
+
+#include <bits/iterator_concepts.h>
 
 #include "SequenceFileParser/ContinuousSequenceFileParser.h"
 #include "SequenceFileParser/IntervalBatchProducer.h"
@@ -13,6 +17,8 @@
 #include "Tools/TypeDefinitions.h"
 #include "fmt/core.h"
 #include "kseqpp_read.hpp"
+
+namespace sbwt_search {
 
 using fmt::format;
 using io_utils::ThrowingIfstream;
@@ -27,24 +33,22 @@ using std::shared_ptr;
 using std::string;
 using std::vector;
 
-namespace sbwt_search {
-
 ContinuousSequenceFileParser::ContinuousSequenceFileParser(
-  const vector<string> &_filenames,
-  const uint _kmer_size,
-  const size_t _max_chars_per_batch,
-  const size_t max_batches,
-  shared_ptr<StringSequenceBatchProducer> _string_sequence_batch_producer,
-  shared_ptr<StringBreakBatchProducer> _string_break_batch_producer,
-  shared_ptr<IntervalBatchProducer> _interval_batch_producer
+  const vector<string> &filenames_,
+  uint kmer_size_,
+  size_t max_chars_per_batch_,
+  size_t max_batches,
+  shared_ptr<StringSequenceBatchProducer> string_sequence_batch_producer_,
+  shared_ptr<StringBreakBatchProducer> string_break_batch_producer_,
+  shared_ptr<IntervalBatchProducer> interval_batch_producer_
 ):
-  filenames(_filenames),
-  kmer_size(_kmer_size),
+  filenames(filenames_),
+  kmer_size(kmer_size_),
   batches(max_batches),
-  max_chars_per_batch(_max_chars_per_batch),
-  string_sequence_batch_producer(_string_sequence_batch_producer),
-  string_break_batch_producer(_string_break_batch_producer),
-  interval_batch_producer(_interval_batch_producer) {
+  max_chars_per_batch(max_chars_per_batch_),
+  string_sequence_batch_producer(std::move(string_sequence_batch_producer_)),
+  string_break_batch_producer(std::move(string_break_batch_producer_)),
+  interval_batch_producer(std::move(interval_batch_producer_)) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {
     batches.set(i, make_shared<Seq>(Seq(max_chars_per_batch)));
@@ -67,17 +71,24 @@ auto ContinuousSequenceFileParser::read_and_generate() -> void {
 auto ContinuousSequenceFileParser::reset_rec() -> void {
   auto rec = batches.current_write();
   auto prev_rec = batches.current_read();
-  if (prev_rec->seq.size() == 0) {
+  if (prev_rec->seq.empty()) {
     rec->clear();
     return;
   }
-  size_t amount_to_copy;
+  int amount_to_copy = 0;
   if (prev_rec->chars_before_newline.size() == 1) {
-    amount_to_copy = min<size_t>(kmer_size - 1, prev_rec->seq.size());
+    amount_to_copy = min<int>(
+      static_cast<int>(kmer_size - 1), static_cast<int>(prev_rec->seq.size())
+    );
   } else {
-    auto &cbn = prev_rec->chars_before_newline;
-    amount_to_copy
-      = min<size_t>(kmer_size - 1, prev_rec->seq.size() - cbn[cbn.size() - 2]);
+    auto &chars_before_newline = prev_rec->chars_before_newline;
+    amount_to_copy = min<int>(
+      static_cast<int>(kmer_size - 1),
+      static_cast<int>(
+        prev_rec->seq.size()
+        - chars_before_newline[chars_before_newline.size() - 2]
+      )
+    );
   }
   rec->seq.resize(rec->max_seq_size);
   copy(
@@ -134,9 +145,10 @@ auto ContinuousSequenceFileParser::read_next() -> void {
 auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
   auto seq_size = batches.current_write()->seq.size();
   auto &str_breaks = batches.current_write()->chars_before_newline;
-  str_breaks.push_back(size_t(-1));
+  str_breaks.push_back(std::numeric_limits<size_t>::max());
   auto strings_in_batch = str_breaks.size()
-    + (str_breaks.size() != 0 && str_breaks.back() != (seq_size - 1));
+    + static_cast<size_t>(!str_breaks.empty()
+                          && str_breaks.back() != (seq_size - 1));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(

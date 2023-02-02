@@ -32,16 +32,16 @@ BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
   ) {}
 
 auto BinaryContinuousResultsPrinter::do_invalid_result() -> void {
-  write(bit_cast<char *>(&minus2), sizeof(u64));
+  get_ostream().write(bit_cast<char *>(&minus2), sizeof(u64));
 }
 auto BinaryContinuousResultsPrinter::do_not_found_result() -> void {
-  write(bit_cast<char *>(&minus1), sizeof(u64));
+  get_ostream().write(bit_cast<char *>(&minus1), sizeof(u64));
 }
 auto BinaryContinuousResultsPrinter::do_result(size_t result) -> void {
-  write(bit_cast<char *>(&result), sizeof(u64));
+  get_ostream().write(bit_cast<char *>(&result), sizeof(u64));
 }
 auto BinaryContinuousResultsPrinter::do_with_newline() -> void {
-  write(bit_cast<char *>(&minus3), sizeof(u64));
+  get_ostream().write(bit_cast<char *>(&minus3), sizeof(u64));
 }
 
 }  // namespace sbwt_search

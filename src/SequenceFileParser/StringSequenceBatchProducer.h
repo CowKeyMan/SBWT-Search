@@ -24,14 +24,15 @@ using std::string;
 
 class StringSequenceBatchProducer:
   public SharedBatchesProducer<StringSequenceBatch> {
+  using Base = SharedBatchesProducer<StringSequenceBatch>;
   friend ContinuousSequenceFileParser;
 
 public:
-  StringSequenceBatchProducer(uint max_batches);
+  explicit StringSequenceBatchProducer(uint max_batches);
 
 private:
   void set_string(const string &s);
-  shared_ptr<StringSequenceBatch> get_default_value() override;
+  auto get_default_value() -> shared_ptr<StringSequenceBatch> override;
 };
 
 }  // namespace sbwt_search
