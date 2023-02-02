@@ -15,15 +15,18 @@ AsciiIndexFileParser::AsciiIndexFileParser(
   shared_ptr<IndexesBatch> indexes_,
   shared_ptr<IndexesIntervalsBatch> indexes_intervals_batch_,
   size_t read_padding_,
-  size_t buffer_size
+  size_t buffer_size_
 ):
-  in_stream(std::move(in_stream_)),
-  indexes(std::move(indexes_)),
-  indexes_intervals_batch(std::move(indexes_intervals_batch_)),
-  read_padding(read_padding_) {
+  IndexFileParser(
+    std::move(in_stream_),
+    std::move(indexes_),
+    std::move(indexes_intervals_batch_),
+    read_padding_
+  ),
+  buffer_size(buffer_size_) {
   assert_version();
-  load_buffer();
   buffer.resize(buffer_size);
+  load_buffer();
 }
 
 auto AsciiIndexFileParser::assert_version() -> void {
@@ -38,14 +41,14 @@ auto AsciiIndexFileParser::generate_batch() -> void {
   size_t current_read_size = 0;
   current_index = 0;
   char c = '\0';
-  while (indexes->indexes.size() < indexes->max_indexes
+  while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
     c = getc();
     if (c == '-') { c = skip_until_next_whitespace(); }
     if (c == '\n') { skip_to_next_read(); }
     // if it is a number (note: all special characters are smaller than '0')
     if (c >= '0') {
-      indexes->indexes.push_back(read_number(c - '0'));
+      get_indexes().push_back(read_number(c - '0'));
       ++current_index;
     }
   }
@@ -53,7 +56,7 @@ auto AsciiIndexFileParser::generate_batch() -> void {
 
 inline auto AsciiIndexFileParser::load_buffer(uint num_copy_from_end) -> void {
   std::copy(buffer.end() - num_copy_from_end, buffer.end(), buffer.begin());
-  get_istream().read(buffer.data(), static_cast<int>(buffer.size()));
+  get_istream().read(buffer.data(), static_cast<int>(buffer_size));
   buffer_size = get_istream().gcount();
   buffer_index = 0;
 }
@@ -81,15 +84,11 @@ inline auto AsciiIndexFileParser::read_number(u64 starting_number) -> u64 {
 }
 
 inline auto AsciiIndexFileParser::skip_to_next_read() -> void {
-  while (current_index % read_padding != 0) {
-    indexes->indexes.push_back(static_cast<u64>(-1));
+  while (current_index % get_read_padding() != 0) {
+    get_indexes().push_back(static_cast<u64>(-1));
     ++current_index;
   }
-  indexes_intervals_batch->indexes_intervals.push_back(current_index);
-}
-
-auto AsciiIndexFileParser::get_istream() -> ThrowingIfstream & {
-  return *in_stream;
+  get_intervals().push_back(current_index);
 }
 
 }  // namespace sbwt_search

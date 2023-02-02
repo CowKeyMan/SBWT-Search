@@ -14,7 +14,7 @@
 #include "BatchObjects/IndexesBatch.h"
 #include "BatchObjects/IndexesIntervalsBatch.h"
 #include "Tools/IOUtils.h"
-/* #include "IndexFileParser/IndexFileParser.h" */
+#include "IndexFileParser/IndexFileParser.h"
 
 namespace sbwt_search {
 
@@ -25,12 +25,8 @@ using std::stringstream;
 
 const size_t sixteen_kB = 16ULL * 8ULL * 1024ULL;
 
-class AsciiIndexFileParser {
+class AsciiIndexFileParser : IndexFileParser{
 private:
-  shared_ptr<ThrowingIfstream> in_stream;
-  shared_ptr<IndexesBatch> indexes;
-  shared_ptr<IndexesIntervalsBatch> indexes_intervals_batch;
-  size_t read_padding;
   string buffer;
   size_t buffer_size = 0;
   size_t buffer_index = 0;
@@ -44,12 +40,11 @@ public:
     size_t read_padding_,
     size_t buffer_size = sixteen_kB
   );
-  auto generate_batch() -> void;
+  auto generate_batch() -> void override ;
 
 private:
   auto load_buffer(uint num_copy_from_end = 0) -> void;
   auto assert_version() -> void;
-  auto get_istream() -> ThrowingIfstream &;
   auto skip_until_next_whitespace() -> char;
   auto getc() -> char;
   auto read_number(u64 starting_number) -> u64;
