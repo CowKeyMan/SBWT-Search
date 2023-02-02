@@ -37,18 +37,18 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
   const vector<string> &filenames_,
   uint kmer_size_,
   size_t max_chars_per_batch_,
-  size_t max_batches,
-  shared_ptr<StringSequenceBatchProducer> string_sequence_batch_producer_,
-  shared_ptr<StringBreakBatchProducer> string_break_batch_producer_,
-  shared_ptr<IntervalBatchProducer> interval_batch_producer_
+  size_t max_batches
 ):
   filenames(filenames_),
   kmer_size(kmer_size_),
   batches(max_batches),
   max_chars_per_batch(max_chars_per_batch_),
-  string_sequence_batch_producer(std::move(string_sequence_batch_producer_)),
-  string_break_batch_producer(std::move(string_break_batch_producer_)),
-  interval_batch_producer(std::move(interval_batch_producer_)) {
+  string_sequence_batch_producer(
+    make_shared<StringSequenceBatchProducer>(max_batches)
+  ),
+  string_break_batch_producer(make_shared<StringBreakBatchProducer>(max_batches)
+  ),
+  interval_batch_producer(make_shared<IntervalBatchProducer>(max_batches)) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {
     batches.set(i, make_shared<Seq>(Seq(max_chars_per_batch)));
@@ -173,6 +173,19 @@ auto ContinuousSequenceFileParser::do_at_generate_finish() -> void {
   string_sequence_batch_producer->do_at_generate_finish();
   string_break_batch_producer->do_at_generate_finish();
   interval_batch_producer->do_at_generate_finish();
+}
+
+auto ContinuousSequenceFileParser::get_string_sequence_batch_producer() const
+  -> const shared_ptr<StringSequenceBatchProducer> & {
+  return string_sequence_batch_producer;
+}
+auto ContinuousSequenceFileParser::get_string_break_batch_producer() const
+  -> const shared_ptr<StringBreakBatchProducer> & {
+  return string_break_batch_producer;
+}
+auto ContinuousSequenceFileParser::get_interval_batch_producer() const
+  -> const shared_ptr<IntervalBatchProducer> & {
+  return interval_batch_producer;
 }
 
 }  // namespace sbwt_search

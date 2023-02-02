@@ -48,12 +48,15 @@ public:
     const vector<string> &_filenames,
     uint _kmer_size,
     size_t _max_chars_per_batch,
-    size_t max_batches,
-    shared_ptr<StringSequenceBatchProducer> string_sequence_batch_producer,
-    shared_ptr<StringBreakBatchProducer> string_break_batch_producer,
-    shared_ptr<IntervalBatchProducer> interval_batch_producer
+    size_t max_batches
   );
   auto read_and_generate() -> void;
+  [[nodiscard]] auto get_string_sequence_batch_producer() const
+    -> const shared_ptr<StringSequenceBatchProducer> &;
+  [[nodiscard]] auto get_string_break_batch_producer() const
+    -> const shared_ptr<StringBreakBatchProducer> &;
+  [[nodiscard]] auto get_interval_batch_producer() const
+    -> const shared_ptr<IntervalBatchProducer> &;
 
 private:
   auto start_next_file() -> bool;

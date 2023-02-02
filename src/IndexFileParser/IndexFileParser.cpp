@@ -21,7 +21,9 @@ auto IndexFileParser::get_istream() const -> ThrowingIfstream & {
 auto IndexFileParser::get_indexes() const -> vector<u64> & {
   return indexes->indexes;
 }
-auto IndexFileParser::get_max_indexes() const -> u64 { return indexes->max_indexes; }
+auto IndexFileParser::get_max_indexes() const -> u64 {
+  return indexes->max_indexes;
+}
 auto IndexFileParser::get_intervals() const -> vector<u64> & {
   return indexes_intervals_batch->indexes_intervals;
 }

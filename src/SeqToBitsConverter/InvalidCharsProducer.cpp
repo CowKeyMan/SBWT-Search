@@ -27,16 +27,16 @@ auto InvalidCharsProducer::get_default_value()
 
 auto InvalidCharsProducer::start_new_batch(size_t num_chars) -> void {
   SharedBatchesProducer<InvalidCharsBatch>::do_at_batch_start();
-  get_batches().current_write()->invalid_chars.resize(num_chars + kmer_size);
+  current_write()->invalid_chars.resize(num_chars + kmer_size);
   fill(
-    get_batches().current_write()->invalid_chars.begin(),
-    get_batches().current_write()->invalid_chars.end(),
+    current_write()->invalid_chars.begin(),
+    current_write()->invalid_chars.end(),
     0
   );
 }
 
 auto InvalidCharsProducer::set(size_t index) -> void {
-  get_batches().current_write()->invalid_chars[index] = 1;
+  current_write()->invalid_chars[index] = 1;
 }
 
 }  // namespace sbwt_search

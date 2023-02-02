@@ -166,7 +166,7 @@ auto IndexSearchMain::load_threads() -> void {
 }
 
 auto IndexSearchMain::get_components(
-  shared_ptr<GpuSbwtContainer> gpu_container, const string &print_mode
+  const shared_ptr<GpuSbwtContainer> &gpu_container, const string &print_mode
 )
   -> std::tuple<
     shared_ptr<ContinuousSequenceFileParser>,
@@ -175,48 +175,38 @@ auto IndexSearchMain::get_components(
     shared_ptr<ContinuousSearcher>,
     ResultsPrinter> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
-  auto string_sequence_batch_producer
-    = make_shared<StringSequenceBatchProducer>(max_batches);
-  auto string_break_batch_producer
-    = make_shared<StringBreakBatchProducer>(max_batches);
-  auto interval_batch_producer
-    = make_shared<IntervalBatchProducer>(max_batches);
   auto sequence_file_parser = make_shared<ContinuousSequenceFileParser>(
-    input_filenames,
-    kmer_size,
-    max_chars_per_batch,
-    max_batches,
-    string_sequence_batch_producer,
-    string_break_batch_producer,
-    interval_batch_producer
+    input_filenames, kmer_size, max_chars_per_batch, max_batches
   );
 
-  auto invalid_chars_producer = make_shared<InvalidCharsProducer>(
-    kmer_size, max_chars_per_batch, max_batches
-  );
-  auto bits_producer
-    = make_shared<BitsProducer>(max_chars_per_batch, max_batches);
   auto seq_to_bits_converter = make_shared<ContinuousSeqToBitsConverter>(
-    string_sequence_batch_producer,
-    invalid_chars_producer,
-    bits_producer,
-    threads
+    sequence_file_parser->get_string_sequence_batch_producer(),
+    threads,
+    kmer_size,
+    max_chars_per_batch,
+    max_batches
   );
 
   auto positions_builder = make_shared<ContinuousPositionsBuilder>(
-    string_break_batch_producer, kmer_size, max_chars_per_batch, max_batches
+    sequence_file_parser->get_string_break_batch_producer(),
+    kmer_size,
+    max_chars_per_batch,
+    max_batches
   );
 
   auto searcher = make_shared<ContinuousSearcher>(
     gpu_container,
-    bits_producer,
+    seq_to_bits_converter->get_bits_producer(),
     positions_builder,
     max_batches,
     max_chars_per_batch
   );
 
   ResultsPrinter results_printer = get_results_printer(
-    print_mode, searcher, interval_batch_producer, invalid_chars_producer
+    print_mode,
+    searcher,
+    sequence_file_parser->get_interval_batch_producer(),
+    seq_to_bits_converter->get_invalid_chars_producer()
   );
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
 

@@ -36,9 +36,9 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
 protected:
   auto run_test(
     uint kmer_size,
-    vector<string> &seqs,
-    vector<vector<u64>> &bits,
-    vector<vector<char>> &invalid_chars,
+    const vector<string> &seqs,
+    const vector<vector<u64>> &bits,
+    const vector<vector<char>> &invalid_chars,
     size_t max_chars_per_batch,
     size_t max_batches
   ) {
@@ -53,14 +53,11 @@ protected:
       shared_seqs.push_back(a);
     }
     auto producer = make_shared<DummyStringSequenceBatchProducer>(shared_seqs);
-    auto invalid_chars_producer = make_shared<InvalidCharsProducer>(
-      kmer_size, max_chars_per_batch, max_batches
-    );
-    auto bits_producer
-      = make_shared<BitsProducer>(max_chars_per_batch, max_batches);
     auto host = make_shared<ContinuousSeqToBitsConverter>(
-      producer, invalid_chars_producer, bits_producer, threads
+      producer, threads, kmer_size, max_chars_per_batch, max_batches
     );
+    auto bits_producer = host->get_bits_producer();
+    auto invalid_chars_producer = host->get_invalid_chars_producer();
     size_t expected_batches = seqs.size();
     size_t batches = 0;
     const uint time_to_wait = 100;
@@ -140,10 +137,13 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestAll) {
 
   const uint max_chars_per_batch = 200;
   for (auto kmer_size : {3}) {
-    vector<vector<char>> expected_invalid_chars
-      = {vector<char>(47 + kmer_size, 0), vector<char>(128 + kmer_size, 0)};
-    expected_invalid_chars[0][5] = 1;
-    for (auto i : {0, 63, 64, 126}) { expected_invalid_chars[1][i] = 1; }
+    const vector<vector<char>> expected_invalid_chars = [&] {
+      vector<vector<char>> ret_val
+        = {vector<char>(47 + kmer_size, 0), vector<char>(128 + kmer_size, 0)};
+      ret_val[0][5] = 1;
+      for (auto i : {0, 63, 64, 126}) { ret_val[1][i] = 1; }
+      return ret_val;
+    }();
     for (auto max_batches : {1}) {
       run_test(
         kmer_size,

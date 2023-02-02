@@ -63,7 +63,7 @@ public:
       step_lock.unset_lock();
       return false;
     }
-    out = batches.current_read();
+    out = current_read();
     batches.step_read();
     step_lock.unset_lock();
     return true;
@@ -73,6 +73,12 @@ protected:
   [[nodiscard]] auto get_batch_id() const -> uint { return batch_id; }
   [[nodiscard]] auto get_batches() -> CircularBuffer<shared_ptr<BatchType>> & {
     return batches;
+  }
+  [[nodiscard]] auto current_write() -> const shared_ptr<BatchType> & {
+    return batches.current_write();
+  }
+  [[nodiscard]] auto current_read() -> const shared_ptr<BatchType> & {
+    return batches.current_read();
   }
 
   auto initialise_batches() -> void {

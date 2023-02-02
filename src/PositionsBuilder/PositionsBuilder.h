@@ -6,20 +6,22 @@
  * @brief Builds the positions of the valid bit sequences
  */
 
+#include <cstddef>
 #include <vector>
 
 #include "Tools/TypeDefinitions.h"
 
-using std::vector;
-
 namespace sbwt_search {
+
+using std::size_t;
+using std::vector;
 
 class PositionsBuilder {
 private:
-  const uint kmer_size;
+  uint kmer_size;
 
 public:
-  PositionsBuilder(const uint kmer_size);
+  explicit PositionsBuilder(uint kmer_size);
   void build_positions(
     const vector<size_t> &chars_before_newline,
     const size_t &string_size,
@@ -28,9 +30,9 @@ public:
 
 private:
   void process_one_string(
-    const size_t start_position_index,
-    const size_t end_position_index,
-    const size_t first_position,
+    size_t start_position_index,
+    size_t end_position_index,
+    size_t first_position,
     vector<size_t> &positions
   );
 };

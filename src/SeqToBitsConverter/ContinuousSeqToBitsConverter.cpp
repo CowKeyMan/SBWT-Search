@@ -13,14 +13,26 @@ using std::min;
 
 ContinuousSeqToBitsConverter::ContinuousSeqToBitsConverter(
   shared_ptr<SharedBatchesProducer<StringSequenceBatch>> producer,
-  shared_ptr<InvalidCharsProducer> invalid_chars_producer_,
-  shared_ptr<BitsProducer> bits_producer_,
-  uint threads
+  uint threads,
+  size_t kmer_size,
+  size_t max_chars_per_batch,
+  size_t max_batches
 ):
   producer(std::move(producer)),
   threads(threads),
-  invalid_chars_producer(std::move(invalid_chars_producer_)),
-  bits_producer(std::move(bits_producer_)) {}
+  invalid_chars_producer(make_shared<InvalidCharsProducer>(
+    kmer_size, max_chars_per_batch, max_batches
+  )),
+  bits_producer(make_shared<BitsProducer>(max_chars_per_batch, max_batches)) {}
+
+auto ContinuousSeqToBitsConverter::get_invalid_chars_producer() const
+  -> const shared_ptr<InvalidCharsProducer> & {
+  return invalid_chars_producer;
+}
+auto ContinuousSeqToBitsConverter::get_bits_producer() const
+  -> const shared_ptr<BitsProducer> & {
+  return bits_producer;
+}
 
 auto ContinuousSeqToBitsConverter::read_and_generate() -> void {
   shared_ptr<StringSequenceBatch> read_batch;

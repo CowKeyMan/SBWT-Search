@@ -61,7 +61,7 @@ private:
     -> size_t;
   auto load_threads() -> void;
   auto get_components(
-    shared_ptr<GpuSbwtContainer> gpu_container, const string &print_mode
+    const shared_ptr<GpuSbwtContainer> &gpu_container, const string &print_mode
   )
     -> std::tuple<
       shared_ptr<ContinuousSequenceFileParser>,
