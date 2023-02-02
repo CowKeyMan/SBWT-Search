@@ -62,6 +62,7 @@ add_library(
   omp_lock
   "${PROJECT_SOURCE_DIR}/Tools/OmpLock.cpp"
 )
+target_link_libraries(omp_lock PRIVATE OpenMP::OpenMP_CXX)
 
 add_library(
   semaphore

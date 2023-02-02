@@ -2,6 +2,7 @@
 #include <ios>
 
 #include "Tools/IOUtils.h"
+#include "Tools/TypeDefinitions.h"
 #include "fmt/core.h"
 
 namespace io_utils {
@@ -42,6 +43,21 @@ ThrowingOfstream::ThrowingOfstream(
 
 auto ThrowingOfstream::check_path_valid(const string &filepath) -> void {
   ThrowingOfstream(filepath, ios_base::in);
+}
+
+auto read_string_with_size(ThrowingIfstream &is) -> string {
+  u64 size = 0;
+  is.read(bit_cast<char *>(&size), sizeof(u64));
+  string s;
+  s.resize(size);
+  is.read(bit_cast<char *>(s.data()), static_cast<std::streamsize>(size));
+  return s;
+}
+
+auto write_string_with_size(ThrowingOfstream &os, const string &s) -> void {
+  u64 size = static_cast<u64>(s.size());
+  os.write(bit_cast<char *>(&size), sizeof(u64));
+  os << s;
 }
 
 }  // namespace io_utils

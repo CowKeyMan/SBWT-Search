@@ -42,6 +42,8 @@ add_executable(
   "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/ContinuousSeqToBitsConverter_test.cpp"
   "${PROJECT_SOURCE_DIR}/ResultsPrinter/ContinuousResultsPrinter_test.cpp"
 
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser_test.cpp"
+
   "${PROJECT_SOURCE_DIR}/Tools/BenchmarkUtils_test.cpp"
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser_test.cpp"
 )

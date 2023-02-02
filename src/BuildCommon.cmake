@@ -39,6 +39,7 @@ FetchContent_MakeAvailable(cxxopts)
 find_package(OpenMP REQUIRED)
 add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
 
+# Index
 add_library(
   index_search_argument_parser
   "${PROJECT_SOURCE_DIR}/ArgumentParser/IndexSearchArgumentParser.cpp"
@@ -152,6 +153,14 @@ add_library(
 )
 target_link_libraries(results_printer PRIVATE io_utils fmt::fmt)
 
+# Colors
+add_library(
+  index_file_parser
+  # "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser.cpp"
+)
+target_link_libraries(index_file_parser PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
+
 # Common libraries
 add_library(common_libraries INTERFACE)
 target_link_libraries(
@@ -173,7 +182,7 @@ target_link_libraries(
   omp_lock
   semaphore
 
-  ## SBWT_SEARCH libraries
+  ## Index search libraries
   index_search_argument_parser
   filenames_parser
   sbwt_builder
@@ -182,6 +191,9 @@ target_link_libraries(
   results_printer
   presearcher_cpu
   presearcher_cuda
+
+  # Color search libraries
+  index_file_parser
 
   sequence_file_parser
   seq_to_bits_converter

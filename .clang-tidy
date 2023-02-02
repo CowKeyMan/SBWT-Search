@@ -51,3 +51,7 @@ Checks:
 
 WarningsAsErrors: ''
 HeaderFilterRegex: 'src/**/*'
+
+CheckOptions:
+- key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+  value: true
