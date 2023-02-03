@@ -23,7 +23,7 @@ auto IntervalBatchProducer::get_default_value() -> shared_ptr<IntervalBatch> {
   return make_shared<IntervalBatch>();
 }
 
-auto IntervalBatchProducer::add_file_end(size_t newlines) -> void {
+auto IntervalBatchProducer::add_file_start(size_t newlines) -> void {
   get_batches().current_write()->newlines_before_newfile.push_back(newlines);
 }
 

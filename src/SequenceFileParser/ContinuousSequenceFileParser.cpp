@@ -100,7 +100,7 @@ auto ContinuousSequenceFileParser::reset_rec() -> void {
 
 auto ContinuousSequenceFileParser::start_next_file() -> bool {
   while (filename_iterator != filenames.end()) {
-    interval_batch_producer->add_file_end(
+    interval_batch_producer->add_file_start(
       batches.current_write()->chars_before_newline.size()
     );
     auto filename = *filename_iterator++;
@@ -115,7 +115,7 @@ auto ContinuousSequenceFileParser::start_next_file() -> bool {
       Logger::log(Logger::LOG_LEVEL::ERROR, e.what());
     }
   }
-  interval_batch_producer->add_file_end(
+  interval_batch_producer->add_file_start(
     batches.current_write()->chars_before_newline.size()
   );
   fail = true;

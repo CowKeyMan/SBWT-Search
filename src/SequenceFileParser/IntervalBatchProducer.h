@@ -26,7 +26,7 @@ public:
   explicit IntervalBatchProducer(uint max_batches);
 
 private:
-  auto add_file_end(size_t newlines) -> void;
+  auto add_file_start(size_t newlines) -> void;
   auto do_at_batch_start() -> void override;
   auto do_at_batch_finish() -> void override;
   auto get_default_value() -> shared_ptr<IntervalBatch> override;
