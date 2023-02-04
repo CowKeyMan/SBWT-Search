@@ -16,13 +16,14 @@ namespace io_utils {
 
 using std::bit_cast;
 using std::ifstream;
+using std::ios;
 using std::ofstream;
 using std::string;
 using std::vector;
 
 class ThrowingIfstream: public ifstream {
 public:
-  ThrowingIfstream(const string &filename, ios_base::openmode mode);
+  ThrowingIfstream(const string &filename, ios::openmode mode);
   static void check_file_exists(const string &filename);
 
   auto read_string_with_size() -> string;
@@ -30,7 +31,7 @@ public:
 
 class ThrowingOfstream: public ofstream {
 public:
-  ThrowingOfstream(const string &filepath, ios_base::openmode mode);
+  ThrowingOfstream(const string &filepath, ios::openmode mode);
   static void check_path_valid(const string &filepath);
 
   using ofstream::write;

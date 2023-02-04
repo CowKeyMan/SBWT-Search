@@ -11,7 +11,7 @@ namespace sbwt_search {
 
 using math_utils::round_up;
 using std::bit_cast;
-using std::ios_base;
+using std::ios;
 
 auto BoolContinuousResultsPrinter::do_get_extension() -> string {
   return ".bool";
@@ -70,8 +70,7 @@ auto BoolContinuousResultsPrinter::do_at_file_end() -> void {
 auto BoolContinuousResultsPrinter::do_open_next_file() -> void {
   ContinuousResultsPrinter::do_open_next_file();
   seq_size_stream = make_unique<ThrowingOfstream>(
-    get_current_filename() + get_seq_sizes_extension(),
-    ios_base::binary | ios_base::out
+    get_current_filename() + get_seq_sizes_extension(), ios::binary | ios::out
   );
 }
 

@@ -9,7 +9,7 @@
 
 namespace sbwt_search {
 
-using std::ios_base;
+using std::ios;
 using std::make_shared;
 
 class AsciiIndexFileParserTest: public ::testing::Test {
@@ -24,7 +24,7 @@ protected:
     const vector<size_t> &expected_true_indexes,
     const vector<size_t> &expected_skipped
   ) -> void {
-    auto in_stream = make_shared<ThrowingIfstream>(filename, ios_base::in);
+    auto in_stream = make_shared<ThrowingIfstream>(filename, ios::in);
     auto format_name = in_stream->read_string_with_size();
     ASSERT_EQ(format_name, "ascii");
     auto indexes_batch = make_shared<IndexesBatch>();

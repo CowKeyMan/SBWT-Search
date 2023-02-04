@@ -13,9 +13,7 @@ using std::ifstream;
 using std::ios;
 using std::string;
 
-ThrowingIfstream::ThrowingIfstream(
-  const string &filename, ios_base::openmode mode
-):
+ThrowingIfstream::ThrowingIfstream(const string &filename, ios::openmode mode):
     ifstream(filename, mode) {
   if (this->fail()) {
     throw ios::failure(format("The input file {} cannot be opened", filename));
@@ -23,12 +21,10 @@ ThrowingIfstream::ThrowingIfstream(
 }
 
 auto ThrowingIfstream::check_file_exists(const string &filename) -> void {
-  ThrowingIfstream(filename, ios_base::in);
+  ThrowingIfstream(filename, ios::in);
 }
 
-ThrowingOfstream::ThrowingOfstream(
-  const string &filepath, ios_base::openmode mode
-):
+ThrowingOfstream::ThrowingOfstream(const string &filepath, ios::openmode mode):
     ofstream(filepath, mode) {
   if (this->fail()) {
     throw ios::failure(fmt::format(
@@ -42,7 +38,7 @@ ThrowingOfstream::ThrowingOfstream(
 }
 
 auto ThrowingOfstream::check_path_valid(const string &filepath) -> void {
-  ThrowingOfstream(filepath, ios_base::out);
+  ThrowingOfstream(filepath, ios::out);
 }
 
 auto ThrowingOfstream::write_string_with_size(const string &s) -> void {

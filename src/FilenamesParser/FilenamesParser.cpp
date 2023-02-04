@@ -10,7 +10,7 @@
 using io_utils::ThrowingIfstream;
 using std::getline;
 using std::ifstream;
-using std::ios_base;
+using std::ios;
 using std::string;
 using std::vector;
 
@@ -35,7 +35,7 @@ auto FilenamesParser::is_txt(string filename) -> bool {
 
 auto FilenamesParser::file_lines_to_vector(string filename) -> vector<string> {
   vector<string> result;
-  ThrowingIfstream stream(filename.c_str(), ios_base::in);
+  ThrowingIfstream stream(filename.c_str(), ios::in);
   string buffer;
   while (getline(stream, buffer)) { result.push_back(buffer); }
   return result;

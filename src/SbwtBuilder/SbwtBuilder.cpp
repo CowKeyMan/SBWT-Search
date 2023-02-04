@@ -26,7 +26,7 @@ using log_utils::Logger;
 using math_utils::round_up;
 using std::bit_cast;
 using std::ifstream;
-using std::ios_base;
+using std::ios;
 using std::make_unique;
 using std::runtime_error;
 using std::unique_ptr;
@@ -47,20 +47,20 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   const size_t bit_vector_bytes
     = round_up<u64>(num_bits, u64_bits) / sizeof(u64);
   in_stream.seekg(
-    static_cast<std::ios::off_type>(bit_vector_bytes), ios_base::cur
+    static_cast<std::ios::off_type>(bit_vector_bytes), ios::cur
   );  // skip first vector
 #pragma unroll
   // skip the other 3 vectors and 4 rank structure vectors
   for (int i = 0; i < 3 + 4; ++i) { skip_bits_vector(in_stream); }
   vector<unique_ptr<vector<u64>>> acgt(4);
   load_bit_vectors(bit_vector_bytes, acgt, vectors_start_position);
-  skip_bits_vector(in_stream);                  // skip suffix group starts
-  skip_bytes_vector(in_stream);                 // skip C map
-  skip_bytes_vector(in_stream);                 // skip kmer_prefix_calc
+  skip_bits_vector(in_stream);             // skip suffix group starts
+  skip_bytes_vector(in_stream);            // skip C map
+  skip_bytes_vector(in_stream);            // skip kmer_prefix_calc
   u64 kmer_size = -1;
-  in_stream.seekg(sizeof(u64), ios_base::cur);  // skip precalc_k
-  in_stream.seekg(sizeof(u64), ios_base::cur);  // skip n_nodes
-  in_stream.seekg(sizeof(u64), ios_base::cur);  // skip n_kmers
+  in_stream.seekg(sizeof(u64), ios::cur);  // skip precalc_k
+  in_stream.seekg(sizeof(u64), ios::cur);  // skip n_nodes
+  in_stream.seekg(sizeof(u64), ios::cur);  // skip n_kmers
   in_stream.read(bit_cast<char *>(&kmer_size), sizeof(u64));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG, format("Using kmer size: {}", kmer_size)
@@ -87,7 +87,7 @@ auto SbwtBuilder::load_bit_vectors(
       static_cast<std::ios::off_type>(
         start_position + i * (bit_vector_bytes + sizeof(u64))
       ),
-      ios_base::beg
+      ios::beg
     );
     acgt[i] = make_unique<vector<u64>>(bit_vector_bytes / sizeof(u64));
     st.read(
@@ -123,13 +123,13 @@ auto SbwtBuilder::skip_bits_vector(istream &stream) -> void {
   size_t bits = 0;
   stream.read(bit_cast<char *>(&bits), sizeof(u64));
   size_t bytes = round_up<size_t>(bits, u64_bits) / sizeof(u64);
-  stream.seekg(static_cast<std::ios::off_type>(bytes), ios_base::cur);
+  stream.seekg(static_cast<std::ios::off_type>(bytes), ios::cur);
 }
 
 auto SbwtBuilder::skip_bytes_vector(istream &stream) -> void {
   size_t bytes = 0;
   stream.read(bit_cast<char *>(&bytes), sizeof(u64));
-  stream.seekg(static_cast<std::ios::off_type>(bytes), ios_base::cur);
+  stream.seekg(static_cast<std::ios::off_type>(bytes), ios::cur);
 }
 
 }  // namespace sbwt_search
