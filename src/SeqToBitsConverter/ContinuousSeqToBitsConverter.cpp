@@ -18,12 +18,13 @@ ContinuousSeqToBitsConverter::ContinuousSeqToBitsConverter(
   size_t max_chars_per_batch,
   size_t max_batches
 ):
-  producer(std::move(producer)),
-  threads(threads),
-  invalid_chars_producer(make_shared<InvalidCharsProducer>(
-    kmer_size, max_chars_per_batch, max_batches
-  )),
-  bits_producer(make_shared<BitsProducer>(max_chars_per_batch, max_batches)) {}
+    producer(std::move(producer)),
+    threads(threads),
+    invalid_chars_producer(make_shared<InvalidCharsProducer>(
+      kmer_size, max_chars_per_batch, max_batches
+    )),
+    bits_producer(make_shared<BitsProducer>(max_chars_per_batch, max_batches)) {
+}
 
 auto ContinuousSeqToBitsConverter::get_invalid_chars_producer() const
   -> const shared_ptr<InvalidCharsProducer> & {

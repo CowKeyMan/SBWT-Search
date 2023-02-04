@@ -17,7 +17,7 @@ GpuPointer<T>::GpuPointer(const T *cpu_ptr, size_t size): GpuPointer(size) {
 }
 template <class T>
 GpuPointer<T>::GpuPointer(const vector<T> &v):
-  GpuPointer<T>(v.data(), v.size()) {}
+    GpuPointer<T>(v.data(), v.size()) {}
 
 template <class T>
 auto GpuPointer<T>::memset(size_t index, size_t amount, uint8_t value) -> void {

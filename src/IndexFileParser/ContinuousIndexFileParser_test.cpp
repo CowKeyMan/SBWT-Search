@@ -145,17 +145,17 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
   const vector<vector<int>> ints = {
     {39, 164, 216, 59},  // end of 1st read
                          // 2nd read is empty
-    {1, 2, 3, 4},  // end of 3rd read
-                   // empty line
+    {1, 2, 3, 4},        // end of 3rd read
+                         // empty line
     {0, 1, 2, 4},
-    {5, 6, pad, pad},  // end of 4th read
-                       // end of first file
+    {5, 6, pad, pad},    // end of 4th read
+                         // end of first file
     {39, 164, 216, 59},  // end of 1st read
                          // 2nd read is empty
-    {1, 2, 3, 4},  // end of 3rd read
-                   // empty line
+    {1, 2, 3, 4},        // end of 3rd read
+                         // empty line
     {0, 1, 2, 4},
-    {5, 6, pad, pad}  // end of 4th read
+    {5, 6, pad, pad}     // end of 4th read
   };
   const vector<vector<u64>> starts
     = {{0}, {0, 0}, {0, 0}, {}, {0}, {0, 0}, {0, 0}, {}};

@@ -45,7 +45,7 @@ __global__ void d_search(
     node_right
       = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
   }
-  if (node_left > node_right) node_left = -1ULL;
+  if (node_left > node_right) { node_left = -1ULL; }
   out[idx] = node_left;
 }
 

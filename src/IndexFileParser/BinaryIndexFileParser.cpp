@@ -15,8 +15,8 @@ BinaryIndexFileParser::BinaryIndexFileParser(
   size_t read_padding_,
   size_t buffer_size_
 ):
-  IndexFileParser(std::move(in_stream_), max_indexes_, read_padding_),
-  buffer_size(buffer_size_ * sizeof(u64)) {
+    IndexFileParser(std::move(in_stream_), max_indexes_, read_padding_),
+    buffer_size(buffer_size_ * sizeof(u64)) {
   assert_version();
   buffer.resize(buffer_size);
   load_buffer();

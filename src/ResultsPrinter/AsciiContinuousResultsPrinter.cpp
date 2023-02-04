@@ -23,14 +23,14 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
   vector<string> &filenames,
   uint kmer_size
 ):
-  Base(
-    std::move(results_producer),
-    std::move(interval_producer),
-    std::move(invalid_chars_producer),
-    filenames,
-    kmer_size
-  ),
-  buffer(max_characters_in_u64, '\0') {}
+    Base(
+      std::move(results_producer),
+      std::move(interval_producer),
+      std::move(invalid_chars_producer),
+      filenames,
+      kmer_size
+    ),
+    buffer(max_characters_in_u64, '\0') {}
 
 auto AsciiContinuousResultsPrinter::do_invalid_result() -> void {
   if (!is_at_newline) { get_ostream() << " "; }

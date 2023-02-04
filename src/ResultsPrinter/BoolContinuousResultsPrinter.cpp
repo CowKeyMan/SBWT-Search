@@ -36,14 +36,14 @@ BoolContinuousResultsPrinter::BoolContinuousResultsPrinter(
   uint kmer_size,
   u64 max_chars_per_batch
 ):
-  Base(
-    std::move(results_producer),
-    std::move(interval_producer),
-    std::move(invalid_chars_producer),
-    filenames,
-    kmer_size
-  ),
-  batch(round_up<u64>(max_chars_per_batch, sizeof(u64)) / sizeof(u64)) {
+    Base(
+      std::move(results_producer),
+      std::move(interval_producer),
+      std::move(invalid_chars_producer),
+      filenames,
+      kmer_size
+    ),
+    batch(round_up<u64>(max_chars_per_batch, sizeof(u64)) / sizeof(u64)) {
   reset_working_bits();
 }
 

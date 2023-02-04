@@ -16,10 +16,10 @@ ContinuousPositionsBuilder::ContinuousPositionsBuilder(
   size_t max_chars_per_batch_,
   uint max_batches
 ):
-  producer(std::move(_producer)),
-  max_chars_per_batch(max_chars_per_batch_),
-  builder(kmer_size_),
-  SharedBatchesProducer<PositionsBatch>(max_batches) {
+    producer(std::move(_producer)),
+    max_chars_per_batch(max_chars_per_batch_),
+    builder(kmer_size_),
+    SharedBatchesProducer<PositionsBatch>(max_batches) {
   initialise_batches();
 }
 

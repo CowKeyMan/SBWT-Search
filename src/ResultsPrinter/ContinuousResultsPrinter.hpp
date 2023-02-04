@@ -70,11 +70,11 @@ public:
     vector<string> &_filenames,
     uint kmer_size
   ):
-    results_producer(std::move(results_producer_)),
-    interval_producer(std::move(interval_producer_)),
-    invalid_chars_producer(std::move(invalid_chars_producer_)),
-    filenames(_filenames),
-    kmer_size(kmer_size) {}
+      results_producer(std::move(results_producer_)),
+      interval_producer(std::move(interval_producer_)),
+      invalid_chars_producer(std::move(invalid_chars_producer_)),
+      filenames(_filenames),
+      kmer_size(kmer_size) {}
 
   auto read_and_generate() -> void {
     current_filename = filenames.begin();

@@ -29,11 +29,11 @@ ContinuousSearcher::ContinuousSearcher(
   size_t max_batches,
   size_t max_chars_per_batch_
 ):
-  searcher(std::move(container), max_chars_per_batch_),
-  bit_seq_producer(std::move(bit_seq_producer_)),
-  positions_producer(std::move(positions_producer_)),
-  max_chars_per_batch(max_chars_per_batch_),
-  SharedBatchesProducer<ResultsBatch>(max_batches) {
+    searcher(std::move(container), max_chars_per_batch_),
+    bit_seq_producer(std::move(bit_seq_producer_)),
+    positions_producer(std::move(positions_producer_)),
+    max_chars_per_batch(max_chars_per_batch_),
+    SharedBatchesProducer<ResultsBatch>(max_batches) {
   initialise_batches();
 }
 

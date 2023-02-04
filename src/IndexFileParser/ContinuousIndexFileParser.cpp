@@ -21,18 +21,18 @@ ContinuousIndexFileParser::ContinuousIndexFileParser(
   span<const string> filenames_,
   size_t read_padding_
 ):
-  max_indexes_per_batch(max_indexes_per_batch_),
-  read_padding(read_padding_),
-  indexes_batch_producer(
-    make_shared<IndexesBatchProducer>(max_indexes_per_batch_, max_batches)
-  ),
-  indexes_starts_batch_producer(
-    make_shared<IndexesStartsBatchProducer>(max_batches)
-  ),
-  indexes_before_newfile_batch_producer(
-    make_shared<IndexesBeforeNewfileBatchProducer>(max_batches)
-  ),
-  filenames(filenames_) {
+    max_indexes_per_batch(max_indexes_per_batch_),
+    read_padding(read_padding_),
+    indexes_batch_producer(
+      make_shared<IndexesBatchProducer>(max_indexes_per_batch_, max_batches)
+    ),
+    indexes_starts_batch_producer(
+      make_shared<IndexesStartsBatchProducer>(max_batches)
+    ),
+    indexes_before_newfile_batch_producer(
+      make_shared<IndexesBeforeNewfileBatchProducer>(max_batches)
+    ),
+    filenames(filenames_) {
   filename_iterator = filenames.begin();
 }
 

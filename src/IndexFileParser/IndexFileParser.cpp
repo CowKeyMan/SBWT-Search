@@ -9,9 +9,9 @@ IndexFileParser::IndexFileParser(
   size_t max_indexes_,
   size_t read_padding_
 ):
-  in_stream(std::move(in_stream_)),
-  max_indexes(max_indexes_),
-  read_padding(read_padding_) {}
+    in_stream(std::move(in_stream_)),
+    max_indexes(max_indexes_),
+    read_padding(read_padding_) {}
 
 auto IndexFileParser::get_istream() const -> ThrowingIfstream & {
   return *in_stream;

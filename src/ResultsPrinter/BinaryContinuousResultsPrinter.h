@@ -12,7 +12,7 @@
 namespace sbwt_search {
 
 class BinaryContinuousResultsPrinter:
-  public ContinuousResultsPrinter<BinaryContinuousResultsPrinter> {
+    public ContinuousResultsPrinter<BinaryContinuousResultsPrinter> {
   using Base = ContinuousResultsPrinter<BinaryContinuousResultsPrinter>;
   friend Base;
 

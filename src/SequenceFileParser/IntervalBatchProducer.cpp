@@ -15,7 +15,7 @@ namespace sbwt_search {
 using std::numeric_limits;
 
 IntervalBatchProducer::IntervalBatchProducer(uint max_batches):
-  SharedBatchesProducer<IntervalBatch>(max_batches) {
+    SharedBatchesProducer<IntervalBatch>(max_batches) {
   initialise_batches();
 }
 

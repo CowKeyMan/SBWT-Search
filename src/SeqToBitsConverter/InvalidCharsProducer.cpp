@@ -12,9 +12,9 @@ using std::make_shared;
 InvalidCharsProducer::InvalidCharsProducer(
   uint kmer_size_, size_t max_chars_per_batch_, uint max_batches
 ):
-  kmer_size(kmer_size_),
-  max_chars_per_batch(max_chars_per_batch_),
-  SharedBatchesProducer<InvalidCharsBatch>(max_batches) {
+    kmer_size(kmer_size_),
+    max_chars_per_batch(max_chars_per_batch_),
+    SharedBatchesProducer<InvalidCharsBatch>(max_batches) {
   initialise_batches();
 }
 

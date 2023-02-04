@@ -14,7 +14,7 @@ using std::array;
 const size_t max_characters_in_u64 = 19;
 
 class AsciiContinuousResultsPrinter:
-  public ContinuousResultsPrinter<AsciiContinuousResultsPrinter> {
+    public ContinuousResultsPrinter<AsciiContinuousResultsPrinter> {
   using Base = ContinuousResultsPrinter<AsciiContinuousResultsPrinter>;
   friend Base;
 

@@ -17,7 +17,7 @@ using std::vector;
 namespace sbwt_search {
 
 PoppyBuilder::PoppyBuilder(const size_t bits_total, const u64 *bits_vector):
-  bits_total(bits_total), bits_vector(bits_vector) {
+    bits_total(bits_total), bits_vector(bits_vector) {
   layer_0.reserve(round_up(bits_total, hyperblock_bits) / hyperblock_bits);
   layer_1_2.reserve(round_up(bits_total, superblock_bits) / superblock_bits);
 }

@@ -20,7 +20,7 @@ using std::shared_ptr;
 class ContinuousIndexFileParser;
 
 class IndexesBeforeNewfileBatchProducer:
-  public SharedBatchesProducer<IndexesBeforeNewfileBatch> {
+    public SharedBatchesProducer<IndexesBeforeNewfileBatch> {
   friend ContinuousIndexFileParser;
 
 public:

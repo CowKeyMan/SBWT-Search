@@ -9,8 +9,8 @@ using std::make_shared;
 IndexesBatchProducer::IndexesBatchProducer(
   size_t max_indexes_per_batch_, size_t max_batches
 ):
-  SharedBatchesProducer<IndexesBatch>(max_batches),
-  max_indexes_per_batch(max_indexes_per_batch_) {
+    SharedBatchesProducer<IndexesBatch>(max_batches),
+    max_indexes_per_batch(max_indexes_per_batch_) {
   initialise_batches();
 }
 

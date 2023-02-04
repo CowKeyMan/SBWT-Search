@@ -7,7 +7,7 @@ using std::make_shared;
 namespace sbwt_search {
 
 StringBreakBatchProducer::StringBreakBatchProducer(const uint max_batches):
-  SharedBatchesProducer<StringBreakBatch>(max_batches) {
+    SharedBatchesProducer<StringBreakBatch>(max_batches) {
   initialise_batches();
 }
 

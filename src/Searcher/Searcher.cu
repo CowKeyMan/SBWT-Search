@@ -53,7 +53,7 @@ __global__ void d_search(
 
 auto Searcher::launch_search_kernel(size_t queries, u64 batch_id) -> void {
   cudaEvent_t search_start;  // NOLINT(cppcoreguidelines-init-variables)
-  cudaEvent_t search_stop;  // NOLINT(cppcoreguidelines-init-variables)
+  cudaEvent_t search_stop;   // NOLINT(cppcoreguidelines-init-variables)
   GPU_CHECK(cudaEventCreate(&search_start));
   GPU_CHECK(cudaEventCreate(&search_stop));
   u32 blocks_per_grid

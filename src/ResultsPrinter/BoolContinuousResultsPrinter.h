@@ -15,7 +15,7 @@ using std::unique_ptr;
 const u8 default_shift_bits = 63;
 
 class BoolContinuousResultsPrinter:
-  public ContinuousResultsPrinter<BoolContinuousResultsPrinter> {
+    public ContinuousResultsPrinter<BoolContinuousResultsPrinter> {
   using Base = ContinuousResultsPrinter<BoolContinuousResultsPrinter>;
   friend Base;
 

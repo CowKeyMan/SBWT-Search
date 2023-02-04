@@ -7,8 +7,8 @@ using std::bit_cast;
 namespace sbwt_search {
 
 BoolOutputParser::BoolOutputParser(const string &filename):
-  OutputParser(filename),
-  seqsize_stream(filename + "_seq_sizes", ios::binary | ios::in) {
+    OutputParser(filename),
+    seqsize_stream(filename + "_seq_sizes", ios::binary | ios::in) {
   read_next_seq_size();
 }
 

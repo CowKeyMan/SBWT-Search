@@ -22,7 +22,7 @@ GpuSbwtContainer::GpuSbwtContainer(
   const u64 bit_vector_size,
   const u32 kmer_size
 ):
-  SbwtContainer(bits_total, bit_vector_size, kmer_size) {
+    SbwtContainer(bits_total, bit_vector_size, kmer_size) {
   acgt.reserve(4);
   acgt.push_back(make_unique<GpuPointer<u64>>(cpu_a, bit_vector_size));
   acgt.push_back(make_unique<GpuPointer<u64>>(cpu_c, bit_vector_size));

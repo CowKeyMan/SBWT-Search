@@ -39,16 +39,17 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
   size_t max_chars_per_batch_,
   size_t max_batches
 ):
-  filenames(filenames_),
-  kmer_size(kmer_size_),
-  batches(max_batches),
-  max_chars_per_batch(max_chars_per_batch_),
-  string_sequence_batch_producer(
-    make_shared<StringSequenceBatchProducer>(max_batches)
-  ),
-  string_break_batch_producer(make_shared<StringBreakBatchProducer>(max_batches)
-  ),
-  interval_batch_producer(make_shared<IntervalBatchProducer>(max_batches)) {
+    filenames(filenames_),
+    kmer_size(kmer_size_),
+    batches(max_batches),
+    max_chars_per_batch(max_chars_per_batch_),
+    string_sequence_batch_producer(
+      make_shared<StringSequenceBatchProducer>(max_batches)
+    ),
+    string_break_batch_producer(
+      make_shared<StringBreakBatchProducer>(max_batches)
+    ),
+    interval_batch_producer(make_shared<IntervalBatchProducer>(max_batches)) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {
     batches.set(i, make_shared<Seq>(Seq(max_chars_per_batch)));

@@ -21,7 +21,7 @@ using std::shared_ptr;
 class ContinuousIndexFileParser;
 
 class IndexesStartsBatchProducer:
-  public SharedBatchesProducer<IndexesStartsBatch> {
+    public SharedBatchesProducer<IndexesStartsBatch> {
   friend ContinuousIndexFileParser;
 
 public:

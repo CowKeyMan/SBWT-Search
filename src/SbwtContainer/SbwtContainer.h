@@ -23,9 +23,9 @@ private:
 
 protected:
   SbwtContainer(size_t num_bits, size_t bit_vector_size, u64 kmer_size):
-    num_bits(num_bits),
-    bit_vector_size(bit_vector_size),
-    kmer_size(kmer_size) {}
+      num_bits(num_bits),
+      bit_vector_size(bit_vector_size),
+      kmer_size(kmer_size) {}
 
 public:
   [[nodiscard]] auto get_bit_vector_size() const -> u64;

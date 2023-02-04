@@ -21,9 +21,10 @@ IndexSearchArgumentParser::IndexSearchArgumentParser(
   int argc,
   char **argv
 ):
-  options(make_unique<Options>(create_options(program_name, program_description)
-  )),
-  args{parse_arguments(argc, argv)} {}
+    options(
+      make_unique<Options>(create_options(program_name, program_description))
+    ),
+    args{parse_arguments(argc, argv)} {}
 
 auto IndexSearchArgumentParser::create_options(
   const string &program_name, const string &program_description

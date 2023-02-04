@@ -23,7 +23,7 @@ using std::shared_ptr;
 using std::string;
 
 class StringSequenceBatchProducer:
-  public SharedBatchesProducer<StringSequenceBatch> {
+    public SharedBatchesProducer<StringSequenceBatch> {
   using Base = SharedBatchesProducer<StringSequenceBatch>;
   friend ContinuousSequenceFileParser;
 

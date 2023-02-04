@@ -54,9 +54,9 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   for (int i = 0; i < 3 + 4; ++i) { skip_bits_vector(in_stream); }
   vector<unique_ptr<vector<u64>>> acgt(4);
   load_bit_vectors(bit_vector_bytes, acgt, vectors_start_position);
-  skip_bits_vector(in_stream);  // skip suffix group starts
-  skip_bytes_vector(in_stream);  // skip C map
-  skip_bytes_vector(in_stream);  // skip kmer_prefix_calc
+  skip_bits_vector(in_stream);                  // skip suffix group starts
+  skip_bytes_vector(in_stream);                 // skip C map
+  skip_bytes_vector(in_stream);                 // skip kmer_prefix_calc
   u64 kmer_size = -1;
   in_stream.seekg(sizeof(u64), ios_base::cur);  // skip precalc_k
   in_stream.seekg(sizeof(u64), ios_base::cur);  // skip n_nodes

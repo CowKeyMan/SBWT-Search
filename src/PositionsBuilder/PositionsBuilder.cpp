@@ -10,7 +10,7 @@ using std::vector;
 namespace sbwt_search {
 
 PositionsBuilder::PositionsBuilder(const uint _kmer_size):
-  kmer_size(_kmer_size){};
+    kmer_size(_kmer_size){};
 
 auto PositionsBuilder::build_positions(
   const vector<size_t> &chars_before_newline,

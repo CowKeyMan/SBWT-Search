@@ -23,13 +23,13 @@ BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
   vector<string> &filenames,
   uint kmer_size
 ):
-  Base(
-    std::move(results_producer),
-    std::move(interval_producer),
-    std::move(invalid_chars_producer),
-    filenames,
-    kmer_size
-  ) {}
+    Base(
+      std::move(results_producer),
+      std::move(interval_producer),
+      std::move(invalid_chars_producer),
+      filenames,
+      kmer_size
+    ) {}
 
 auto BinaryContinuousResultsPrinter::do_invalid_result() -> void {
   get_ostream().write(bit_cast<char *>(&minus2), sizeof(u64));

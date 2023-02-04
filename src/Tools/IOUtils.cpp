@@ -16,7 +16,7 @@ using std::string;
 ThrowingIfstream::ThrowingIfstream(
   const string &filename, ios_base::openmode mode
 ):
-  ifstream(filename, mode) {
+    ifstream(filename, mode) {
   if (this->fail()) {
     throw ios::failure(format("The input file {} cannot be opened", filename));
   }
@@ -29,7 +29,7 @@ auto ThrowingIfstream::check_file_exists(const string &filename) -> void {
 ThrowingOfstream::ThrowingOfstream(
   const string &filepath, ios_base::openmode mode
 ):
-  ofstream(filepath, mode) {
+    ofstream(filepath, mode) {
   if (this->fail()) {
     throw ios::failure(fmt::format(
       "The path {}"

@@ -15,7 +15,7 @@ CpuSbwtContainer::CpuSbwtContainer(
   unique_ptr<vector<u64>> &t,
   uint kmer_size
 ):
-  SbwtContainer(num_bits, a->size(), kmer_size) {
+    SbwtContainer(num_bits, a->size(), kmer_size) {
   acgt.push_back(std::move(a));
   acgt.push_back(std::move(c));
   acgt.push_back(std::move(g));

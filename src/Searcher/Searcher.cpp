@@ -14,9 +14,9 @@ using math_utils::round_up;
 Searcher::Searcher(
   shared_ptr<GpuSbwtContainer> container, u64 max_chars_per_batch
 ):
-  container(std::move(container)),
-  d_bit_seqs(max_chars_per_batch / u64_bits * 2),
-  d_kmer_positions(max_chars_per_batch) {}
+    container(std::move(container)),
+    d_bit_seqs(max_chars_per_batch / u64_bits * 2),
+    d_kmer_positions(max_chars_per_batch) {}
 
 auto Searcher::search(
   const vector<u64> &bit_seqs,

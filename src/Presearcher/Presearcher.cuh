@@ -32,7 +32,7 @@ __global__ void d_presearch(
     node_left = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_left);
     node_right
       = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
-    if (i == 0) break;
+    if (i == 0) { break; }
   }
   presearch_left[kmer] = node_left;
   presearch_right[kmer] = node_right;

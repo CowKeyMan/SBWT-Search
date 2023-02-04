@@ -40,10 +40,10 @@ public:
   auto operator=(SharedBatchesProducer &&) = delete;
 
   explicit SharedBatchesProducer(const unsigned int max_batches):
-    // the '-1' is so that we do not overwrite the current item being read
-    start_semaphore(max_batches - 1),
-    finish_semaphore(0),
-    batches(max_batches) {}
+      // the '-1' is so that we do not overwrite the current item being read
+      start_semaphore(max_batches - 1),
+      finish_semaphore(0),
+      batches(max_batches) {}
 
   auto virtual read_and_generate() -> void {
     throw_if_uninitialised();

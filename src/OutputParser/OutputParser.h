@@ -31,7 +31,7 @@ public:
   auto operator=(const OutputParser &) = delete;
   auto operator=(const OutputParser &&) = delete;
   explicit OutputParser(const string &filename):
-    stream(filename, ios::binary | ios::in) {}
+      stream(filename, ios::binary | ios::in) {}
   virtual auto get_next() -> ITEM_TYPE = 0;
   virtual auto get_value() -> size_t = 0;
   virtual ~OutputParser() = default;

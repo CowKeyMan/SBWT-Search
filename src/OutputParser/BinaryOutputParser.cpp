@@ -7,7 +7,7 @@ using std::bit_cast;
 namespace sbwt_search {
 
 BinaryOutputParser::BinaryOutputParser(const string &filename):
-  OutputParser(filename) {}
+    OutputParser(filename) {}
 
 auto BinaryOutputParser::get_next() -> ITEM_TYPE {
   if (get_stream().read(bit_cast<char *>(&current_value), sizeof(size_t))) {

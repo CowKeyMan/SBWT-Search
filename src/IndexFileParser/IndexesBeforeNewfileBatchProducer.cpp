@@ -9,7 +9,7 @@ using std::make_shared;
 IndexesBeforeNewfileBatchProducer::IndexesBeforeNewfileBatchProducer(
   size_t max_batches
 ):
-  SharedBatchesProducer<IndexesBeforeNewfileBatch>(max_batches) {
+    SharedBatchesProducer<IndexesBeforeNewfileBatch>(max_batches) {
   initialise_batches();
 }
 

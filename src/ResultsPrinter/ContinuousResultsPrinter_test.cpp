@@ -47,7 +47,7 @@ using DummyIntervalProducer = DummyBatchProducer<IntervalBatch>;
 using DummyInvalidCharsProducer = DummyBatchProducer<InvalidCharsBatch>;
 
 class DummyContinuousResultsPrinter:
-  public ContinuousResultsPrinter<DummyContinuousResultsPrinter> {
+    public ContinuousResultsPrinter<DummyContinuousResultsPrinter> {
   using Base = ContinuousResultsPrinter<DummyContinuousResultsPrinter>;
   friend Base;
 
@@ -67,14 +67,14 @@ public:
     uint kmer_size,
     uint files
   ):
-    filenames(files),
-    ContinuousResultsPrinter(
-      results_producer,
-      interval_producer,
-      invalid_chars_producer,
-      filenames,
-      kmer_size
-    ) {}
+      filenames(files),
+      ContinuousResultsPrinter(
+        results_producer,
+        interval_producer,
+        invalid_chars_producer,
+        filenames,
+        kmer_size
+      ) {}
 
 protected:
   auto do_start_next_file() -> void { result_string.emplace_back(""); }
@@ -201,9 +201,9 @@ TEST_F(ContinuousResultsPrinterTest, MultipleBatches) {
     {{30, 40, 50, 60, 70}},
     {{80, 123456, 100}}};
   const vector<InvalidCharsBatch> invalid_chars = {
-    {{0, 0, 0, 0, 0}},  // end of first string
+    {{0, 0, 0, 0, 0}},              // end of first string
     {{0, 0, 0, 0, 1, 0, 0, 0, 0}},  // end of third
-    {{0, 1, 0, 0, 0}}};  // end of last string
+    {{0, 1, 0, 0, 0}}};             // end of last string
   const vector<vector<u64>> chars_before_newline = {
     {
       1,

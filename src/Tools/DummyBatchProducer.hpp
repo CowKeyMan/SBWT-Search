@@ -27,12 +27,12 @@ class DummyBatchProducer: public SharedBatchesProducer<T> {
 
 public:
   explicit DummyBatchProducer(const vector<shared_ptr<T>> &batches_):
-    batches(batches_), SharedBatchesProducer<T>(batches_.size() + 1) {
+      batches(batches_), SharedBatchesProducer<T>(batches_.size() + 1) {
     this->initialise_batches();
     this->read_and_generate();
   }
   explicit DummyBatchProducer(const vector<T> &batches_):
-    SharedBatchesProducer<T>(batches_.size() + 1) {
+      SharedBatchesProducer<T>(batches_.size() + 1) {
     this->initialise_batches();
     for (auto b : batches_) { batches.push_back(make_shared<T>(b)); }
     this->read_and_generate();
