@@ -1,11 +1,11 @@
-#ifndef ASCII_INDEX_FILE_PARSER_H
-#define ASCII_INDEX_FILE_PARSER_H
+#ifndef BINARY_INDEX_FILE_PARSER_H
+#define BINARY_INDEX_FILE_PARSER_H
 
 /**
- * @file AsciiIndexFileParser.h
- * @brief Reads the input text file integer by integer, and pads each line/read
- * to the given parameter. It also takes note of the starting index of where
- * each read starts in our vector of integers.
+ * @file BinaryIndexFileParser.h
+ * @brief Reads the input binary file integer by integer, and pads each
+ * line/read to the given parameter. It also takes note of the starting index of
+ * where each read starts in our vector of integers.
  */
 
 #include <memory>
@@ -23,19 +23,19 @@ using std::shared_ptr;
 using std::string;
 using std::stringstream;
 
-class AsciiIndexFileParser: public IndexFileParser {
+class BinaryIndexFileParser: public IndexFileParser {
 private:
-  string buffer;
+  vector<u64> buffer;
   size_t buffer_size = 0;
   size_t buffer_index = 0;
   bool new_read = true;
 
 public:
-  AsciiIndexFileParser(
+  BinaryIndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
     size_t max_indexes_,
     size_t read_padding_,
-    size_t buffer_size = sixteen_kB
+    size_t buffer_size = sixteen_kB / sizeof(u64)
   );
   auto generate_batch(
     shared_ptr<IndexesBatch> indexes_batch_,
@@ -45,9 +45,7 @@ public:
 private:
   auto load_buffer() -> void;
   auto assert_version() -> void;
-  auto skip_until_next_whitespace() -> char;
-  auto getc() -> char;
-  auto read_number(u64 starting_number) -> u64;
+  auto get_next() -> u64;
 };
 
 }  // namespace sbwt_search

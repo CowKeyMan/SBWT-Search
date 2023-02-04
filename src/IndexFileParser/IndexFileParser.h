@@ -21,6 +21,9 @@
 
 namespace sbwt_search {
 
+const size_t sixteen_kB = 16ULL * 8ULL * 1024ULL;
+const u64 pad = static_cast<u64>(-1);
+
 using design_utils::SharedBatchesProducer;
 using io_utils::ThrowingIfstream;
 using std::shared_ptr;
@@ -28,7 +31,7 @@ using std::shared_ptr;
 class IndexFileParser {
 private:
   shared_ptr<ThrowingIfstream> in_stream;
-  shared_ptr<IndexesBatch> indexes;
+  shared_ptr<IndexesBatch> indexes_batch;
   shared_ptr<IndexesStartsBatch> indexes_starts_batch;
   size_t max_indexes;
   size_t read_padding;
@@ -36,24 +39,28 @@ private:
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
   [[nodiscard]] auto get_indexes() const -> vector<u64> &;
+  [[nodiscard]] auto get_indexes_batch() -> shared_ptr<IndexesBatch> &;
   [[nodiscard]] auto get_max_indexes() const -> u64;
   [[nodiscard]] auto get_starts() const -> vector<u64> &;
   [[nodiscard]] auto get_read_padding() const -> u64;
-
-public:
   IndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
-    shared_ptr<IndexesBatch> indexes_,
-    shared_ptr<IndexesStartsBatch> indexes_starts_batch_,
     size_t max_indexes_,
     size_t read_padding_
   );
-  virtual auto generate_batch(size_t start_index) -> void = 0;
+
+public:
+  // return true if we manage to read from the file
+  virtual auto generate_batch(
+    shared_ptr<IndexesBatch> indexes_batch_,
+    shared_ptr<IndexesStartsBatch> indexes_starts_batch_
+  ) -> bool;
   virtual ~IndexFileParser() = default;
   IndexFileParser(IndexFileParser &) = delete;
   IndexFileParser(IndexFileParser &&) = delete;
   auto operator=(IndexFileParser &) = delete;
   auto operator=(IndexFileParser &&) = delete;
+  auto pad_read() -> void;
 };
 
 }  // namespace sbwt_search

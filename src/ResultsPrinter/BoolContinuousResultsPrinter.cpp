@@ -100,8 +100,8 @@ auto BoolContinuousResultsPrinter::dump_working_bits() -> void {
 
 auto BoolContinuousResultsPrinter::do_write_file_header() -> void {
   Base::do_write_file_header();
-  write_string_with_size(get_ostream(), get_seq_sizes_format());
-  write_string_with_size(get_ostream(), get_seq_sizes_version());
+  get_ostream().write_string_with_size(get_seq_sizes_format());
+  get_ostream().write_string_with_size(get_seq_sizes_version());
 }
 
 }  // namespace sbwt_search

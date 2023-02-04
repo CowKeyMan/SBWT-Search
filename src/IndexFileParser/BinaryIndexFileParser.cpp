@@ -1,95 +1,78 @@
+#include <bit>
+#include <ios>
 #include <stdexcept>
-#include <string>
 
-#include "IndexFileParser/AsciiIndexFileParser.h"
-#include "Tools/IOUtils.h"
+#include "IndexFileParser/BinaryIndexFileParser.h"
 
 namespace sbwt_search {
 
+using std::bit_cast;
 using std::runtime_error;
-using std::string;
 
-AsciiIndexFileParser::AsciiIndexFileParser(
+BinaryIndexFileParser::BinaryIndexFileParser(
   shared_ptr<ThrowingIfstream> in_stream_,
   size_t max_indexes_,
   size_t read_padding_,
   size_t buffer_size_
 ):
   IndexFileParser(std::move(in_stream_), max_indexes_, read_padding_),
-  buffer_size(buffer_size_) {
+  buffer_size(buffer_size_ * sizeof(u64)) {
   assert_version();
   buffer.resize(buffer_size);
   load_buffer();
 }
 
-auto AsciiIndexFileParser::assert_version() -> void {
+auto BinaryIndexFileParser::assert_version() -> void {
   auto version = get_istream().read_string_with_size();
   if (version != "v1.0") {
     throw runtime_error("The file has an incompatible version number");
   }
 }
 
-auto AsciiIndexFileParser::generate_batch(
+auto BinaryIndexFileParser::generate_batch(
   shared_ptr<IndexesBatch> indexes_batch_,
   shared_ptr<IndexesStartsBatch> indexes_starts_batch_
 ) -> bool {
+  u64 i = 0;
   IndexFileParser::generate_batch(
     std::move(indexes_batch_), std::move(indexes_starts_batch_)
   );
   const size_t initial_size = get_starts().size() + get_indexes().size();
-  char c = '\0';
   while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
-    c = getc();
-    if (c == '\0') { break; }  // EOF
+    i = get_next();
+    if (buffer_size == 0) { break; }  // EOF
     if (new_read) {
       get_starts().push_back(get_indexes().size());
       new_read = false;
     }
-    if (c == '-') {
-      c = skip_until_next_whitespace();
+    if (i == static_cast<u64>(-1) || i == static_cast<u64>(-2)) {
       ++get_indexes_batch()->skipped;
-    }
-    if (c == '\n') {
+    } else if (i == static_cast<u64>(-3)) {
       pad_read();
       new_read = true;
-    }
-    // if it is a number (note: all special characters are smaller than '0')
-    if (c >= '0') {
+    } else {
       ++get_indexes_batch()->true_indexes;
-      get_indexes().push_back(read_number(c - '0'));
+      get_indexes().push_back(i);
     }
   }
   pad_read();
   return get_starts().size() + get_starts().size() > initial_size;
 }
 
-inline auto AsciiIndexFileParser::load_buffer() -> void {
-  get_istream().read(buffer.data(), static_cast<std::streamsize>(buffer_size));
-  buffer_size = get_istream().gcount();
-  buffer_index = 0;
-}
-
-inline auto AsciiIndexFileParser::getc() -> char {
+inline auto BinaryIndexFileParser::get_next() -> u64 {
   if (buffer_index >= buffer_size) { load_buffer(); }
-  if (buffer_size == 0) { return 0; }
+  if (buffer_size == 0) { return -1; }
   return buffer[buffer_index++];
 }
 
-inline auto AsciiIndexFileParser::skip_until_next_whitespace() -> char {
-  char c = '\0';
-  // while we are still getting digits
-  while ((c = getc()) >= '0') {}
-  return c;
-}
-
-inline auto AsciiIndexFileParser::read_number(u64 starting_number) -> u64 {
-  auto result = starting_number;
-  char c = '\0';
-  const u64 base = 10;
-  while ((c = getc()) >= '0') { result = result * base + c - '0'; }
-  buffer_index--;
-  return result;
+inline auto BinaryIndexFileParser::load_buffer() -> void {
+  get_istream().read(
+    bit_cast<char *>(buffer.data()),
+    static_cast<std::streamsize>(buffer_size * sizeof(u64))
+  );
+  buffer_size = get_istream().gcount() / sizeof(u64);
+  buffer_index = 0;
 }
 
 }  // namespace sbwt_search

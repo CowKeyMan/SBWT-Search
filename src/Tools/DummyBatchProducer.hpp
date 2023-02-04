@@ -8,6 +8,7 @@
  */
 
 #include <memory>
+#include <vector>
 
 #include "Tools/SharedBatchesProducer.hpp"
 #include "Tools/TypeDefinitions.h"
@@ -17,6 +18,7 @@ namespace test_utils {
 using design_utils::SharedBatchesProducer;
 using std::make_shared;
 using std::shared_ptr;
+using std::vector;
 
 template <class T>
 class DummyBatchProducer: public SharedBatchesProducer<T> {

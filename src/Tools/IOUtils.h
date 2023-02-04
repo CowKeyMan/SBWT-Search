@@ -10,6 +10,7 @@
 #include <bit>
 #include <fstream>
 #include <string>
+#include <vector>
 
 namespace io_utils {
 
@@ -17,21 +18,35 @@ using std::bit_cast;
 using std::ifstream;
 using std::ofstream;
 using std::string;
+using std::vector;
 
 class ThrowingIfstream: public ifstream {
 public:
   ThrowingIfstream(const string &filename, ios_base::openmode mode);
   static void check_file_exists(const string &filename);
+
+  auto read_string_with_size() -> string;
 };
 
 class ThrowingOfstream: public ofstream {
 public:
   ThrowingOfstream(const string &filepath, ios_base::openmode mode);
   static void check_path_valid(const string &filepath);
-};
 
-auto read_string_with_size(ThrowingIfstream &is) -> string;
-auto write_string_with_size(ThrowingOfstream &os, const string &s) -> void;
+  using ofstream::write;
+
+  template <class Real>
+  auto write(Real r) -> void {
+    write(bit_cast<char *>(&r), sizeof(r));
+  }
+
+  template <class T>
+  auto write(const vector<T> &v) -> void {
+    write(bit_cast<char *>(v.data()), v.size() * sizeof(T));
+  }
+
+  auto write_string_with_size(const string &s) -> void;
+};
 
 }  // namespace io_utils
 

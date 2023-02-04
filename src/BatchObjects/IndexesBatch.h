@@ -19,6 +19,14 @@ using std::vector;
 class IndexesBatch {
 public:
   vector<u64> indexes;
+  size_t true_indexes = 0;
+  size_t skipped = 0;
+
+  auto reset() {
+    indexes.resize(0);
+    true_indexes = 0;
+    skipped = 0;
+  }
 };
 
 }  // namespace sbwt_search

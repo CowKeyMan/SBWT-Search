@@ -59,10 +59,7 @@ auto ContinuousSequenceFileParser::read_and_generate() -> void {
   start_next_file();
   while (!fail) {
     do_at_batch_start();
-    batches.step_write();
-    reset_rec();
     read_next();
-    batches.step_read();
     do_at_batch_finish();
   }
   do_at_generate_finish();
@@ -115,9 +112,6 @@ auto ContinuousSequenceFileParser::start_next_file() -> bool {
       Logger::log(Logger::LOG_LEVEL::ERROR, e.what());
     }
   }
-  interval_batch_producer->add_file_start(
-    batches.current_write()->chars_before_newline.size()
-  );
   fail = true;
   return false;
 }
@@ -131,6 +125,8 @@ auto ContinuousSequenceFileParser::do_at_batch_start() -> void {
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
+  batches.step_write();
+  reset_rec();
 }
 
 auto ContinuousSequenceFileParser::read_next() -> void {
@@ -143,6 +139,7 @@ auto ContinuousSequenceFileParser::read_next() -> void {
 }
 
 auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
+  batches.step_read();
   auto seq_size = batches.current_write()->seq.size();
   auto &str_breaks = batches.current_write()->chars_before_newline;
   str_breaks.push_back(std::numeric_limits<size_t>::max());

@@ -42,22 +42,22 @@ ThrowingOfstream::ThrowingOfstream(
 }
 
 auto ThrowingOfstream::check_path_valid(const string &filepath) -> void {
-  ThrowingOfstream(filepath, ios_base::in);
+  ThrowingOfstream(filepath, ios_base::out);
 }
 
-auto read_string_with_size(ThrowingIfstream &is) -> string {
+auto ThrowingOfstream::write_string_with_size(const string &s) -> void {
+  u64 size = static_cast<u64>(s.size());
+  std::ofstream::write(bit_cast<char *>(&size), sizeof(u64));
+  (*this) << s;
+}
+
+auto ThrowingIfstream::read_string_with_size() -> string {
   u64 size = 0;
-  is.read(bit_cast<char *>(&size), sizeof(u64));
+  read(bit_cast<char *>(&size), sizeof(u64));
   string s;
   s.resize(size);
-  is.read(bit_cast<char *>(s.data()), static_cast<std::streamsize>(size));
+  read(bit_cast<char *>(s.data()), static_cast<std::streamsize>(size));
   return s;
-}
-
-auto write_string_with_size(ThrowingOfstream &os, const string &s) -> void {
-  u64 size = static_cast<u64>(s.size());
-  os.write(bit_cast<char *>(&size), sizeof(u64));
-  os << s;
 }
 
 }  // namespace io_utils

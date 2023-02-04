@@ -18,6 +18,8 @@ using std::vector;
 class IndexesStartsBatch {
 public:
   vector<u64> indexes_starts;
+
+  auto reset() { indexes_starts.resize(0); }
 };
 
 }  // namespace sbwt_search

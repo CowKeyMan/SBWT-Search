@@ -33,35 +33,35 @@ using std::unique_ptr;
 
 auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   -> unique_ptr<CpuSbwtContainer> {
-  ThrowingIfstream stream(filename, std::ios::in);
+  ThrowingIfstream in_stream(filename, std::ios::in);
   Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::START);
-  const string variant = read_string_with_size(stream);
+  const string variant = in_stream.read_string_with_size();
   if (variant != "plain-matrix") {
     throw runtime_error("Error input is not a plain-matrix SBWT");
   }
-  const string version = read_string_with_size(stream);
+  const string version = in_stream.read_string_with_size();
   if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); }
   u64 num_bits = 0;
-  stream.read(bit_cast<char *>(&num_bits), sizeof(u64));
-  const size_t vectors_start_position = stream.tellg();
+  in_stream.read(bit_cast<char *>(&num_bits), sizeof(u64));
+  const size_t vectors_start_position = in_stream.tellg();
   const size_t bit_vector_bytes
     = round_up<u64>(num_bits, u64_bits) / sizeof(u64);
-  stream.seekg(
+  in_stream.seekg(
     static_cast<std::ios::off_type>(bit_vector_bytes), ios_base::cur
   );  // skip first vector
 #pragma unroll
   // skip the other 3 vectors and 4 rank structure vectors
-  for (int i = 0; i < 3 + 4; ++i) { skip_bits_vector(stream); }
+  for (int i = 0; i < 3 + 4; ++i) { skip_bits_vector(in_stream); }
   vector<unique_ptr<vector<u64>>> acgt(4);
   load_bit_vectors(bit_vector_bytes, acgt, vectors_start_position);
-  skip_bits_vector(stream);  // skip suffix group starts
-  skip_bytes_vector(stream);  // skip C map
-  skip_bytes_vector(stream);  // skip kmer_prefix_calc
+  skip_bits_vector(in_stream);  // skip suffix group starts
+  skip_bytes_vector(in_stream);  // skip C map
+  skip_bytes_vector(in_stream);  // skip kmer_prefix_calc
   u64 kmer_size = -1;
-  stream.seekg(sizeof(u64), ios_base::cur);  // skip precalc_k
-  stream.seekg(sizeof(u64), ios_base::cur);  // skip n_nodes
-  stream.seekg(sizeof(u64), ios_base::cur);  // skip n_kmers
-  stream.read(bit_cast<char *>(&kmer_size), sizeof(u64));
+  in_stream.seekg(sizeof(u64), ios_base::cur);  // skip precalc_k
+  in_stream.seekg(sizeof(u64), ios_base::cur);  // skip n_nodes
+  in_stream.seekg(sizeof(u64), ios_base::cur);  // skip n_kmers
+  in_stream.read(bit_cast<char *>(&kmer_size), sizeof(u64));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG, format("Using kmer size: {}", kmer_size)
   );

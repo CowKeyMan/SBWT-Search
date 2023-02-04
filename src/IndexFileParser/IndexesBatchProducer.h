@@ -3,9 +3,9 @@
 
 /**
  * @file IndexesBatchProducer.h
- * @brief Simple class sued by the IndexFileParser which stores the index batch
- * and serves it to its consumers. The class provides an interfact to fill the
- * batch
+ * @brief Simple class used by the IndexFileParser which stores the index batch
+ * and serves it to its consumers. The current_write batch can be obtained and
+ * written to
  */
 
 #include <memory>
@@ -18,21 +18,21 @@ namespace sbwt_search {
 using design_utils::SharedBatchesProducer;
 using std::shared_ptr;
 
-class IndexFileParser;
+class ContinuousIndexFileParser;
 
-class IndexesBatchProducer: SharedBatchesProducer<IndexesBatch> {
-  friend IndexFileParser;
+class IndexesBatchProducer: public SharedBatchesProducer<IndexesBatch> {
+  friend ContinuousIndexFileParser;
 
 private:
   size_t max_indexes_per_batch;
 
 public:
-  IndexesBatchProducer(size_t max_indexes_per_batch_, uint max_batches);
+  IndexesBatchProducer(size_t max_indexes_per_batch_, size_t max_batches);
 
 private:
   auto get_default_value() -> shared_ptr<IndexesBatch> override;
   auto start_new_batch() -> void;
-  auto add(size_t index) -> void;
+  auto get_current_write() -> shared_ptr<IndexesBatch>;
 };
 
 }  // namespace sbwt_search

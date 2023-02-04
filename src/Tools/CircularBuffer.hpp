@@ -7,12 +7,12 @@
  * memory when using large buffers
  */
 
-#include <stddef.h>
+#include <cstddef>
 #include <vector>
 
-using std::vector;
-
 namespace structure_utils {
+
+using std::vector;
 
 template <class T>
 class CircularBuffer {

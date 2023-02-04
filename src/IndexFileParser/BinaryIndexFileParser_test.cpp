@@ -1,18 +1,20 @@
-#include <ios>
+#include <filesystem>
+#include <memory>
 
 #include <gtest/gtest.h>
 
-#include "IndexFileParser/AsciiIndexFileParser.h"
+#include "IndexFileParser/BinaryIndexFileParser.h"
+#include "IndexFileParser/IndexFileParserTestUtils.h"
 #include "Tools/IOUtils.h"
-#include "Tools/RNGUtils.hpp"
 #include "Tools/TestUtils.hpp"
 
 namespace sbwt_search {
 
-using std::ios_base;
+using std::ios;
 using std::make_shared;
+using std::filesystem::remove;
 
-class AsciiIndexFileParserTest: public ::testing::Test {
+class BinaryIndexFileParserTest: public ::testing::Test {
 protected:
   auto run_test(
     const string &filename,
@@ -24,13 +26,14 @@ protected:
     const vector<size_t> &expected_true_indexes,
     const vector<size_t> &expected_skipped
   ) -> void {
-    auto in_stream = make_shared<ThrowingIfstream>(filename, ios_base::in);
+    write_fake_binary_results_to_file();
+    auto in_stream = make_shared<ThrowingIfstream>(filename, ios::in);
     auto format_name = in_stream->read_string_with_size();
-    ASSERT_EQ(format_name, "ascii");
+    ASSERT_EQ(format_name, "binary");
     auto indexes_batch = make_shared<IndexesBatch>();
     auto indexes_starts_batch = make_shared<IndexesStartsBatch>();
     auto host
-      = AsciiIndexFileParser(in_stream, max_indexes, padding, buffer_size);
+      = BinaryIndexFileParser(in_stream, max_indexes, padding, buffer_size);
     for (int i = 0; i < expected_indexes.size(); ++i) {
       indexes_batch->indexes.resize(0);
       indexes_batch->true_indexes = 0;
@@ -42,10 +45,11 @@ protected:
       EXPECT_EQ(indexes_batch->true_indexes, expected_true_indexes[i]);
       EXPECT_EQ(indexes_batch->skipped, expected_skipped[i]);
     }
+    remove(get_binary_index_output_filename());
   }
 };
 
-TEST_F(AsciiIndexFileParserTest, OneBatch) {
+TEST_F(BinaryIndexFileParserTest, OneBatch) {
   const size_t max_indexes = 999;
   const size_t padding = 4;
   const int pad = -1;
@@ -75,7 +79,7 @@ TEST_F(AsciiIndexFileParserTest, OneBatch) {
   // 63 is how many characters are in entire file, 24 includes EOF
   for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {
     run_test(
-      "test_objects/example_index_search_result.txt",
+      get_binary_index_output_filename(),
       max_indexes,
       padding,
       test_utils::to_u64s(ints),
@@ -87,7 +91,7 @@ TEST_F(AsciiIndexFileParserTest, OneBatch) {
   }
 }
 
-TEST_F(AsciiIndexFileParserTest, MultipleBatches) {
+TEST_F(BinaryIndexFileParserTest, MultipleBatches) {
   const size_t max_indexes = 4;
   const size_t padding = 4;
   const int pad = -1;
@@ -106,7 +110,7 @@ TEST_F(AsciiIndexFileParserTest, MultipleBatches) {
   // 63 is how many characters are in entire file, 24 includes EOF
   for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {
     run_test(
-      "test_objects/example_index_search_result.txt",
+      get_binary_index_output_filename(),
       max_indexes,
       padding,
       test_utils::to_u64s(ints),

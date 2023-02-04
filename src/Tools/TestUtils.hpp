@@ -40,6 +40,17 @@ auto assert_vectors_equal(
   );
 }
 
+template <class Source>
+auto to_u64s(const vector<vector<Source>> &int_vec)
+  -> vector<vector<uint64_t>> {
+  vector<vector<uint64_t>> ret_val;
+  for (const auto &v : int_vec) {
+    ret_val.emplace_back();
+    for (const auto &element : v) { ret_val.back().emplace_back(element); }
+  }
+  return ret_val;
+}
+
 }  // namespace test_utils
 
 #endif

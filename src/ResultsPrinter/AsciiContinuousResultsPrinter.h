@@ -10,6 +10,7 @@
 
 namespace sbwt_search {
 
+using std::array;
 const size_t max_characters_in_u64 = 19;
 
 class AsciiContinuousResultsPrinter:
@@ -20,7 +21,7 @@ class AsciiContinuousResultsPrinter:
 private:
   bool is_at_newline = true;
   // the +1 is done to handle any '\0' at the end
-  char buffer[max_characters_in_u64 + 1];
+  string buffer;
 
 public:
   AsciiContinuousResultsPrinter(

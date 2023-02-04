@@ -193,8 +193,8 @@ protected:
   };
 
   auto do_write_file_header() -> void {
-    write_string_with_size(get_ostream(), impl().do_get_format());
-    write_string_with_size(get_ostream(), impl().do_get_version());
+    get_ostream().write_string_with_size(impl().do_get_format());
+    get_ostream().write_string_with_size(impl().do_get_version());
   }
 
   auto do_at_file_end() -> void{};

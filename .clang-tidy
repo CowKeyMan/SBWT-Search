@@ -55,3 +55,7 @@ HeaderFilterRegex: 'src/**/*'
 CheckOptions:
 - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
   value: true
+- key: readability-function-cognitive-complexity.IgnoreMacros
+  value: true
+- key: readability-function-cognitive-complexity.DescribeBasicIncrements
+  value: true

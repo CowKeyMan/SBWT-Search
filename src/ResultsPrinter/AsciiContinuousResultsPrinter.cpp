@@ -29,7 +29,8 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
     std::move(invalid_chars_producer),
     filenames,
     kmer_size
-  ) {}
+  ),
+  buffer(max_characters_in_u64, '\0') {}
 
 auto AsciiContinuousResultsPrinter::do_invalid_result() -> void {
   if (!is_at_newline) { get_ostream() << " "; }
