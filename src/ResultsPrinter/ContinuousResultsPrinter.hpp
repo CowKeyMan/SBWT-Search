@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <bit>
+#include <functional>
 #include <memory>
 
 #include "BatchObjects/IntervalBatch.h"
@@ -198,9 +199,9 @@ protected:
 
   auto do_at_file_end() -> void{};
 
-  auto do_get_extension() -> string { return ""; }
-  auto do_get_format() -> string { return "format_goes_here"; }
-  auto do_get_version() -> string { return "version_number_goes_here"; }
+  auto do_get_extension() -> string { throw std::bad_function_call(); }
+  auto do_get_format() -> string { throw std::bad_function_call(); }
+  auto do_get_version() -> string { throw std::bad_function_call(); }
 
   auto get_ostream() -> ThrowingOfstream & { return *out_stream; }
 };
