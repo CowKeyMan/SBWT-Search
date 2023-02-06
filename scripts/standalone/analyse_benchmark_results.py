@@ -127,10 +127,7 @@ for name, lines in benchmark_name_to_lines.items():
                     timed_event_to_df_entry(j)
                 )
         except json.JSONDecodeError:
-            if line.startswith("Input file size: "):
-                details["input_file_size"] = line.split()[3]
-            elif line.startswith("Output file size: "):
-                details["output_file_size"] = line.split()[3]
+            pass
 
 
 def bits_to_gb(bits):
@@ -164,8 +161,6 @@ for index, name in enumerate(sorted_keys):
     cpu_characters = details['cpu_characters']
     print(f'{index + 1}. Results for {name}:')
     start_text = (
-        f'Input file size is {details["input_file_size"]}\n'
-        f'Output file size is {details["output_file_size"]}\n'
         f'Processed {details["num_chars"]} characters from '
         f'{details["num_strings"]} strings in '
         f'{details["num_batches"]} batches\n'

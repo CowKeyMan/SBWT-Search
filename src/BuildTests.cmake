@@ -43,7 +43,6 @@ add_executable(
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/ContinuousPositionsBuilder_test.cpp"
   "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/ContinuousSeqToBitsConverter_test.cpp"
-  "${PROJECT_SOURCE_DIR}/ResultsPrinter/ContinuousResultsPrinter_test.cpp"
 
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParserTestUtils.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser_test.cpp"

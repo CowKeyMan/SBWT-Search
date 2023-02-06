@@ -123,13 +123,6 @@ target_link_libraries(
   positions_builder PRIVATE fmt::fmt logger OpenMP::OpenMP_CXX
 )
 add_library(
-  output_parser
-  "${PROJECT_SOURCE_DIR}/OutputParser/AsciiOutputParser.cpp"
-  "${PROJECT_SOURCE_DIR}/OutputParser/BinaryOutputParser.cpp"
-  "${PROJECT_SOURCE_DIR}/OutputParser/BoolOutputParser.cpp"
-)
-target_link_libraries(output_parser PRIVATE io_utils)
-add_library(
   searcher_cpu
   "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cpp"
 )
@@ -151,7 +144,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/ResultsPrinter/BinaryContinuousResultsPrinter.cpp"
   "${PROJECT_SOURCE_DIR}/ResultsPrinter/BoolContinuousResultsPrinter.cpp"
 )
-target_link_libraries(results_printer PRIVATE io_utils fmt::fmt)
+target_link_libraries(results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
 
 # Colors
 add_library(

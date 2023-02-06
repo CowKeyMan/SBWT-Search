@@ -138,10 +138,11 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu(
                         "unavailable-main-memory.");
   }
   size_t free
-    = (get_total_system_memory() * sizeof(size_t) - unavailable_memory) * 0.95;
+    = (get_total_system_memory() * sizeof(size_t) - unavailable_memory) * 0.85;
   if (max_memory < free) { free = max_memory; }
-  auto max_chars_per_batch
-    = round_down<size_t>(free / 146 / max_batches, threads_per_block);
+  auto max_chars_per_batch = round_down<size_t>(
+    free / (146 + 21 * 8) / max_batches, threads_per_block
+  );
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -230,7 +231,9 @@ auto IndexSearchMain::get_results_printer(
       interval_batch_producer,
       invalid_chars_producer,
       output_filenames,
-      kmer_size
+      kmer_size,
+      threads,
+      max_chars_per_batch
     );
   }
   if (print_mode == "binary") {
@@ -239,7 +242,9 @@ auto IndexSearchMain::get_results_printer(
       interval_batch_producer,
       invalid_chars_producer,
       output_filenames,
-      kmer_size
+      kmer_size,
+      threads,
+      max_chars_per_batch
     );
   }
   if (print_mode == "bool") {

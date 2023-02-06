@@ -70,7 +70,6 @@ The following section describes the available options I created and what each of
 * `DCMAKE_BUILD_TYPE`: (Options: Debug/Release). Debug mode does not do optimisations
 * `DENABLE_HEADER_GUARDS_CHECK`: Run header guards check
 * `DENABLE_CLANG_FORMAT_CHECK`: Run clang-format check
-* `DBUILD_VERIFY`: Build the verify target
 * `DBUILD_MAIN`: Build the main target
 * `DBUILD_TESTS`: Build the test target
 * `DBUILD_DOCS`: Build the documentation

@@ -8,10 +8,11 @@ bad_exits=0
 
 # Easily add more commands here
 hook_commands=(
-  "sh hooks/ascii_and_whitespace.sh"
-  "python3 scripts/static_analysers/clang_format.py"
-  "python3 scripts/static_analysers/headers.py"
-  "python3 scripts/standalone/generate_file_documentation.py --no-print"
+  "./hooks/ascii_and_whitespace.sh"
+  "./scripts/static_analysers/clang_format.py"
+  "./scripts/static_analysers/headers.py"
+  "./scripts/standalone/generate_file_documentation.py --no-print"
+  "./scripts/standalone/index_pipeline_test.sh"
   "flake8"
   "pylint ."
   # "python scripts/static_analysers/clang_tidy.py"

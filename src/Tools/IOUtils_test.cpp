@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <ios>
 #include <string>
 
@@ -29,7 +30,8 @@ TEST(IOUtilsTest, TestFileExists) {
 }
 
 TEST(IOUtilsTest, TestPathValid) {
-  ThrowingOfstream::check_path_valid("README.md");
+  ThrowingOfstream::check_path_valid("test_objects/empty_file.abc");
+  std::filesystem::remove("test_objects/empty_file.abc");
   string random_path = "test_objects/tmpgarbage/test.txt";
   try {
     ThrowingOfstream::check_path_valid(random_path);

@@ -21,6 +21,3 @@ include("${PROJECT_SOURCE_DIR}/BuildMain.cmake")
 
 project(test)
 include("${PROJECT_SOURCE_DIR}/BuildTests.cmake")
-
-project(verify)
-include("${PROJECT_SOURCE_DIR}/BuildVerify.cmake")

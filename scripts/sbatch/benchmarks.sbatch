@@ -7,8 +7,6 @@
 #SBATCH --job-name=Main
 ## The account to charge. Look at the unix group from https://my.csc.fi/myProjects
 #SBATCH --account=dongelr1
-## Maximum time
-#SBATCH --time=03:00:00
 ## put stderr to benchmark_err.txt
 #SBATCH --error benchmark_err.txt
 ## put stdout to benchmark_out.txt
@@ -23,10 +21,15 @@
 ##SBATCH --exclusive
 ## Amount of memory per node
 #SBATCH --mem-per-cpu=29G
-## This partition on mahti has NVME
-#SBATCH --partition=gpusmall
 ## We only want a single a100 gpu and 10GB of NVME storage
 #SBATCH --gres=gpu:a100:1,nvme:300
+
+## The partitions on mahti with nvme and maximum time
+##SBATCH --partition=gputest
+##SBATCH --time=00:15:00
+## Maximum time
+#SBATCH --time=03:00:00
+#SBATCH --partition=gpusmall
 
 ## Remove unnecessary modules
 module purge

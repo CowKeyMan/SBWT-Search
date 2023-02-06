@@ -12,7 +12,7 @@
             "configuration": {
                 "request": "launch",
                 "program": "${workspaceRoot}/build/bin/sbwt_search",
-                "args": ["index", "-i", "test_objects/search_test_index.sbwt.sbwt", "-q", "test_objects/search_test_indexed.fna", "-o", "tmp/out_DELETE", "-c", "bool", "-b", "1", "-m", "80000000"],
+                "args": ["index", "-i", "test_objects/search_test_index.sbwt", "-q", "test_objects/full_pipeline/index_search/combined_input.txt", "-o", "test_objects/full_pipeline/index_search/combined_output.txt", "-c", "ascii", "-b", "1", "-m", "80000000"],
                 "cwd": "${workspaceRoot}",
                 "environment": [],
                 "externalConsole": true,

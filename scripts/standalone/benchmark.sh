@@ -23,21 +23,21 @@ if [ "${top_level_directory}" != "." ]; then
 fi
 
 input_files=(
+  "${input_folder}/365.fna"
   "${input_folder}/FASTA1GB.fna"
   "${input_folder}/FASTQ1GB.fnq"
-  "${input_folder}/365.fna"
   "${input_folder}/combined_input.txt"
 )
 
 output_files=(
-  "${results_folder}/365.txt"
-  "${results_folder}/FASTA1GB.txt"
-  "${results_folder}/FASTQ1GB.txt"
+  "${results_folder}/365"
+  "${results_folder}/FASTA1GB"
+  "${results_folder}/FASTQ1GB"
   "${input_folder}/combined_output.txt"
 )
 
 sbwt_file="${input_folder}/coli3.sbwt"
-batches=(1 2 3 4 5 6 10 30 70 100 200 1000)
+batches=(1 3 5 10 100 1000)
 
 stdoutput="${results_folder}/benchmark_out.txt"
 
@@ -45,6 +45,11 @@ printing_modes=(
   "binary"
   "bool"
   "ascii"
+)
+extensions=(
+  ".bin"
+  ".bool"
+  ".txt"
 )
 
 # populate combined_input.txt
@@ -61,11 +66,7 @@ for batch in ${batches[@]}; do
     for (( p=0; p<${#printing_modes[@]}; p++ )); do
       echo Now running: File ${input_files[i]} with ${batch} batches in ${printing_modes[p]} format
       echo Now running: File ${input_files[i]} with ${batch} batches in ${printing_modes[p]} format >> ${stdoutput}
-      printf "Input file size: " >> ${stdoutput}
-      ls -lh ${input_files[i]} | awk '{print  $5}' >> ${stdoutput}
       ./build/bin/sbwt_search index -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batch} -c ${printing_modes[p]} >> ${stdoutput}
-      printf "Output file size: " >> ${stdoutput}
-      ls -lh ${output_files[i]} | awk '{print  $5}' >> ${stdoutput}
     done
   done
 done

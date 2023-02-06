@@ -12,8 +12,8 @@
 namespace sbwt_search {
 
 class BinaryContinuousResultsPrinter:
-    public ContinuousResultsPrinter<BinaryContinuousResultsPrinter> {
-  using Base = ContinuousResultsPrinter<BinaryContinuousResultsPrinter>;
+    public ContinuousResultsPrinter<BinaryContinuousResultsPrinter, u64> {
+  using Base = ContinuousResultsPrinter<BinaryContinuousResultsPrinter, u64>;
   friend Base;
 
 private:
@@ -26,17 +26,20 @@ public:
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
     shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
     vector<string> &filenames,
-    uint kmer_size
+    u64 kmer_size,
+    u64 threads,
+    u64 max_chars_per_batch
   );
 
 protected:
-  auto do_invalid_result() -> void;
-  auto do_not_found_result() -> void;
-  auto do_result(size_t result) -> void;
-  auto do_with_newline() -> void;
   auto do_get_extension() -> string;
   auto do_get_format() -> string;
   auto do_get_version() -> string;
+
+  auto do_with_result(vector<u64>::iterator buffer, u64 result) -> u64;
+  auto do_with_not_found(vector<u64>::iterator buffer) -> u64;
+  auto do_with_invalid(vector<u64>::iterator buffer) -> u64;
+  auto do_with_newline(vector<u64>::iterator buffer) -> u64;
 };
 
 }  // namespace sbwt_search

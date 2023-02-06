@@ -17,9 +17,9 @@ using std::cout;
 using std::endl;
 using std::make_shared;
 using std::shared_ptr;
+using std::span;
 using std::string;
 using std::unordered_map;
-using std::span;
 
 auto main(int argc, char **argv) -> int {
   auto args = span{argv, static_cast<size_t>(argc)};

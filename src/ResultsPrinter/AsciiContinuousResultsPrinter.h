@@ -10,18 +10,15 @@
 
 namespace sbwt_search {
 
-using std::array;
-const size_t max_characters_in_u64 = 19;
+const size_t max_chars_in_u64 = 20;
 
 class AsciiContinuousResultsPrinter:
-    public ContinuousResultsPrinter<AsciiContinuousResultsPrinter> {
-  using Base = ContinuousResultsPrinter<AsciiContinuousResultsPrinter>;
+    public ContinuousResultsPrinter<AsciiContinuousResultsPrinter, char> {
+  using Base = ContinuousResultsPrinter<AsciiContinuousResultsPrinter, char>;
   friend Base;
 
 private:
-  bool is_at_newline = true;
-  // the +1 is done to handle any '\0' at the end
-  string buffer;
+  vector<vector<char>> tiny_buffers;
 
 public:
   AsciiContinuousResultsPrinter(
@@ -29,17 +26,21 @@ public:
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
     shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
     vector<string> &filenames,
-    uint kmer_size
+    uint kmer_size,
+    u64 threads,
+    u64 max_chars_per_batch_
   );
 
 protected:
-  auto do_invalid_result() -> void;
-  auto do_not_found_result() -> void;
-  auto do_result(size_t result) -> void;
-  auto do_with_newline() -> void;
   auto do_get_extension() -> string;
   auto do_get_format() -> string;
   auto do_get_version() -> string;
+
+  auto do_with_result(vector<char>::iterator buffer, u64 result) -> u64;
+  auto do_with_not_found(vector<char>::iterator buffer) -> u64;
+  auto do_with_invalid(vector<char>::iterator buffer) -> u64;
+  auto do_with_newline(vector<char>::iterator buffer) -> u64;
+  auto do_with_space(vector<char>::iterator buffer) -> u64;
 };
 
 }  // namespace sbwt_search
