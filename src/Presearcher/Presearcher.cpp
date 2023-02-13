@@ -13,7 +13,7 @@ using std::make_unique;
 namespace sbwt_search {
 
 Presearcher::Presearcher(shared_ptr<GpuSbwtContainer> container_):
-    container(container_) {}
+    container(std::move(container_)) {}
 
 auto Presearcher::presearch() -> void {
   constexpr const auto presearch_times

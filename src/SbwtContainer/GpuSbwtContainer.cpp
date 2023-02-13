@@ -14,32 +14,33 @@ using std::vector;
 namespace sbwt_search {
 
 GpuSbwtContainer::GpuSbwtContainer(
-  const u64 *cpu_a,
-  const u64 *cpu_c,
-  const u64 *cpu_g,
-  const u64 *cpu_t,
-  const u64 bits_total,
-  const u64 bit_vector_size,
-  const u32 kmer_size
+  const vector<vector<u64>> &cpu_acgt,
+  const vector<Poppy> &cpu_poppy,
+  const vector<u64> &cpu_c_map,
+  u64 bits_total,
+  u64 bit_vector_size,
+  u32 kmer_size
 ):
     SbwtContainer(bits_total, bit_vector_size, kmer_size) {
   acgt.reserve(4);
-  acgt.push_back(make_unique<GpuPointer<u64>>(cpu_a, bit_vector_size));
-  acgt.push_back(make_unique<GpuPointer<u64>>(cpu_c, bit_vector_size));
-  acgt.push_back(make_unique<GpuPointer<u64>>(cpu_g, bit_vector_size));
-  acgt.push_back(make_unique<GpuPointer<u64>>(cpu_t, bit_vector_size));
-  auto v = vector<u64 *>(
-    {acgt[0]->get(), acgt[1]->get(), acgt[2]->get(), acgt[3]->get()}
-  );
+  for (u64 i = 0; i < 4; ++i) {
+    acgt.push_back(make_unique<GpuPointer<u64>>(cpu_acgt[i]));
+    layer_0.push_back(make_unique<GpuPointer<u64>>(cpu_poppy[i].layer_0));
+    layer_1_2.push_back(make_unique<GpuPointer<u64>>(cpu_poppy[i].layer_1_2));
+  }
+  c_map = make_unique<GpuPointer<u64>>(cpu_c_map);
   acgt_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
     {acgt[0]->get(), acgt[1]->get(), acgt[2]->get(), acgt[3]->get()}
   ));
-  layer_0.reserve(4);
-  layer_1_2.reserve(4);
-}
-
-auto GpuSbwtContainer::set_c_map(const vector<u64> &value) -> void {
-  c_map = make_unique<GpuPointer<u64>>(value);
+  layer_0_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
+    {layer_0[0]->get(), layer_0[1]->get(), layer_0[2]->get(), layer_0[3]->get()}
+  ));
+  layer_1_2_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
+    {layer_1_2[0]->get(),
+     layer_0[1]->get(),
+     layer_0[2]->get(),
+     layer_0[3]->get()}
+  ));
 }
 
 auto GpuSbwtContainer::get_c_map() const -> const GpuPointer<u64> & {
@@ -49,29 +50,6 @@ auto GpuSbwtContainer::get_c_map() const -> const GpuPointer<u64> & {
 auto GpuSbwtContainer::get_acgt_pointers() const -> const GpuPointer<u64 *> & {
   return *acgt_pointers;
 };
-
-auto GpuSbwtContainer::set_layer_0(const vector<vector<u64>> &value) -> void {
-#pragma unroll 4
-  for (const auto &v : value) {
-    layer_0.push_back(make_unique<GpuPointer<u64>>(v));
-  }
-  layer_0_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
-    {layer_0[0]->get(), layer_0[1]->get(), layer_0[2]->get(), layer_0[3]->get()}
-  ));
-}
-
-auto GpuSbwtContainer::set_layer_1_2(const vector<vector<u64>> &value) -> void {
-#pragma unroll 4
-  for (const auto &v : value) {
-    layer_1_2.push_back(make_unique<GpuPointer<u64>>(v));
-  }
-  layer_1_2_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
-    {layer_1_2[0]->get(),
-     layer_1_2[1]->get(),
-     layer_1_2[2]->get(),
-     layer_1_2[3]->get()}
-  ));
-}
 
 auto GpuSbwtContainer::get_layer_0_pointers() const
   -> const GpuPointer<u64 *> & {

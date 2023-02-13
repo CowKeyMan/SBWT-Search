@@ -31,10 +31,9 @@ using std::make_unique;
 using std::runtime_error;
 using std::unique_ptr;
 
-auto SbwtBuilder::get_cpu_sbwt(bool build_index)
-  -> unique_ptr<CpuSbwtContainer> {
+auto SbwtBuilder::get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer> {
   ThrowingIfstream in_stream(filename, std::ios::in);
-  Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::START);
+  Logger::log_timed_event("SBWTReadAndPopppy", Logger::EVENT_STATE::START);
   const string variant = in_stream.read_string_with_size();
   if (variant != "plain-matrix") {
     throw runtime_error("Error input is not a plain-matrix SBWT");
@@ -52,8 +51,6 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
 #pragma unroll
   // skip the other 3 vectors and 4 rank structure vectors
   for (int i = 0; i < 3 + 4; ++i) { skip_bits_vector(in_stream); }
-  vector<unique_ptr<vector<u64>>> acgt(4);
-  load_bit_vectors(bit_vector_bytes, acgt, vectors_start_position);
   skip_bits_vector(in_stream);             // skip suffix group starts
   skip_bytes_vector(in_stream);            // skip C map
   skip_bytes_vector(in_stream);            // skip kmer_prefix_calc
@@ -65,21 +62,27 @@ auto SbwtBuilder::get_cpu_sbwt(bool build_index)
   Logger::log(
     Logger::LOG_LEVEL::DEBUG, format("Using kmer size: {}", kmer_size)
   );
-  Logger::log_timed_event("SBWTRead", Logger::EVENT_STATE::STOP);
-  auto container = make_unique<CpuSbwtContainer>(
-    num_bits, acgt[0], acgt[1], acgt[2], acgt[3], kmer_size
+  auto [acgt, poppys, c_map] = get_container_components(
+    num_bits, bit_vector_bytes, vectors_start_position
   );
-  Logger::log_timed_event("Poppy", Logger::EVENT_STATE::START);
-  if (build_index) { build_poppy(container.get()); }
-  Logger::log_timed_event("Poppy", Logger::EVENT_STATE::STOP);
+  auto container = make_unique<CpuSbwtContainer>(
+    std::move(acgt),
+    std::move(poppys),
+    std::move(c_map),
+    num_bits,
+    acgt[0].size(),
+    kmer_size
+  );
+  Logger::log_timed_event("SBWTReadAndPopppy", Logger::EVENT_STATE::STOP);
   return container;
 }
 
-auto SbwtBuilder::load_bit_vectors(
-  u64 bit_vector_bytes,
-  vector<unique_ptr<vector<u64>>> &acgt,
-  size_t start_position
-) -> void {
+auto SbwtBuilder::get_container_components(
+  u64 num_bits, u64 bit_vector_bytes, size_t start_position
+) -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>> {
+  vector<vector<u64>> acgt(4);
+  vector<Poppy> poppys(4);
+  vector<u64> c_map(cmap_size, 1);
 #pragma omp parallel for
   for (size_t i = 0; i < 4; ++i) {
     ifstream st(filename);
@@ -89,34 +92,17 @@ auto SbwtBuilder::load_bit_vectors(
       ),
       ios::beg
     );
-    acgt[i] = make_unique<vector<u64>>(bit_vector_bytes / sizeof(u64));
+    acgt[i] = vector<u64>(bit_vector_bytes / sizeof(u64));
     st.read(
-      bit_cast<char *>(acgt[i]->data()),
+      bit_cast<char *>(acgt[i].data()),
       static_cast<std::streamsize>(bit_vector_bytes)
     );
-  }
-}
-
-auto SbwtBuilder::build_poppy(CpuSbwtContainer *container) -> void {
-  vector<vector<u64>> layer_0(4);
-  vector<vector<u64>> layer_1_2(4);
-  const uint cmap_size = 5;
-  vector<u64> c_map(cmap_size);
-  c_map[0] = 1;
-#pragma omp parallel for
-  for (size_t i = 0; i < 4; ++i) {
-    auto builder = PoppyBuilder(
-      container->get_num_bits(), container->get_acgt(static_cast<ACGT>(i))
-    );
-    builder.build();
-    layer_0[i] = builder.get_layer_0();
-    layer_1_2[i] = builder.get_layer_1_2();
-    c_map[i + 1] = builder.get_total_count();
+    auto builder = PoppyBuilder(acgt[i], num_bits);
+    poppys[i] = builder.get_poppy();
+    c_map[i + 1] = poppys[i].total_1s;
   }
   for (int i = 0; i < 4; ++i) { c_map[i + 1] += c_map[i]; }
-  container->set_index(
-    std::move(c_map), std::move(layer_0), std::move(layer_1_2)
-  );
+  return {acgt, poppys, c_map};
 }
 
 auto SbwtBuilder::skip_bits_vector(istream &stream) -> void {

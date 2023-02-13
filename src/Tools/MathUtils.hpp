@@ -34,17 +34,6 @@ auto constexpr round_down(
   return (value / multiple) * multiple;
 }
 
-template <class UnsignedNumber>
-inline auto divisible_by_power_of_two(
-  const UnsignedNumber numerator, const UnsignedNumber denominator_power_of_two
-) -> UnsignedNumber {
-  static_assert(
-    is_unsigned<UnsignedNumber>::value,
-    "Template class to round_up must be unsigned"
-  );
-  return (numerator & (denominator_power_of_two - 1)) == 0;
-}
-
 }  // namespace math_utils
 
 #endif

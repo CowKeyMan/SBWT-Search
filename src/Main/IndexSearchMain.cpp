@@ -68,7 +68,7 @@ auto IndexSearchMain::get_gpu_container(const string &index_file)
   Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::START);
   Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::START);
   auto builder = SbwtBuilder(index_file);
-  auto cpu_container = builder.get_cpu_sbwt(true);
+  auto cpu_container = builder.get_cpu_sbwt();
   Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::STOP);
   Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::START);
   auto gpu_container = cpu_container->to_gpu();

@@ -10,6 +10,7 @@
 #include <istream>
 #include <memory>
 #include <string>
+#include <tuple>
 #include <vector>
 
 #include "SbwtContainer/CpuSbwtContainer.h"
@@ -19,6 +20,7 @@ namespace sbwt_search {
 
 using std::istream;
 using std::string;
+using std::tuple;
 using std::unique_ptr;
 using std::vector;
 
@@ -28,15 +30,12 @@ private:
 
 public:
   explicit SbwtBuilder(string filename): filename(std::move(filename)) {}
-  auto get_cpu_sbwt(bool build_index = true) -> unique_ptr<CpuSbwtContainer>;
+  auto get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer>;
 
 private:
-  auto build_poppy(CpuSbwtContainer *container) -> void;
-  auto load_bit_vectors(
-    u64 bit_vector_bytes,
-    vector<unique_ptr<vector<u64>>> &acgt,
-    size_t start_position
-  ) -> void;
+  auto get_container_components(
+    u64 num_bits, u64 bit_vector_bytes, size_t start_position
+  ) -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>>;
   auto skip_bits_vector(istream &stream) -> void;
   auto skip_bytes_vector(istream &stream) -> void;
 };

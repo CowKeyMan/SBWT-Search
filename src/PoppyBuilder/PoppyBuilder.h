@@ -12,37 +12,37 @@
  */
 
 #include <cstddef>
+#include <span>
 #include <vector>
 
+#include "Poppy/Poppy.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
+
+using std::span;
 
 using std::vector;
 
 class PoppyBuilder {
 private:
-  size_t bits_total;
-  const u64 *bits_vector;
-  vector<u64> layer_0, layer_1_2;
+  const span<u64> bits_vector;
+  Poppy poppy;
   vector<u64> layer_2_temps = vector<u64>(3, 0);
   size_t layer_2_temps_index = 0;
   u64 layer_0_count = 0, layer_1_count = 0, layer_2_count = 0;
+  u64 num_bits;
 
 public:
-  PoppyBuilder(size_t bits_total, const u64 *bits_vector);
+  explicit PoppyBuilder(const span<u64> bits_vector, u64 num_bits_);
 
-  auto get_layer_0() -> vector<u64> &&;
-  auto get_layer_1_2() -> vector<u64> &&;
-  auto get_total_count() -> u64;
-
-  auto build() -> void;
+  auto get_poppy() -> Poppy;
 
 private:
-  auto do_divisble_by_superblock(u64 bits) -> void;
-  auto do_divisble_by_hyperlock() -> void;
-  auto do_divisible_by_basicblock() -> void;
-  auto add_layer_1_2() -> void;
+  auto do_divisble_by_superblock(u64 bits, Poppy &poppy) -> void;
+  auto do_divisble_by_hyperlock(Poppy &poppy) -> void;
+  auto do_divisible_by_basicblock(Poppy &poppy) -> void;
+  auto add_layer_1_2(Poppy &poppy) -> void;
 };
 
 }  // namespace sbwt_search
