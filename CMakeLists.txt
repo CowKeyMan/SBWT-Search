@@ -21,6 +21,8 @@ include(CheckLanguage)
 check_language(CUDA)
 if (CMAKE_CUDA_COMPILER)
   enable_language(CUDA)
+  add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
+  add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:--gpu-architecture=all>")
 endif()
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

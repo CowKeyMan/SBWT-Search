@@ -37,7 +37,6 @@ FetchContent_MakeAvailable(cxxopts)
 
 # Fetch OpenMP
 find_package(OpenMP REQUIRED)
-add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
 
 # Fetch sdsl
 find_library(SDSL_FOUND NAMES libsdsl sdsl PATHS "${CMAKE_BINARY_DIR}/external/sdsl/lib/" "${CMAKE_BINARY_DIR}/external/sdsl/")
@@ -70,13 +69,12 @@ add_library(
   presearcher_cpu
   "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cpp"
 )
-target_link_libraries(presearcher_cpu PRIVATE cuda_utils)
+target_link_libraries(presearcher_cpu PRIVATE gpu_utils)
 add_library(
   presearcher_cuda
   "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cu"
 )
-set_target_properties(presearcher_cuda PROPERTIES CUDA_ARCHITECTURES "80;70;60")
-target_link_libraries(presearcher_cuda PRIVATE cuda_utils)
+target_link_libraries(presearcher_cuda PRIVATE gpu_utils)
 add_library(
   sequence_file_parser
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser.cpp"
@@ -121,7 +119,7 @@ target_link_libraries(
   io_utils
   OpenMP::OpenMP_CXX
   fmt::fmt
-  cuda_utils
+  gpu_utils
 )
 add_library(
   sbwt_container
@@ -129,7 +127,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cpp"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cpp"
 )
-target_link_libraries(sbwt_container PUBLIC cuda_utils)
+target_link_libraries(sbwt_container PUBLIC gpu_utils)
 add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"
@@ -147,8 +145,7 @@ add_library(
   searcher_cuda
   "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cu"
 )
-set_target_properties(searcher_cuda PROPERTIES CUDA_ARCHITECTURES "80;70;60")
-target_link_libraries(searcher_cuda PRIVATE fmt::fmt cuda_utils)
+target_link_libraries(searcher_cuda PRIVATE fmt::fmt gpu_utils)
 add_library(
   continuous_searcher
   "${PROJECT_SOURCE_DIR}/Searcher/ContinuousSearcher.cpp"
@@ -178,12 +175,12 @@ target_link_libraries(index_file_parser PRIVATE io_utils fmt::fmt OpenMP::OpenMP
 add_library(
   color_index_container
   "${PROJECT_SOURCE_DIR}/ColorIndexContainer/CpuColorIndexContainer.cpp"
+  "${PROJECT_SOURCE_DIR}/ColorIndexContainer/GpuColorIndexContainer.cpp"
 )
-target_link_libraries(color_index_container PRIVATE libsdsl)
+target_link_libraries(color_index_container PRIVATE libsdsl gpu_utils)
 if (NOT SDSL_FOUND)
   add_dependencies(color_index_container sdsl)
 endif()
-
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -228,5 +225,5 @@ target_link_libraries(
 
 # Link cuda items
 if (CMAKE_CUDA_COMPILER)
-  target_link_libraries(common_libraries INTERFACE cuda_utils)
+  target_link_libraries(common_libraries INTERFACE gpu_utils)
 endif()

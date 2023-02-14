@@ -72,8 +72,7 @@ add_library(
 target_link_libraries(semaphore PRIVATE OpenMP::OpenMP_CXX omp_lock)
 
 add_library(
-  cuda_utils
+  gpu_utils
   "${PROJECT_SOURCE_DIR}/Tools/CudaUtils.cu"
   "${PROJECT_SOURCE_DIR}/Tools/CudaPointer.cu"
 )
-set_target_properties(cuda_utils PROPERTIES CUDA_ARCHITECTURES "80;70;60")
