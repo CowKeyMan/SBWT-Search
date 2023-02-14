@@ -6,6 +6,7 @@ include(ExternalProject)
 include(FetchContent)
 
 # External libraries used in the tools
+# Fetch fmt
 FetchContent_Declare(
   fmt
   QUIET

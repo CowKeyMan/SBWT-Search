@@ -39,6 +39,22 @@ FetchContent_MakeAvailable(cxxopts)
 find_package(OpenMP REQUIRED)
 add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
 
+# Fetch sdsl
+find_library(SDSL_FOUND NAMES libsdsl sdsl PATHS "${CMAKE_BINARY_DIR}/external/sdsl/lib/" "${CMAKE_BINARY_DIR}/external/sdsl/")
+if (NOT SDSL_FOUND)
+  ExternalProject_Add(
+    sdsl
+    GIT_REPOSITORY  https://github.com/simongog/sdsl-lite/
+    GIT_TAG         v2.1.1
+    PREFIX          "${CMAKE_BINARY_DIR}/external/sdsl"
+    CMAKE_ARGS
+      -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  )
+endif()
+add_library(libsdsl SHARED IMPORTED)
+set_target_properties(libsdsl PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/external/sdsl/lib/libsdsl.a")
+include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/sdsl/include")
+
 # Index
 add_library(
   index_search_argument_parser
@@ -158,6 +174,16 @@ add_library(
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexesBeforeNewfileBatchProducer.cpp"
 )
 target_link_libraries(index_file_parser PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
+
+add_library(
+  color_index_container
+  "${PROJECT_SOURCE_DIR}/ColorIndexContainer/CpuColorIndexContainer.cpp"
+)
+target_link_libraries(color_index_container PRIVATE libsdsl)
+if (NOT SDSL_FOUND)
+  add_dependencies(color_index_container sdsl)
+endif()
+
 
 # Common libraries
 add_library(common_libraries INTERFACE)
