@@ -26,7 +26,7 @@ using std::vector;
 
 class PoppyBuilder {
 private:
-  const span<u64> bits_vector;
+  span<u64> bits_vector;
   Poppy poppy;
   vector<u64> layer_2_temps = vector<u64>(3, 0);
   size_t layer_2_temps_index = 0;
@@ -34,7 +34,7 @@ private:
   u64 num_bits;
 
 public:
-  explicit PoppyBuilder(const span<u64> bits_vector, u64 num_bits_);
+  explicit PoppyBuilder(span<u64> bits_vector, u64 num_bits_);
 
   auto get_poppy() -> Poppy;
 

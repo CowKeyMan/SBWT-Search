@@ -182,6 +182,15 @@ if (NOT SDSL_FOUND)
   add_dependencies(color_index_container sdsl)
 endif()
 
+add_library(
+  color_index_builder
+  "${PROJECT_SOURCE_DIR}/ColorIndexBuilder/ColorIndexBuilder.cpp"
+)
+target_link_libraries(color_index_builder PRIVATE libsdsl poppy_builder)
+if (NOT SDSL_FOUND)
+  add_dependencies(color_index_builder sdsl)
+endif()
+
 # Common libraries
 add_library(common_libraries INTERFACE)
 target_link_libraries(
@@ -193,6 +202,7 @@ target_link_libraries(
   OpenMP::OpenMP_CXX
   spdlog::spdlog
   cxxopts
+  libsdsl
 
   # Internal libraries
   io_utils
@@ -209,17 +219,20 @@ target_link_libraries(
   sbwt_builder
   sbwt_container
   poppy_builder
-  results_printer
   presearcher_cpu
   presearcher_cuda
-
-  # Color search libraries
-  index_file_parser
 
   sequence_file_parser
   seq_to_bits_converter
   positions_builder
   continuous_searcher
+  results_printer
+
+  # Color search libraries
+  color_index_builder
+  color_index_container
+
+  index_file_parser
 )
 
 

@@ -18,7 +18,7 @@ namespace sbwt_search {
 using std::unique_ptr;
 
 class CpuColorIndexContainer {
-private:
+public:
   sdsl::bit_vector dense_arrays;
   sdsl::int_vector<> dense_arrays_intervals;
   sdsl::int_vector<> sparse_arrays;
@@ -28,23 +28,9 @@ private:
   sdsl::bit_vector core_kmer_marks;
   Poppy core_kmer_marks_poppy;
   sdsl::int_vector<> color_set_idxs;
-  u64 largest_color_id;
+  u64 num_color_sets;
 
-public:
-  CpuColorIndexContainer(
-    sdsl::bit_vector dense_arrays_,
-    sdsl::int_vector<> dense_arrays_intervals_,
-    sdsl::int_vector<> sparse_arrays_,
-    sdsl::int_vector<> sparse_arrays_intervals_,
-    sdsl::bit_vector is_dense_marks_,
-    Poppy is_dense_marks_poppy_,
-    sdsl::bit_vector core_kmer_marks_,
-    Poppy core_kmer_marks_poppy_,
-    sdsl::int_vector<> color_set_idxs_,
-    u64 largest_color_id_
-  );
-
-  auto to_gpu() -> GpuColorIndexContainer;
+  [[nodiscard]] auto to_gpu() const -> GpuColorIndexContainer;
 };
 
 }  // namespace sbwt_search

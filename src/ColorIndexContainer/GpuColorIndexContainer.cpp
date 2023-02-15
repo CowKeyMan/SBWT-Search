@@ -13,7 +13,7 @@ GpuColorIndexContainer::GpuColorIndexContainer(
   const sdsl::bit_vector &cpu_core_kmer_marks,
   const Poppy &cpu_core_kmer_marks_poppy,
   const sdsl::int_vector<> &cpu_color_set_idxs,
-  u64 largest_color_id_
+  u64 num_color_sets_
 ):
     dense_arrays(
       cpu_dense_arrays.data(), cpu_dense_arrays.capacity() / u64_bits
@@ -46,6 +46,6 @@ GpuColorIndexContainer::GpuColorIndexContainer(
       cpu_color_set_idxs.data(), cpu_color_set_idxs.capacity() / u64_bits
     ),
     color_idxs_width(cpu_color_set_idxs.width()),
-    largest_color_id(largest_color_id_) {}
+    num_color_sets(num_color_sets_) {}
 
 }  // namespace sbwt_search

@@ -66,6 +66,7 @@ auto GpuPointer<T>::copy_to(vector<T> &destination, size_t amount) const
 }
 template <class T>
 auto GpuPointer<T>::copy_to(vector<T> &destination) const -> void {
+  destination.resize(bytes / sizeof(T));
   copy_to(destination.data());
 }
 
