@@ -5,9 +5,7 @@
 namespace sbwt_search {
 
 IndexFileParser::IndexFileParser(
-  shared_ptr<ThrowingIfstream> in_stream_,
-  size_t max_indexes_,
-  size_t read_padding_
+  shared_ptr<ThrowingIfstream> in_stream_, u64 max_indexes_, u64 read_padding_
 ):
     in_stream(std::move(in_stream_)),
     max_indexes(max_indexes_),

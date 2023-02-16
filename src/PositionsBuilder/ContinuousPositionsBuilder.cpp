@@ -12,9 +12,9 @@ using std::make_shared;
 
 ContinuousPositionsBuilder::ContinuousPositionsBuilder(
   shared_ptr<SharedBatchesProducer<StringBreakBatch>> _producer,
-  uint kmer_size_,
-  size_t max_chars_per_batch_,
-  uint max_batches
+  u64 kmer_size_,
+  u64 max_chars_per_batch_,
+  u64 max_batches
 ):
     producer(std::move(_producer)),
     max_chars_per_batch(max_chars_per_batch_),

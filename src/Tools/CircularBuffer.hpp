@@ -10,6 +10,8 @@
 #include <cstddef>
 #include <vector>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace structure_utils {
 
 using std::vector;
@@ -18,14 +20,14 @@ template <class T>
 class CircularBuffer {
 private:
   vector<T> q;
-  size_t read_idx = 0, write_idx = 0, population = 0;
+  u64 read_idx = 0, write_idx = 0, population = 0;
 
 public:
-  explicit CircularBuffer(size_t size): q(size) {}
-  CircularBuffer(size_t size, T default_value): q(size) {
+  explicit CircularBuffer(u64 size): q(size) {}
+  CircularBuffer(u64 size, T default_value): q(size) {
     for (auto &x : q) { x = default_value; }
   }
-  auto set(size_t idx, T value) { q[idx] = value; }
+  auto set(u64 idx, T value) { q[idx] = value; }
 
   auto current_read() const -> const T & { return q[read_idx]; }
   auto current_write() -> T & { return q[write_idx]; }
@@ -39,8 +41,8 @@ public:
     ++population;
   }
 
-  [[nodiscard]] auto size() const -> size_t { return population; }
-  [[nodiscard]] auto capacity() const -> size_t { return q.size(); }
+  [[nodiscard]] auto size() const -> u64 { return population; }
+  [[nodiscard]] auto capacity() const -> u64 { return q.size(); }
   [[nodiscard]] auto empty() const -> bool { return population == 0; }
 };
 

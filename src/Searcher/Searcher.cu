@@ -51,7 +51,7 @@ __global__ void d_search(
 }
 // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
-auto Searcher::launch_search_kernel(size_t queries, u64 batch_id) -> void {
+auto Searcher::launch_search_kernel(u64 queries, u64 batch_id) -> void {
   cudaEvent_t search_start;  // NOLINT(cppcoreguidelines-init-variables)
   cudaEvent_t search_stop;   // NOLINT(cppcoreguidelines-init-variables)
   GPU_CHECK(cudaEventCreate(&search_start));

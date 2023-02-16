@@ -37,7 +37,7 @@ private:
     const vector<u64> &kmer_positions,
     vector<u64> &results
   ) -> void;
-  auto launch_search_kernel(size_t queries, u64 batch_id) -> void;
+  auto launch_search_kernel(u64 queries, u64 batch_id) -> void;
   auto copy_from_gpu(
     vector<u64> &results, u64 batch_id, const vector<u64> &kmer_positions
   ) -> void;

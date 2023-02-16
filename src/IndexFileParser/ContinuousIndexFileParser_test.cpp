@@ -22,17 +22,17 @@ using std::chrono::milliseconds;
 using std::filesystem::remove;
 using std::this_thread::sleep_for;
 
-const uint default_max_batches = 7;
-const auto max = numeric_limits<size_t>::max();
-const uint time_to_wait = 100;
+const u64 default_max_batches = 7;
+const auto max = numeric_limits<u64>::max();
+const u64 time_to_wait = 100;
 
 class ContinuousIndexFileParserTest: public ::testing::Test {
 protected:
   auto run_test(
-    size_t max_indexes_per_batch,
-    size_t max_batches,
+    u64 max_indexes_per_batch,
+    u64 max_batches,
     span<const string> filenames,
-    size_t read_padding,
+    u64 read_padding,
     const vector<vector<u64>> &expected_indexes,
     const vector<u64> &expected_true_indexes,
     const vector<u64> &expected_skipped,
@@ -92,7 +92,7 @@ protected:
   ) -> void {
     shared_ptr<IndexesBatch> batch;
     auto rng = get_uniform_generator(0U, time_to_wait);
-    size_t batches = 0;
+    u64 batches = 0;
     for (batches = 0; indexes_batch_producer >> batch; ++batches) {
       sleep_for(milliseconds(rng()));
       EXPECT_EQ(expected_indexes[batches], batch->indexes);
@@ -108,7 +108,7 @@ protected:
   ) -> void {
     shared_ptr<IndexesStartsBatch> batch;
     auto rng = get_uniform_generator(0U, time_to_wait);
-    size_t batches = 0;
+    u64 batches = 0;
     for (batches = 0; indexes_starts_batch_producer >> batch; ++batches) {
       sleep_for(milliseconds(rng()));
       EXPECT_EQ(expected_indexes_starts[batches], batch->indexes_starts);
@@ -122,7 +122,7 @@ protected:
   ) -> void {
     shared_ptr<IndexesBeforeNewfileBatch> batch;
     auto rng = get_uniform_generator(0U, time_to_wait);
-    size_t batches = 0;
+    u64 batches = 0;
     for (batches = 0; indexes_before_newfile_batch_producer >> batch;
          ++batches) {
       sleep_for(milliseconds(rng()));
@@ -140,7 +140,7 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
     "test_objects/example_index_search_result.txt",
     get_binary_index_output_filename()};
   span<const string> filenames_span = {filenames.data(), filenames.size()};
-  const size_t read_padding = 4;
+  const u64 read_padding = 4;
   int pad = -1;
   const vector<vector<int>> ints = {
     {39, 164, 216, 59},  // end of 1st read
@@ -159,8 +159,8 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
   };
   const vector<vector<u64>> starts
     = {{0}, {0, 0}, {0, 0}, {}, {0}, {0, 0}, {0, 0}, {}};
-  const vector<size_t> true_indexes = {4, 4, 4, 2, 4, 4, 4, 2};
-  const vector<size_t> skipped_indexes = {1, 9, 0, 0, 1, 9, 0, 0};
+  const vector<u64> true_indexes = {4, 4, 4, 2, 4, 4, 4, 2};
+  const vector<u64> skipped_indexes = {1, 9, 0, 0, 1, 9, 0, 0};
   const vector<vector<u64>> expected_indexes_before_newfile
     = {{}, {}, {}, {4}, {}, {}, {}, {}};
   for (auto max_batches : {1, 2, 3, 4, 5, 7}) {
@@ -184,7 +184,7 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
     "test_objects/example_index_search_result.txt",
     get_binary_index_output_filename()};
   span<const string> filenames_span = {filenames.data(), filenames.size()};
-  const size_t read_padding = 4;
+  const u64 read_padding = 4;
   int pad = -1;
   const vector<vector<int>> ints = {{
     39,
@@ -226,8 +226,8 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
     pad  // end of 4th read
   }};
   const vector<vector<u64>> starts = {{0, 4, 4, 8, 8, 16, 20, 20, 24, 24}};
-  const vector<size_t> true_indexes = {14ULL * 2};
-  const vector<size_t> skipped_indexes = {10ULL * 2};
+  const vector<u64> true_indexes = {14ULL * 2};
+  const vector<u64> skipped_indexes = {10ULL * 2};
   const vector<vector<u64>> expected_indexes_before_newfile = {{16}};
   for (auto max_batches : {1, 2, 3, 4, 5, 7}) {
     run_test(

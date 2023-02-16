@@ -14,12 +14,11 @@
 
 namespace sbwt_search {
 
-using std::size_t;
 using std::vector;
 
 class IndexesBeforeNewfileBatch {
 public:
-  vector<size_t> indexes_before_newfile;
+  vector<u64> indexes_before_newfile;
   auto reset() -> void { indexes_before_newfile.resize(0); }
 };
 

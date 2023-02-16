@@ -16,7 +16,7 @@ auto Semaphore::acquire() -> void {
 
 auto Semaphore::release() -> void {
   count_protector.set_lock();
-  const unsigned int previous_count = count;
+  const u64 previous_count = count;
   ++count;
   count_protector.unset_lock();
   if (previous_count == 0) { acquire_gate.unset_lock(); }

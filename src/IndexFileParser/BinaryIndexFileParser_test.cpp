@@ -18,13 +18,13 @@ class BinaryIndexFileParserTest: public ::testing::Test {
 protected:
   auto run_test(
     const string &filename,
-    size_t max_indexes,
-    size_t padding,
+    u64 max_indexes,
+    u64 padding,
     const vector<vector<u64>> &expected_indexes,
-    const vector<vector<size_t>> &expected_starts,
-    size_t buffer_size,
-    const vector<size_t> &expected_true_indexes,
-    const vector<size_t> &expected_skipped
+    const vector<vector<u64>> &expected_starts,
+    u64 buffer_size,
+    const vector<u64> &expected_true_indexes,
+    const vector<u64> &expected_skipped
   ) -> void {
     write_fake_binary_results_to_file();
     auto in_stream = make_shared<ThrowingIfstream>(filename, ios::in);
@@ -50,8 +50,8 @@ protected:
 };
 
 TEST_F(BinaryIndexFileParserTest, OneBatch) {
-  const size_t max_indexes = 999;
-  const size_t padding = 4;
+  const u64 max_indexes = 999;
+  const u64 padding = 4;
   const int pad = -1;
   const vector<vector<int>> ints = {{
     39,
@@ -72,9 +72,9 @@ TEST_F(BinaryIndexFileParserTest, OneBatch) {
     pad,
     pad  // end of 4th read
   }};
-  const vector<vector<size_t>> starts = {{0, 4, 4, 8, 8}};
-  const vector<size_t> true_indexes = {14};
-  const vector<size_t> skipped_indexes = {10};
+  const vector<vector<u64>> starts = {{0, 4, 4, 8, 8}};
+  const vector<u64> true_indexes = {14};
+  const vector<u64> skipped_indexes = {10};
   // 22 is how many characters are on the first line, 23 includes '\n'
   // 63 is how many characters are in entire file, 24 includes EOF
   for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {
@@ -92,8 +92,8 @@ TEST_F(BinaryIndexFileParserTest, OneBatch) {
 }
 
 TEST_F(BinaryIndexFileParserTest, MultipleBatches) {
-  const size_t max_indexes = 4;
-  const size_t padding = 4;
+  const u64 max_indexes = 4;
+  const u64 padding = 4;
   const int pad = -1;
   const vector<vector<int>> ints = {
     {39, 164, 216, 59},  // end of 1st read
@@ -104,8 +104,8 @@ TEST_F(BinaryIndexFileParserTest, MultipleBatches) {
     {5, 6, pad, pad}     // end of 4th read
   };
   const vector<vector<u64>> starts = {{0}, {0, 0}, {0, 0}, {}};
-  const vector<size_t> true_indexes = {4, 4, 4, 2};
-  const vector<size_t> skipped_indexes = {1, 9, 0, 0};
+  const vector<u64> true_indexes = {4, 4, 4, 2};
+  const vector<u64> skipped_indexes = {1, 9, 0, 0};
   // 22 is how many characters are on the first line, 23 includes '\n'
   // 63 is how many characters are in entire file, 24 includes EOF
   for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {

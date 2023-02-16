@@ -23,7 +23,7 @@ auto PoppyBuilder::get_poppy() -> Poppy {
   poppy.layer_1_2.reserve(
     round_up(num_bits, superblock_bits) / superblock_bits
   );
-  for (size_t i = 0, bits = 0; bits < round_up<u64>(num_bits, superblock_bits);
+  for (u64 i = 0, bits = 0; bits < round_up<u64>(num_bits, superblock_bits);
        bits += u64_bits, ++i) {
     if (bits % superblock_bits == 0) { do_divisble_by_superblock(bits, poppy); }
     auto condition = bits % basicblock_bits == 0 && bits % superblock_bits != 0;

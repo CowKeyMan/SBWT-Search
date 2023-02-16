@@ -26,7 +26,7 @@ public:
   auto launch_presearch_kernel(
     unique_ptr<GpuPointer<u64>> &presearch_left,
     unique_ptr<GpuPointer<u64>> &presearch_right,
-    size_t blocks_per_grid
+    u64 blocks_per_grid
   ) -> void;
   auto presearch() -> void;
 };

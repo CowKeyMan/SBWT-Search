@@ -6,7 +6,7 @@ using std::make_shared;
 
 namespace sbwt_search {
 
-StringBreakBatchProducer::StringBreakBatchProducer(const uint max_batches):
+StringBreakBatchProducer::StringBreakBatchProducer(const u64 max_batches):
     SharedBatchesProducer<StringBreakBatch>(max_batches) {
   initialise_batches();
 }
@@ -17,7 +17,7 @@ auto StringBreakBatchProducer::get_default_value()
 }
 
 auto StringBreakBatchProducer::set(
-  const vector<size_t> &chars_before_newline, size_t string_size
+  const vector<u64> &chars_before_newline, u64 string_size
 ) -> void {
   get_batches().current_write()->chars_before_newline = &chars_before_newline;
   get_batches().current_write()->string_size = string_size;

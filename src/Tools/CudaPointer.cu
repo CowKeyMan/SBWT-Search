@@ -8,11 +8,11 @@ using std::vector;
 namespace gpu_utils {
 
 template <class T>
-GpuPointer<T>::GpuPointer(size_t size): bytes(size * sizeof(T)) {
+GpuPointer<T>::GpuPointer(u64 size): bytes(size * sizeof(T)) {
   GPU_CHECK(cudaMalloc(&ptr, bytes));
 }
 template <class T>
-GpuPointer<T>::GpuPointer(const T *cpu_ptr, size_t size): GpuPointer(size) {
+GpuPointer<T>::GpuPointer(const T *cpu_ptr, u64 size): GpuPointer(size) {
   GPU_CHECK(cudaMemcpy(ptr, cpu_ptr, bytes, cudaMemcpyHostToDevice));
 }
 template <class T>
@@ -20,15 +20,14 @@ GpuPointer<T>::GpuPointer(const vector<T> &v):
     GpuPointer<T>(v.data(), v.size()) {}
 
 template <class T>
-auto GpuPointer<T>::memset(size_t index, size_t amount, uint8_t value) -> void {
+auto GpuPointer<T>::memset(u64 index, u64 amount, uint8_t value) -> void {
   // NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
   GPU_CHECK(cudaMemset(ptr + index, value, amount * sizeof(T)));
 }
 
 template <class T>
-auto GpuPointer<T>::set(
-  const T *source, size_t amount, size_t destination_index
-) -> void {
+auto GpuPointer<T>::set(const T *source, u64 amount, u64 destination_index)
+  -> void {
   GPU_CHECK(cudaMemcpy(
     // NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
     ptr + destination_index,
@@ -39,7 +38,7 @@ auto GpuPointer<T>::set(
 }
 template <class T>
 auto GpuPointer<T>::set(
-  const vector<T> &source, size_t amount, size_t destination_index
+  const vector<T> &source, u64 amount, u64 destination_index
 ) -> void {
   set(source.data(), amount, destination_index);
 }
@@ -50,7 +49,7 @@ auto GpuPointer<T>::get() const -> T * {
 }
 
 template <class T>
-auto GpuPointer<T>::copy_to(T *destination, size_t amount) const -> void {
+auto GpuPointer<T>::copy_to(T *destination, u64 amount) const -> void {
   GPU_CHECK(
     cudaMemcpy(destination, ptr, amount * sizeof(T), cudaMemcpyDeviceToHost)
   );
@@ -60,8 +59,7 @@ auto GpuPointer<T>::copy_to(T *destination) const -> void {
   copy_to(destination, bytes / sizeof(T));
 }
 template <class T>
-auto GpuPointer<T>::copy_to(vector<T> &destination, size_t amount) const
-  -> void {
+auto GpuPointer<T>::copy_to(vector<T> &destination, u64 amount) const -> void {
   copy_to(destination.data(), amount);
 }
 template <class T>

@@ -24,10 +24,10 @@ class IndexesBatchProducer: public SharedBatchesProducer<IndexesBatch> {
   friend ContinuousIndexFileParser;
 
 private:
-  size_t max_indexes_per_batch;
+  u64 max_indexes_per_batch;
 
 public:
-  IndexesBatchProducer(size_t max_indexes_per_batch_, size_t max_batches);
+  IndexesBatchProducer(u64 max_indexes_per_batch_, u64 max_batches);
 
 private:
   auto get_default_value() -> shared_ptr<IndexesBatch> override;

@@ -12,16 +12,18 @@
 
 #include <unordered_map>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace units_parser {
 
 using std::string;
 using std::unordered_map;
 
 class MemoryUnitsParser {
-  const static unordered_map<string, size_t> units_to_multiplier;
+  const static unordered_map<string, u64> units_to_multiplier;
 
 public:
-  static auto convert(const string &s) -> size_t;
+  static auto convert(const string &s) -> u64;
 };
 
 }  // namespace units_parser

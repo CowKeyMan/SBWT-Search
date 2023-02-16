@@ -35,9 +35,9 @@ using std::vector;
 
 ContinuousSequenceFileParser::ContinuousSequenceFileParser(
   const vector<string> &filenames_,
-  uint kmer_size_,
-  size_t max_chars_per_batch_,
-  size_t max_batches
+  u64 kmer_size_,
+  u64 max_chars_per_batch_,
+  u64 max_batches
 ):
     filenames(filenames_),
     kmer_size(kmer_size_),
@@ -143,10 +143,10 @@ auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
   batches.step_read();
   auto seq_size = batches.current_write()->seq.size();
   auto &str_breaks = batches.current_write()->chars_before_newline;
-  str_breaks.push_back(std::numeric_limits<size_t>::max());
+  str_breaks.push_back(std::numeric_limits<u64>::max());
   auto strings_in_batch = str_breaks.size()
-    + static_cast<size_t>(!str_breaks.empty()
-                          && str_breaks.back() != (seq_size - 1));
+    + static_cast<u64>(!str_breaks.empty()
+                       && str_breaks.back() != (seq_size - 1));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(

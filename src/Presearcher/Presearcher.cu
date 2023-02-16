@@ -9,7 +9,7 @@ namespace sbwt_search {
 auto Presearcher::launch_presearch_kernel(
   unique_ptr<GpuPointer<u64>> &presearch_left,
   unique_ptr<GpuPointer<u64>> &presearch_right,
-  size_t blocks_per_grid
+  u64 blocks_per_grid
 ) -> void {
   d_presearch<<<blocks_per_grid, threads_per_block>>>(
     container->get_c_map().get(),

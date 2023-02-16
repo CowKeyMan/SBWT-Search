@@ -38,7 +38,7 @@ auto BoolContinuousResultsPrinter::read_and_generate() -> void {
   current_filename = filenames.begin();
   if (current_filename == filenames.end()) { return; }
   do_start_next_file();
-  for (uint batch_id = 0; get_batch(); ++batch_id) {
+  for (u64 batch_id = 0; get_batch(); ++batch_id) {
     Logger::log_timed_event(
       "ResultsPrinter", Logger::EVENT_STATE::START, format("batch {}", batch_id)
     );
@@ -51,9 +51,9 @@ auto BoolContinuousResultsPrinter::read_and_generate() -> void {
 }
 
 auto BoolContinuousResultsPrinter::get_batch() -> bool {
-  return (static_cast<uint>(*interval_producer >> interval_batch)
-          & static_cast<uint>(*invalid_chars_producer >> invalid_chars_batch)
-          & static_cast<uint>(*results_producer >> results_batch))
+  return (static_cast<u64>(*interval_producer >> interval_batch)
+          & static_cast<u64>(*invalid_chars_producer >> invalid_chars_batch)
+          & static_cast<u64>(*results_producer >> results_batch))
     > 0;
 }
 
@@ -67,7 +67,7 @@ auto BoolContinuousResultsPrinter::process_batch() -> void {
   }
 }
 
-auto BoolContinuousResultsPrinter::process_file(size_t newlines_before_newfile)
+auto BoolContinuousResultsPrinter::process_file(u64 newlines_before_newfile)
   -> void {
   for (; line_index < newlines_before_newfile
        && results_index < results_batch->results.size();
@@ -82,7 +82,7 @@ auto BoolContinuousResultsPrinter::process_file(size_t newlines_before_newfile)
   }
 }
 
-auto BoolContinuousResultsPrinter::process_line(size_t chars_before_newline)
+auto BoolContinuousResultsPrinter::process_line(u64 chars_before_newline)
   -> void {
   if (chars_before_newline < kmer_size - 1) { return; }
   invalid_chars_left = get_invalid_chars_left_first_kmer();
@@ -93,7 +93,7 @@ auto BoolContinuousResultsPrinter::process_line(size_t chars_before_newline)
     }
     process_result(
       results_batch->results[results_index],
-      results_batch->results[results_index] != numeric_limits<size_t>::max(),
+      results_batch->results[results_index] != numeric_limits<u64>::max(),
       invalid_chars_left == 0
     );
     if (invalid_chars_left > 0) { --invalid_chars_left; }
@@ -102,8 +102,7 @@ auto BoolContinuousResultsPrinter::process_line(size_t chars_before_newline)
   }
 }
 
-auto BoolContinuousResultsPrinter::get_invalid_chars_left_first_kmer()
-  -> size_t {
+auto BoolContinuousResultsPrinter::get_invalid_chars_left_first_kmer() -> u64 {
   auto &invalid_chars = invalid_chars_batch->invalid_chars;
   auto limit = min(
     {chars_index + kmer_size,
@@ -114,14 +113,14 @@ auto BoolContinuousResultsPrinter::get_invalid_chars_left_first_kmer()
   // Even though this is a backwards loop, it was benchmarked and found to be
   // faster than the equivalent of this function in a forward loop manner
   // (since it stops earlier)
-  for (size_t i = limit; i > chars_index; --i) {
+  for (u64 i = limit; i > chars_index; --i) {
     if (invalid_chars[i - 1] == 1) { return i - chars_index; }
   }
   return 0;
 }
 
 auto BoolContinuousResultsPrinter::process_result(
-  size_t result, bool found, bool valid
+  u64 result, bool found, bool valid
 ) -> void {
   if (!valid) {
     do_invalid_result();
@@ -142,7 +141,7 @@ auto BoolContinuousResultsPrinter::do_start_next_file() -> void {
 auto BoolContinuousResultsPrinter::do_invalid_result() -> void { shift(); }
 auto BoolContinuousResultsPrinter::do_not_found_result() -> void { shift(); }
 // NOLINTNEXTLINE(misc-unused-parameters)
-auto BoolContinuousResultsPrinter::do_result(size_t result) -> void {
+auto BoolContinuousResultsPrinter::do_result(u64 result) -> void {
   working_bits |= (1ULL << shift_bits);
   shift();
 }

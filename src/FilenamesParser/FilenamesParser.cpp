@@ -1,11 +1,11 @@
 #include <fstream>
 #include <ios>
-#include <stddef.h>
 #include <string>
 #include <vector>
 
 #include "FilenamesParser/FilenamesParser.h"
 #include "Tools/IOUtils.h"
+#include "Tools/TypeDefinitions.h"
 
 using io_utils::ThrowingIfstream;
 using std::getline;
@@ -29,7 +29,7 @@ FilenamesParser::FilenamesParser(
 }
 
 auto FilenamesParser::is_txt(string filename) -> bool {
-  size_t fsize = filename.size();
+  u64 fsize = filename.size();
   return fsize >= 4 && filename.substr(fsize - 4, 4) == ".txt";
 }
 

@@ -25,7 +25,7 @@ auto assert_arrays_equals(
 ) -> void {
   EXPECT_EQ(v1.size(), v2.size())
     << " unequal size at " << filename << ":" << to_string(line);
-  for (size_t i = 0; i < v1.size(); ++i) {
+  for (u64 i = 0; i < v1.size(); ++i) {
     EXPECT_EQ(v1[i], v2[i]) << " unequal at index " << i << " at " << filename
                             << ":" << to_string(line);
   }

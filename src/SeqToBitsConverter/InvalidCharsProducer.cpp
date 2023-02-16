@@ -10,7 +10,7 @@ using std::fill;
 using std::make_shared;
 
 InvalidCharsProducer::InvalidCharsProducer(
-  uint kmer_size_, size_t max_chars_per_batch_, uint max_batches
+  u64 kmer_size_, u64 max_chars_per_batch_, u64 max_batches
 ):
     kmer_size(kmer_size_),
     max_chars_per_batch(max_chars_per_batch_),
@@ -25,7 +25,7 @@ auto InvalidCharsProducer::get_default_value()
   return batch;
 }
 
-auto InvalidCharsProducer::start_new_batch(size_t num_chars) -> void {
+auto InvalidCharsProducer::start_new_batch(u64 num_chars) -> void {
   SharedBatchesProducer<InvalidCharsBatch>::do_at_batch_start();
   current_write()->invalid_chars.resize(num_chars + kmer_size);
   fill(
@@ -35,7 +35,7 @@ auto InvalidCharsProducer::start_new_batch(size_t num_chars) -> void {
   );
 }
 
-auto InvalidCharsProducer::set(size_t index) -> void {
+auto InvalidCharsProducer::set(u64 index) -> void {
   current_write()->invalid_chars[index] = 1;
 }
 

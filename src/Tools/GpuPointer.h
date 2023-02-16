@@ -9,9 +9,10 @@
 #include <cstdint>
 #include <vector>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace gpu_utils {
 
-using std::size_t;
 using std::uint8_t;
 using std::vector;
 
@@ -19,29 +20,28 @@ template <class T>
 class GpuPointer {
 private:
   T *ptr;
-  size_t bytes = 0;
+  u64 bytes = 0;
 
 public:
-  explicit GpuPointer(size_t size);
+  explicit GpuPointer(u64 size);
   explicit GpuPointer(const vector<T> &v);
-  GpuPointer(const T *cpu_ptr, size_t size);
+  GpuPointer(const T *cpu_ptr, u64 size);
 
   GpuPointer(GpuPointer &) = delete;
   GpuPointer(GpuPointer &&) = delete;
   auto operator=(GpuPointer &) = delete;
   auto operator=(GpuPointer &&) = delete;
 
-  auto memset(size_t index, size_t amount, uint8_t value) -> void;
+  auto memset(u64 index, u64 amount, uint8_t value) -> void;
 
-  auto set(const T *source, size_t amount, size_t destination_index = 0)
-    -> void;
-  auto set(const vector<T> &source, size_t amount, size_t destination_index = 0)
+  auto set(const T *source, u64 amount, u64 destination_index = 0) -> void;
+  auto set(const vector<T> &source, u64 amount, u64 destination_index = 0)
     -> void;
   auto get() const -> T *;
 
-  auto copy_to(T *destination, size_t amount) const -> void;
+  auto copy_to(T *destination, u64 amount) const -> void;
   auto copy_to(T *destination) const -> void;
-  auto copy_to(vector<T> &destination, size_t amount) const -> void;
+  auto copy_to(vector<T> &destination, u64 amount) const -> void;
   auto copy_to(vector<T> &destination) const -> void;
 
   ~GpuPointer();

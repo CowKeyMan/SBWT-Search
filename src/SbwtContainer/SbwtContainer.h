@@ -17,12 +17,12 @@ const u64 cmap_size = 5;
 
 class SbwtContainer {
 private:
-  size_t num_bits;
-  size_t bit_vector_size;
+  u64 num_bits;
+  u64 bit_vector_size;
   u64 kmer_size;
 
 protected:
-  SbwtContainer(size_t num_bits_, size_t bit_vector_size_, u64 kmer_size_);
+  SbwtContainer(u64 num_bits_, u64 bit_vector_size_, u64 kmer_size_);
 
 public:
   [[nodiscard]] auto get_bit_vector_size() const -> u64;

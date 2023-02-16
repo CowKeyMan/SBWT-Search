@@ -65,7 +65,7 @@ auto IndexSearchArgumentParser::create_options(
       "components so they can all keep processing without interruption from "
       "the start (this is assuming you have 5 threads running). If you have "
       "less threads, maybe set to to the number of available threads instead",
-      value<size_t>()->default_value(to_string(5))
+      value<u64>()->default_value(to_string(5))
     )("c,print-mode",
       "The mode used when printing the result to the output file. Options "
       "are 'ascii' (default), 'binary' or 'boolean'. In ascii mode the "
@@ -118,15 +118,15 @@ auto IndexSearchArgumentParser::get_index_file() -> string {
 auto IndexSearchArgumentParser::get_output_file() -> string {
   return args["output-prefix"].as<string>();
 }
-auto IndexSearchArgumentParser::get_unavailable_ram() -> size_t {
+auto IndexSearchArgumentParser::get_unavailable_ram() -> u64 {
   return MemoryUnitsParser::convert(args["unavailable-main-memory"].as<string>()
   );
 }
-auto IndexSearchArgumentParser::get_max_cpu_memory() -> size_t {
+auto IndexSearchArgumentParser::get_max_cpu_memory() -> u64 {
   return MemoryUnitsParser::convert(args["max-main-memory"].as<string>());
 }
-auto IndexSearchArgumentParser::get_batches() -> size_t {
-  return args["batches"].as<size_t>();
+auto IndexSearchArgumentParser::get_batches() -> u64 {
+  return args["batches"].as<u64>();
 }
 auto IndexSearchArgumentParser::get_print_mode() -> string {
   return args["print-mode"].as<string>();

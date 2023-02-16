@@ -9,11 +9,11 @@
 // Function credits:
 // https://stackoverflow.com/questions/2513505/how-to-get-available-memory-c-g
 
-#include <cstddef>
+#include "Tools/TypeDefinitions.h"
 
 namespace memory_utils {
 
-auto get_total_system_memory() -> std::size_t;
+auto get_total_system_memory() -> u64;
 
 }  // namespace memory_utils
 

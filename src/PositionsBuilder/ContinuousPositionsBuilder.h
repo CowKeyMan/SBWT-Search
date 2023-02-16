@@ -25,14 +25,14 @@ private:
   shared_ptr<SharedBatchesProducer<StringBreakBatch>> producer;
   shared_ptr<StringBreakBatch> read_batch;
   PositionsBuilder builder;
-  size_t max_chars_per_batch;
+  u64 max_chars_per_batch;
 
 public:
   ContinuousPositionsBuilder(
     shared_ptr<SharedBatchesProducer<StringBreakBatch>> _producer,
-    uint kmer_size,
-    size_t _max_chars_per_batch,
-    uint max_batches
+    u64 kmer_size,
+    u64 _max_chars_per_batch,
+    u64 max_batches
   );
 
 protected:

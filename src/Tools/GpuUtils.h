@@ -10,6 +10,8 @@
 
 #include <cuda_runtime.h>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace gpu_utils {
 
 using std::runtime_error;
@@ -35,7 +37,7 @@ inline auto gpuAssert(Error_t code, const char *file, int line) -> void {
 #define GPU_CHECK(code_block) \
   { gpu_utils::gpuAssert((code_block), __FILE__, __LINE__); }
 
-auto get_free_gpu_memory() -> size_t;
+auto get_free_gpu_memory() -> u64;
 
 }  // namespace gpu_utils
 

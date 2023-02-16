@@ -13,14 +13,13 @@
 
 namespace sbwt_search {
 
-using std::size_t;
 using std::vector;
 
 class IndexesBatch {
 public:
   vector<u64> indexes;
-  size_t true_indexes = 0;
-  size_t skipped = 0;
+  u64 true_indexes = 0;
+  u64 skipped = 0;
 
   auto reset() {
     indexes.resize(0);

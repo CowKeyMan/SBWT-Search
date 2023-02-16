@@ -11,9 +11,9 @@ using std::string;
 
 AsciiIndexFileParser::AsciiIndexFileParser(
   shared_ptr<ThrowingIfstream> in_stream_,
-  size_t max_indexes_,
-  size_t read_padding_,
-  size_t buffer_size_
+  u64 max_indexes_,
+  u64 read_padding_,
+  u64 buffer_size_
 ):
     IndexFileParser(std::move(in_stream_), max_indexes_, read_padding_),
     buffer_size(buffer_size_) {
@@ -36,7 +36,7 @@ auto AsciiIndexFileParser::generate_batch(
   IndexFileParser::generate_batch(
     std::move(indexes_batch_), std::move(indexes_starts_batch_)
   );
-  const size_t initial_size = get_starts().size() + get_indexes().size();
+  const u64 initial_size = get_starts().size() + get_indexes().size();
   char c = '\0';
   while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {

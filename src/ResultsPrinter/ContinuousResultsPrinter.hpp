@@ -101,7 +101,7 @@ public:
     current_filename = filenames.begin();
     if (current_filename == filenames.end()) { return; }
     impl().do_start_next_file();
-    for (uint batch_id = 0; get_batch(); ++batch_id) {
+    for (u64 batch_id = 0; get_batch(); ++batch_id) {
       Logger::log_timed_event(
         "ResultsPrinter",
         Logger::EVENT_STATE::START,
@@ -119,9 +119,9 @@ public:
 
 private:
   auto get_batch() -> bool {
-    return (static_cast<uint>(*interval_producer >> interval_batch)
-            & static_cast<uint>(*invalid_chars_producer >> invalid_chars_batch)
-            & static_cast<uint>(*results_producer >> results_batch))
+    return (static_cast<u64>(*interval_producer >> interval_batch)
+            & static_cast<u64>(*invalid_chars_producer >> invalid_chars_batch)
+            & static_cast<u64>(*results_producer >> results_batch))
       > 0;
   }
 
@@ -250,12 +250,12 @@ private:
   }
 
   auto get_invalid_chars_left_first_kmer(u64 char_idx, u64 chars_before_newline)
-    -> size_t {
+    -> u64 {
     auto &invalid_chars = invalid_chars_batch->invalid_chars;
     auto limit
       = min({char_idx + kmer_size, invalid_chars.size(), chars_before_newline});
     if (limit <= char_idx) { return 0; }
-    for (size_t i = limit; i > char_idx; --i) {
+    for (u64 i = limit; i > char_idx; --i) {
       if (invalid_chars[i - 1] == 1) { return i - char_idx; }
     }
     return 0;

@@ -16,10 +16,10 @@ using std::ios;
 using std::make_shared;
 
 ContinuousIndexFileParser::ContinuousIndexFileParser(
-  size_t max_indexes_per_batch_,
-  size_t max_batches,
+  u64 max_indexes_per_batch_,
+  u64 max_batches,
   span<const string> filenames_,
-  size_t read_padding_
+  u64 read_padding_
 ):
     max_indexes_per_batch(max_indexes_per_batch_),
     read_padding(read_padding_),
@@ -115,10 +115,8 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
   auto indexes_batch = indexes_batch_producer->get_current_write();
   auto indexes_starts
     = indexes_starts_batch_producer->get_current_write()->indexes_starts;
-  size_t reads = indexes_starts.size()
-    + static_cast<size_t>(
-                   indexes_starts.empty() || indexes_starts.front() != 0
-    );
+  u64 reads = indexes_starts.size()
+    + static_cast<u64>(indexes_starts.empty() || indexes_starts.front() != 0);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(

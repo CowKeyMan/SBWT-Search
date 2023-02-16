@@ -25,7 +25,7 @@ class IndexesStartsBatchProducer:
   friend ContinuousIndexFileParser;
 
 public:
-  explicit IndexesStartsBatchProducer(size_t max_batches);
+  explicit IndexesStartsBatchProducer(u64 max_batches);
 
 private:
   auto get_default_value() -> shared_ptr<IndexesStartsBatch> override;

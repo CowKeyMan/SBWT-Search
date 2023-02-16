@@ -8,7 +8,6 @@
 
 #include <cstdint>
 
-using uint = unsigned int;
 using i64 = int64_t;
 using u64 = uint64_t;
 using u32 = uint32_t;
@@ -16,9 +15,6 @@ using i32 = int32_t;
 using u8 = uint8_t;
 using i8 = int8_t;
 
-using s64 = int64_t;
-using s32 = int32_t;
-
-const unsigned int u64_bits = 64;
+const u64 u64_bits = 64;
 
 #endif

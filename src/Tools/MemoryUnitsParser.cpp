@@ -12,15 +12,15 @@ using std::stoull;
 using std::string;
 using std::toupper;
 
-const unordered_map<string, size_t> MemoryUnitsParser::units_to_multiplier = {
+const unordered_map<string, u64> MemoryUnitsParser::units_to_multiplier = {
   {"B", 8ULL},
   {"KB", 8 * 1024ULL},
   {"MB", 8 * 1024 * 1024ULL},
   {"GB", 8 * 1024 * 1024 * 1024ULL}};
 
-auto MemoryUnitsParser::convert(const string &s) -> size_t {
-  size_t str_size = s.size();
-  size_t multiplier = 1;
+auto MemoryUnitsParser::convert(const string &s) -> u64 {
+  u64 str_size = s.size();
+  u64 multiplier = 1;
   string str_number = s;
   if (units_to_multiplier.find(s.substr(str_size - 2, 2)) != units_to_multiplier.end()) {
     auto sub = s.substr(str_size - 2, 2);

@@ -29,7 +29,7 @@ class BitsProducer: public SharedBatchesProducer<BitSeqBatch> {
   u64 max_chars_per_batch;
 
 public:
-  BitsProducer(u64 max_chars_per_batch_, uint max_batches);
+  BitsProducer(u64 max_chars_per_batch_, u64 max_batches);
 
 private:
   auto get_default_value() -> shared_ptr<BitSeqBatch> override;

@@ -29,7 +29,7 @@ private:
   span<u64> bits_vector;
   Poppy poppy;
   vector<u64> layer_2_temps = vector<u64>(3, 0);
-  size_t layer_2_temps_index = 0;
+  u64 layer_2_temps_index = 0;
   u64 layer_0_count = 0, layer_1_count = 0, layer_2_count = 0;
   u64 num_bits;
 

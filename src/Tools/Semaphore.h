@@ -11,13 +11,14 @@
 // http://www.cs.umd.edu/~shankar/412-Notes/10x-countingSemUsingBinarySem.pdf
 
 #include "Tools/OmpLock.h"
+#include "Tools/TypeDefinitions.h"
 
 namespace threading_utils {
 
 class Semaphore {
 private:
   OmpLock acquire_gate, count_protector;
-  unsigned int count;
+  u64 count;
 
 public:
   explicit Semaphore(unsigned int starting_count = 1);

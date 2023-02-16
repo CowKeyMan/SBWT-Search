@@ -35,15 +35,15 @@ using DummyStringSequenceBatchProducer
 class ContinuousSeqToBitsConverterTest: public ::testing::Test {
 protected:
   auto run_test(
-    uint kmer_size,
+    u64 kmer_size,
     const vector<string> &seqs,
     const vector<vector<u64>> &bits,
     const vector<vector<char>> &invalid_chars,
-    size_t max_chars_per_batch,
-    size_t max_batches
+    u64 max_chars_per_batch,
+    u64 max_batches
   ) {
     omp_set_nested(1);
-    uint threads = 0;
+    u64 threads = 0;
 #pragma omp parallel
 #pragma omp single
     { threads = omp_get_num_threads(); }
@@ -58,9 +58,9 @@ protected:
     );
     auto bits_producer = host->get_bits_producer();
     auto invalid_chars_producer = host->get_invalid_chars_producer();
-    size_t expected_batches = seqs.size();
-    size_t batches = 0;
-    const uint time_to_wait = 100;
+    u64 expected_batches = seqs.size();
+    u64 batches = 0;
+    const u64 time_to_wait = 100;
 #pragma omp parallel sections private(batches) num_threads(3)
     {
 #pragma omp section
@@ -96,7 +96,7 @@ protected:
 
 auto convert_binary(string bin) -> u64 {
   u64 total = 0;
-  for (size_t i = bin.size(); i > 0; --i) {
+  for (u64 i = bin.size(); i > 0; --i) {
     total += static_cast<u64>(bin.at(i - 1) == '1')
       * (1ULL << (bin.size() - i));  // 2^(bin.size() - i)
   }
@@ -135,7 +135,7 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestAll) {
       )  // We apply 0 padding on the right to get decimal equivalent };
     }};
 
-  const uint max_chars_per_batch = 200;
+  const u64 max_chars_per_batch = 200;
   for (auto kmer_size : {3}) {
     const vector<vector<char>> expected_invalid_chars = [&] {
       vector<vector<char>> ret_val

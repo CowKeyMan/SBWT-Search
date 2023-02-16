@@ -26,16 +26,16 @@ private:
   shared_ptr<SharedBatchesProducer<StringSequenceBatch>> producer;
   shared_ptr<InvalidCharsProducer> invalid_chars_producer;
   shared_ptr<BitsProducer> bits_producer;
-  uint threads;
+  u64 threads;
   CharToBits char_to_bits;
 
 public:
   ContinuousSeqToBitsConverter(
     shared_ptr<SharedBatchesProducer<StringSequenceBatch>> producer,
-    uint threads,
-    size_t kmer_size,
-    size_t max_chars_per_batch,
-    size_t max_batches
+    u64 threads,
+    u64 kmer_size,
+    u64 max_chars_per_batch,
+    u64 max_batches
   );
 
   [[nodiscard]] auto get_invalid_chars_producer() const
@@ -48,8 +48,7 @@ public:
 
 private:
   auto parallel_generate(StringSequenceBatch &read_batch) -> void;
-  auto convert_int(const string &string, size_t start_index, size_t end_index)
-    -> u64;
+  auto convert_int(const string &string, u64 start_index, u64 end_index) -> u64;
 };
 
 }  // namespace sbwt_search

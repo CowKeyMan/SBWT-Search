@@ -12,15 +12,16 @@
 
 #include <vector>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace sbwt_search {
 
-using std::size_t;
 using std::vector;
 
 class IntervalBatch {
 public:
-  const vector<size_t> *chars_before_newline;
-  vector<size_t> newlines_before_newfile;
+  const vector<u64> *chars_before_newline;
+  vector<u64> newlines_before_newfile;
 };
 
 }  // namespace sbwt_search

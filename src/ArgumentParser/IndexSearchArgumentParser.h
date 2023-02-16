@@ -41,9 +41,9 @@ public:
   auto get_sequence_file() -> string;
   auto get_index_file() -> string;
   auto get_output_file() -> string;
-  auto get_unavailable_ram() -> size_t;
-  auto get_max_cpu_memory() -> size_t;
-  auto get_batches() -> size_t;
+  auto get_unavailable_ram() -> u64;
+  auto get_max_cpu_memory() -> u64;
+  auto get_batches() -> u64;
   auto get_print_mode() -> string;
 };
 

@@ -7,7 +7,7 @@ namespace sbwt_search {
 using std::make_shared;
 
 IndexesBatchProducer::IndexesBatchProducer(
-  size_t max_indexes_per_batch_, size_t max_batches
+  u64 max_indexes_per_batch_, u64 max_batches
 ):
     SharedBatchesProducer<IndexesBatch>(max_batches),
     max_indexes_per_batch(max_indexes_per_batch_) {

@@ -11,7 +11,7 @@ using std::string;
 
 namespace sbwt_search {
 
-StringSequenceBatchProducer::StringSequenceBatchProducer(uint max_batches):
+StringSequenceBatchProducer::StringSequenceBatchProducer(u64 max_batches):
     Base(max_batches) {
   initialise_batches();
 }

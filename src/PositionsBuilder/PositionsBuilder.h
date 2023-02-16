@@ -13,27 +13,26 @@
 
 namespace sbwt_search {
 
-using std::size_t;
 using std::vector;
 
 class PositionsBuilder {
 private:
-  uint kmer_size;
+  u64 kmer_size;
 
 public:
-  explicit PositionsBuilder(uint kmer_size);
+  explicit PositionsBuilder(u64 kmer_size);
   void build_positions(
-    const vector<size_t> &chars_before_newline,
-    const size_t &string_size,
-    vector<size_t> &positions
+    const vector<u64> &chars_before_newline,
+    const u64 &string_size,
+    vector<u64> &positions
   );
 
 private:
   void process_one_string(
-    size_t start_position_index,
-    size_t end_position_index,
-    size_t first_position,
-    vector<size_t> &positions
+    u64 start_position_index,
+    u64 end_position_index,
+    u64 first_position,
+    vector<u64> &positions
   );
 };
 

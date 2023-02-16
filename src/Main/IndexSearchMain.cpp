@@ -106,17 +106,17 @@ auto IndexSearchMain::load_batch_info(
 }
 
 auto IndexSearchMain::get_max_chars_per_batch(
-  size_t unavailable_memory, size_t max_cpu_memory
-) -> size_t {
+  u64 unavailable_memory, u64 max_cpu_memory
+) -> u64 {
   auto gpu_chars = get_max_chars_per_batch_gpu();
   auto cpu_chars
     = get_max_chars_per_batch_cpu(unavailable_memory, max_cpu_memory);
   return min(gpu_chars, cpu_chars);
 }
 
-auto IndexSearchMain::get_max_chars_per_batch_gpu() -> size_t {
-  size_t free = get_free_gpu_memory() * 8 * 0.95;
-  auto max_chars_per_batch = round_down<size_t>(free / 66, threads_per_block);
+auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
+  u64 free = get_free_gpu_memory() * 8 * 0.95;
+  auto max_chars_per_batch = round_down<u64>(free / 66, threads_per_block);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -131,18 +131,17 @@ auto IndexSearchMain::get_max_chars_per_batch_gpu() -> size_t {
 }
 
 auto IndexSearchMain::get_max_chars_per_batch_cpu(
-  size_t unavailable_memory, size_t max_memory
-) -> size_t {
-  if (unavailable_memory > get_total_system_memory() * sizeof(size_t)) {
+  u64 unavailable_memory, u64 max_memory
+) -> u64 {
+  if (unavailable_memory > get_total_system_memory() * sizeof(u64)) {
     throw runtime_error("Not enough memory. Please specify a lower number of "
                         "unavailable-main-memory.");
   }
-  size_t free
-    = (get_total_system_memory() * sizeof(size_t) - unavailable_memory) * 0.85;
+  u64 free
+    = (get_total_system_memory() * sizeof(u64) - unavailable_memory) * 0.85;
   if (max_memory < free) { free = max_memory; }
-  auto max_chars_per_batch = round_down<size_t>(
-    free / (146 + 21 * 8) / max_batches, threads_per_block
-  );
+  auto max_chars_per_batch
+    = round_down<u64>(free / (146 + 21 * 8) / max_batches, threads_per_block);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(

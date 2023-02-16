@@ -26,16 +26,16 @@ using std::stringstream;
 class BinaryIndexFileParser: public IndexFileParser {
 private:
   vector<u64> buffer;
-  size_t buffer_size = 0;
-  size_t buffer_index = 0;
+  u64 buffer_size = 0;
+  u64 buffer_index = 0;
   bool new_read = true;
 
 public:
   BinaryIndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
-    size_t max_indexes_,
-    size_t read_padding_,
-    size_t buffer_size = sixteen_kB / sizeof(u64)
+    u64 max_indexes_,
+    u64 read_padding_,
+    u64 buffer_size = sixteen_kB / sizeof(u64)
   );
   auto generate_batch(
     shared_ptr<IndexesBatch> indexes_batch_,

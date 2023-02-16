@@ -29,18 +29,18 @@ private:
     indexes_before_newfile_batch_producer;
   span<const string> filenames;
   span<const string>::iterator filename_iterator;
-  size_t batch_id = 0;
+  u64 batch_id = 0;
   bool fail = false;
   unique_ptr<IndexFileParser> index_file_parser;
-  size_t max_indexes_per_batch;
-  size_t read_padding;
+  u64 max_indexes_per_batch;
+  u64 read_padding;
 
 public:
   ContinuousIndexFileParser(
-    size_t max_indexes_per_batch_,
-    size_t max_batches,
+    u64 max_indexes_per_batch_,
+    u64 max_batches,
     span<const string> filenames_,
-    size_t read_padding_
+    u64 read_padding_
   );
 
   [[nodiscard]] auto get_indexes_batch_producer() const

@@ -7,9 +7,6 @@
  * memory when using queues
  */
 
-#include <stddef.h>
-#include <vector>
-
 namespace structure_utils {
 
 using std::vector;
@@ -18,10 +15,10 @@ template <class T>
 class CircularQueue {
 private:
   vector<T> q;
-  size_t front_idx = 0, back_idx = 0;
+  u64 front_idx = 0, back_idx = 0;
 
 public:
-  CircularQueue(size_t capcity): q(capcity + 1) {}
+  CircularQueue(u64 capcity): q(capcity + 1) {}
 
   auto front() -> T & { return q[front_idx]; }
 
@@ -36,12 +33,12 @@ public:
 
   auto full() -> bool { return (back_idx + 1) % q.size() == front_idx; }
 
-  auto size() -> size_t {
+  auto size() -> u64 {
     if (front_idx > back_idx) { return q.size() - (front_idx - back_idx); }
     return back_idx - front_idx;
   }
 
-  auto capacity() -> size_t { return q.size() - 1; }
+  auto capacity() -> u64 { return q.size() - 1; }
 };
 
 }  // namespace structure_utils

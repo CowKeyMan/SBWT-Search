@@ -16,7 +16,7 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
   shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
   shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
   vector<string> &filenames,
-  uint kmer_size,
+  u64 kmer_size,
   u64 threads,
   u64 max_chars_per_batch
 ):

@@ -13,10 +13,10 @@ using std::min;
 
 ContinuousSeqToBitsConverter::ContinuousSeqToBitsConverter(
   shared_ptr<SharedBatchesProducer<StringSequenceBatch>> producer,
-  uint threads,
-  size_t kmer_size,
-  size_t max_chars_per_batch,
-  size_t max_batches
+  u64 threads,
+  u64 kmer_size,
+  u64 max_chars_per_batch,
+  u64 max_batches
 ):
     producer(std::move(producer)),
     threads(threads),
@@ -37,7 +37,7 @@ auto ContinuousSeqToBitsConverter::get_bits_producer() const
 
 auto ContinuousSeqToBitsConverter::read_and_generate() -> void {
   shared_ptr<StringSequenceBatch> read_batch;
-  for (uint batch_idx = 0; (*producer) >> read_batch; ++batch_idx) {
+  for (u64 batch_idx = 0; (*producer) >> read_batch; ++batch_idx) {
     invalid_chars_producer->start_new_batch(read_batch->seq->size());
     bits_producer->start_new_batch(read_batch->seq->size());
     Logger::log_timed_event(
@@ -61,20 +61,19 @@ auto ContinuousSeqToBitsConverter::read_and_generate() -> void {
 auto ContinuousSeqToBitsConverter::parallel_generate(
   StringSequenceBatch &read_batch
 ) -> void {
-  const size_t chars_per_u64 = 32;
+  const u64 chars_per_u64 = 32;
   auto seq_size = read_batch.seq->size();
-  size_t chars_per_thread
-    = static_cast<size_t>(
+  u64 chars_per_thread
+    = static_cast<u64>(
         ceil((ceil(static_cast<double>(seq_size) / chars_per_u64)) / threads)
       )
     * chars_per_u64;
 #pragma omp parallel num_threads(threads) shared(read_batch)
   {
-    uint idx = omp_get_thread_num();
-    size_t start_index = min(idx * chars_per_thread, seq_size);
-    size_t end_index = min((idx + 1) * chars_per_thread, seq_size);
-    for (size_t index = start_index; index < end_index;
-         index += chars_per_u64) {
+    u64 idx = omp_get_thread_num();
+    u64 start_index = min(idx * chars_per_thread, seq_size);
+    u64 end_index = min((idx + 1) * chars_per_thread, seq_size);
+    for (u64 index = start_index; index < end_index; index += chars_per_u64) {
       bits_producer->set(
         index / chars_per_u64,
         convert_int(
@@ -86,7 +85,7 @@ auto ContinuousSeqToBitsConverter::parallel_generate(
 }
 
 auto ContinuousSeqToBitsConverter::convert_int(
-  const string &string, size_t start_index, size_t end_index
+  const string &string, u64 start_index, u64 end_index
 ) -> u64 {
   const u64 bits_per_character = 2;
   u64 result = 0;

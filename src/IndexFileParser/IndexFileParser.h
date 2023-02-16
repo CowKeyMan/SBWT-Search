@@ -21,7 +21,7 @@
 
 namespace sbwt_search {
 
-const size_t sixteen_kB = 16ULL * 8ULL * 1024ULL;
+const u64 sixteen_kB = 16ULL * 8ULL * 1024ULL;
 const u64 pad = static_cast<u64>(-1);
 
 using design_utils::SharedBatchesProducer;
@@ -33,8 +33,8 @@ private:
   shared_ptr<ThrowingIfstream> in_stream;
   shared_ptr<IndexesBatch> indexes_batch;
   shared_ptr<IndexesStartsBatch> indexes_starts_batch;
-  size_t max_indexes;
-  size_t read_padding;
+  u64 max_indexes;
+  u64 read_padding;
 
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
@@ -44,9 +44,7 @@ protected:
   [[nodiscard]] auto get_starts() const -> vector<u64> &;
   [[nodiscard]] auto get_read_padding() const -> u64;
   IndexFileParser(
-    shared_ptr<ThrowingIfstream> in_stream_,
-    size_t max_indexes_,
-    size_t read_padding_
+    shared_ptr<ThrowingIfstream> in_stream_, u64 max_indexes_, u64 read_padding_
   );
 
 public:

@@ -23,7 +23,7 @@ using std::vector;
 template <class T>
 class DummyBatchProducer: public SharedBatchesProducer<T> {
   vector<shared_ptr<T>> batches;
-  uint counter = 0;
+  u64 counter = 0;
 
 public:
   explicit DummyBatchProducer(const vector<shared_ptr<T>> &batches_):

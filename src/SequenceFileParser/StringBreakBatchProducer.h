@@ -31,14 +31,13 @@ public:
   auto operator=(StringBreakBatchProducer &) = delete;
   auto operator=(StringBreakBatchProducer &&) = delete;
 
-  explicit StringBreakBatchProducer(uint max_batches);
+  explicit StringBreakBatchProducer(u64 max_batches);
 
   ~StringBreakBatchProducer() override = default;
 
 private:
   auto get_default_value() -> shared_ptr<StringBreakBatch> override;
-  auto set(const vector<size_t> &chars_before_newline, size_t string_size)
-    -> void;
+  auto set(const vector<u64> &chars_before_newline, u64 string_size) -> void;
 };
 
 }  // namespace sbwt_search

@@ -6,7 +6,7 @@ namespace sbwt_search {
 
 using std::make_shared;
 
-IndexesStartsBatchProducer::IndexesStartsBatchProducer(size_t max_batches):
+IndexesStartsBatchProducer::IndexesStartsBatchProducer(u64 max_batches):
     SharedBatchesProducer<IndexesStartsBatch>(max_batches) {
   initialise_batches();
 }

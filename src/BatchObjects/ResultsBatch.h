@@ -9,14 +9,15 @@
 
 #include <vector>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace sbwt_search {
 
-using std::size_t;
 using std::vector;
 
 class ResultsBatch {
 public:
-  vector<size_t> results;
+  vector<u64> results;
 };
 
 }  // namespace sbwt_search

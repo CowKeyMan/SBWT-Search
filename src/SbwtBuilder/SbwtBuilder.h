@@ -34,7 +34,7 @@ public:
 
 private:
   auto get_container_components(
-    u64 num_bits, u64 bit_vector_bytes, size_t start_position
+    u64 num_bits, u64 bit_vector_bytes, u64 start_position
   ) -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>>;
   auto skip_bits_vector(istream &stream) -> void;
   auto skip_bytes_vector(istream &stream) -> void;

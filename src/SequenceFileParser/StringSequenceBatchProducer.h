@@ -7,7 +7,6 @@
  */
 
 #include <memory>
-#include <stddef.h>
 #include <string>
 
 #include "BatchObjects/StringSequenceBatch.h"
@@ -28,7 +27,7 @@ class StringSequenceBatchProducer:
   friend ContinuousSequenceFileParser;
 
 public:
-  explicit StringSequenceBatchProducer(uint max_batches);
+  explicit StringSequenceBatchProducer(u64 max_batches);
 
 private:
   void set_string(const string &s);

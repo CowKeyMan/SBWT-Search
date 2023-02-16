@@ -21,10 +21,10 @@ using test_utils::DummyBatchProducer;
 using DummyStringBreakBatchProducer = DummyBatchProducer<StringBreakBatch>;
 
 shared_ptr<DummyStringBreakBatchProducer> get_producer(
-  vector<vector<size_t>> &chars_before_newline, vector<size_t> string_sizes
+  vector<vector<u64>> &chars_before_newline, vector<u64> string_sizes
 ) {
   vector<shared_ptr<StringBreakBatch>> b;
-  for (uint i = 0; i < string_sizes.size(); ++i) {
+  for (u64 i = 0; i < string_sizes.size(); ++i) {
     b.push_back(make_shared<StringBreakBatch>(
       StringBreakBatch({&chars_before_newline[i], string_sizes[i]})
     ));
@@ -38,19 +38,19 @@ protected:
     expected_positions;
 
   auto run_test(
-    uint kmer_size,
-    vector<vector<size_t>> chars_before_newline,
-    vector<size_t> string_sizes,
-    vector<vector<size_t>> expected_positions,
-    uint max_batches = 7
+    u64 kmer_size,
+    vector<vector<u64>> chars_before_newline,
+    vector<u64> string_sizes,
+    vector<vector<u64>> expected_positions,
+    u64 max_batches = 7
   ) {
     auto max_chars_per_batch = 999;
     auto producer = get_producer(chars_before_newline, string_sizes);
     auto host = ContinuousPositionsBuilder(
       producer, kmer_size, max_chars_per_batch, max_batches
     );
-    size_t expected_batches = chars_before_newline.size();
-    size_t batches = 0;
+    u64 expected_batches = chars_before_newline.size();
+    u64 batches = 0;
 #pragma omp parallel sections private(batches) num_threads(2)
     {
 #pragma omp section
@@ -74,12 +74,12 @@ protected:
 };
 
 TEST_F(ContinuousPositionsBuilderTest, Basic) {
-  const vector<vector<size_t>> chars_before_newline
-    = {{8, 9, 11, 16, size_t(-1)}, {8, 9, 11, 17, size_t(-1)}};
-  const vector<size_t> string_sizes = {20, 15};
-  const vector<vector<size_t>> expected_positions = {
+  const vector<vector<u64>> chars_before_newline
+    = {{8, 9, 11, 16, u64(-1)}, {8, 9, 11, 17, u64(-1)}};
+  const vector<u64> string_sizes = {20, 15};
+  const vector<vector<u64>> expected_positions = {
     {0, 1, 2, 3, 4, 5, 11, 12, 13, 16, 17}, {0, 1, 2, 3, 4, 5, 11, 12, 13, 14}};
-  uint kmer_size = 3;
+  u64 kmer_size = 3;
   for (auto max_batches : {1, 2, 3, 7}) {
     run_test(
       kmer_size,

@@ -3,7 +3,7 @@
 namespace sbwt_search {
 
 SbwtContainer::SbwtContainer(
-  size_t num_bits_, size_t bit_vector_size_, u64 kmer_size_
+  u64 num_bits_, u64 bit_vector_size_, u64 kmer_size_
 ):
     num_bits(num_bits_),
     bit_vector_size(bit_vector_size_),

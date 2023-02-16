@@ -22,7 +22,7 @@ using std::string;
 using std::unordered_map;
 
 auto main(int argc, char **argv) -> int {
-  auto args = span{argv, static_cast<size_t>(argc)};
+  auto args = span{argv, static_cast<u64>(argc)};
   const unordered_map<string, shared_ptr<Main>> str_to_item{
     {"index", make_shared<IndexSearchMain>()},
     {"color", make_shared<ColorSearchMain>()}};

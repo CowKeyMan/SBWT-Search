@@ -7,7 +7,7 @@ namespace sbwt_search {
 using std::make_shared;
 
 IndexesBeforeNewfileBatchProducer::IndexesBeforeNewfileBatchProducer(
-  size_t max_batches
+  u64 max_batches
 ):
     SharedBatchesProducer<IndexesBeforeNewfileBatch>(max_batches) {
   initialise_batches();
@@ -23,7 +23,7 @@ auto IndexesBeforeNewfileBatchProducer::start_new_batch() -> void {
   current_write()->indexes_before_newfile.resize(0);
 }
 
-auto IndexesBeforeNewfileBatchProducer::add(size_t element) -> void {
+auto IndexesBeforeNewfileBatchProducer::add(u64 element) -> void {
   current_write()->indexes_before_newfile.push_back(element);
 }
 

@@ -26,8 +26,8 @@ ContinuousSearcher::ContinuousSearcher(
   shared_ptr<GpuSbwtContainer> container,
   shared_ptr<SharedBatchesProducer<BitSeqBatch>> bit_seq_producer_,
   shared_ptr<SharedBatchesProducer<PositionsBatch>> positions_producer_,
-  size_t max_batches,
-  size_t max_chars_per_batch_
+  u64 max_batches,
+  u64 max_chars_per_batch_
 ):
     searcher(std::move(container), max_chars_per_batch_),
     bit_seq_producer(std::move(bit_seq_producer_)),
@@ -43,8 +43,8 @@ auto ContinuousSearcher::get_default_value() -> shared_ptr<ResultsBatch> {
 
 auto ContinuousSearcher::continue_read_condition() -> bool {
   return static_cast<bool>(
-    static_cast<uint>(*positions_producer >> positions_batch)
-    & static_cast<uint>(*bit_seq_producer >> bit_seq_batch)
+    static_cast<u64>(*positions_producer >> positions_batch)
+    & static_cast<u64>(*bit_seq_producer >> bit_seq_batch)
   );
 }
 

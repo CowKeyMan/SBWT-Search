@@ -6,7 +6,7 @@ namespace sbwt_search {
 
 const u64 chars_per_u64 = 32;
 
-BitsProducer::BitsProducer(u64 max_chars_per_batch_, uint max_batches):
+BitsProducer::BitsProducer(u64 max_chars_per_batch_, u64 max_batches):
     max_chars_per_batch(max_chars_per_batch_),
     SharedBatchesProducer<BitSeqBatch>(max_batches) {
   initialise_batches();

@@ -28,21 +28,21 @@ const auto kmer_size = 3;
 const auto seq_size = 23;
 
 TEST(PositionsBuilderTest, WithLastPosition) {
-  const vector<size_t> chars_before_newline
-    = {4, 6, 9, 13, 19, 23, numeric_limits<size_t>::max()};
-  const vector<size_t> expected = {0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20};
+  const vector<u64> chars_before_newline
+    = {4, 6, 9, 13, 19, 23, numeric_limits<u64>::max()};
+  const vector<u64> expected = {0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20};
   auto host = PositionsBuilder(kmer_size);
-  vector<size_t> positions;
+  vector<u64> positions;
   host.build_positions(chars_before_newline, seq_size, positions);
   ASSERT_EQ(positions, expected);
 }
 
 TEST(PositionsBuilderTest, WithNoLastPosition) {
-  const vector<size_t> chars_before_newline
-    = {4, 6, 9, 13, 19, numeric_limits<size_t>::max()};
-  const vector<size_t> expected = {0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20};
+  const vector<u64> chars_before_newline
+    = {4, 6, 9, 13, 19, numeric_limits<u64>::max()};
+  const vector<u64> expected = {0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20};
   auto host = PositionsBuilder(kmer_size);
-  vector<size_t> positions;
+  vector<u64> positions;
   host.build_positions(chars_before_newline, seq_size, positions);
   ASSERT_EQ(positions, expected);
 }

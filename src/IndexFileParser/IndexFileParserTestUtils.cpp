@@ -31,7 +31,7 @@ auto write_fake_binary_results_to_file() -> void {
   );
   out_stream.write_string_with_size("binary");
   out_stream.write_string_with_size("v1.0");
-  for (size_t i = 0; i < results.size(); ++i) {
+  for (u64 i = 0; i < results.size(); ++i) {
     out_stream.write(results[i]);
     if (i < results.size() - 1) { out_stream.write(static_cast<u64>(-3)); }
   }

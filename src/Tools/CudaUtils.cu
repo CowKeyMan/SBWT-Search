@@ -1,4 +1,5 @@
 #include "Tools/GpuUtils.h"
+#include "Tools/TypeDefinitions.h"
 
 namespace gpu_utils {
 
@@ -9,9 +10,9 @@ auto getErrorString(Error_t code) -> const char * {
 
 template auto getErrorString(cudaError_t code) -> const char *;
 
-auto get_free_gpu_memory() -> size_t {
-  size_t free = 0;
-  size_t total = 0;
+auto get_free_gpu_memory() -> u64 {
+  u64 free = 0;
+  u64 total = 0;
   GPU_CHECK(cudaMemGetInfo(&free, &total));
   return free;
 }

@@ -14,6 +14,7 @@
 #include "Tools/ErrorUtils.h"
 #include "Tools/OmpLock.h"
 #include "Tools/Semaphore.h"
+#include "Tools/TypeDefinitions.h"
 
 namespace design_utils {
 
@@ -30,7 +31,7 @@ private:
   Semaphore start_semaphore, finish_semaphore;
   bool batches_initialised = false;
   OmpLock step_lock;
-  uint batch_id = 0;
+  u64 batch_id = 0;
   CircularBuffer<shared_ptr<BatchType>> batches;
 
 public:
@@ -39,7 +40,7 @@ public:
   auto operator=(SharedBatchesProducer &) = delete;
   auto operator=(SharedBatchesProducer &&) = delete;
 
-  explicit SharedBatchesProducer(const unsigned int max_batches):
+  explicit SharedBatchesProducer(const u64 max_batches):
       // the '-1' is so that we do not overwrite the current item being read
       start_semaphore(max_batches - 1),
       finish_semaphore(0),
@@ -70,7 +71,7 @@ public:
   }
 
 protected:
-  [[nodiscard]] auto get_batch_id() const -> uint { return batch_id; }
+  [[nodiscard]] auto get_batch_id() const -> u64 { return batch_id; }
   [[nodiscard]] auto get_batches() -> CircularBuffer<shared_ptr<BatchType>> & {
     return batches;
   }

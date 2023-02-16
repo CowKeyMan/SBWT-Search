@@ -25,24 +25,24 @@ using std::shared_ptr;
 using std::chrono::milliseconds;
 using std::this_thread::sleep_for;
 
-const auto max = numeric_limits<size_t>::max();
-const uint time_to_wait = 100;
+const auto max = numeric_limits<u64>::max();
+const u64 time_to_wait = 100;
 
 class ContinuousSequenceFileParserTest: public ::testing::Test {
 protected:
   auto run_test(
     const vector<string> &filenames,
-    uint kmer_size,
-    size_t max_chars_per_batch,
+    u64 kmer_size,
+    u64 max_chars_per_batch,
     const vector<string> &seq,
-    const vector<vector<size_t>> &chars_before_newline,
-    const vector<vector<size_t>> &newlines_before_newfile,
-    uint max_batches
+    const vector<vector<u64>> &chars_before_newline,
+    const vector<vector<u64>> &newlines_before_newfile,
+    u64 max_batches
   ) {
     auto host = make_unique<ContinuousSequenceFileParser>(
       filenames, kmer_size, max_chars_per_batch, max_batches
     );
-    size_t expected_batches = seq.size();
+    u64 expected_batches = seq.size();
 #pragma omp parallel sections num_threads(4)
     {
 #pragma omp section
@@ -89,12 +89,12 @@ private:
   auto assert_string_break_batch_correct(
     StringBreakBatchProducer &string_break_batch_producer,
     const vector<string> &seq,
-    size_t expected_batches,
-    const vector<vector<size_t>> &chars_before_newline
+    u64 expected_batches,
+    const vector<vector<u64>> &chars_before_newline
   ) const -> void {
     auto rng = get_uniform_generator(0U, time_to_wait);
     shared_ptr<StringBreakBatch> string_break_batch;
-    size_t batches = 0;
+    u64 batches = 0;
     for (batches = 0; string_break_batch_producer >> string_break_batch;
          ++batches) {
       sleep_for(milliseconds(rng()));
@@ -109,11 +109,11 @@ private:
   auto assert_string_sequence_batch_correct(
     StringSequenceBatchProducer &string_sequence_batch_producer,
     const vector<string> &seq,
-    size_t expected_batches
+    u64 expected_batches
   ) const -> void {
     auto rng = get_uniform_generator(0U, time_to_wait);
     shared_ptr<StringSequenceBatch> string_sequence_batch;
-    size_t batches = 0;
+    u64 batches = 0;
     for (batches = 0; string_sequence_batch_producer >> string_sequence_batch;
          ++batches) {
       sleep_for(milliseconds(rng()));
@@ -124,13 +124,13 @@ private:
 
   auto assert_interval_batch_correct(
     IntervalBatchProducer &interval_batch_producer,
-    const vector<vector<size_t>> &chars_before_newline,
-    const vector<vector<size_t>> &newlines_before_newfile,
-    size_t expected_batches
+    const vector<vector<u64>> &chars_before_newline,
+    const vector<vector<u64>> &newlines_before_newfile,
+    u64 expected_batches
   ) const -> void {
     auto rng = get_uniform_generator(0U, time_to_wait);
     shared_ptr<IntervalBatch> interval_batch;
-    size_t batches = 0;
+    u64 batches = 0;
     for (batches = 0; interval_batch_producer >> interval_batch; ++batches) {
       sleep_for(milliseconds(rng()));
       EXPECT_EQ(
@@ -146,16 +146,16 @@ private:
 };
 
 TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
-  const uint kmer_size = 10;
-  const size_t max_chars_per_batch = 999;
+  const u64 kmer_size = 10;
+  const u64 max_chars_per_batch = 999;
   const vector<string> seq
     = {"1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGA"
        "TGGATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA61A"
        "CTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGATG"
        "GATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6"};
-  const vector<vector<size_t>> chars_before_newline
+  const vector<vector<u64>> chars_before_newline
     = {{36UL, 36UL * 2UL, 36UL * 3UL, 36UL * 4UL, 36UL * 5UL, 36UL * 6UL, max}};
-  const vector<vector<size_t>> newlines_before_newfile = {{3, max}};
+  const vector<vector<u64>> newlines_before_newfile = {{3, max}};
   for (auto max_batches : {1, 2, 3, 7}) {
     run_test(
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
@@ -170,17 +170,17 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
 }
 
 TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
-  const uint kmer_size = 15;
-  const size_t max_chars_per_batch = 36 * 3 + 10;
+  const u64 kmer_size = 15;
+  const u64 max_chars_per_batch = 36 * 3 + 10;
   const vector<string> seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGATGGATGGAATGTGATG45T"
     "GAGTGAGATGAGGTGATAGTGACGTAGTGAGGA61ACTGCAATG",
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGATGGATGGAATGTGATG45T"
     "GAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6",
   };
-  const vector<vector<size_t>> chars_before_newline
+  const vector<vector<u64>> chars_before_newline
     = {{36, 36ULL * 2, 36ULL * 3, max}, {36, 36ULL * 2, 36ULL * 3, max}};
-  vector<vector<size_t>> newlines_before_newfile = {{3, max}, {max}};
+  vector<vector<u64>> newlines_before_newfile = {{3, max}, {max}};
   for (auto max_batches : {1, 2, 3, 7}) {
     run_test(
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
@@ -195,18 +195,17 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
 }
 
 TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
-  uint kmer_size = 3;
-  const size_t max_chars_per_batch = 36 * 3 - 10;
+  u64 kmer_size = 3;
+  const u64 max_chars_per_batch = 36 * 3 - 10;
   const vector<string> seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACT"
     "GATGGATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACG",
     "CGTAGTGAGGA61ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTA"
     "GCTACTACTACTGATGGATGGAATGTGATG45TGAGTGAGATGAG",
     "AGGTGATAGTGACGTAGTGAGGA6"};
-  const vector<vector<size_t>> chars_before_newline
+  const vector<vector<u64>> chars_before_newline
     = {{36, 36ULL * 2, max}, {12, 12 + 36, 12 + 36ULL * 2, max}, {24, max}};
-  const vector<vector<size_t>> newlines_before_newfile
-    = {{max}, {1, max}, {max}};
+  const vector<vector<u64>> newlines_before_newfile = {{max}, {1, max}, {max}};
   for (auto max_batches : {1, 2, 3, 7}) {
     run_test(
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
@@ -221,16 +220,16 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
 }
 
 TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
-  const uint kmer_size = 3;
-  const size_t max_chars_per_batch = 30;
+  const u64 kmer_size = 3;
+  const u64 max_chars_per_batch = 30;
   const vector<string> seq = {
     {"1ACTGCAATGGGCAATATGTCTCTGTGTGG"},
     {"GGATTAC23TCTAGCTACTACTACTGATGG"},
     {"GGATGGAATGTGATG45TGAGTGAGATGAG"},
     {"AGGTGATAGTGACGTAGTGAGGA6"}};
-  const vector<vector<size_t>> chars_before_newline
+  const vector<vector<u64>> chars_before_newline
     = {{max}, {8, max}, {16, max}, {24, max}};
-  const vector<vector<size_t>> newlines_before_newfile
+  const vector<vector<u64>> newlines_before_newfile
     = {{max}, {max}, {max}, {1, max}};
   for (auto max_batches : {1, 2, 3, 7}) {
     run_test(

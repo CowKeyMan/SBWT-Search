@@ -9,18 +9,18 @@ using std::vector;
 
 namespace sbwt_search {
 
-PositionsBuilder::PositionsBuilder(const uint _kmer_size):
+PositionsBuilder::PositionsBuilder(const u64 _kmer_size):
     kmer_size(_kmer_size){};
 
 auto PositionsBuilder::build_positions(
-  const vector<size_t> &chars_before_newline,
-  const size_t &string_size,
-  vector<size_t> &positions
+  const vector<u64> &chars_before_newline,
+  const u64 &string_size,
+  vector<u64> &positions
 ) -> void {
-  size_t start_position_index = 0, end_position_index = 0;
-  size_t first_string_index = 0;
-  size_t string_position_index = 0;
-  size_t previous_string_break = 0;
+  u64 start_position_index = 0, end_position_index = 0;
+  u64 first_string_index = 0;
+  u64 string_position_index = 0;
+  u64 previous_string_break = 0;
   positions.resize(string_size);
   for (int i = 0; i < chars_before_newline.size(); ++i) {
     if (i > 0) {
@@ -46,14 +46,14 @@ auto PositionsBuilder::build_positions(
 }
 
 auto PositionsBuilder::process_one_string(
-  const size_t start_position_index,
-  const size_t end_position_index,
-  const size_t first_position_content,
+  const u64 start_position_index,
+  const u64 end_position_index,
+  const u64 first_position_content,
   vector<u64> &positions
 ) -> void {
   if (start_position_index >= end_position_index) { return; }
 #pragma omp simd
-  for (size_t i = 0; i < end_position_index - start_position_index; ++i) {
+  for (u64 i = 0; i < end_position_index - start_position_index; ++i) {
     positions[start_position_index + i] = first_position_content + i;
   }
 }

@@ -42,9 +42,8 @@ auto SbwtBuilder::get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer> {
   if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); }
   u64 num_bits = 0;
   in_stream.read(bit_cast<char *>(&num_bits), sizeof(u64));
-  const size_t vectors_start_position = in_stream.tellg();
-  const size_t bit_vector_bytes
-    = round_up<u64>(num_bits, u64_bits) / sizeof(u64);
+  const u64 vectors_start_position = in_stream.tellg();
+  const u64 bit_vector_bytes = round_up<u64>(num_bits, u64_bits) / sizeof(u64);
   in_stream.seekg(
     static_cast<std::ios::off_type>(bit_vector_bytes), ios::cur
   );  // skip first vector
@@ -78,13 +77,13 @@ auto SbwtBuilder::get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer> {
 }
 
 auto SbwtBuilder::get_container_components(
-  u64 num_bits, u64 bit_vector_bytes, size_t start_position
+  u64 num_bits, u64 bit_vector_bytes, u64 start_position
 ) -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>> {
   vector<vector<u64>> acgt(4);
   vector<Poppy> poppys(4);
   vector<u64> c_map(cmap_size, 1);
 #pragma omp parallel for
-  for (size_t i = 0; i < 4; ++i) {
+  for (u64 i = 0; i < 4; ++i) {
     ifstream st(filename);
     st.seekg(
       static_cast<std::ios::off_type>(
@@ -106,14 +105,14 @@ auto SbwtBuilder::get_container_components(
 }
 
 auto SbwtBuilder::skip_bits_vector(istream &stream) -> void {
-  size_t bits = 0;
+  u64 bits = 0;
   stream.read(bit_cast<char *>(&bits), sizeof(u64));
-  size_t bytes = round_up<size_t>(bits, u64_bits) / sizeof(u64);
+  u64 bytes = round_up<u64>(bits, u64_bits) / sizeof(u64);
   stream.seekg(static_cast<std::ios::off_type>(bytes), ios::cur);
 }
 
 auto SbwtBuilder::skip_bytes_vector(istream &stream) -> void {
-  size_t bytes = 0;
+  u64 bytes = 0;
   stream.read(bit_cast<char *>(&bytes), sizeof(u64));
   stream.seekg(static_cast<std::ios::off_type>(bytes), ios::cur);
 }

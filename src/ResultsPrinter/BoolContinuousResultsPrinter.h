@@ -38,14 +38,14 @@ private:
   shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer;
   shared_ptr<IntervalBatch> interval_batch;
   vector<string> &filenames;
-  size_t chars_index = 0, results_index = 0, line_index = 0;
-  size_t invalid_chars_left = 0;
-  size_t chars_before_newline_index = 0;
+  u64 chars_index = 0, results_index = 0, line_index = 0;
+  u64 invalid_chars_left = 0;
+  u64 chars_before_newline_index = 0;
   vector<string>::iterator current_filename;
   shared_ptr<ResultsBatch> results_batch;
   shared_ptr<InvalidCharsBatch> invalid_chars_batch;
   unique_ptr<ThrowingOfstream> out_stream;
-  uint kmer_size;
+  u64 kmer_size;
   vector<char> batch;
   u64 working_bits = 0, working_seq_size = 0;
   u8 shift_bits = default_shift_bits;
@@ -66,10 +66,10 @@ public:
 private:
   auto get_batch() -> bool;
   auto process_batch() -> void;
-  auto process_file(size_t newlines_before_newfile) -> void;
-  auto process_line(size_t chars_before_newline) -> void;
-  auto get_invalid_chars_left_first_kmer() -> size_t;
-  auto process_result(size_t result, bool found, bool valid) -> void;
+  auto process_file(u64 newlines_before_newfile) -> void;
+  auto process_line(u64 chars_before_newline) -> void;
+  auto get_invalid_chars_left_first_kmer() -> u64;
+  auto process_result(u64 result, bool found, bool valid) -> void;
   auto reset_working_bits() -> void;
   auto shift() -> void;
   auto dump_working_bits() -> void;
@@ -78,7 +78,7 @@ private:
   auto get_seq_sizes_version() -> string;
   auto do_invalid_result() -> void;
   auto do_not_found_result() -> void;
-  auto do_result(size_t result) -> void;
+  auto do_result(u64 result) -> void;
   auto do_with_newline() -> void;
   auto do_at_file_end() -> void;
   auto do_open_next_file() -> void;

@@ -32,8 +32,8 @@ public:
     shared_ptr<GpuSbwtContainer> container,
     shared_ptr<SharedBatchesProducer<BitSeqBatch>> bit_seq_producer_,
     shared_ptr<SharedBatchesProducer<PositionsBatch>> positions_producer_,
-    size_t max_batches,
-    size_t max_positions_per_batch
+    u64 max_batches,
+    u64 max_positions_per_batch
   );
 
   auto get_default_value() -> shared_ptr<ResultsBatch> override;

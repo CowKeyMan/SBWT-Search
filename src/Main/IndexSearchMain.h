@@ -54,11 +54,11 @@ private:
   ) -> void;
   auto load_batch_info(u64 max_batches, u64 unavailable_ram, u64 max_cpu_memory)
     -> void;
-  auto get_max_chars_per_batch_cpu(size_t unavailable_memory, size_t max_memory)
-    -> size_t;
-  auto get_max_chars_per_batch_gpu() -> size_t;
-  auto get_max_chars_per_batch(size_t unavailable_memory, size_t max_cpu_memory)
-    -> size_t;
+  auto get_max_chars_per_batch_cpu(u64 unavailable_memory, u64 max_memory)
+    -> u64;
+  auto get_max_chars_per_batch_gpu() -> u64;
+  auto get_max_chars_per_batch(u64 unavailable_memory, u64 max_cpu_memory)
+    -> u64;
   auto load_threads() -> void;
   auto get_components(
     const shared_ptr<GpuSbwtContainer> &gpu_container, const string &print_mode
