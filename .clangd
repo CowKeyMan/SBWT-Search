@@ -7,3 +7,4 @@ CompileFlags:
     - -forward-unknown-to-host-compiler
     - --generate-code*
     - -Xcompiler=*
+    - --gpu-architecture*
