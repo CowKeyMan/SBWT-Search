@@ -191,6 +191,11 @@ if (NOT SDSL_FOUND)
   add_dependencies(color_index_builder sdsl)
 endif()
 
+add_library(
+  color_searcher_cuda
+  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
+)
+
 # Common libraries
 add_library(common_libraries INTERFACE)
 target_link_libraries(
@@ -234,6 +239,9 @@ target_link_libraries(
 
   index_file_parser
 )
+if (NOT SDSL_FOUND)
+  add_dependencies(common_libraries sdsl)
+endif()
 
 
 # Link cuda items
