@@ -46,14 +46,13 @@ cpp_headers = (
     list(Path('src').glob('**/*.h'))
     + list(Path('src').glob('**/*.hpp'))
     + list(Path('src').glob('**/*.cuh'))
-    + list(Path('src').glob('**/*.cuhpp'))
 )
 
 
 def capitalise(name: str, suffix: str) -> str:
     result = name[0]
     for char in name[1:]:
-        if char.isupper() or not char.isalpha():
+        if char.isupper() or not char.isalpha() and char != '_':
             result += '_'
         result += char.upper()
     result += '_' + suffix.upper()
