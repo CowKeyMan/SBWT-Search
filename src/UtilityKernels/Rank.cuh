@@ -3,7 +3,12 @@
 
 /**
  * @file Rank.cuh
- * @brief Rank implementation on GPU
+ * @brief The rank function is given an index within a bit vector and returns
+ * the number of 1s up to that point. We use the poppy data structure which is
+ * described in the paper Space-Efficient, High-Performance Rank & Select
+ * Structures on Uncompressed Bit Sequences by Zhou et. al. This data structure
+ * is also included in the sdsl library with rank_support_v5 (see test for this
+ * class if you wish to know how that is used).
  */
 
 #include <memory>

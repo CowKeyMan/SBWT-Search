@@ -2,6 +2,7 @@
 
 #include "Tools/GpuPointer.h"
 #include "Tools/GpuUtils.h"
+#include "Tools/TypeDefinitions.h"
 
 using std::vector;
 

@@ -6,14 +6,15 @@
  * @brief Search implementation
  */
 
-#include "Rank/Rank.cuh"
 #include "Tools/KernelUtils.cuh"
 #include "Tools/TypeDefinitions.h"
+#include "UtilityKernels/Rank.cuh"
 
 using gpu_utils::get_idx;
 
 namespace sbwt_search {
 
+// NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 __global__ void d_search(
   const u32 kmer_size,
   const u64 *const c_map,
@@ -32,7 +33,7 @@ __global__ void d_search(
   const u64 first_part = (bit_seqs[kmer_index / 64] << (kmer_index % 64));
   const u64 second_part
     = (bit_seqs[kmer_index / 64 + 1] >> (64 - (kmer_index % 64)))
-    & (-((kmer_index % 64) != 0));
+    & static_cast<u64>(-static_cast<u64>((kmer_index % 64) != 0));
   const u64 kmer = first_part | second_part;
   constexpr const u64 presearch_mask = (2ULL << (presearch_letters * 2)) - 1;
   const u32 presearched
@@ -48,6 +49,7 @@ __global__ void d_search(
   if (node_left > node_right) { node_left = -1ULL; }
   out[idx] = node_left;
 }
+// NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 
 }  // namespace sbwt_search
 

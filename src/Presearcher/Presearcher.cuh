@@ -6,8 +6,8 @@
  * @brief Device function for presearching
  */
 
-#include "Rank/Rank.cuh"
 #include "Tools/KernelUtils.cuh"
+#include "UtilityKernels/Rank.cuh"
 
 namespace sbwt_search {
 
