@@ -34,7 +34,7 @@ public:
   GpuPointer<u64> core_kmer_marks_poppy_layer_0;
   GpuPointer<u64> core_kmer_marks_poppy_layer_1_2;
   GpuPointer<u64> color_set_idxs;
-  u64 color_idxs_width;
+  u64 color_set_idxs_width;
   u64 num_color_sets;
 
   GpuColorIndexContainer(
