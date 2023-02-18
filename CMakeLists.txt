@@ -17,15 +17,6 @@ project(
 )
 set (CMAKE_CXX_STANDARD 20)
 
-include(CheckLanguage)
-check_language(CUDA)
-if (CMAKE_CUDA_COMPILER)
-  enable_language(CUDA)
-  add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Xcompiler=-fopenmp>")
-  add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:--gpu-architecture=all>")
-  add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Wno-deprecated-gpu-targets>")
-endif()
-
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -35,6 +26,8 @@ include(cmake/CompilerWarnings.cmake)
 include(cmake/Profiling.cmake)
 include(cmake/Options.cmake)
 include(cmake/CCache.cmake)
+include(cmake/CCache.cmake)
+include(cmake/SetHipTargetDevice.cmake)
 
 option(
   BUILD_DOCS

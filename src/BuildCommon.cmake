@@ -5,7 +5,6 @@
 # rather than putting it with each file individually
 
 include_directories("${PROJECT_SOURCE_DIR}")
-include_directories("${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}")
 
 # External Dependencies
 include(ExternalProject)
@@ -71,10 +70,10 @@ add_library(
 )
 target_link_libraries(presearcher_cpu PRIVATE gpu_utils)
 add_library(
-  presearcher_cuda
+  presearcher_gpu
   "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cu"
 )
-target_link_libraries(presearcher_cuda PRIVATE gpu_utils)
+target_link_libraries(presearcher_gpu PRIVATE gpu_utils)
 add_library(
   sequence_file_parser
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser.cpp"
@@ -142,15 +141,15 @@ add_library(
 )
 target_link_libraries(searcher_cpu PRIVATE fmt::fmt)
 add_library(
-  searcher_cuda
+  searcher_gpu
   "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cu"
 )
-target_link_libraries(searcher_cuda PRIVATE fmt::fmt gpu_utils)
+target_link_libraries(searcher_gpu PRIVATE fmt::fmt gpu_utils)
 add_library(
   continuous_searcher
   "${PROJECT_SOURCE_DIR}/Searcher/ContinuousSearcher.cpp"
 )
-target_link_libraries(continuous_searcher PRIVATE fmt::fmt searcher_cpu searcher_cuda)
+target_link_libraries(continuous_searcher PRIVATE fmt::fmt searcher_cpu searcher_gpu)
 add_library(
   results_printer
   "${PROJECT_SOURCE_DIR}/ResultsPrinter/AsciiContinuousResultsPrinter.cpp"
@@ -192,7 +191,7 @@ if (NOT SDSL_FOUND)
 endif()
 
 add_library(
-  color_searcher_cuda
+  color_searcher_gpu
   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
 )
 
@@ -225,7 +224,7 @@ target_link_libraries(
   sbwt_container
   poppy_builder
   presearcher_cpu
-  presearcher_cuda
+  presearcher_gpu
 
   sequence_file_parser
   seq_to_bits_converter
@@ -244,7 +243,7 @@ if (NOT SDSL_FOUND)
 endif()
 
 
-# Link cuda items
+# Link gpu items
 if (CMAKE_CUDA_COMPILER)
   target_link_libraries(common_libraries INTERFACE gpu_utils)
 endif()

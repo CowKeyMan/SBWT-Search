@@ -20,9 +20,9 @@ using test_utils::DummyBatchProducer;
 
 using DummyStringBreakBatchProducer = DummyBatchProducer<StringBreakBatch>;
 
-shared_ptr<DummyStringBreakBatchProducer> get_producer(
+auto get_producer(
   vector<vector<u64>> &chars_before_newline, vector<u64> string_sizes
-) {
+) -> shared_ptr<DummyStringBreakBatchProducer> {
   vector<shared_ptr<StringBreakBatch>> b;
   for (u64 i = 0; i < string_sizes.size(); ++i) {
     b.push_back(make_shared<StringBreakBatch>(
@@ -44,7 +44,8 @@ protected:
     vector<vector<u64>> expected_positions,
     u64 max_batches = 7
   ) {
-    auto max_chars_per_batch = 999;
+    const u64 time_to_wait = 200;
+    const auto max_chars_per_batch = 999;
     auto producer = get_producer(chars_before_newline, string_sizes);
     auto host = ContinuousPositionsBuilder(
       producer, kmer_size, max_chars_per_batch, max_batches
@@ -55,13 +56,13 @@ protected:
     {
 #pragma omp section
       {
-        auto rng = get_uniform_generator(0, 200);
+        auto rng = get_uniform_generator(0UL, time_to_wait);
         sleep_for(milliseconds(rng()));
         host.read_and_generate();
       }
 #pragma omp section
       {
-        auto rng = get_uniform_generator(0, 200);
+        auto rng = get_uniform_generator(0UL, time_to_wait);
         shared_ptr<PositionsBatch> positions_batch;
         for (batches = 0; host >> positions_batch; ++batches) {
           sleep_for(milliseconds(rng()));

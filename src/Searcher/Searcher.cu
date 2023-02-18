@@ -7,6 +7,7 @@
 #include "Tools/MathUtils.hpp"
 #include "UtilityKernels/Rank.cuh"
 #include "fmt/core.h"
+#include "hip/hip_runtime.h"
 
 namespace sbwt_search {
 
@@ -15,14 +16,19 @@ using log_utils::Logger;
 using math_utils::round_up;
 
 auto Searcher::launch_search_kernel(u64 queries, u64 batch_id) -> void {
-  cudaEvent_t search_start;  // NOLINT(cppcoreguidelines-init-variables)
-  cudaEvent_t search_stop;   // NOLINT(cppcoreguidelines-init-variables)
-  GPU_CHECK(cudaEventCreate(&search_start));
-  GPU_CHECK(cudaEventCreate(&search_stop));
+  hipEvent_t search_start;  // NOLINT(cppcoreguidelines-init-variables)
+  hipEvent_t search_stop;   // NOLINT(cppcoreguidelines-init-variables)
+  GPU_CHECK(hipEventCreate(&search_start));
+  GPU_CHECK(hipEventCreate(&search_stop));
   u32 blocks_per_grid
     = round_up<u64>(queries, threads_per_block) / threads_per_block;
-  cudaEventRecord(search_start);
-  d_search<<<blocks_per_grid, threads_per_block>>>(
+  hipEventRecord(search_start);
+  hipLaunchKernelGGL(
+    d_search,
+    blocks_per_grid,
+    threads_per_block,
+    0,
+    0,
     container->get_kmer_size(),
     container->get_c_map().get(),
     container->get_acgt_pointers().get(),
@@ -34,11 +40,11 @@ auto Searcher::launch_search_kernel(u64 queries, u64 batch_id) -> void {
     d_bit_seqs.get(),
     d_kmer_positions.get()
   );
-  cudaEventRecord(search_stop);
-  GPU_CHECK(cudaPeekAtLastError());
-  GPU_CHECK(cudaDeviceSynchronize());
+  hipEventRecord(search_stop);
+  GPU_CHECK(hipPeekAtLastError());
+  GPU_CHECK(hipDeviceSynchronize());
   float milliseconds = -1;
-  GPU_CHECK(cudaEventElapsedTime(&milliseconds, search_start, search_stop));
+  GPU_CHECK(hipEventElapsedTime(&milliseconds, search_start, search_stop));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format("Batch {} took {} ms to search in the GPU", batch_id, milliseconds)

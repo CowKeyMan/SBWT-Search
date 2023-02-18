@@ -7,7 +7,7 @@
 namespace structure_utils {
 
 TEST(CircularQueueTest, NormalUsage) {
-  CircularQueue<int> q(3);
+  CircularQueue<u64> q(3);
   ASSERT_EQ(3, q.capacity());
   ASSERT_TRUE(q.empty());
   q.push(1);

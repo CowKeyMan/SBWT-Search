@@ -15,6 +15,8 @@ then
     -DBUILD_DOCS=OFF \
     -DENABLE_PROFILING=OFF \
     -DENABLE_MARCH_NATIVE=OFF \
+    -DHIP_TARGET_DEVICE=NVIDIA \
+    -DROCM_BRANCH="rocm-5.4.x" \
     ..
 fi
 cmake --build . -j8

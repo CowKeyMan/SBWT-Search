@@ -2,6 +2,7 @@
 #include "Tools/GpuUtils.h"
 #include "UtilityKernels/Rank_test.cuh"
 #include "UtilityKernels/Rank_test.h"
+#include "hip/hip_runtime.h"
 
 using gpu_utils::GpuPointer;
 
@@ -14,15 +15,20 @@ auto get_rank(
   const u64 index
 ) -> u64 {
   GpuPointer<u64> d_result(1);
-  d_global_rank<<<1, 1>>>(
+  hipLaunchKernelGGL(
+    d_global_rank,
+    1,
+    1,
+    0,
+    0,
     bit_vector.get(),
     poppy_layer_0.get(),
     poppy_layer_1_2.get(),
     index,
     d_result.get()
   );
-  GPU_CHECK(cudaPeekAtLastError());
-  GPU_CHECK(cudaDeviceSynchronize());
+  GPU_CHECK(hipPeekAtLastError());
+  GPU_CHECK(hipDeviceSynchronize());
   u64 result = static_cast<u64>(-1);
   d_result.copy_to(&result);
   return result;

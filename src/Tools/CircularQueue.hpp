@@ -7,6 +7,8 @@
  * memory when using queues
  */
 
+#include "Tools/TypeDefinitions.h"
+
 namespace structure_utils {
 
 using std::vector;

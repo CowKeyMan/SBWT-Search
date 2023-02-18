@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Helper script called in cmake/SetHipTargetDevice.cmake to automatically
+# download the necessary hip extras alongside the already installed target
+# device compilers. Example: the user is expected to already have nvcc
+# installed on an NVIDIA machine, so the script then simply downloads and
+# installs any extras related to HIP. Similarly on AMD. To install the
+# necessary items on each platform, the user is encouraged to look at the
+# :ref:`Tools` section of the documentation
+
+TARGET_DEVICE=$1
+ROCM_BRANCH=$2
+
+mkdir -p hip
+cd hip
+
+if [ "${TARGET_DEVICE}" = "NVIDIA" ]; then
+  mkdir -p hip_nvidia
+  cd hip_nvidia
+  git clone -b "$ROCM_BRANCH" https://github.com/ROCm-Developer-Tools/hip.git
+  git clone -b "$ROCM_BRANCH" https://github.com/ROCm-Developer-Tools/hipamd.git
+  if [ $1 == 0 ]; then  # otherwise it means it was already downloaded
+    HIP_DIR="$(readlink -f hip)"
+    HIPAMD_DIR="$(readlink -f hipamd)"
+    cd "$HIPAMD_DIR"
+    mkdir -p build; cd build
+    cmake -DHIP_COMMON_DIR=$HIP_DIR -DHIP_PLATFORM=nvidia -DCMAKE_INSTALL_PREFIX=$PWD/install ..
+    make -j$(nproc)
+  fi
+fi

@@ -73,6 +73,6 @@ target_link_libraries(semaphore PRIVATE OpenMP::OpenMP_CXX omp_lock)
 
 add_library(
   gpu_utils
-  "${PROJECT_SOURCE_DIR}/Tools/CudaUtils.cu"
-  "${PROJECT_SOURCE_DIR}/Tools/CudaPointer.cu"
+  "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
+  "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu"
 )

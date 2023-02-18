@@ -81,7 +81,7 @@ protected:
 
 private:
   auto host_generate(ContinuousSequenceFileParser &host) const -> void {
-    auto rng = get_uniform_generator(0U, time_to_wait);
+    auto rng = get_uniform_generator(0UL, time_to_wait);
     sleep_for(milliseconds(rng()));
     host.read_and_generate();
   }
@@ -92,7 +92,7 @@ private:
     u64 expected_batches,
     const vector<vector<u64>> &chars_before_newline
   ) const -> void {
-    auto rng = get_uniform_generator(0U, time_to_wait);
+    auto rng = get_uniform_generator(0UL, time_to_wait);
     shared_ptr<StringBreakBatch> string_break_batch;
     u64 batches = 0;
     for (batches = 0; string_break_batch_producer >> string_break_batch;
@@ -111,7 +111,7 @@ private:
     const vector<string> &seq,
     u64 expected_batches
   ) const -> void {
-    auto rng = get_uniform_generator(0U, time_to_wait);
+    auto rng = get_uniform_generator(0UL, time_to_wait);
     shared_ptr<StringSequenceBatch> string_sequence_batch;
     u64 batches = 0;
     for (batches = 0; string_sequence_batch_producer >> string_sequence_batch;
@@ -128,7 +128,7 @@ private:
     const vector<vector<u64>> &newlines_before_newfile,
     u64 expected_batches
   ) const -> void {
-    auto rng = get_uniform_generator(0U, time_to_wait);
+    auto rng = get_uniform_generator(0UL, time_to_wait);
     shared_ptr<IntervalBatch> interval_batch;
     u64 batches = 0;
     for (batches = 0; interval_batch_producer >> interval_batch; ++batches) {

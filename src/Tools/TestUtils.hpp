@@ -12,6 +12,8 @@
 
 #include <gtest/gtest.h>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace test_utils {
 
 using std::span;
