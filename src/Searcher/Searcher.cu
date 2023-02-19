@@ -28,7 +28,7 @@ auto Searcher::launch_search_kernel(u64 queries, u64 batch_id) -> void {
     blocks_per_grid,
     threads_per_block,
     0,
-    0,
+    nullptr,
     container->get_kmer_size(),
     container->get_c_map().get(),
     container->get_acgt_pointers().get(),

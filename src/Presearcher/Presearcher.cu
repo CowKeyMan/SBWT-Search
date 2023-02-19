@@ -17,7 +17,7 @@ auto Presearcher::launch_presearch_kernel(
     blocks_per_grid,
     threads_per_block,
     0,
-    0,
+    nullptr,
     container->get_c_map().get(),
     container->get_acgt_pointers().get(),
     container->get_layer_0_pointers().get(),

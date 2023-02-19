@@ -27,10 +27,12 @@ target_link_libraries(
 add_library(
   gpu_tests
   "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cu"
+  "${PROJECT_SOURCE_DIR}/UtilityKernels/GetBoolFromBitVector_test.cu"
 )
 target_link_libraries(gpu_tests PRIVATE gpu_utils)
 set_source_files_properties(
   "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cu"
+  "${PROJECT_SOURCE_DIR}/UtilityKernels/GetBoolFromBitVector_test.cu"
   TARGET_DIRECTORY gpu_tests
   PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
 )
@@ -61,7 +63,9 @@ add_executable(
   "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/ColorIndexBuilder/ColorIndexBuilder_test.cpp"
+
   "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cpp"
+  "${PROJECT_SOURCE_DIR}/UtilityKernels/GetBoolFromBitVector_test.cpp"
 )
 add_test(NAME test_main COMMAND test_main)
 target_link_libraries(

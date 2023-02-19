@@ -1,6 +1,6 @@
 #include "Tools/GpuPointer.h"
 #include "Tools/GpuUtils.h"
-#include "UtilityKernels/Rank_test.cuh"
+#include "UtilityKernels/GetBoolFromBitVector_test.cuh"
 #include "UtilityKernels/Rank_test.h"
 #include "hip/hip_runtime.h"
 
@@ -8,22 +8,16 @@ using gpu_utils::GpuPointer;
 
 namespace sbwt_search {
 
-auto get_rank(
-  const GpuPointer<u64> &bit_vector,
-  const GpuPointer<u64> &poppy_layer_0,
-  const GpuPointer<u64> &poppy_layer_1_2,
-  const u64 index
-) -> u64 {
+auto get_bool_from_bit_vector(const GpuPointer<u64> &bit_vector, u64 index)
+  -> bool {
   GpuPointer<u64> d_result(1);
   hipLaunchKernelGGL(
-    d_global_rank,
+    d_global_get_bool_from_bit_vector,
     1,
     1,
     0,
     nullptr,
     bit_vector.get(),
-    poppy_layer_0.get(),
-    poppy_layer_1_2.get(),
     index,
     d_result.get()
   );
@@ -31,7 +25,7 @@ auto get_rank(
   GPU_CHECK(hipDeviceSynchronize());
   u64 result = static_cast<u64>(-1);
   d_result.copy_to(&result);
-  return result;
+  return static_cast<bool>(result);
 }
 
 }  // namespace sbwt_search

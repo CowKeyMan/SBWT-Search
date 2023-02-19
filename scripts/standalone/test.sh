@@ -11,7 +11,13 @@ find build/src -name "*.gcda" -type f -delete
 printf "\nRunning Tests:\n"
 ./build/bin/test_main
 printf "\nRunning Lcov..."
-lcov --directory . --capture -q --output-file build/code_coverage.info --exclude "*/usr/**/*" --exclude "*_deps/**/*" --exclude "*main.cpp" --exclude "/tmp/*" --exclude "*.cuh" --exclude "*/external/*"
+lcov --directory . --capture -q --output-file build/code_coverage.info \
+    --exclude "*/usr/**/*" \
+    --exclude "*_deps/**/*" \
+    --exclude "*main.cpp" \
+    --exclude "/tmp/*" \
+    --exclude "build/*" \
+    --exclude "*/external/*"
 printf "\nRunning genhtml..."
 genhtml -q build/code_coverage.info --output-directory ./docs/code_coverage/
 printf "\n"

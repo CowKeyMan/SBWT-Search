@@ -4,7 +4,7 @@
 /**
  * @file Rank_test.cuh
  * @brief A simple kernel which performs rank function for a single item in the
- * gpu
+ * gpu. Used only for testing
  */
 
 #include "UtilityKernels/Rank.cuh"

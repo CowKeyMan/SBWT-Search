@@ -77,9 +77,10 @@ add_library(
   "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
   "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu"
 )
-target_link_libraries(gpu_utils INTERFACE hip_rt)
+target_link_libraries(gpu_utils PUBLIC hip_rt)
 set_source_files_properties(
-  "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu" "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
+  "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
+  "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu"
   TARGET_DIRECTORY gpu_utils
   PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
 )

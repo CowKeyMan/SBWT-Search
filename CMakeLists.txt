@@ -3,10 +3,10 @@
 # program. Inside it, we specify the project name and details, we load all
 # files within the cmake folder and then add the src and documentation folder,
 # which also contain a CMakeLists.txt file, as subdirectories, so that the
-# CMakeLists.txt file within them is also executed (sequentially).
-# Since we will be using CUDA, we want to use a pretty high version of CMake.
+# CMakeLists.txt file within them is also executed (sequentially).  Since we
+# will be using CUDA and HIP, we want to use a pretty high version of CMake.
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.21)
 
 project(
   "SBWT Search"
