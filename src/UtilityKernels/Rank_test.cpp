@@ -32,7 +32,7 @@ TEST(RankTest, TestAll) {
   for (u64 i = 0; i < num_bits; ++i) {
     ASSERT_EQ(
       get_rank(d_v, d_poppy_layer_0, d_poppy_layer_1_2, i), rank_support.rank(i)
-    ) << "Unequal at index "
+    ) << "Unequal at index "  // LCOV_EXCL_LINE
       << i;
   }
 }

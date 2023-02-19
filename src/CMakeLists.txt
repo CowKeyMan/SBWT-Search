@@ -3,8 +3,13 @@
 
 # common options
 add_compile_options(
-  "$<$<CONFIG:Debug>:--coverage>" # only in debug mode
+  # only in debug mode
+  "$<$<CONFIG:Debug>:--coverage>"
+  "$<$<CONFIG:Debug>:-fno-elide-constructors>"
+  "$<$<CONFIG:Debug>:-fno-default-inline>"
+  "$<$<CONFIG:Debug>:-O0>"
 )
+
 add_compile_options(
   "$<$<CONFIG:Release>:-O3>" # only in release mode
 )

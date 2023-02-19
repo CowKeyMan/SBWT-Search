@@ -19,7 +19,7 @@ lcov --directory . --capture -q --output-file build/code_coverage.info \
     --exclude "build/*" \
     --exclude "*/external/*"
 printf "\nRunning genhtml..."
-genhtml -q build/code_coverage.info --output-directory ./docs/code_coverage/
+genhtml -q build/code_coverage.info --output-directory ./docs/code_coverage/ --demangle-cpp
 printf "\n"
 find test_objects/tmp/ -not -name  "*.gitignore" -type f -delete
 SPDLOG_LEVEL=${TMP_SPDLOG_LEVEL}

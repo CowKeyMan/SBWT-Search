@@ -43,8 +43,6 @@ public:
   [[nodiscard]] auto get_bits_producer() const
     -> const shared_ptr<BitsProducer> &;
   auto read_and_generate() -> void;
-  auto operator>>(shared_ptr<BitSeqBatch> &batch) -> bool;
-  auto operator>>(shared_ptr<InvalidCharsBatch> &batch) -> bool;
 
 private:
   auto parallel_generate(StringSequenceBatch &read_batch) -> void;

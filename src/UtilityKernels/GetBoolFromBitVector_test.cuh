@@ -1,8 +1,8 @@
-#ifndef RANK_TEST_CUH
-#define RANK_TEST_CUH
+#ifndef GET_BOOL_FROM_BIT_VECTOR_TEST_CUH
+#define GET_BOOL_FROM_BIT_VECTOR_TEST_CUH
 
 /**
- * @file Rank_test.cuh
+ * @file GetBoolFromBitVector_test.cuh
  * @brief A simple kernel which performs the GetBoolFromBitVector function for a
  * single item in the gpu. Used only for testing
  */

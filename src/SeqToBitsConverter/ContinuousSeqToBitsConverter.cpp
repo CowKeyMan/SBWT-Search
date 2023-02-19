@@ -102,15 +102,4 @@ auto ContinuousSeqToBitsConverter::convert_int(
   return result;
 }
 
-auto ContinuousSeqToBitsConverter::operator>>(shared_ptr<BitSeqBatch> &batch)
-  -> bool {
-  return (*bits_producer) >> batch;
-}
-
-auto ContinuousSeqToBitsConverter::operator>>(
-  shared_ptr<InvalidCharsBatch> &batch
-) -> bool {
-  return (*invalid_chars_producer) >> batch;
-}
-
 };  // namespace sbwt_search

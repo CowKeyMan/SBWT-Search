@@ -19,7 +19,7 @@
 #include "hip/hip_runtime.h"
 
 inline __device__ auto d_variable_length_int_index(
-  u64 *container, u32 width, u64 width_set_bits, u64 index
+  const u64 *container, u32 width, u64 width_set_bits, u64 index
 ) -> u64 {
   u64 index_1 = index / u64_bits;
   u64 offset = index % u64_bits;
