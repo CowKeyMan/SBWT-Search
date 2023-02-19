@@ -38,8 +38,6 @@ inline __device__ auto d_rank(
   for (u64 i = 0; i < ints_in_basicblock; i += 2) {
     ulonglong2 data_128b = bit_vector_128b
       [(index / 128) - ((index / 128) % (ints_in_basicblock / 2)) + i / 2];
-    // WARNING: UNDEFINED BEHAVIOUR HERE WHEN target_shift = 64
-    // (expected to equal 0 - works well on CUDA)
     entry_basicblock
       += __popcll(
            (data_128b.x << (((i + 0) == in_basicblock_index) * target_shift))
