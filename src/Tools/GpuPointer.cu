@@ -11,7 +11,7 @@ namespace gpu_utils {
 
 template <class T>
 GpuPointer<T>::GpuPointer(u64 size): bytes(size * sizeof(T)) {
-  GPU_CHECK(hipMalloc(&ptr, bytes));
+  GPU_CHECK(hipMalloc((void **)(&ptr), bytes));
 }
 template <class T>
 GpuPointer<T>::GpuPointer(const T *cpu_ptr, u64 size): GpuPointer(size) {
@@ -72,7 +72,9 @@ auto GpuPointer<T>::copy_to(vector<T> &destination) const -> void {
 
 template <class T>
 GpuPointer<T>::~GpuPointer() {
-  hipFree(ptr);
+  try {
+    GPU_CHECK(hipFree(ptr));
+  } catch (std::runtime_error) {}
 }
 
 // We set these here because we need the class to be instantiated since we are

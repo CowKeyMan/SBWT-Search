@@ -23,7 +23,8 @@ FetchContent_Declare(
   GIT_REPOSITORY       https://github.com/gabime/spdlog
   GIT_TAG              v1.10.0
   GIT_SHALLOW          TRUE
-  )
+  SYSTEM
+)
 FetchContent_MakeAvailable(spdlog)
 include_directories(SYSTEM "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
 
@@ -75,4 +76,10 @@ add_library(
   gpu_utils
   "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
   "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu"
+)
+target_link_libraries(gpu_utils INTERFACE hip_rt)
+set_source_files_properties(
+  "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu" "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
+  TARGET_DIRECTORY gpu_utils
+  PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
 )

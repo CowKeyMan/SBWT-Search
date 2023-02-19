@@ -6,6 +6,8 @@
  * @brief Contains kernel device functions used commonly in some kernels
  */
 
+#include "hip/hip_runtime.h"
+
 namespace gpu_utils {
 
 inline __device__ auto get_idx() -> int {

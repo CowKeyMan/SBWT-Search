@@ -12,6 +12,7 @@
  */
 
 #include "Tools/TypeDefinitions.h"
+#include "hip/hip_runtime.h"
 
 inline __device__ auto d_get_bool_from_bit_vector(u64 *bitmap, u64 index)
   -> bool {

@@ -73,6 +73,11 @@ add_library(
   presearcher_gpu
   "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cu"
 )
+set_source_files_properties(
+  "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cu"
+  TARGET_DIRECTORY presearcher_gpu
+  PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
+)
 target_link_libraries(presearcher_gpu PRIVATE gpu_utils)
 add_library(
   sequence_file_parser
@@ -144,6 +149,11 @@ add_library(
   searcher_gpu
   "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cu"
 )
+set_source_files_properties(
+  "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cu"
+  TARGET_DIRECTORY searcher_gpu
+  PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
+)
 target_link_libraries(searcher_gpu PRIVATE fmt::fmt gpu_utils)
 add_library(
   continuous_searcher
@@ -190,10 +200,10 @@ if (NOT SDSL_FOUND)
   add_dependencies(color_index_builder sdsl)
 endif()
 
-add_library(
-  color_searcher_gpu
-  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
-)
+# add_library(
+#   color_searcher_gpu
+#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
+# )
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -244,6 +254,4 @@ endif()
 
 
 # Link gpu items
-if (CMAKE_CUDA_COMPILER)
-  target_link_libraries(common_libraries INTERFACE gpu_utils)
-endif()
+target_link_libraries(common_libraries INTERFACE gpu_utils)

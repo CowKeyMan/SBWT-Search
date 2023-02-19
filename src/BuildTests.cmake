@@ -29,6 +29,11 @@ add_library(
   "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cu"
 )
 target_link_libraries(gpu_tests PRIVATE gpu_utils)
+set_source_files_properties(
+  "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cu"
+  TARGET_DIRECTORY gpu_tests
+  PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
+)
 
 # Create cpu test executable
 add_executable(

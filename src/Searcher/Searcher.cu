@@ -22,7 +22,7 @@ auto Searcher::launch_search_kernel(u64 queries, u64 batch_id) -> void {
   GPU_CHECK(hipEventCreate(&search_stop));
   u32 blocks_per_grid
     = round_up<u64>(queries, threads_per_block) / threads_per_block;
-  hipEventRecord(search_start);
+  GPU_CHECK(hipEventRecord(search_start));
   hipLaunchKernelGGL(
     d_search,
     blocks_per_grid,
@@ -40,7 +40,7 @@ auto Searcher::launch_search_kernel(u64 queries, u64 batch_id) -> void {
     d_bit_seqs.get(),
     d_kmer_positions.get()
   );
-  hipEventRecord(search_stop);
+  GPU_CHECK(hipEventRecord(search_stop));
   GPU_CHECK(hipPeekAtLastError());
   GPU_CHECK(hipDeviceSynchronize());
   float milliseconds = -1;

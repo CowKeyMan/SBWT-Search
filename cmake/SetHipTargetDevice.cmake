@@ -35,8 +35,10 @@ else()
   )
 endif()
 
-include(CheckLanguage)
+add_library(hip_rt INTERFACE)
+
 if(${HIP_TARGET_DEVICE} STREQUAL "NVIDIA")
+  include(CheckLanguage)
   check_language(CUDA)
   if (NOT CMAKE_CUDA_COMPILER)
     message("CUDA NOT FOUND")
@@ -46,4 +48,22 @@ if(${HIP_TARGET_DEVICE} STREQUAL "NVIDIA")
   add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:--gpu-architecture=all>")
   add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Wno-deprecated-gpu-targets>")
   include_directories(SYSTEM "${CMAKE_BINARY_DIR}/hip/hip_nvidia/hipamd/build/include")
+  set(HIP_TARGET_LANGUAGE CUDA)
+endif()
+
+if(${HIP_TARGET_DEVICE} STREQUAL "CPU")
+  include(ExternalProject)
+  include(FetchContent)
+    FetchContent_Declare(
+    hipcpu
+    QUIET
+    GIT_REPOSITORY       https://github.com/CowKeyMan/HIP-CPU.git
+    GIT_TAG              92dd08ef2a735c4e8c230ead8f7e413eae99ed3f
+    GIT_SHALLOW          TRUE
+  )
+  FetchContent_MakeAvailable(hipcpu)
+  target_include_directories(hip_cpu_rt INTERFACE "${CMAKE_SOURCE_DIR}/build/_deps/hipcpu-src/include/")
+  target_compile_options(hip_rt INTERFACE -x c++)
+  target_link_libraries(hip_rt INTERFACE hip_cpu_rt)
+  set(HIP_TARGET_LANGUAGE CXX)
 endif()

@@ -9,6 +9,7 @@
 #include "Tools/KernelUtils.cuh"
 #include "Tools/TypeDefinitions.h"
 #include "UtilityKernels/Rank.cuh"
+#include "hip/hip_runtime.h"
 
 using gpu_utils::get_idx;
 

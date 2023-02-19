@@ -8,6 +8,7 @@
 
 #include "Tools/KernelUtils.cuh"
 #include "UtilityKernels/Rank.cuh"
+#include "hip/hip_runtime.h"
 
 namespace sbwt_search {
 

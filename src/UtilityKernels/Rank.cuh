@@ -15,8 +15,8 @@
 
 #include "Global/GlobalDefinitions.h"
 #include "Tools/BitDefinitions.h"
-#include "Tools/GpuIntrinsics.cuh"
 #include "Tools/TypeDefinitions.h"
+#include "hip/hip_runtime.h"
 
 namespace sbwt_search {
 
@@ -42,11 +42,13 @@ inline __device__ auto d_rank(
     // (expected to equal 0 - works well on CUDA)
     entry_basicblock
       += __popcll(
-           data_128b.x << (((i + 0) == in_basicblock_index) * target_shift)
+           (data_128b.x << (((i + 0) == in_basicblock_index) * target_shift))
+           & -((((i + 0) == in_basicblock_index) * target_shift) < 64)
          )
         * ((i + 0) <= in_basicblock_index)
       + __popcll(
-          data_128b.y << (((i + 1) == in_basicblock_index) * target_shift)
+          (data_128b.y << (((i + 1) == in_basicblock_index) * target_shift))
+          & -((((i + 1) == in_basicblock_index) * target_shift) < 64)
         )
         * ((i + 1) <= in_basicblock_index);
   }
