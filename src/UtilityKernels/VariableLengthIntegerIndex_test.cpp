@@ -13,7 +13,7 @@ namespace sbwt_search {
 
 using bit_utils::set_bits;
 using gpu_utils::GpuPointer;
-using rng_utils::get_uniform_generator;
+using rng_utils::get_uniform_int_generator;
 
 TEST(GetVariableLengthIntegerIndexTest, TestAll) {
   const u64 num_bits = 10000;
@@ -22,7 +22,8 @@ TEST(GetVariableLengthIntegerIndexTest, TestAll) {
     v.width(width);
     v.bit_resize(num_bits);
     const auto num_elements = v.capacity() / u64_bits;
-    auto rng = get_uniform_generator<u64>(0, std::numeric_limits<u64>::max());
+    auto rng
+      = get_uniform_int_generator<u64>(0, std::numeric_limits<u64>::max());
     for (u64 i = 0; i < num_elements; ++i) { v.set_int(i * u64_bits, rng()); }
     // the +1 is added for convenience since the function always references the
     // next u64 bits as well

@@ -11,7 +11,7 @@
 
 namespace sbwt_search {
 
-using rng_utils::get_uniform_generator;
+using rng_utils::get_uniform_int_generator;
 using std::make_shared;
 using std::shared_ptr;
 using std::chrono::milliseconds;
@@ -56,13 +56,13 @@ protected:
     {
 #pragma omp section
       {
-        auto rng = get_uniform_generator(0UL, time_to_wait);
+        auto rng = get_uniform_int_generator(0UL, time_to_wait);
         sleep_for(milliseconds(rng()));
         host.read_and_generate();
       }
 #pragma omp section
       {
-        auto rng = get_uniform_generator(0UL, time_to_wait);
+        auto rng = get_uniform_int_generator(0UL, time_to_wait);
         shared_ptr<PositionsBatch> positions_batch;
         for (batches = 0; host >> positions_batch; ++batches) {
           sleep_for(milliseconds(rng()));

@@ -16,7 +16,7 @@ using std::mt19937;
 using std::uniform_int_distribution;
 
 template <class T>
-auto get_uniform_generator(T min_value, T max_value, int seed = 0) {
+auto get_uniform_int_generator(T min_value, T max_value, int seed = 0) {
   // Both min and max included
   return bind(uniform_int_distribution<T>(min_value, max_value), mt19937(seed));
 }

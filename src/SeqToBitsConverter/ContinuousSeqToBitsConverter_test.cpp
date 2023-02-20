@@ -18,7 +18,7 @@
 
 namespace sbwt_search {
 
-using rng_utils::get_uniform_generator;
+using rng_utils::get_uniform_int_generator;
 using std::make_shared;
 using std::string;
 using std::unique_ptr;
@@ -65,13 +65,13 @@ protected:
     {
 #pragma omp section
       {
-        auto rng = get_uniform_generator(0UL, time_to_wait);
+        auto rng = get_uniform_int_generator(0UL, time_to_wait);
         sleep_for(milliseconds(rng()));
         host->read_and_generate();
       }
 #pragma omp section
       {
-        auto rng = get_uniform_generator(0UL, time_to_wait);
+        auto rng = get_uniform_int_generator(0UL, time_to_wait);
         shared_ptr<BitSeqBatch> bit_seq_batch;
         for (batches = 0; (*bits_producer) >> bit_seq_batch; ++batches) {
           sleep_for(milliseconds(rng()));
@@ -81,7 +81,7 @@ protected:
       }
 #pragma omp section
       {
-        auto rng = get_uniform_generator(0UL, time_to_wait);
+        auto rng = get_uniform_int_generator(0UL, time_to_wait);
         shared_ptr<InvalidCharsBatch> invalid_chars_batch;
         for (batches = 0; (*invalid_chars_producer) >> invalid_chars_batch;
              ++batches) {

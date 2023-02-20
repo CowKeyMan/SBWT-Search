@@ -13,14 +13,14 @@
 namespace sbwt_search {
 
 using gpu_utils::GpuPointer;
-using rng_utils::get_uniform_generator;
+using rng_utils::get_uniform_int_generator;
 
 TEST(RankTest, TestAll) {
   const u64 num_bits = 1000;
   sdsl::bit_vector v;
   v.bit_resize(num_bits);
   const auto num_elements = v.capacity() / u64_bits;
-  auto rng = get_uniform_generator<u64>(0, std::numeric_limits<u64>::max());
+  auto rng = get_uniform_int_generator<u64>(0, std::numeric_limits<u64>::max());
   for (u64 i = 0; i < num_elements; ++i) { v.set_int(i * u64_bits, rng()); }
   sdsl::rank_support_v5 rank_support;
   rank_support.set_vector(&v);

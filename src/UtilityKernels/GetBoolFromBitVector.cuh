@@ -23,6 +23,6 @@ inline __device__ auto d_get_bool_from_bit_vector(const u64 *bitmap, u64 index)
   return (bitmap[elem_idx] & (1ULL << elem_offset)) > 0;
 }
 
-}
+}  // namespace sbwt_search
 
 #endif

@@ -14,7 +14,7 @@
 
 namespace sbwt_search {
 
-using rng_utils::get_uniform_generator;
+using rng_utils::get_uniform_int_generator;
 using std::make_unique;
 using std::numeric_limits;
 using std::span;
@@ -79,7 +79,7 @@ protected:
   }
 
   auto host_generate(ContinuousIndexFileParser &host) const -> void {
-    auto rng = get_uniform_generator(0UL, time_to_wait);
+    auto rng = get_uniform_int_generator(0UL, time_to_wait);
     sleep_for(milliseconds(rng()));
     host.read_and_generate();
   }
@@ -91,7 +91,7 @@ protected:
     const vector<u64> &expected_skipped
   ) -> void {
     shared_ptr<IndexesBatch> batch;
-    auto rng = get_uniform_generator(0UL, time_to_wait);
+    auto rng = get_uniform_int_generator(0UL, time_to_wait);
     u64 batches = 0;
     for (batches = 0; indexes_batch_producer >> batch; ++batches) {
       sleep_for(milliseconds(rng()));
@@ -107,7 +107,7 @@ protected:
     const vector<vector<u64>> &expected_indexes_starts
   ) -> void {
     shared_ptr<IndexesStartsBatch> batch;
-    auto rng = get_uniform_generator(0UL, time_to_wait);
+    auto rng = get_uniform_int_generator(0UL, time_to_wait);
     u64 batches = 0;
     for (batches = 0; indexes_starts_batch_producer >> batch; ++batches) {
       sleep_for(milliseconds(rng()));
@@ -121,7 +121,7 @@ protected:
     const vector<vector<u64>> &expected_indexes_before_newfile
   ) -> void {
     shared_ptr<IndexesBeforeNewfileBatch> batch;
-    auto rng = get_uniform_generator(0UL, time_to_wait);
+    auto rng = get_uniform_int_generator(0UL, time_to_wait);
     u64 batches = 0;
     for (batches = 0; indexes_before_newfile_batch_producer >> batch;
          ++batches) {
