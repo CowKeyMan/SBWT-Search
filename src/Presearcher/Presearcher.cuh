@@ -6,12 +6,14 @@
  * @brief Device function for presearching
  */
 
+#include "Tools/BitDefinitions.h"
 #include "Tools/KernelUtils.cuh"
 #include "UtilityKernels/Rank.cuh"
 #include "hip/hip_runtime.h"
 
 namespace sbwt_search {
 
+using bit_utils::two_1s;
 using gpu_utils::get_idx;
 
 __global__ void d_presearch(

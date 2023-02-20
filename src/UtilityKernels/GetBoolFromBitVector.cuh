@@ -14,11 +14,15 @@
 #include "Tools/TypeDefinitions.h"
 #include "hip/hip_runtime.h"
 
+namespace sbwt_search {
+
 inline __device__ auto d_get_bool_from_bit_vector(const u64 *bitmap, u64 index)
   -> bool {
   auto elem_idx = index / u64_bits;
   auto elem_offset = index % u64_bits;
   return (bitmap[elem_idx] & (1ULL << elem_offset)) > 0;
+}
+
 }
 
 #endif

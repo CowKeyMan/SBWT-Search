@@ -12,13 +12,13 @@
 
 namespace sbwt_search {
 
-__global__ void d_global_rank(
+__global__ auto d_global_rank(
   const u64 *bit_vector,
   const u64 *layer_0,
   const u64 *layer_1_2,
   const u64 index,
   u64 *result
-) {
+) -> void {
   result[0] = d_rank(bit_vector, layer_0, layer_1_2, index);
 }
 

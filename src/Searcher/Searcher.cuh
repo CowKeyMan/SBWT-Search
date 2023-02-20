@@ -6,14 +6,16 @@
  * @brief Search implementation
  */
 
+#include "Tools/BitDefinitions.h"
 #include "Tools/KernelUtils.cuh"
 #include "Tools/TypeDefinitions.h"
 #include "UtilityKernels/Rank.cuh"
 #include "hip/hip_runtime.h"
 
-using gpu_utils::get_idx;
-
 namespace sbwt_search {
+
+using bit_utils::two_1s;
+using gpu_utils::get_idx;
 
 // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
 __global__ void d_search(

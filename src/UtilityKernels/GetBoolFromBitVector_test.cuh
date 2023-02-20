@@ -12,9 +12,9 @@
 
 namespace sbwt_search {
 
-__global__ void d_global_get_bool_from_bit_vector(
+__global__ auto d_global_get_bool_from_bit_vector(
   const u64 *bit_vector, const u64 index, u64 *result
-) {
+) -> void {
   result[0] = d_get_bool_from_bit_vector(bit_vector, index);
 }
 

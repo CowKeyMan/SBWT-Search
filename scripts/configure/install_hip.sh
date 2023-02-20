@@ -17,12 +17,16 @@ cd hip
 if [ "${TARGET_DEVICE}" = "NVIDIA" ]; then
   mkdir -p hip_nvidia
   cd hip_nvidia
-  git clone -b "$ROCM_BRANCH" https://github.com/ROCm-Developer-Tools/hip.git
-  git clone -b "$ROCM_BRANCH" https://github.com/ROCm-Developer-Tools/hipamd.git
-  if [ $1 == 0 ]; then  # otherwise it means it was already downloaded
-    HIP_DIR="$(readlink -f hip)"
-    HIPAMD_DIR="$(readlink -f hipamd)"
-    cd "$HIPAMD_DIR"
+  if [ ! -d "hip" ]; then
+      git clone -b "${ROCM_BRANCH}" https://github.com/ROCm-Developer-Tools/hip.git
+  fi
+  if [ ! -d "hipamd" ]; then
+      git clone -b "${ROCM_BRANCH}" https://github.com/ROCm-Developer-Tools/hipamd.git
+  fi
+  HIP_DIR="$(readlink -f hip)"
+  HIPAMD_DIR="$(readlink -f hipamd)"
+  if [ ! -d ${HIPAMD_DIR}/build ]; then  # otherwise it means it was already built
+    cd "${HIPAMD_DIR}"
     mkdir -p build; cd build
     cmake -DHIP_COMMON_DIR=$HIP_DIR -DHIP_PLATFORM=nvidia -DCMAKE_INSTALL_PREFIX=$PWD/install ..
     make -j$(nproc)

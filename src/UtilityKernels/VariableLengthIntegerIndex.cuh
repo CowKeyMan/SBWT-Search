@@ -18,11 +18,13 @@
 #include "Tools/TypeDefinitions.h"
 #include "hip/hip_runtime.h"
 
+namespace sbwt_search {
+
 inline __device__ auto d_variable_length_int_index(
   const u64 *container, u32 width, u64 width_set_bits, u64 index
 ) -> u64 {
-  u64 index_1 = index / u64_bits;
-  u64 offset = index % u64_bits;
+  u64 index_1 = (index * width) / u64_bits;
+  u64 offset = (index * width) % u64_bits;
   u64 elem_1 = container[index_1];
   u64 result = elem_1 >> offset;
   if (offset + width > u64_bits) {
@@ -32,5 +34,7 @@ inline __device__ auto d_variable_length_int_index(
   }
   return result & width_set_bits;
 }
+
+}  // namespace sbwt_search
 
 #endif

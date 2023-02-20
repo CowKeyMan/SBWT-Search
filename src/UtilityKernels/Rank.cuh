@@ -20,6 +20,9 @@
 
 namespace sbwt_search {
 
+using bit_utils::ten_1s;
+using bit_utils::thirty_1s;
+
 inline __device__ auto d_rank(
   const u64 *bit_vector,
   const u64 *layer_0,
