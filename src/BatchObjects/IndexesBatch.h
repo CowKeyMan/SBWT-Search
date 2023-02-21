@@ -21,7 +21,7 @@ public:
   u64 true_indexes = 0;
   u64 skipped = 0;
 
-  auto reset() {
+  auto reset() -> void {
     indexes.resize(0);
     true_indexes = 0;
     skipped = 0;

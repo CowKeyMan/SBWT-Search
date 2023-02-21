@@ -40,18 +40,12 @@ public:
   auto main(int argc, char **argv) -> int override;
 
 private:
-  vector<string> input_filenames;
-  vector<string> output_filenames;
   u64 kmer_size = 0;
   u64 max_chars_per_batch = 0;
   u64 max_batches = 0;
-  u64 threads = 0;
 
   auto get_gpu_container(const string &index_file)
     -> shared_ptr<GpuSbwtContainer>;
-  auto load_input_output_filenames(
-    const string &input_file, const string &output_file
-  ) -> void;
   auto load_batch_info(u64 max_batches, u64 unavailable_ram, u64 max_cpu_memory)
     -> void;
   auto get_max_chars_per_batch_cpu(u64 unavailable_memory, u64 max_memory)
@@ -59,7 +53,6 @@ private:
   auto get_max_chars_per_batch_gpu() -> u64;
   auto get_max_chars_per_batch(u64 unavailable_memory, u64 max_cpu_memory)
     -> u64;
-  auto load_threads() -> void;
   auto get_components(
     const shared_ptr<GpuSbwtContainer> &gpu_container, const string &print_mode
   )

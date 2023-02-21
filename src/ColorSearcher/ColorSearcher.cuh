@@ -59,40 +59,47 @@ __global__ void d_color_search(
     color_set_idxs_width_set_bits,
     color_set_idxs_idx
   );
+  printf("%ull\n", color_set_idx);
   auto is_dense = d_get_bool_from_bit_vector(is_dense_marks, color_set_idx);
-  auto starts_index = d_rank(
-    is_dense_marks,
-    is_dense_marks_poppy_layer_0,
-    is_dense_marks_poppy_layer_1_2,
-    color_set_idx
-  );
-  if (!is_dense) {
-    starts_index = color_set_idx - starts_index;  // the rank of the 0s
+
+  if (is_dense) {
+    auto starts_index = d_rank(
+      is_dense_marks,
+      is_dense_marks_poppy_layer_0,
+      is_dense_marks_poppy_layer_1_2,
+      color_set_idx
+    );
+    auto arrays_start = d_variable_length_int_index(
+      dense_arrays_intervals,
+      dense_arrays_intervals_width,
+      dense_arrays_intervals_width_set_bits,
+      starts_index
+    );
+    auto arrays_end = d_variable_length_int_index(
+      dense_arrays_intervals,
+      dense_arrays_intervals_width,
+      dense_arrays_intervals_width_set_bits,
+      starts_index + 1
+    );
+  } else {
+    auto starts_index = color_set_idx
+      - d_rank(is_dense_marks,
+               is_dense_marks_poppy_layer_0,
+               is_dense_marks_poppy_layer_1_2,
+               color_set_idx);
+    auto arrays_start = d_variable_length_int_index(
+      sparse_arrays_intervals,
+      sparse_arrays_intervals_width,
+      sparse_arrays_intervals_width_set_bits,
+      starts_index
+    );
+    auto arrays_end = d_variable_length_int_index(
+      sparse_arrays_intervals,
+      sparse_arrays_intervals_width,
+      sparse_arrays_intervals_width_set_bits,
+      starts_index + 1
+    );
   }
-  auto arrays_start = is_dense ? d_variable_length_int_index(
-                        dense_arrays_intervals,
-                        dense_arrays_intervals_width,
-                        dense_arrays_intervals_width_set_bits,
-                        starts_index
-                      ) :
-                                 d_variable_length_int_index(
-                                   sparse_arrays_intervals,
-                                   sparse_arrays_intervals_width,
-                                   sparse_arrays_intervals_width_set_bits,
-                                   starts_index
-                                 );
-  auto arrays_end = is_dense ? d_variable_length_int_index(
-                      dense_arrays_intervals,
-                      dense_arrays_intervals_width,
-                      dense_arrays_intervals_width_set_bits,
-                      starts_index + 1
-                    ) :
-                               d_variable_length_int_index(
-                                 sparse_arrays_intervals,
-                                 sparse_arrays_intervals_width,
-                                 sparse_arrays_intervals_width_set_bits,
-                                 starts_index + 1
-                               );
   // TODO: start filling array, do shuffles. I need to set u64
   // TODO: case for padding
 }

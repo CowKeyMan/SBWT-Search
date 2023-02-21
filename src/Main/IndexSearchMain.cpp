@@ -21,6 +21,7 @@ namespace sbwt_search {
 using fmt::format;
 using gpu_utils::get_free_gpu_memory;
 using log_utils::Logger;
+using math_utils::bits_to_gB;
 using math_utils::round_down;
 using memory_utils::get_total_system_memory;
 using std::min;
@@ -31,18 +32,22 @@ auto IndexSearchMain::main(int argc, char **argv) -> int {
   const string program_name = "SBWT_Search";
   const string program_description
     = "An application to search for k-mers in a genome given an SBWT index";
-  Logger::initialise_global_logging(Logger::LOG_LEVEL::WARN);
   Logger::log_timed_event("main", Logger::EVENT_STATE::START);
   auto args
     = IndexSearchArgumentParser(program_name, program_description, argc, argv);
   Logger::log(Logger::LOG_LEVEL::INFO, "Loading components into memory");
   auto gpu_container = get_gpu_container(args.get_index_file());
   kmer_size = gpu_container->get_kmer_size();
-  load_input_output_filenames(args.get_sequence_file(), args.get_output_file());
+  load_input_output_filenames(args.get_query_file(), args.get_output_file());
   load_batch_info(
     args.get_batches(), args.get_unavailable_ram(), args.get_max_cpu_memory()
   );
+  omp_set_nested(1);
   load_threads();
+  Logger::log(
+    Logger::LOG_LEVEL::INFO,
+    format("Running OpenMP with {} threads", get_threads())
+  );
   auto
     [sequence_file_parser,
      seq_to_bits_converter,
@@ -79,17 +84,6 @@ auto IndexSearchMain::get_gpu_container(const string &index_file)
   Logger::log_timed_event("Presearcher", Logger::EVENT_STATE::STOP);
   Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::STOP);
   return gpu_container;
-}
-
-auto IndexSearchMain::load_input_output_filenames(
-  const string &input_file, const string &output_file
-) -> void {
-  FilenamesParser filenames_parser(input_file, output_file);
-  input_filenames = filenames_parser.get_input_filenames();
-  output_filenames = filenames_parser.get_output_filenames();
-  if (input_filenames.size() != output_filenames.size()) {
-    throw runtime_error("Input and output file sizes differ");
-  }
 }
 
 auto IndexSearchMain::load_batch_info(
@@ -137,32 +131,23 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu(
     throw runtime_error("Not enough memory. Please specify a lower number of "
                         "unavailable-main-memory.");
   }
-  u64 free
+  u64 free_bits
     = (get_total_system_memory() * sizeof(u64) - unavailable_memory) * 0.85;
-  if (max_memory < free) { free = max_memory; }
-  auto max_chars_per_batch
-    = round_down<u64>(free / (146 + 21 * 8) / max_batches, threads_per_block);
+  if (max_memory < free_bits) { free_bits = max_memory; }
+  auto max_chars_per_batch = round_down<u64>(
+    free_bits / (146 + 21 * 8) / max_batches, threads_per_block
+  );
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
       "Free main memory: {} bits ({:.2f}GB). This allows for {} "
       "characters per batch",
-      free,
-      double(free) / 8 / 1024 / 1024 / 1024,
+      free_bits,
+      bits_to_gB(free_bits),
       max_chars_per_batch
     )
   );
   return max_chars_per_batch;
-}
-
-auto IndexSearchMain::load_threads() -> void {
-  omp_set_nested(1);
-#pragma omp parallel
-#pragma omp single
-  threads = omp_get_num_threads();
-  Logger::log(
-    Logger::LOG_LEVEL::INFO, format("Running OpenMP with {} threads", threads)
-  );
 }
 
 auto IndexSearchMain::get_components(
@@ -176,12 +161,12 @@ auto IndexSearchMain::get_components(
     ResultsPrinter> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   auto sequence_file_parser = make_shared<ContinuousSequenceFileParser>(
-    input_filenames, kmer_size, max_chars_per_batch, max_batches
+    get_input_filenames(), kmer_size, max_chars_per_batch, max_batches
   );
 
   auto seq_to_bits_converter = make_shared<ContinuousSeqToBitsConverter>(
     sequence_file_parser->get_string_sequence_batch_producer(),
-    threads,
+    get_threads(),
     kmer_size,
     max_chars_per_batch,
     max_batches
@@ -229,9 +214,9 @@ auto IndexSearchMain::get_results_printer(
       searcher,
       interval_batch_producer,
       invalid_chars_producer,
-      output_filenames,
+      get_output_filenames(),
       kmer_size,
-      threads,
+      get_threads(),
       max_chars_per_batch
     );
   }
@@ -240,9 +225,9 @@ auto IndexSearchMain::get_results_printer(
       searcher,
       interval_batch_producer,
       invalid_chars_producer,
-      output_filenames,
+      get_output_filenames(),
       kmer_size,
-      threads,
+      get_threads(),
       max_chars_per_batch
     );
   }
@@ -251,7 +236,7 @@ auto IndexSearchMain::get_results_printer(
       searcher,
       interval_batch_producer,
       invalid_chars_producer,
-      output_filenames,
+      get_output_filenames(),
       kmer_size,
       max_chars_per_batch
     );

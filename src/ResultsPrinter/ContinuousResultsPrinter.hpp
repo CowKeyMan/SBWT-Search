@@ -60,7 +60,7 @@ private:
   shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer;
   shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer;
   shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer;
-  vector<string> &filenames;
+  vector<string> filenames;
   vector<string>::iterator current_filename;
   shared_ptr<ResultsBatch> results_batch;
   shared_ptr<InvalidCharsBatch> invalid_chars_batch;
@@ -77,7 +77,7 @@ public:
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer_,
     shared_ptr<SharedBatchesProducer<InvalidCharsBatch>>
       invalid_chars_producer_,
-    vector<string> &_filenames,
+    vector<string> filenames_,
     u64 kmer_size,
     u64 element_size_,
     u64 threads_,
@@ -86,7 +86,7 @@ public:
       results_producer(std::move(results_producer_)),
       interval_producer(std::move(interval_producer_)),
       invalid_chars_producer(std::move(invalid_chars_producer_)),
-      filenames(_filenames),
+      filenames(std::move(filenames_)),
       threads(threads_),
       kmer_size(kmer_size),
       write_locks(threads_ - 1),

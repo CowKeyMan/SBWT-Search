@@ -37,7 +37,7 @@ private:
   shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer;
   shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer;
   shared_ptr<IntervalBatch> interval_batch;
-  vector<string> &filenames;
+  vector<string> filenames;
   u64 chars_index = 0, results_index = 0, line_index = 0;
   u64 invalid_chars_left = 0;
   u64 chars_before_newline_index = 0;
@@ -56,7 +56,7 @@ public:
     shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
     shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
-    vector<string> &filenames,
+    vector<string> filenames,
     u64 kmer_size,
     u64 max_chars_per_batch
   );

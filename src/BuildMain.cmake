@@ -9,10 +9,12 @@ option(
 if (BUILD_MAIN)
 
 add_library(
-  index_search_main
+  main_lib
+  "${PROJECT_SOURCE_DIR}/Main/Main.cpp"
   "${PROJECT_SOURCE_DIR}/Main/IndexSearchMain.cpp"
+  "${PROJECT_SOURCE_DIR}/Main/ColorSearchMain.cpp"
 )
-target_link_libraries(index_search_main PRIVATE common_libraries)
+target_link_libraries(main_lib PRIVATE common_libraries)
 
 add_library(
   color_search_main
@@ -24,8 +26,7 @@ add_executable(sbwt_search "${PROJECT_SOURCE_DIR}/main.cpp")
 target_link_libraries(
   sbwt_search
   PRIVATE
-  index_search_main
-  color_search_main
+  main_lib
   common_libraries
 )
 

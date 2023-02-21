@@ -3,17 +3,19 @@
 #include <string>
 
 #include "ArgumentParser/IndexSearchArgumentParser.h"
+#include "Tools/MathUtils.hpp"
 #include "cxxopts.hpp"
 
 namespace sbwt_search {
 
-using cxxopts::Options;
-using cxxopts::ParseResult;
 using cxxopts::value;
-using std::make_unique;
+using math_utils::gB_to_bits;
 using std::string;
 using std::to_string;
 using units_parser::MemoryUnitsParser;
+
+const u64 default_unavailable_gB = 4;
+const u64 default_batches = 5;
 
 IndexSearchArgumentParser::IndexSearchArgumentParser(
   const string &program_name,
@@ -21,16 +23,13 @@ IndexSearchArgumentParser::IndexSearchArgumentParser(
   int argc,
   char **argv
 ):
-    options(
-      make_unique<Options>(create_options(program_name, program_description))
-    ),
-    args{parse_arguments(argc, argv)} {}
+    ArgumentParser::ArgumentParser(program_name, program_description) {
+  create_options();
+  initialise_args(argc, argv);
+}
 
-auto IndexSearchArgumentParser::create_options(
-  const string &program_name, const string &program_description
-) -> Options {
-  auto options = Options(program_name, program_description);
-  options.add_options()("o,output-prefix", "Output prefix. The extension will be determined by the output format chosen", value<string>())(
+auto IndexSearchArgumentParser::create_options() -> void {
+  get_options().add_options()("o,output-prefix", "Output prefix. The extension will be determined by the output format chosen", value<string>())(
       "i,index-file", "Index input file", value<string>()
     )("q,query-file",
       "The query in FASTA or FASTQ format, possibly gzipped."
@@ -40,14 +39,15 @@ auto IndexSearchArgumentParser::create_options(
       "files "
       "in the same manner, one line for each input file.",
       value<string>()
-    )("u,unavailable-main-memory",
+    )
+    ("u,unavailable-main-memory",
       "The amount of main memory not to consume from the operating system in "
       "bits. This means that the program will hog as much main memory it "
       "can, provided that the VRAM can also keep up with it, except for the "
       "amount specified by this value. By default it is set to 4GB. The "
       "value can be in the following formats: 12345 (12345 bits), 12345B "
       "(12345 bytes), 12345KB, 12345MB or 12345GB",
-      value<string>()->default_value(to_string(4ULL * 8 * 1024 * 1024 * 1024))
+      value<string>()->default_value(to_string(gB_to_bits(default_unavailable_gB)))
     )("m,max-main-memory",
       "The maximum amount of main memory (RAM) which may be used by the "
       "searching step, in bits. The default is that the program will occupy "
@@ -65,8 +65,9 @@ auto IndexSearchArgumentParser::create_options(
       "components so they can all keep processing without interruption from "
       "the start (this is assuming you have 5 threads running). If you have "
       "less threads, maybe set to to the number of available threads instead",
-      value<u64>()->default_value(to_string(5))
-    )("c,print-mode",
+      value<u64>()->default_value(to_string(default_batches))
+    )
+    ("c,print-mode",
       "The mode used when printing the result to the output file. Options "
       "are 'ascii' (default), 'binary' or 'boolean'. In ascii mode the "
       "results will be printed in ASCII format so that the number viewed "
@@ -95,41 +96,31 @@ auto IndexSearchArgumentParser::create_options(
       "input file. In terms of file extensions, ASCII format will add .txt, boolean format will add .bool and binary format will add .bin and .seqsizes for the separate sequence sizes",
       value<string>()->default_value("ascii")
     )("h,help", "Print usage", value<bool>()->default_value("false"));
-  options.allow_unrecognised_options();
-  return options;
+  get_options().allow_unrecognised_options();
 }
 
-auto IndexSearchArgumentParser::parse_arguments(int argc, char **argv)
-  -> ParseResult {
-  auto arguments = options->parse(argc, argv);
-  if (argc == 1 || arguments["help"].as<bool>()) {
-    std::cout << options->help() << std::endl;
-    std::quick_exit(1);
-  }
-  return arguments;
-}
-
-auto IndexSearchArgumentParser::get_sequence_file() -> string {
-  return args["query-file"].as<string>();
+auto IndexSearchArgumentParser::get_query_file() -> string {
+  return get_args()["query-file"].as<string>();
 }
 auto IndexSearchArgumentParser::get_index_file() -> string {
-  return args["index-file"].as<string>();
+  return get_args()["index-file"].as<string>();
 }
 auto IndexSearchArgumentParser::get_output_file() -> string {
-  return args["output-prefix"].as<string>();
+  return get_args()["output-prefix"].as<string>();
 }
 auto IndexSearchArgumentParser::get_unavailable_ram() -> u64 {
-  return MemoryUnitsParser::convert(args["unavailable-main-memory"].as<string>()
+  return MemoryUnitsParser::convert(
+    get_args()["unavailable-main-memory"].as<string>()
   );
 }
 auto IndexSearchArgumentParser::get_max_cpu_memory() -> u64 {
-  return MemoryUnitsParser::convert(args["max-main-memory"].as<string>());
+  return MemoryUnitsParser::convert(get_args()["max-main-memory"].as<string>());
 }
 auto IndexSearchArgumentParser::get_batches() -> u64 {
-  return args["batches"].as<u64>();
+  return get_args()["batches"].as<u64>();
 }
 auto IndexSearchArgumentParser::get_print_mode() -> string {
-  return args["print-mode"].as<string>();
+  return get_args()["print-mode"].as<string>();
 }
 
 };  // namespace sbwt_search

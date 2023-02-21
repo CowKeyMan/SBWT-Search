@@ -8,7 +8,6 @@
  */
 
 #include <memory>
-#include <span>
 
 #include "IndexFileParser/IndexFileParser.h"
 #include "IndexFileParser/IndexesBatchProducer.h"
@@ -18,8 +17,8 @@
 namespace sbwt_search {
 
 using std::shared_ptr;
-using std::span;
 using std::unique_ptr;
+using std::vector;
 
 class ContinuousIndexFileParser {
 private:
@@ -27,8 +26,8 @@ private:
   shared_ptr<IndexesStartsBatchProducer> indexes_starts_batch_producer;
   shared_ptr<IndexesBeforeNewfileBatchProducer>
     indexes_before_newfile_batch_producer;
-  span<const string> filenames;
-  span<const string>::iterator filename_iterator;
+  vector<string> filenames;
+  vector<string>::iterator filename_iterator;
   u64 batch_id = 0;
   bool fail = false;
   unique_ptr<IndexFileParser> index_file_parser;
@@ -39,7 +38,7 @@ public:
   ContinuousIndexFileParser(
     u64 max_indexes_per_batch_,
     u64 max_batches,
-    span<const string> filenames_,
+    vector<string> filenames_,
     u64 read_padding_
   );
 

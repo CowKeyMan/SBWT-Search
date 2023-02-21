@@ -8,6 +8,8 @@
 
 #include <type_traits>
 
+#include "Tools/TypeDefinitions.h"
+
 namespace math_utils {
 
 using std::is_unsigned;
@@ -33,6 +35,9 @@ auto constexpr round_down(
   );
   return (value / multiple) * multiple;
 }
+
+auto bits_to_gB(u64 bits) -> double;
+auto gB_to_bits(double gB) -> u64;
 
 }  // namespace math_utils
 

@@ -4,13 +4,11 @@
 
 namespace sbwt_search {
 
-using std::bit_cast;
-
 BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
   shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
   shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
   shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
-  vector<string> &filenames,
+  vector<string> filenames,
   u64 kmer_size,
   u64 threads,
   u64 max_chars_per_batch
@@ -19,7 +17,7 @@ BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
       std::move(results_producer),
       std::move(interval_producer),
       std::move(invalid_chars_producer),
-      filenames,
+      std::move(filenames),
       kmer_size,
       1,
       threads,

@@ -15,6 +15,7 @@
 
 namespace sbwt_search {
 
+using std::shared_ptr;
 using std::unique_ptr;
 
 class CpuColorIndexContainer {
@@ -30,7 +31,7 @@ public:
   sdsl::int_vector<> color_set_idxs;
   u64 num_color_sets;
 
-  [[nodiscard]] auto to_gpu() const -> GpuColorIndexContainer;
+  [[nodiscard]] auto to_gpu() const -> shared_ptr<GpuColorIndexContainer>;
 };
 
 }  // namespace sbwt_search

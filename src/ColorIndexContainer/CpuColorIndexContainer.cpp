@@ -1,9 +1,14 @@
+#include <memory>
+
 #include "ColorIndexContainer/CpuColorIndexContainer.h"
 
 namespace sbwt_search {
 
-auto CpuColorIndexContainer::to_gpu() const -> GpuColorIndexContainer {
-  return {
+using std::make_shared;
+
+auto CpuColorIndexContainer::to_gpu() const
+  -> shared_ptr<GpuColorIndexContainer> {
+  return make_shared<GpuColorIndexContainer>(
     dense_arrays,
     dense_arrays_intervals,
     sparse_arrays,
@@ -13,7 +18,8 @@ auto CpuColorIndexContainer::to_gpu() const -> GpuColorIndexContainer {
     core_kmer_marks,
     core_kmer_marks_poppy,
     color_set_idxs,
-    num_color_sets};
+    num_color_sets
+  );
 }
 
 }  // namespace sbwt_search

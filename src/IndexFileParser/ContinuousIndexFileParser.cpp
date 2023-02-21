@@ -18,7 +18,7 @@ using std::make_shared;
 ContinuousIndexFileParser::ContinuousIndexFileParser(
   u64 max_indexes_per_batch_,
   u64 max_batches,
-  span<const string> filenames_,
+  vector<string> filenames_,
   u64 read_padding_
 ):
     max_indexes_per_batch(max_indexes_per_batch_),
@@ -32,7 +32,7 @@ ContinuousIndexFileParser::ContinuousIndexFileParser(
     indexes_before_newfile_batch_producer(
       make_shared<IndexesBeforeNewfileBatchProducer>(max_batches)
     ),
-    filenames(filenames_) {
+    filenames(std::move(filenames_)) {
   filename_iterator = filenames.begin();
 }
 

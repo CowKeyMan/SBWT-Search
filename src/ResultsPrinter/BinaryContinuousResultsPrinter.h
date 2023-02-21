@@ -25,7 +25,7 @@ public:
     shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
     shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
-    vector<string> &filenames,
+    vector<string> filenames,
     u64 kmer_size,
     u64 threads,
     u64 max_chars_per_batch

@@ -55,15 +55,12 @@ include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/sdsl/include")
 
 # Index
 add_library(
-  index_search_argument_parser
+  argument_parser
+  "${PROJECT_SOURCE_DIR}/ArgumentParser/ArgumentParser.cpp"
+  "${PROJECT_SOURCE_DIR}/ArgumentParser/ColorSearchArgumentParser.cpp"
   "${PROJECT_SOURCE_DIR}/ArgumentParser/IndexSearchArgumentParser.cpp"
 )
-target_link_libraries(
-  index_search_argument_parser
-  PRIVATE
-  memory_units_parser
-  cxxopts
-)
+target_link_libraries(argument_parser PRIVATE cxxopts memory_units_parser)
 add_library(
   presearcher_cpu
   "${PROJECT_SOURCE_DIR}/Presearcher/Presearcher.cpp"
@@ -200,6 +197,10 @@ if (NOT SDSL_FOUND)
   add_dependencies(color_index_builder sdsl)
 endif()
 
+add_library(
+  continuous_color_searcher
+  "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
+)
 # add_library(
 #   color_searcher_gpu
 #   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
@@ -226,9 +227,12 @@ target_link_libraries(
   memory_utils
   omp_lock
   semaphore
+  math_utils
+
+  ## Common libraries
+  argument_parser
 
   ## Index search libraries
-  index_search_argument_parser
   filenames_parser
   sbwt_builder
   sbwt_container
@@ -245,6 +249,7 @@ target_link_libraries(
   # Color search libraries
   color_index_builder
   color_index_container
+  continuous_color_searcher
 
   index_file_parser
 )

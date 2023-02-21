@@ -21,14 +21,14 @@ BoolContinuousResultsPrinter::BoolContinuousResultsPrinter(
   shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer_,
   shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer_,
   shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer_,
-  vector<string> &filenames_,
+  vector<string> filenames_,
   u64 kmer_size_,
   u64 max_chars_per_batch
 ):
     results_producer(std::move(results_producer_)),
     interval_producer(std::move(interval_producer_)),
     invalid_chars_producer(std::move(invalid_chars_producer_)),
-    filenames(filenames_),
+    filenames(std::move(filenames_)),
     kmer_size(kmer_size_),
     batch(round_up<u64>(max_chars_per_batch, sizeof(u64)) / sizeof(u64)) {
   reset_working_bits();

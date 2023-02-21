@@ -30,14 +30,14 @@ include_directories(SYSTEM "${CMAKE_BINARY_DIR}/_deps/spdlog-src/include")
 
 # My libraries
 add_library(
+  math_utils
+  "${PROJECT_SOURCE_DIR}/Tools/MathUtils.cpp"
+)
+add_library(
   io_utils
   "${PROJECT_SOURCE_DIR}/Tools/IOUtils.cpp"
 )
-target_link_libraries(
-  io_utils
-  PRIVATE
-  fmt::fmt
-)
+target_link_libraries(io_utils PRIVATE fmt::fmt)
 
 add_library(
   error_utils
