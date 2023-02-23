@@ -5,6 +5,7 @@
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"
 #include "fmt/core.h"
+#include "hip/hip_runtime.h"
 
 namespace sbwt_search {
 
@@ -48,6 +49,7 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
     container->sparse_arrays_intervals.get(),
     container->sparse_arrays_intervals_width,
     set_bits.at(container->sparse_arrays_intervals_width),
+    container->num_colors,
     d_results.get()
   );
   GPU_CHECK(hipEventRecord(search_stop));

@@ -55,7 +55,8 @@ GpuColorIndexContainer::GpuColorIndexContainer(
       cpu_color_set_idxs.capacity() / u64_bits + 1
     ),
     color_set_idxs_width(cpu_color_set_idxs.width()),
-    num_color_sets(num_color_sets_) {
+    num_color_sets(num_color_sets_),
+    num_colors(cpu_is_dense_marks.size()) {
   dense_arrays_intervals.memset(
     cpu_dense_arrays_intervals.capacity() / u64_bits, 1, 0
   );

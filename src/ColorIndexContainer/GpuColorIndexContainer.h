@@ -36,6 +36,7 @@ public:
   GpuPointer<u64> color_set_idxs;
   u64 color_set_idxs_width;
   u64 num_color_sets;
+  u64 num_colors;
 
   GpuColorIndexContainer(
     const sdsl::bit_vector &cpu_dense_arrays,
