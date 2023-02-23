@@ -39,6 +39,9 @@ public:
 
 private:
   auto create_options() -> void;
+
+protected:
+  auto get_required_options() -> vector<string> override;
 };
 
 }  // namespace sbwt_search

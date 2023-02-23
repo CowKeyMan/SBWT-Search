@@ -57,7 +57,7 @@ auto BinaryIndexFileParser::generate_batch(
     }
   }
   pad_read();
-  return get_starts().size() + get_starts().size() > initial_size;
+  return get_starts().size() > initial_size;
 }
 
 inline auto BinaryIndexFileParser::get_next() -> u64 {

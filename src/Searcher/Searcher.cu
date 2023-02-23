@@ -15,13 +15,13 @@ using fmt::format;
 using log_utils::Logger;
 using math_utils::round_up;
 
-auto Searcher::launch_search_kernel(u64 queries, u64 batch_id) -> void {
+auto Searcher::launch_search_kernel(u64 num_queries, u64 batch_id) -> void {
   hipEvent_t search_start;  // NOLINT(cppcoreguidelines-init-variables)
   hipEvent_t search_stop;   // NOLINT(cppcoreguidelines-init-variables)
   GPU_CHECK(hipEventCreate(&search_start));
   GPU_CHECK(hipEventCreate(&search_stop));
   u32 blocks_per_grid
-    = round_up<u64>(queries, threads_per_block) / threads_per_block;
+    = round_up<u64>(num_queries, threads_per_block) / threads_per_block;
   GPU_CHECK(hipEventRecord(search_start));
   hipLaunchKernelGGL(
     d_search,

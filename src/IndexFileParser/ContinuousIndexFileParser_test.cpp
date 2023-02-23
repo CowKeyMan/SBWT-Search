@@ -2,7 +2,6 @@
 #include <filesystem>
 #include <limits>
 #include <memory>
-#include <span>
 #include <thread>
 
 #include <gtest/gtest.h>
@@ -17,7 +16,6 @@ namespace sbwt_search {
 using rng_utils::get_uniform_int_generator;
 using std::make_unique;
 using std::numeric_limits;
-using std::span;
 using std::chrono::milliseconds;
 using std::filesystem::remove;
 using std::this_thread::sleep_for;
@@ -31,7 +29,7 @@ protected:
   auto run_test(
     u64 max_indexes_per_batch,
     u64 max_batches,
-    span<const string> filenames,
+    const vector<string> &filenames,
     u64 read_padding,
     const vector<vector<u64>> &expected_indexes,
     const vector<u64> &expected_true_indexes,
@@ -139,7 +137,6 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
   const vector<string> filenames = {
     "test_objects/example_index_search_result.txt",
     get_binary_index_output_filename()};
-  span<const string> filenames_span = {filenames.data(), filenames.size()};
   const u64 read_padding = 4;
   int pad = -1;
   const vector<vector<int>> ints = {
@@ -167,7 +164,7 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
     run_test(
       max_indexes_per_batch,
       max_batches,
-      filenames_span,
+      filenames,
       read_padding,
       test_utils::to_u64s(ints),
       true_indexes,
@@ -183,7 +180,6 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
   const vector<string> filenames = {
     "test_objects/example_index_search_result.txt",
     get_binary_index_output_filename()};
-  span<const string> filenames_span = {filenames.data(), filenames.size()};
   const u64 read_padding = 4;
   int pad = -1;
   const vector<vector<int>> ints = {{
@@ -233,7 +229,7 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
     run_test(
       max_indexes_per_batch,
       max_batches,
-      filenames_span,
+      filenames,
       read_padding,
       test_utils::to_u64s(ints),
       true_indexes,

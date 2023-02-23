@@ -1,6 +1,26 @@
 {
     "configurations": {
-        "main": {
+        "main_colors": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [
+                "cpp",
+                "c",
+                "cu",
+                "objc",
+                "rust"
+            ],
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceRoot}/build/bin/sbwt_search",
+                "args": ["colors", "-i", "../colors_dataset/themisto_example_GCA.tcolors", "-q", "../colors_dataset/GCA.txt", "-o", "GCA_colors_out", "-c", "ascii", "-b", "10", "-m", "80000000"],
+                "cwd": "${workspaceRoot}",
+                "environment": [],
+                "externalConsole": true,
+                "MIMode": "gdb",
+                "stopAtEntry": true
+            }
+        },
+        "main_index": {
             "adapter": "vscode-cpptools",
             "filetypes": [
                 "cpp",

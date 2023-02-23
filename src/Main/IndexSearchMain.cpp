@@ -29,9 +29,8 @@ using std::runtime_error;
 using std::to_string;
 
 auto IndexSearchMain::main(int argc, char **argv) -> int {
-  const string program_name = "SBWT_Search";
-  const string program_description
-    = "An application to search for k-mers in a genome given an SBWT index";
+  const string program_name = "index";
+  const string program_description = "sbwt_search";
   Logger::log_timed_event("main", Logger::EVENT_STATE::START);
   auto args
     = IndexSearchArgumentParser(program_name, program_description, argc, argv);
@@ -117,7 +116,7 @@ auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
       "Free gpu memory: {} bits ({:.2f}GB). This allows for {} characters per "
       "batch",
       free,
-      double(free) / 8 / 1024 / 1024 / 1024,
+      bits_to_gB(free),
       max_chars_per_batch
     )
   );
@@ -252,7 +251,8 @@ auto IndexSearchMain::run_components(
   ResultsPrinter &results_printer
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
-#pragma omp parallel sections num_threads(5)
+  const u64 sections = 5;
+#pragma omp parallel sections num_threads(sections)
   {
 #pragma omp section
     { sequence_file_parser->read_and_generate(); }

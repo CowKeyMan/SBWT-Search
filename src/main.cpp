@@ -25,7 +25,7 @@ auto main(int argc, char **argv) -> int {
   auto args = span{argv, static_cast<u64>(argc)};
   const unordered_map<string, shared_ptr<Main>> str_to_item{
     {"index", make_shared<IndexSearchMain>()},
-    {"color", make_shared<ColorSearchMain>()}};
+    {"colors", make_shared<ColorSearchMain>()}};
   if (argc == 1 || !str_to_item.contains(args[1])) {
     cout << "Usage: sbwt_search [index|colors]" << endl;
     return 1;

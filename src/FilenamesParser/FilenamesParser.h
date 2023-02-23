@@ -4,28 +4,30 @@
 /**
  * @file FilenamesParser.h
  * @brief Takes the input and output user input and outputs if the files are a
- * direct input or if they are a series of files
+ * direct input or if they are a series of files. They are considered a series
+ * of files if the extension of the file is '.list'
  */
 
 #include <string>
 #include <vector>
 
+namespace sbwt_search {
+
 using std::string;
 using std::vector;
 
-namespace sbwt_search {
 class FilenamesParser {
 private:
   vector<string> input_filenames, output_filenames;
 
 public:
-  FilenamesParser(string input_filename, string output_filename);
-  vector<string> get_output_filenames();
-  vector<string> get_input_filenames();
+  FilenamesParser(const string &input_filename, const string &output_filename);
+  auto get_output_filenames() -> vector<string>;
+  auto get_input_filenames() -> vector<string>;
 
 private:
-  bool is_txt(string filename);
-  vector<string> file_lines_to_vector(string filename);
+  auto is_txt(const string &filename) -> bool;
+  auto file_lines_to_vector(const string &filename) -> vector<string>;
 };
 }  // namespace sbwt_search
 

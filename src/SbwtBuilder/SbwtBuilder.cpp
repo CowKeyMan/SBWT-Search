@@ -64,12 +64,13 @@ auto SbwtBuilder::get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer> {
   auto [acgt, poppys, c_map] = get_container_components(
     num_bits, bit_vector_bytes, vectors_start_position
   );
+  u64 acgt_size = acgt[0].size();
   auto container = make_unique<CpuSbwtContainer>(
     std::move(acgt),
     std::move(poppys),
     std::move(c_map),
     num_bits,
-    acgt[0].size(),
+    acgt_size,
     kmer_size
   );
   Logger::log_timed_event("SBWTReadAndPopppy", Logger::EVENT_STATE::STOP);

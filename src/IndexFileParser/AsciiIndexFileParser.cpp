@@ -61,7 +61,7 @@ auto AsciiIndexFileParser::generate_batch(
     }
   }
   pad_read();
-  return get_starts().size() + get_starts().size() > initial_size;
+  return get_starts().size() > initial_size;
 }
 
 inline auto AsciiIndexFileParser::load_buffer() -> void {

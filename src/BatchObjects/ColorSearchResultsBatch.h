@@ -15,6 +15,7 @@ namespace sbwt_search {
 using std::vector;
 
 class ColorSearchResultsBatch {
+public:
   vector<u64> results;
   auto reset() -> void { results.resize(0); }
 };

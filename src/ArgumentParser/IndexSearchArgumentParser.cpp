@@ -122,5 +122,15 @@ auto IndexSearchArgumentParser::get_batches() -> u64 {
 auto IndexSearchArgumentParser::get_print_mode() -> string {
   return get_args()["print-mode"].as<string>();
 }
+auto IndexSearchArgumentParser::get_required_options() -> vector<string> {
+  return {
+    "query-file",
+    "index-file",
+    "output-prefix",
+    "max-main-memory",
+    "unavailable-main-memory",
+    "print-mode",
+    "batches"};
+}
 
 };  // namespace sbwt_search

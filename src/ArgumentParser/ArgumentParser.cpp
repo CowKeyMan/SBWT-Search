@@ -1,10 +1,13 @@
+#include <iostream>
 #include <memory>
 
 #include "ArgumentParser/ArgumentParser.h"
+#include "cxxopts.hpp"
 
 namespace sbwt_search {
 
-using cxxopts::Options;
+using std::cout;
+using std::endl;
 using std::make_unique;
 
 ArgumentParser::ArgumentParser(
@@ -14,8 +17,8 @@ ArgumentParser::ArgumentParser(
 
 auto ArgumentParser::parse_arguments(int argc, char **argv) -> ParseResult {
   auto arguments = options.parse(argc, argv);
-  if (argc == 1 || arguments["help"].as<bool>()) {
-    std::cout << options.help() << std::endl;
+  if (arguments["help"].as<bool>() || !is_required_all_provided(arguments)) {
+    cout << options.help() << endl;
     std::quick_exit(1);
   }
   return arguments;
@@ -28,5 +31,14 @@ auto ArgumentParser::get_args() const -> const cxxopts::ParseResult & {
   return args;
 }
 auto ArgumentParser::get_options() -> cxxopts::Options & { return options; }
+auto ArgumentParser::is_required_all_provided(ParseResult &args) -> bool {
+  for (auto &s : get_required_options()) {
+    if (args[s].count() < 1 && !args[s].has_default()) {
+      cout << "Missing option: " << s << endl;
+      return false;
+    }
+  }
+  return true;
+}
 
 }  // namespace sbwt_search

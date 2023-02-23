@@ -37,6 +37,9 @@ public:
   auto get_batches() -> u64;
   auto get_print_mode() -> string;
 
+protected:
+  auto get_required_options() -> vector<string> override;
+
 private:
   auto create_options() -> void;
 };

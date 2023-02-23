@@ -37,9 +37,9 @@ GpuSbwtContainer::GpuSbwtContainer(
   ));
   layer_1_2_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
     {layer_1_2[0]->get(),
-     layer_0[1]->get(),
-     layer_0[2]->get(),
-     layer_0[3]->get()}
+     layer_1_2[1]->get(),
+     layer_1_2[2]->get(),
+     layer_1_2[3]->get()}
   ));
 }
 

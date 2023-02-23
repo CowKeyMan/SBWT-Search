@@ -1,12 +1,16 @@
+#include <limits>
 #include <string>
 
 #include "ArgumentParser/ColorSearchArgumentParser.h"
 #include "Tools/MathUtils.hpp"
+#include "Tools/MemoryUnitsParser.h"
 
 namespace sbwt_search {
 
 using math_utils::gB_to_bits;
+using std::numeric_limits;
 using std::to_string;
+using units_parser::MemoryUnitsParser;
 
 const u64 default_unavailable_gB = 4;
 const u64 default_batches = 1;
@@ -34,8 +38,8 @@ auto ColorSearchArgumentParser::create_options() -> void {
     value<string>()
     )
     (
-    "i,colors-file",
-    "The colors index file",
+    "o,output-prefix",
+    "The prefix for the output file",
     value<string>()
     )
     ("u,unavailable-main-memory",
@@ -55,7 +59,7 @@ auto ColorSearchArgumentParser::create_options() -> void {
       "recommended to change this when you have a few small queries to "
       "process. The format of this value is the same as that for the "
       "unavailable-main-memory option",
-      value<string>()->default_value(to_string(ULLONG_MAX))
+      value<string>()->default_value(to_string(numeric_limits<u64>::max()))
      )
     ("c,print-mode",
       "The mode used when printing the result to the output file. Options: ascii",
@@ -63,8 +67,8 @@ auto ColorSearchArgumentParser::create_options() -> void {
     )
     ("b,batches",
       "The number of files to read and process at once. This implies dividing the available memory into <memory>/<batches> pieces, so each batch will process less items at a time, but there is instead more parallelism.",
-      value<string>()->default_value(to_string(default_batches))
-    );
+      value<u64>()->default_value(to_string(default_batches))
+    )("h,help", "Print usage", value<bool>()->default_value("false"));
   get_options().allow_unrecognised_options();
 }
 
@@ -75,19 +79,31 @@ auto ColorSearchArgumentParser::get_colors_file() -> string {
   return get_args()["colors-file"].as<string>();
 }
 auto ColorSearchArgumentParser::get_output_file() -> string {
-  return get_args()["output-file"].as<string>();
+  return get_args()["output-prefix"].as<string>();
 }
 auto ColorSearchArgumentParser::get_unavailable_ram() -> u64 {
-  return get_args()["max-main-memory"].as<u64>();
+  return MemoryUnitsParser::convert(
+    get_args()["unavailable-main-memory"].as<string>()
+  );
 }
 auto ColorSearchArgumentParser::get_max_cpu_memory() -> u64 {
-  return get_args()["max-main-memory"].as<u64>();
+  return MemoryUnitsParser::convert(get_args()["max-main-memory"].as<string>());
 }
 auto ColorSearchArgumentParser::get_print_mode() -> string {
   return get_args()["print-mode"].as<string>();
 }
 auto ColorSearchArgumentParser::get_batches() -> u64 {
   return get_args()["batches"].as<u64>();
+}
+auto ColorSearchArgumentParser::get_required_options() -> vector<string> {
+  return {
+    "query-file",
+    "colors-file",
+    "output-prefix",
+    "unavailable-main-memory",
+    "max-main-memory",
+    "print-mode",
+    "batches"};
 }
 
 }  // namespace sbwt_search

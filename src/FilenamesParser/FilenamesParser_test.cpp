@@ -9,7 +9,7 @@ using test_utils::assert_vectors_equal;
 
 TEST(FilenamesParserTest, TestTxt) {
   auto host = FilenamesParser(
-    "test_objects/filenames.txt", "test_objects/filenames.txt"
+    "test_objects/filenames.list", "test_objects/filenames.list"
   );
   vector<string> expected_filenames = {"filename 1", "filename2", "filename_3"};
   assert_vectors_equal(

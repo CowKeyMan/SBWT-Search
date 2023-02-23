@@ -9,6 +9,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "cxxopts.hpp"
 
@@ -19,6 +20,7 @@ using cxxopts::ParseResult;
 using cxxopts::value;
 using std::string;
 using std::unique_ptr;
+using std::vector;
 
 class ArgumentParser {
 private:
@@ -39,6 +41,10 @@ protected:
   auto initialise_args(int argc, char **argv) -> void;
   [[nodiscard]] auto get_args() const -> const cxxopts::ParseResult &;
   auto get_options() -> cxxopts::Options &;
+  virtual auto get_required_options() -> vector<string> = 0;
+
+private:
+  auto is_required_all_provided(ParseResult &args) -> bool;
 };
 
 }  // namespace sbwt_search

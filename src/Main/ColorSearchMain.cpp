@@ -16,8 +16,8 @@ using std::runtime_error;
 using std::to_string;
 
 auto ColorSearchMain::main(int argc, char **argv) -> int {
-  const string program_name = "Colors Search";
-  const string program_description = "Pseudoalignment";
+  const string program_name = "colors";
+  const string program_description = "sbwt_search";
   Logger::log_timed_event("main", Logger::EVENT_STATE::START);
   auto args
     = ColorSearchArgumentParser(program_name, program_description, argc, argv);
@@ -35,9 +35,8 @@ auto ColorSearchMain::main(int argc, char **argv) -> int {
   );
   auto [index_file_parser, searcher]
     = get_components(gpu_container, args.get_print_mode());
-  // TODO: CREATE OBJECTS
   Logger::log(Logger::LOG_LEVEL::INFO, "Running queries");
-  // TODO: RUN OBJECTS
+  run_components(index_file_parser, searcher);
   Logger::log(Logger::LOG_LEVEL::INFO, "Finished");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
   return 0;
@@ -77,9 +76,28 @@ auto ColorSearchMain::get_components(
     max_indexes_per_batch, max_batches, get_input_filenames(), read_padding
   );
   auto searcher = make_shared<ContinuousColorSearcher>(
-    gpu_container, index_file_parser->get_indexes_batch_producer(), max_batches
+    gpu_container,
+    index_file_parser->get_indexes_batch_producer(),
+    max_indexes_per_batch,
+    max_batches
   );
   return {index_file_parser, searcher};
+}
+
+auto ColorSearchMain::run_components(
+  shared_ptr<ContinuousIndexFileParser> &index_file_parser,
+  shared_ptr<ContinuousColorSearcher> &color_searcher
+) -> void {
+  Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
+  const u64 sections = 2;
+#pragma omp parallel sections num_threads(sections)
+  {
+#pragma omp section
+    { index_file_parser->read_and_generate(); }
+#pragma omp section
+    { color_searcher->read_and_generate(); }
+  }
+  Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
 }
 
 }  // namespace sbwt_search

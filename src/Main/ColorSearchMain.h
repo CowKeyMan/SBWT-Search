@@ -41,6 +41,10 @@ private:
     -> std::tuple<
       shared_ptr<ContinuousIndexFileParser>,
       shared_ptr<ContinuousColorSearcher>>;
+  auto run_components(
+    shared_ptr<ContinuousIndexFileParser> &index_file_parser,
+    shared_ptr<ContinuousColorSearcher> &color_searcher
+  ) -> void;
 };
 
 }  // namespace sbwt_search

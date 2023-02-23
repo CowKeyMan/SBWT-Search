@@ -17,7 +17,7 @@ using std::vector;
 namespace sbwt_search {
 
 FilenamesParser::FilenamesParser(
-  string input_filename, string output_filename
+  const string &input_filename, const string &output_filename
 ) {
   if (is_txt(input_filename)) {
     input_filenames = file_lines_to_vector(input_filename);
@@ -28,14 +28,15 @@ FilenamesParser::FilenamesParser(
   }
 }
 
-auto FilenamesParser::is_txt(string filename) -> bool {
+auto FilenamesParser::is_txt(const string &filename) -> bool {
   u64 fsize = filename.size();
-  return fsize >= 4 && filename.substr(fsize - 4, 4) == ".txt";
+  return fsize >= 5 && filename.substr(fsize - 5, 5) == ".list";
 }
 
-auto FilenamesParser::file_lines_to_vector(string filename) -> vector<string> {
+auto FilenamesParser::file_lines_to_vector(const string &filename)
+  -> vector<string> {
   vector<string> result;
-  ThrowingIfstream stream(filename.c_str(), ios::in);
+  ThrowingIfstream stream(filename, ios::in);
   string buffer;
   while (getline(stream, buffer)) { result.push_back(buffer); }
   return result;
