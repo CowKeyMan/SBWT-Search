@@ -18,7 +18,7 @@ ColorSearcher::ColorSearcher(
 ):
     container(std::move(container_)),
     d_sbwt_index_idxs(max_indexes_per_batch),
-    d_results(10000) {}  // TODO: resize results appropriately
+    d_results(max_indexes_per_batch / gpu_warp_size * container->num_colors) {}
 
 auto ColorSearcher::search(
   const vector<u64> &sbwt_index_idxs, vector<u64> &results, u64 batch_id
@@ -59,7 +59,9 @@ auto ColorSearcher::copy_to_gpu(
   Logger::log_timed_event(
     "SearcherCopyToGpu", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
   );
-  // results.resize(kmer_positions.size()); // TODO: resize properly
+  results.resize(
+    sbwt_index_idxs.size() / gpu_warp_size * container->num_colors
+  );
 }
 
 auto ColorSearcher::copy_from_gpu(vector<u64> &results, u64 batch_id) -> void {

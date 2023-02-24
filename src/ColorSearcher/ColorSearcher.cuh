@@ -126,7 +126,11 @@ __global__ void d_color_search(
     );
   }
   u64 array_idx = arrays_start;
+  // TODO: shfl to find minimum color_idx and maximum color_idx
+  // TODO: get next color
   for (u64 color_idx = 0; color_idx < num_colors; ++color_idx) {
+    // TODO: get minimum of each thread and only consider that color
+    // Use find first set bit (__ffsll)
     bool color_present = false;
     if (array_idx < arrays_end) {
       if (is_dense) {
