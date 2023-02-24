@@ -21,9 +21,4 @@ auto IndexesStartsBatchProducer::start_new_batch() -> void {
   current_write()->indexes_starts.resize(0);
 }
 
-auto IndexesStartsBatchProducer::get_current_write()
-  -> shared_ptr<IndexesStartsBatch> {
-  return current_write();
-}
-
 }  // namespace sbwt_search

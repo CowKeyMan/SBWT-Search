@@ -114,7 +114,7 @@ auto ContinuousIndexFileParser::read_next() -> void {
 auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
   auto indexes_batch = indexes_batch_producer->get_current_write();
   auto indexes_starts
-    = indexes_starts_batch_producer->get_current_write()->indexes_starts;
+    = indexes_starts_batch_producer->current_write()->indexes_starts;
   u64 reads = indexes_starts.size()
     + static_cast<u64>(indexes_starts.empty() || indexes_starts.front() != 0);
   Logger::log(
