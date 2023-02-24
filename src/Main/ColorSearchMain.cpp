@@ -4,6 +4,7 @@
 
 #include "ArgumentParser/ColorSearchArgumentParser.h"
 #include "ColorIndexBuilder/ColorIndexBuilder.h"
+#include "Global/GlobalDefinitions.h"
 #include "Main/ColorSearchMain.h"
 #include "Tools/Logger.h"
 #include "fmt/core.h"
@@ -71,7 +72,7 @@ auto ColorSearchMain::get_components(
   -> std::tuple<
     shared_ptr<ContinuousIndexFileParser>,
     shared_ptr<ContinuousColorSearcher>> {
-  const u64 read_padding = 32;
+  const u64 read_padding = gpu_warp_size;
   auto index_file_parser = make_shared<ContinuousIndexFileParser>(
     max_indexes_per_batch, max_batches, get_input_filenames(), read_padding
   );

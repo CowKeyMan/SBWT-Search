@@ -26,3 +26,5 @@ package.json
 
 tmp/
 gmon*
+
+src/Global/GlobalDefinitions.h

@@ -49,6 +49,7 @@ if(${HIP_TARGET_DEVICE} STREQUAL "NVIDIA")
   add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:-Wno-deprecated-gpu-targets>")
   target_include_directories(hip_rt SYSTEM INTERFACE "${CMAKE_BINARY_DIR}/hip/hip_nvidia/hipamd/build/include")
   set(HIP_TARGET_LANGUAGE CUDA)
+  set(GPU_WARP_SIZE 32 CACHE STRING "The warp size of the target device" FORCE)
 endif()
 
 if(${HIP_TARGET_DEVICE} STREQUAL "CPU")
@@ -66,4 +67,10 @@ if(${HIP_TARGET_DEVICE} STREQUAL "CPU")
   target_compile_options(hip_rt INTERFACE -x c++)
   target_link_libraries(hip_rt INTERFACE hip_cpu_rt)
   set(HIP_TARGET_LANGUAGE CXX)
+  set(GPU_WARP_SIZE 64 CACHE STRING "The warp size of the target device" FORCE)
 endif()
+
+configure_file(
+  "${CMAKE_SOURCE_DIR}/src/Global/GlobalDefinitions.h.in"
+  "${CMAKE_SOURCE_DIR}/src/Global/GlobalDefinitions.h"
+)
