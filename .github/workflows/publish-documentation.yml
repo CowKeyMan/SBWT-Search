@@ -37,9 +37,7 @@ jobs:
       - name: Install Sphinx and extentions
         run: |
           pip3 install breathe exhale sphinx sphinx-rtd-theme sphinx-rtd-dark-mode sphinxcontrib-mermaid matplotlib pandas
-          cd documentation
           npm install @mermaid-js/mermaid-cli
-          cd ..
 
       - name: Install dependencies
         run: sudo apt install zlib1g-dev git

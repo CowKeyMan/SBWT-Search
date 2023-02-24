@@ -1,5 +1,5 @@
-Components
-==========
+Index Search Components
+=======================
 
 This section will describe the components which make up our code base such that it is easier to navigate it. The header files contain a docstring on top which briefly tells what each module is responsible of. I recommend looking at this when you need even more details
 
@@ -9,7 +9,7 @@ Hierarchy
 We will first show the class Hierarchy and then proceed to tell how each component works
 
 .. _MainPipeline:
-.. mermaid:: graphs/Classhierarchy.mmd
+.. mermaid:: graphs/IndexSearchClasshierarchy.mmd
 
 The project code is located in the **src** folder.
 

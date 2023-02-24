@@ -108,7 +108,6 @@ Then you can install mermaid using the following:
 .. code-block:: bash
 
   pip install sphinxcontrib-mermaid
-  cd documentation/
   npm install @mermaid-js/mermaid-cli
 
 
