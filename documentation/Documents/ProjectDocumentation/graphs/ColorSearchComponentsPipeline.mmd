@@ -1,73 +1,73 @@
 flowchart TD
-  IndexesBatch(["
-      IndexesBatch
-      <i>
-      indexes (max_indexes * 64)
-      true_indxes (64)
-      skipped (64)
+    IndexesBatch(["
+        IndexesBatch
+        <i>
+        indexes (max_indexes * 64)
+        true_indxes (64)
+        skipped (64)
 
-      </i>
-  "])
-  ColorsIntervalBatch(["
-  ColorsIntervalBatch
-      <i>
-      warps_before_new_read ((max_reads + 1) * 64)
-      reads_before_newfile ((max_reads + 1) * 64)
+        </i>
+    "])
+    ColorsIntervalBatch(["
+    ColorsIntervalBatch
+        <i>
+        warps_before_new_read ((max_reads + 1) * 64)
+        reads_before_newfile ((max_reads + 1) * 64)
 
-      </i>
-  "])
-  WarpsBeforeNewReadBatch(["
-      WarpsBeforeNewReadBatch
-      <i>
-      warps_before_new_read (pointer to warps_before_new_read)
+        </i>
+    "])
+    WarpsBeforeNewReadBatch(["
+        WarpsBeforeNewReadBatch
+        <i>
+        warps_before_new_read (pointer to warps_before_new_read)
 
-      </i>
-  "])
-  ReadStatisticsBatch(["
-      ReadStatisticsBatch
-      <i>
-      true_indexes (max_reads * 64)
-      invalid (max_reads * 64)
-      not_found (max_reads * 64)
+        </i>
+    "])
+    ReadStatisticsBatch(["
+        ReadStatisticsBatch
+        <i>
+        true_indexes (max_reads * 64)
+        invalid (max_reads * 64)
+        not_found (max_reads * 64)
 
-      </i>
-  "])
-  ColorSearchResultsBatch(["
-      ColorSearchResultsBatch
-      <i>
-      results (max_indexes / warp_size * colors * 64)
+        </i>
+    "])
+    ColorSearchResultsBatch(["
+        ColorSearchResultsBatch
+        <i>
+        results (max_indexes / warp_size * colors * 64)
 
-      </i>
-  "])
-  ColorSearchResultsPostProcessedBatch(["
-      ColorSearchResultsBatch
-      <i>
-      squeezed_results (pointer to results)
+        </i>
+    "])
+    ColorSearchResultsPostProcessedBatch(["
+        ColorSearchResultsBatch
+        <i>
+        squeezed_results (pointer to results)
 
-      </i>
-  "])
+        </i>
+    "])
 
-  IndexFile{Index File}-->ContinuousIndexFileParser
-  subgraph ContinuousIndexFileParser
-    IndexesBatchProducer
-    ColorsIntervalBatchProducer
-    WarpsBeforeNewReadBatchProducer
-    ReadStatisticsBatchProducer
-  end
+    IndexFile{Index File}-->ContinuousIndexFileParser
+    subgraph ContinuousIndexFileParser
+        IndexesBatchProducer
+        ColorsIntervalBatchProducer
+        WarpsBeforeNewReadBatchProducer
+        ReadStatisticsBatchProducer
+    end
 
-  IndexesBatchProducer --- IndexesBatch
-  ColorsIntervalBatchProducer --- ColorsIntervalBatch
-  WarpsBeforeNewReadBatchProducer --- WarpsBeforeNewReadBatch
-  ReadStatisticsBatchProducer --- ReadStatisticsBatch
-  ColorSearchResultsPostProcessor --- ColorSearchResultsPostProcessedBatch
-  ColorSearcher --- ColorSearchResultsBatch
+    IndexesBatchProducer --- IndexesBatch
+    ColorsIntervalBatchProducer --- ColorsIntervalBatch
+    WarpsBeforeNewReadBatchProducer --- WarpsBeforeNewReadBatch
+    ReadStatisticsBatchProducer --- ReadStatisticsBatch
+    ColorSearchResultsPostProcessor --- ColorSearchResultsPostProcessedBatch
+    ColorSearcher --- ColorSearchResultsBatch
 
-  IndexesBatch-->ColorSearcher
-  ColorsIntervalBatch-->ContinuousColorResultsPrinter
-  WarpsBeforeNewReadBatch-->ColorSearchResultsPostProcessor
-  ColorSearchResultsBatch-->ColorSearchResultsPostProcessor
+    IndexesBatch-->ColorSearcher
+    ColorsIntervalBatch-->ContinuousColorResultsPrinter
+    WarpsBeforeNewReadBatch-->ColorSearchResultsPostProcessor
+    ColorSearchResultsBatch-->ColorSearchResultsPostProcessor
 
-  ReadStatisticsBatch-->ContinuousColorResultsPrinter
-  ColorSearchResultsPostProcessedBatch-->ContinuousColorResultsPrinter
+    ReadStatisticsBatch-->ContinuousColorResultsPrinter
+    ColorSearchResultsPostProcessedBatch-->ContinuousColorResultsPrinter
 
-  ContinuousColorResultsPrinter--> ResultFiles{Results}
+    ContinuousColorResultsPrinter--> ResultFiles{Results}

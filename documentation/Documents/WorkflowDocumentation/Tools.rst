@@ -164,7 +164,7 @@ We use github pages to publish the documentation and code coverage. To set this 
 CUDA
 ++++
 
-This template also supports CUDA. Check the official installation guides for more info, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can turn the build off. For more information look at the **build** folder section in :ref:`Workflow Files`.
+This template also supports CUDA. Check the official installation guides for more info, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can turn the build off. For more information look at the **build** folder section in :ref:`File Documentation`.
 
 On github actions we do not have GPUs, but we can still compile and test our code. Thus, our gpu tests will fail but we will still have the code coverage report on the site.
 
