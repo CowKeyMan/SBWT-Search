@@ -22,7 +22,7 @@ auto StringSequenceBatchProducer::get_default_value()
 }
 
 auto StringSequenceBatchProducer::set_string(const string &s) -> void {
-  get_batches().current_write()->seq = &s;
+  current_write()->seq = &s;
 }
 
 }  // namespace sbwt_search

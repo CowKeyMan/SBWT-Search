@@ -19,8 +19,8 @@ auto StringBreakBatchProducer::get_default_value()
 auto StringBreakBatchProducer::set(
   const vector<u64> &chars_before_newline, u64 string_size
 ) -> void {
-  get_batches().current_write()->chars_before_newline = &chars_before_newline;
-  get_batches().current_write()->string_size = string_size;
+  current_write()->chars_before_newline = &chars_before_newline;
+  current_write()->string_size = string_size;
 }
 
 }  // namespace sbwt_search

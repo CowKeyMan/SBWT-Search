@@ -22,13 +22,13 @@ auto BitsProducer::get_default_value() -> shared_ptr<BitSeqBatch> {
 
 auto BitsProducer::start_new_batch(u64 num_chars) -> void {
   SharedBatchesProducer<BitSeqBatch>::do_at_batch_start();
-  get_batches().current_write()->bit_seq.resize(
+  current_write()->bit_seq.resize(
     ceil(static_cast<double>(num_chars) / chars_per_u64)
   );
 }
 
 auto BitsProducer::set(u64 index, u64 value) -> void {
-  get_batches().current_write()->bit_seq[index] = value;
+  current_write()->bit_seq[index] = value;
 }
 
 }  // namespace sbwt_search

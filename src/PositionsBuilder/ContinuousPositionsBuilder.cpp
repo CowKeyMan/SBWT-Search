@@ -38,7 +38,7 @@ auto ContinuousPositionsBuilder::generate() -> void {
   builder.build_positions(
     *read_batch->chars_before_newline,
     read_batch->string_size,
-    get_batches().current_write()->positions
+    current_write()->positions
   );
 }
 

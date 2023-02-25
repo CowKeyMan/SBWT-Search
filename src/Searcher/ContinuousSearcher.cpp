@@ -52,7 +52,7 @@ auto ContinuousSearcher::generate() -> void {
   searcher.search(
     bit_seq_batch->bit_seq,
     positions_batch->positions,
-    get_batches().current_write()->results,
+    current_write()->results,
     get_batch_id()
   );
 }

@@ -46,7 +46,7 @@ public:
     return !(counter == batches.size());
   }
   auto generate() -> void override {
-    this->get_batches().current_write() = batches[counter];
+    this->current_write() = batches[counter];
     counter++;
   }
 };
