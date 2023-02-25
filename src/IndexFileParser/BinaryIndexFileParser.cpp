@@ -12,10 +12,10 @@ using std::runtime_error;
 BinaryIndexFileParser::BinaryIndexFileParser(
   shared_ptr<ThrowingIfstream> in_stream_,
   u64 max_indexes_,
-  u64 read_padding_,
+  u64 warp_size_,
   u64 buffer_size_
 ):
-    IndexFileParser(std::move(in_stream_), max_indexes_, read_padding_),
+    IndexFileParser(std::move(in_stream_), max_indexes_, warp_size_),
     buffer_size(buffer_size_ * sizeof(u64)) {
   assert_version();
   buffer.resize(buffer_size);

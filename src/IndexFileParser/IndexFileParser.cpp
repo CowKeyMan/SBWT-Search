@@ -5,11 +5,11 @@
 namespace sbwt_search {
 
 IndexFileParser::IndexFileParser(
-  shared_ptr<ThrowingIfstream> in_stream_, u64 max_indexes_, u64 read_padding_
+  shared_ptr<ThrowingIfstream> in_stream_, u64 max_indexes_, u64 warp_size_
 ):
     in_stream(std::move(in_stream_)),
     max_indexes(max_indexes_),
-    read_padding(read_padding_) {}
+    warp_size(warp_size_) {}
 
 auto IndexFileParser::get_istream() const -> ThrowingIfstream & {
   return *in_stream;
@@ -18,7 +18,7 @@ auto IndexFileParser::get_indexes() const -> vector<u64> & {
   return indexes_batch->indexes;
 }
 auto IndexFileParser::get_max_indexes() const -> u64 { return max_indexes; }
-auto IndexFileParser::get_read_padding() const -> u64 { return read_padding; }
+auto IndexFileParser::get_read_padding() const -> u64 { return warp_size; }
 
 auto IndexFileParser::generate_batch(
   shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
@@ -52,7 +52,7 @@ auto IndexFileParser::get_indexes_batch() const
 
 auto IndexFileParser::begin_new_read() -> void {
   get_warps_before_new_read_batch()->warps_before_new_read->push_back(
-    get_indexes().size()
+    get_indexes().size() / warp_size
   );
   read_statistics_batch->found_idxs.push_back(0);
   read_statistics_batch->invalid_idxs.push_back(0);

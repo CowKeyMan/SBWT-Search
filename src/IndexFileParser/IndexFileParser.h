@@ -36,7 +36,7 @@ private:
   shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch;
   shared_ptr<IndexesBatch> indexes_batch;
   u64 max_indexes;
-  u64 read_padding;
+  u64 warp_size;
 
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
