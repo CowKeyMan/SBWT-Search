@@ -3,8 +3,6 @@ flowchart TD
         IndexesBatch
         <i>
         indexes (max_indexes * 64)
-        true_indxes (64)
-        skipped (64)
 
         </i>
     "])
@@ -26,7 +24,7 @@ flowchart TD
     ReadStatisticsBatch(["
         ReadStatisticsBatch
         <i>
-        true_indexes (max_reads * 64)
+        found_indexes (max_reads * 64)
         invalid (max_reads * 64)
         not_found (max_reads * 64)
 

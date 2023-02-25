@@ -15,7 +15,8 @@
 #include <memory>
 
 #include "BatchObjects/IndexesBatch.h"
-#include "BatchObjects/IndexesStartsBatch.h"
+#include "BatchObjects/ReadStatisticsBatch.h"
+#include "BatchObjects/WarpsBeforeNewReadBatch.h"
 #include "Tools/IOUtils.h"
 #include "Tools/SharedBatchesProducer.hpp"
 
@@ -31,17 +32,16 @@ using std::shared_ptr;
 class IndexFileParser {
 private:
   shared_ptr<ThrowingIfstream> in_stream;
+  shared_ptr<ReadStatisticsBatch> read_statistics_batch;
+  shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch;
   shared_ptr<IndexesBatch> indexes_batch;
-  shared_ptr<IndexesStartsBatch> indexes_starts_batch;
   u64 max_indexes;
   u64 read_padding;
 
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
   [[nodiscard]] auto get_indexes() const -> vector<u64> &;
-  [[nodiscard]] auto get_indexes_batch() -> shared_ptr<IndexesBatch> &;
   [[nodiscard]] auto get_max_indexes() const -> u64;
-  [[nodiscard]] auto get_starts() const -> vector<u64> &;
   [[nodiscard]] auto get_read_padding() const -> u64;
   IndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_, u64 max_indexes_, u64 read_padding_
@@ -50,8 +50,9 @@ protected:
 public:
   // return true if we manage to read from the file
   virtual auto generate_batch(
-    shared_ptr<IndexesBatch> indexes_batch_,
-    shared_ptr<IndexesStartsBatch> indexes_starts_batch_
+    shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
+    shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch_,
+    shared_ptr<IndexesBatch> indexes_batch_
   ) -> bool;
   virtual ~IndexFileParser() = default;
   IndexFileParser(IndexFileParser &) = delete;
@@ -59,6 +60,16 @@ public:
   auto operator=(IndexFileParser &) = delete;
   auto operator=(IndexFileParser &&) = delete;
   auto pad_read() -> void;
+
+protected:
+  [[nodiscard]] auto get_read_statistics_batch() const
+    -> const shared_ptr<ReadStatisticsBatch> &;
+  [[nodiscard]] auto get_warps_before_new_read_batch() const
+    -> const shared_ptr<WarpsBeforeNewReadBatch> &;
+  [[nodiscard]] auto get_indexes_batch() const
+    -> const shared_ptr<IndexesBatch> &;
+
+  auto begin_new_read() -> void;
 };
 
 }  // namespace sbwt_search

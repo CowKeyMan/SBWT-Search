@@ -28,6 +28,7 @@ public:
     for (auto &x : q) { x = default_value; }
   }
   auto set(u64 idx, T value) { q[idx] = value; }
+  auto get(u64 idx) -> T { return q[idx]; }
 
   auto current_read() const -> const T & { return q[read_idx]; }
   auto current_write() -> T & { return q[write_idx]; }

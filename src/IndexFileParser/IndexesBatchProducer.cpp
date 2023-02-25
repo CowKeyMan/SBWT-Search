@@ -20,9 +20,9 @@ auto IndexesBatchProducer::get_default_value() -> shared_ptr<IndexesBatch> {
   return batch;
 }
 
-auto IndexesBatchProducer::start_new_batch() -> void {
+auto IndexesBatchProducer::do_at_batch_start() -> void {
   SharedBatchesProducer<IndexesBatch>::do_at_batch_start();
-  current_write()->indexes.resize(0);
+  current_write()->reset();
 }
 
 auto IndexesBatchProducer::get_current_write() -> shared_ptr<IndexesBatch> {

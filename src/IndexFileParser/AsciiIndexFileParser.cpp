@@ -30,25 +30,34 @@ auto AsciiIndexFileParser::assert_version() -> void {
 }
 
 auto AsciiIndexFileParser::generate_batch(
-  shared_ptr<IndexesBatch> indexes_batch_,
-  shared_ptr<IndexesStartsBatch> indexes_starts_batch_
+  shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
+  shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch_,
+  shared_ptr<IndexesBatch> indexes_batch_
 ) -> bool {
   IndexFileParser::generate_batch(
-    std::move(indexes_batch_), std::move(indexes_starts_batch_)
+    std::move(read_statistics_batch_),
+    std::move(warps_before_new_read_batch_),
+    std::move(indexes_batch_)
   );
-  const u64 initial_size = get_starts().size() + get_indexes().size();
+  const u64 initial_size = get_indexes_batch()->indexes.size()
+    + get_warps_before_new_read_batch()->warps_before_new_read->size();
   char c = '\0';
   while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
     c = getc();
     if (c == '\0') { break; }  // EOF
     if (new_read) {
-      get_starts().push_back(get_indexes().size());
+      begin_new_read();
       new_read = false;
     }
     if (c == '-') {
+      c = getc();
+      if (c == '1') {
+        ++get_read_statistics_batch()->not_found_idxs.back();
+      } else if (c == '2') {
+        ++get_read_statistics_batch()->invalid_idxs.back();
+      }
       c = skip_until_next_whitespace();
-      ++get_indexes_batch()->skipped;
     }
     if (c == '\n') {
       pad_read();
@@ -56,12 +65,14 @@ auto AsciiIndexFileParser::generate_batch(
     }
     // if it is a number (note: all special characters are smaller than '0')
     if (c >= '0') {
-      ++get_indexes_batch()->true_indexes;
+      ++get_read_statistics_batch()->found_idxs.back();
       get_indexes().push_back(read_number(c - '0'));
     }
   }
   pad_read();
-  return get_starts().size() > initial_size;
+  return (get_indexes_batch()->indexes.size()
+          + get_warps_before_new_read_batch()->warps_before_new_read->size())
+    > initial_size;
 }
 
 inline auto AsciiIndexFileParser::load_buffer() -> void {

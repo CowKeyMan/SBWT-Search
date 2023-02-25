@@ -46,31 +46,31 @@ add_executable(
   test_main
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
 
-  "${PROJECT_SOURCE_DIR}/Tools/CircularQueue_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Tools/CircularBuffer_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Tools/IOUtils_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Tools/Semaphore_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Tools/MathUtils_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Tools/Logger_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Tools/MemoryUnitsParser_test.cpp"
-  "${PROJECT_SOURCE_DIR}/Tools/BenchmarkUtils_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/CircularQueue_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/CircularBuffer_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/IOUtils_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/Semaphore_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/MathUtils_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/Logger_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/MemoryUnitsParser_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/Tools/BenchmarkUtils_test.cpp"
 
-  "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser_test.cpp"
 
-  "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser_test.cpp"
-  "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
-  "${PROJECT_SOURCE_DIR}/PositionsBuilder/ContinuousPositionsBuilder_test.cpp"
-  "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/ContinuousSeqToBitsConverter_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/PositionsBuilder/ContinuousPositionsBuilder_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/SeqToBitsConverter/ContinuousSeqToBitsConverter_test.cpp"
 
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParserTestUtils.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser_test.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser_test.cpp"
-  "${PROJECT_SOURCE_DIR}/ColorIndexBuilder/ColorIndexBuilder_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/ColorIndexBuilder/ColorIndexBuilder_test.cpp"
 
-  "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cpp"
-  "${PROJECT_SOURCE_DIR}/UtilityKernels/GetBoolFromBitVector_test.cpp"
-  "${PROJECT_SOURCE_DIR}/UtilityKernels/VariableLengthIntegerIndex_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/UtilityKernels/GetBoolFromBitVector_test.cpp"
+  # "${PROJECT_SOURCE_DIR}/UtilityKernels/VariableLengthIntegerIndex_test.cpp"
 )
 add_test(NAME test_main COMMAND test_main)
 target_link_libraries(

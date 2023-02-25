@@ -11,8 +11,6 @@
 #include <memory>
 #include <sstream>
 
-#include "BatchObjects/IndexesBatch.h"
-#include "BatchObjects/IndexesStartsBatch.h"
 #include "IndexFileParser/IndexFileParser.h"
 #include "Tools/IOUtils.h"
 
@@ -28,7 +26,7 @@ private:
   vector<u64> buffer;
   u64 buffer_size = 0;
   u64 buffer_index = 0;
-  bool new_read = true;
+  bool new_read = false;
 
 public:
   BinaryIndexFileParser(
@@ -38,8 +36,9 @@ public:
     u64 buffer_size = sixteen_kB / sizeof(u64)
   );
   auto generate_batch(
-    shared_ptr<IndexesBatch> indexes_batch_,
-    shared_ptr<IndexesStartsBatch> indexes_starts_batch_
+    shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
+    shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch_,
+    shared_ptr<IndexesBatch> indexes_batch_
   ) -> bool override;
 
 private:

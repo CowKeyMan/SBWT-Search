@@ -30,34 +30,42 @@ auto BinaryIndexFileParser::assert_version() -> void {
 }
 
 auto BinaryIndexFileParser::generate_batch(
-  shared_ptr<IndexesBatch> indexes_batch_,
-  shared_ptr<IndexesStartsBatch> indexes_starts_batch_
+  shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
+  shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch_,
+  shared_ptr<IndexesBatch> indexes_batch_
 ) -> bool {
   u64 i = 0;
   IndexFileParser::generate_batch(
-    std::move(indexes_batch_), std::move(indexes_starts_batch_)
+    std::move(read_statistics_batch_),
+    std::move(warps_before_new_read_batch_),
+    std::move(indexes_batch_)
   );
-  const u64 initial_size = get_starts().size() + get_indexes().size();
+  const u64 initial_size = get_indexes_batch()->indexes.size()
+    + get_warps_before_new_read_batch()->warps_before_new_read->size();
   while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
     i = get_next();
     if (buffer_size == 0) { break; }  // EOF
     if (new_read) {
-      get_starts().push_back(get_indexes().size());
+      begin_new_read();
       new_read = false;
     }
-    if (i == static_cast<u64>(-1) || i == static_cast<u64>(-2)) {
-      ++get_indexes_batch()->skipped;
+    if (i == static_cast<u64>(-1)) {
+      ++get_read_statistics_batch()->not_found_idxs.back();
+    } else if (i == static_cast<u64>(-2)) {
+      ++get_read_statistics_batch()->invalid_idxs.back();
     } else if (i == static_cast<u64>(-3)) {
       pad_read();
       new_read = true;
     } else {
-      ++get_indexes_batch()->true_indexes;
+      ++get_read_statistics_batch()->found_idxs.back();
       get_indexes().push_back(i);
     }
   }
   pad_read();
-  return get_starts().size() > initial_size;
+  return (get_indexes_batch()->indexes.size()
+          + get_warps_before_new_read_batch()->warps_before_new_read->size())
+    > initial_size;
 }
 
 inline auto BinaryIndexFileParser::get_next() -> u64 {

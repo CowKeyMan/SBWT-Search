@@ -1,15 +1,15 @@
-Searching
-=========
+Index Searching
+===============
 
 The following diagram shows the search components. The diamonds show the items stored on disk, the rectangles with sharp edges are the class components and the rectangles with round corners are the data objects which are passed around between components. We also show how many bits are necessary per component.
 
-.. _SearchComponentsPipeline:
+.. _IndexSearchComponentsPipeline:
 .. mermaid:: graphs/IndexSearchComponentsPipeline.mmd
 
 Search Components
 +++++++++++++++++
 
-The searching is divided into 5 components. These are the SequenceFileParser, SeqToBitsConverter, PositionsBuilder, Searching, and ResultsPrinter. They are described in :ref:`Components` and above one can see how they share data with one another. It is also important to note that the 'Continuous' aspect of these means that they can operate while their dependency is processing. The repository contains an implementation of a multithreaded pipeline, with the help of the **SharedBatchesProducer** class, which each continuous component inherits from, and I recommended checking out if you wish to contribute to the project. Since we want to share memory between the components so as not to waste cpu cycles copying data, we must have a lot of memory, and allocate multiple batches, which is where the **SharedBatchesProducer** also comes into play, by cycling through a semaphore protected buffer of batches.
+The searching is divided into 5 components. These are the SequenceFileParser, SeqToBitsConverter, PositionsBuilder, Searching, and ResultsPrinter. They are described in :ref:`IndexSearchComponents` and above one can see how they share data with one another. It is also important to note that the 'Continuous' aspect of these means that they can operate while their dependency is processing. The repository contains an implementation of a multithreaded pipeline, with the help of the **SharedBatchesProducer** class, which each continuous component inherits from, and I recommended checking out if you wish to contribute to the project. Since we want to share memory between the components so as not to waste cpu cycles copying data, we must have a lot of memory, and allocate multiple batches, which is where the **SharedBatchesProducer** also comes into play, by cycling through a semaphore protected buffer of batches.
 
 Memory
 ++++++

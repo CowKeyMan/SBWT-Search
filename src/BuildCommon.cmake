@@ -168,13 +168,16 @@ target_link_libraries(results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_C
 # Colors
 add_library(
   index_file_parser
+  # "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
+
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser.cpp"
+
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/ColorsIntervalBatchProducer.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/ReadStatisticsBatchProducer.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/WarpsBeforeNewReadBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexesBatchProducer.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexesStartsBatchProducer.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexesBeforeNewfileBatchProducer.cpp"
 )
 target_link_libraries(index_file_parser PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
 

@@ -1,5 +1,5 @@
 Color Searching
 ===============
 
-.. _SearchComponentsPipeline:
+.. _ColorSearchComponentsPipeline:
 .. mermaid:: graphs/ColorSearchComponentsPipeline.mmd
