@@ -40,8 +40,7 @@ auto IntervalBatchProducer::do_at_batch_start() -> void {
 }
 
 auto IntervalBatchProducer::do_at_batch_finish() -> void {
-  current_write()->newlines_before_newfile.push_back(
-    numeric_limits<u64>::max()
+  current_write()->newlines_before_newfile.push_back(numeric_limits<u64>::max()
   );
   SharedBatchesProducer<IntervalBatch>::do_at_batch_finish();
 }
