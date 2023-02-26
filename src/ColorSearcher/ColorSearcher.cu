@@ -1,21 +1,3 @@
-#include <algorithm>
-#include <iostream>
-#include <limits>
-#include <span>
-#include <vector>
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::vector;
-template <class T>
-auto print_vec(
-  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
-) {
-  cout << "---------------------" << endl;
-  for (int i = 0; i < std::min(limit, v.size()); ++i) { cout << v[i] << " "; }
-  cout << endl << "---------------------" << endl;
-}
-
 #include "ColorSearcher/ColorSearcher.cuh"
 #include "ColorSearcher/ColorSearcher.h"
 #include "Tools/BitDefinitions.h"
@@ -40,7 +22,6 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   GPU_CHECK(hipEventCreate(&search_stop));
   u32 blocks_per_grid
     = round_up<u64>(num_queries, threads_per_block) / threads_per_block;
-  cout << blocks_per_grid << endl;
   GPU_CHECK(hipEventRecord(search_start));
   hipLaunchKernelGGL(
     d_color_search,
