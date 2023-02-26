@@ -1,4 +1,7 @@
+#include <cstdlib>
+#include <iostream>
 #include <memory>
+#include <numeric>
 
 #include <fmt/core.h>
 
@@ -16,21 +19,30 @@ using std::ios;
 using std::make_shared;
 
 ContinuousIndexFileParser::ContinuousIndexFileParser(
-  u64 max_indexes_per_batch_,
   u64 max_batches,
-  vector<string> filenames_,
-  u64 read_padding_
+  u64 max_indexes_per_batch_,
+  u64 max_reads,
+  u64 read_padding_,
+  vector<string> filenames_
 ):
+    warps_before_new_read(
+      create_warps_before_new_read(max_batches, max_reads + 1)
+    ),
     max_indexes_per_batch(max_indexes_per_batch_),
     read_padding(read_padding_),
+    colors_interval_batch_producer(make_shared<ColorsIntervalBatchProducer>(
+      max_batches, max_reads, warps_before_new_read
+    )),
+    read_statistics_batch_producer(
+      make_shared<ReadStatisticsBatchProducer>(max_batches, max_reads)
+    ),
+    warps_before_new_read_batch_producer(
+      make_shared<WarpsBeforeNewReadBatchProducer>(
+        max_batches, warps_before_new_read
+      )
+    ),
     indexes_batch_producer(
       make_shared<IndexesBatchProducer>(max_indexes_per_batch_, max_batches)
-    ),
-    indexes_starts_batch_producer(
-      make_shared<IndexesStartsBatchProducer>(max_batches)
-    ),
-    indexes_before_newfile_batch_producer(
-      make_shared<IndexesBeforeNewfileBatchProducer>(max_batches)
     ),
     filenames(std::move(filenames_)) {
   filename_iterator = filenames.begin();
@@ -48,8 +60,10 @@ auto ContinuousIndexFileParser::read_and_generate() -> void {
 
 auto ContinuousIndexFileParser::start_next_file() -> bool {
   while (filename_iterator != filenames.end()) {
-    indexes_before_newfile_batch_producer->add(
-      indexes_batch_producer->current_write()->indexes.size()
+    auto colors_interval_batch
+      = colors_interval_batch_producer->current_write();
+    colors_interval_batch->reads_before_newfile.push_back(
+      colors_interval_batch->warps_before_new_read->size()
     );
     auto filename = *filename_iterator++;
     try {
@@ -69,7 +83,7 @@ auto ContinuousIndexFileParser::start_next_file() -> bool {
 auto ContinuousIndexFileParser::open_parser(const string &filename) -> void {
   auto in_stream = make_shared<ThrowingIfstream>(filename, ios::in);
   const string file_format = in_stream->read_string_with_size();
-  if (file_format == "ascii") {
+  if (file_format == "ascii") {  // NOLINT (bugprone-branch-clone)
     index_file_parser = make_unique<AsciiIndexFileParser>(
       std::move(in_stream), max_indexes_per_batch, read_padding
     );
@@ -77,25 +91,23 @@ auto ContinuousIndexFileParser::open_parser(const string &filename) -> void {
     index_file_parser = make_unique<BinaryIndexFileParser>(
       std::move(in_stream), max_indexes_per_batch, read_padding
     );
+  } else {
+    Logger::log(
+      Logger::LOG_LEVEL::WARN, "Invalid file format in file: " + filename
+    );
   }
 }
 
 auto ContinuousIndexFileParser::do_at_batch_start() -> void {
+  colors_interval_batch_producer->do_at_batch_start();
+  read_statistics_batch_producer->do_at_batch_start();
+  warps_before_new_read_batch_producer->do_at_batch_start();
   indexes_batch_producer->do_at_batch_start();
-  indexes_starts_batch_producer->do_at_batch_start();
-  indexes_before_newfile_batch_producer->do_at_batch_start();
   Logger::log_timed_event(
     "ContinuousIndexFileParser",
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  reset();
-}
-
-auto ContinuousIndexFileParser::reset() -> void {
-  indexes_batch_producer->current_write()->reset();
-  indexes_starts_batch_producer->current_write()->reset();
-  indexes_before_newfile_batch_producer->current_write()->reset();
 }
 
 auto ContinuousIndexFileParser::read_next() -> void {
@@ -103,8 +115,9 @@ auto ContinuousIndexFileParser::read_next() -> void {
     (indexes_batch_producer->current_write()->indexes.size() < max_indexes_per_batch)
      && (
        index_file_parser->generate_batch(
-         indexes_batch_producer->current_write(),
-         indexes_starts_batch_producer->current_write()
+         read_statistics_batch_producer->current_write(),
+         warps_before_new_read_batch_producer->current_write(),
+         indexes_batch_producer->current_write()
        )
        || start_next_file()
       )
@@ -112,23 +125,42 @@ auto ContinuousIndexFileParser::read_next() -> void {
 }
 
 auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
-  auto indexes_batch = indexes_batch_producer->get_current_write();
-  auto indexes_starts
-    = indexes_starts_batch_producer->current_write()->indexes_starts;
-  u64 reads = indexes_starts.size()
-    + static_cast<u64>(indexes_starts.empty() || indexes_starts.front() != 0);
+  auto num_indexes
+    = indexes_batch_producer->get_current_write()->indexes.size();
+  auto read_statistics_batch
+    = get_read_statistics_batch_producer()->current_write();
+  auto reads = colors_interval_batch_producer->current_write()
+                 ->reads_before_newfile.size();
+  auto num_found_idxs = std::accumulate(
+    get_read_statistics_batch_producer()->current_write()->found_idxs.begin(),
+    get_read_statistics_batch_producer()->current_write()->found_idxs.end(),
+    0UL
+  );
+  auto num_invalid_idxs = std::accumulate(
+    read_statistics_batch->invalid_idxs.begin(),
+    read_statistics_batch->invalid_idxs.end(),
+    0UL
+  );
+  auto num_not_found_idxs = std::accumulate(
+    read_statistics_batch->not_found_idxs.begin(),
+    read_statistics_batch->not_found_idxs.end(),
+    0UL
+  );
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
-      "Read {} indexes in batch {}, of which {} are true indexes "
-      "and {} is padding, and {} indexes were skipped because they represent "
-      "nulls",
-      indexes_batch->indexes.size(),
-      reads,
+      "Batch {} contains {} indexes in {} reads, of which {} are found indexes "
+      "and {} is "
+      "padding. {} indexes were skipped, of which {} is not found and {} is "
+      "invalids.",
       batch_id,
-      indexes_batch->true_indexes,
-      indexes_batch->indexes.size() - indexes_batch->true_indexes,
-      indexes_batch->skipped
+      num_indexes,
+      reads,
+      num_found_idxs,
+      num_indexes - num_found_idxs,
+      num_not_found_idxs + num_invalid_idxs,
+      num_not_found_idxs,
+      num_invalid_idxs
     )
   );
   Logger::log_timed_event(
@@ -137,28 +169,44 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
     format("batch {}", batch_id)
   );
   ++batch_id;
+  colors_interval_batch_producer->do_at_batch_finish();
+  read_statistics_batch_producer->do_at_batch_finish();
+  warps_before_new_read_batch_producer->do_at_batch_finish();
   indexes_batch_producer->do_at_batch_finish();
-  indexes_starts_batch_producer->do_at_batch_finish();
-  indexes_before_newfile_batch_producer->do_at_batch_finish();
 }
 
 auto ContinuousIndexFileParser::do_at_generate_finish() -> void {
+  colors_interval_batch_producer->do_at_generate_finish();
+  read_statistics_batch_producer->do_at_generate_finish();
+  warps_before_new_read_batch_producer->do_at_generate_finish();
   indexes_batch_producer->do_at_generate_finish();
-  indexes_starts_batch_producer->do_at_generate_finish();
-  indexes_before_newfile_batch_producer->do_at_generate_finish();
 }
 
+auto ContinuousIndexFileParser::get_colors_interval_batch_producer() const
+  -> const shared_ptr<ColorsIntervalBatchProducer> & {
+  return colors_interval_batch_producer;
+}
+auto ContinuousIndexFileParser::get_read_statistics_batch_producer() const
+  -> const shared_ptr<ReadStatisticsBatchProducer> & {
+  return read_statistics_batch_producer;
+}
+auto ContinuousIndexFileParser::get_warps_before_new_read_batch_producer() const
+  -> const shared_ptr<WarpsBeforeNewReadBatchProducer> & {
+  return warps_before_new_read_batch_producer;
+}
 auto ContinuousIndexFileParser::get_indexes_batch_producer() const
   -> const shared_ptr<IndexesBatchProducer> & {
   return indexes_batch_producer;
 }
-auto ContinuousIndexFileParser::get_indexes_starts_batch_producer() const
-  -> const shared_ptr<IndexesStartsBatchProducer> & {
-  return indexes_starts_batch_producer;
-}
-auto ContinuousIndexFileParser::get_indexes_before_newfile_batch_producer(
-) const -> const shared_ptr<IndexesBeforeNewfileBatchProducer> & {
-  return indexes_before_newfile_batch_producer;
+
+auto ContinuousIndexFileParser::create_warps_before_new_read(
+  u64 amount, u64 size
+) const -> const vector<shared_ptr<vector<u64>>> {
+  vector<shared_ptr<vector<u64>>> result;
+  for (int i = 0; i < amount; ++i) {
+    result.push_back(make_shared<vector<u64>>(size));
+  }
+  return result;
 }
 
 }  // namespace sbwt_search

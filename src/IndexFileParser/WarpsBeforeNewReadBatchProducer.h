@@ -15,16 +15,18 @@ using design_utils::SharedBatchesProducer;
 class ContinuousIndexFileParser;
 
 class WarpsBeforeNewReadBatchProducer:
-    SharedBatchesProducer<WarpsBeforeNewReadBatch> {
+    public SharedBatchesProducer<WarpsBeforeNewReadBatch> {
   friend ContinuousIndexFileParser;
 
 public:
   explicit WarpsBeforeNewReadBatchProducer(
-    u64 max_batches, vector<shared_ptr<vector<u64>>> &warps_before_new_read
+    u64 max_batches,
+    const vector<shared_ptr<vector<u64>>> &warps_before_new_read
   );
 
 protected:
   auto do_at_batch_start() -> void override;
+  auto get_default_value() -> shared_ptr<WarpsBeforeNewReadBatch> override;
 };
 
 }  // namespace sbwt_search

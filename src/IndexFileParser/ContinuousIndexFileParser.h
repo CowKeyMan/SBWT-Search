@@ -9,10 +9,11 @@
 
 #include <memory>
 
+#include "IndexFileParser/ColorsIntervalBatchProducer.h"
 #include "IndexFileParser/IndexFileParser.h"
 #include "IndexFileParser/IndexesBatchProducer.h"
-#include "IndexFileParser/IndexesBeforeNewfileBatchProducer.h"
-#include "IndexFileParser/IndexesStartsBatchProducer.h"
+#include "IndexFileParser/ReadStatisticsBatchProducer.h"
+#include "IndexFileParser/WarpsBeforeNewReadBatchProducer.h"
 
 namespace sbwt_search {
 
@@ -22,10 +23,13 @@ using std::vector;
 
 class ContinuousIndexFileParser {
 private:
+  vector<shared_ptr<vector<u64>>> warps_before_new_read;
+  shared_ptr<ColorsIntervalBatchProducer> colors_interval_batch_producer;
+  shared_ptr<ReadStatisticsBatchProducer> read_statistics_batch_producer;
+  shared_ptr<WarpsBeforeNewReadBatchProducer>
+    warps_before_new_read_batch_producer;
   shared_ptr<IndexesBatchProducer> indexes_batch_producer;
-  shared_ptr<IndexesStartsBatchProducer> indexes_starts_batch_producer;
-  shared_ptr<IndexesBeforeNewfileBatchProducer>
-    indexes_before_newfile_batch_producer;
+
   vector<string> filenames;
   vector<string>::iterator filename_iterator;
   u64 batch_id = 0;
@@ -36,27 +40,33 @@ private:
 
 public:
   ContinuousIndexFileParser(
-    u64 max_indexes_per_batch_,
     u64 max_batches,
-    vector<string> filenames_,
-    u64 read_padding_
+    u64 max_indexes_per_batch_,
+    u64 max_reads,
+    u64 read_padding_,
+    vector<string> filenames_
   );
 
+  [[nodiscard]] auto get_colors_interval_batch_producer() const
+    -> const shared_ptr<ColorsIntervalBatchProducer> &;
+  [[nodiscard]] auto get_read_statistics_batch_producer() const
+    -> const shared_ptr<ReadStatisticsBatchProducer> &;
+  [[nodiscard]] auto get_warps_before_new_read_batch_producer() const
+    -> const shared_ptr<WarpsBeforeNewReadBatchProducer> &;
   [[nodiscard]] auto get_indexes_batch_producer() const
     -> const shared_ptr<IndexesBatchProducer> &;
-  [[nodiscard]] auto get_indexes_starts_batch_producer() const
-    -> const shared_ptr<IndexesStartsBatchProducer> &;
-  [[nodiscard]] auto get_indexes_before_newfile_batch_producer() const
-    -> const shared_ptr<IndexesBeforeNewfileBatchProducer> &;
 
   auto read_and_generate() -> void;
+
+private:
   auto do_at_batch_start() -> void;
-  auto reset() -> void;
   auto do_at_batch_finish() -> void;
   auto do_at_generate_finish() -> void;
   auto read_next() -> void;
   auto start_next_file() -> bool;
   auto open_parser(const string &filename) -> void;
+  [[nodiscard]] auto create_warps_before_new_read(u64 amount, u64 size) const
+    -> const vector<shared_ptr<vector<u64>>>;
 };
 
 }  // namespace sbwt_search

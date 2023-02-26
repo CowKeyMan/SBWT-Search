@@ -39,9 +39,6 @@ protected:
       read_statistics_batch->reset();
       warps_before_new_read_batch->reset();
       indexes_batch->reset();
-      read_statistics_batch->found_idxs.push_back(0);
-      read_statistics_batch->invalid_idxs.push_back(0);
-      read_statistics_batch->not_found_idxs.push_back(0);
       host.generate_batch(
         read_statistics_batch, warps_before_new_read_batch, indexes_batch
       );

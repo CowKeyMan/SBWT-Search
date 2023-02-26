@@ -28,12 +28,13 @@ public:
   ColorsIntervalBatchProducer(
     u64 max_batches,
     u64 max_reads,
-    vector<shared_ptr<vector<u64>>> &warps_before_new_read
+    const vector<shared_ptr<vector<u64>>> &warps_before_new_read
   );
 
 private:
   auto get_default_value() -> shared_ptr<ColorsIntervalBatch> override;
   auto do_at_batch_start() -> void override;
+  auto do_at_batch_finish() -> void override;
 };
 
 }  // namespace sbwt_search
