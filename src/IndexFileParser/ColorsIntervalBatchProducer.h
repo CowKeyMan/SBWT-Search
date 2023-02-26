@@ -33,7 +33,6 @@ public:
 
 private:
   auto get_default_value() -> shared_ptr<ColorsIntervalBatch> override;
-  auto do_at_batch_start() -> void override;
   auto do_at_batch_finish() -> void override;
 };
 

@@ -31,14 +31,7 @@ auto ColorsIntervalBatchProducer::get_default_value()
   return batch;
 }
 
-auto ColorsIntervalBatchProducer::do_at_batch_start() -> void {
-  SharedBatchesProducer<ColorsIntervalBatch>::do_at_batch_start();
-  current_write()->reset();
-}
-
 auto ColorsIntervalBatchProducer::do_at_batch_finish() -> void {
-  current_write()->reads_before_newfile.push_back(numeric_limits<u64>::max());
-  current_write()->warps_before_new_read->push_back(numeric_limits<u64>::max());
   SharedBatchesProducer<ColorsIntervalBatch>::do_at_batch_finish();
 }
 

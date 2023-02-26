@@ -36,14 +36,14 @@ private:
   bool fail = false;
   unique_ptr<IndexFileParser> index_file_parser;
   u64 max_indexes_per_batch;
-  u64 read_padding;
+  u64 warp_size;
 
 public:
   ContinuousIndexFileParser(
     u64 max_batches,
     u64 max_indexes_per_batch_,
     u64 max_reads,
-    u64 read_padding_,
+    u64 warp_size_,
     vector<string> filenames_
   );
 
@@ -64,9 +64,10 @@ private:
   auto do_at_generate_finish() -> void;
   auto read_next() -> void;
   auto start_next_file() -> bool;
-  auto open_parser(const string &filename) -> void;
+  auto start_new_file(const string &filename) -> void;
   [[nodiscard]] auto create_warps_before_new_read(u64 amount, u64 size) const
     -> const vector<shared_ptr<vector<u64>>>;
+  auto reset_batches() -> void;
 };
 
 }  // namespace sbwt_search

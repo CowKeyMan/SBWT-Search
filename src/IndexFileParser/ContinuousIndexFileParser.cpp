@@ -1,5 +1,24 @@
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <span>
+#include <vector>
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::vector;
+template <class T>
+auto print_vec(
+  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
+) {
+  cout << "---------------------" << endl;
+  for (int i = 0; i < std::min(limit, v.size()); ++i) { cout << v[i] << " "; }
+  cout << endl << "---------------------" << endl;
+}
+
 #include <cstdlib>
 #include <iostream>
+#include <limits>
 #include <memory>
 #include <numeric>
 
@@ -17,19 +36,20 @@ using fmt::format;
 using log_utils::Logger;
 using std::ios;
 using std::make_shared;
+using std::numeric_limits;
 
 ContinuousIndexFileParser::ContinuousIndexFileParser(
   u64 max_batches,
   u64 max_indexes_per_batch_,
   u64 max_reads,
-  u64 read_padding_,
+  u64 warp_size_,
   vector<string> filenames_
 ):
     warps_before_new_read(
       create_warps_before_new_read(max_batches, max_reads + 1)
     ),
     max_indexes_per_batch(max_indexes_per_batch_),
-    read_padding(read_padding_),
+    warp_size(warp_size_),
     colors_interval_batch_producer(make_shared<ColorsIntervalBatchProducer>(
       max_batches, max_reads, warps_before_new_read
     )),
@@ -52,25 +72,41 @@ auto ContinuousIndexFileParser::read_and_generate() -> void {
   start_next_file();
   while (!fail) {
     do_at_batch_start();
+    reset_batches();
     read_next();
     do_at_batch_finish();
   }
   do_at_generate_finish();
 }
 
+auto ContinuousIndexFileParser::reset_batches() -> void {
+  colors_interval_batch_producer->current_write()->reset();
+  read_statistics_batch_producer->current_write()->reset();
+  warps_before_new_read_batch_producer->current_write()->reset();
+  indexes_batch_producer->current_write()->reset();
+}
+
 auto ContinuousIndexFileParser::start_next_file() -> bool {
   while (filename_iterator != filenames.end()) {
+    auto filename = *filename_iterator++;
+    Logger::log(
+      Logger::LOG_LEVEL::INFO, format("Now reading file {}", filename)
+    );
     auto colors_interval_batch
       = colors_interval_batch_producer->current_write();
     colors_interval_batch->reads_before_newfile.push_back(
-      colors_interval_batch->warps_before_new_read->size()
+      colors_interval_batch->warps_before_new_read->size() + 1
     );
-    auto filename = *filename_iterator++;
-    try {
-      Logger::log(
-        Logger::LOG_LEVEL::INFO, format("Now reading file {}", filename)
+    warps_before_new_read_batch_producer->current_write()
+      ->warps_before_new_read->push_back(
+        indexes_batch_producer->current_write()->indexes.size() / warp_size
       );
-      open_parser(filename);
+    read_statistics_batch_producer->current_write()->found_idxs.push_back(0);
+    read_statistics_batch_producer->current_write()->invalid_idxs.push_back(0);
+    read_statistics_batch_producer->current_write()->not_found_idxs.push_back(0
+    );
+    try {
+      start_new_file(filename);
       return true;
     } catch (ios::failure &e) {
       Logger::log(Logger::LOG_LEVEL::ERROR, e.what());
@@ -80,16 +116,16 @@ auto ContinuousIndexFileParser::start_next_file() -> bool {
   return false;
 }
 
-auto ContinuousIndexFileParser::open_parser(const string &filename) -> void {
+auto ContinuousIndexFileParser::start_new_file(const string &filename) -> void {
   auto in_stream = make_shared<ThrowingIfstream>(filename, ios::in);
   const string file_format = in_stream->read_string_with_size();
   if (file_format == "ascii") {  // NOLINT (bugprone-branch-clone)
     index_file_parser = make_unique<AsciiIndexFileParser>(
-      std::move(in_stream), max_indexes_per_batch, read_padding
+      std::move(in_stream), max_indexes_per_batch, warp_size
     );
   } else if (file_format == "binary") {
     index_file_parser = make_unique<BinaryIndexFileParser>(
-      std::move(in_stream), max_indexes_per_batch, read_padding
+      std::move(in_stream), max_indexes_per_batch, warp_size
     );
   } else {
     Logger::log(
@@ -169,6 +205,10 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
     format("batch {}", batch_id)
   );
   ++batch_id;
+  colors_interval_batch_producer->current_write()
+    ->reads_before_newfile.push_back(numeric_limits<u64>::max());
+  colors_interval_batch_producer->current_write()
+    ->warps_before_new_read->push_back(numeric_limits<u64>::max());
   colors_interval_batch_producer->do_at_batch_finish();
   read_statistics_batch_producer->do_at_batch_finish();
   warps_before_new_read_batch_producer->do_at_batch_finish();

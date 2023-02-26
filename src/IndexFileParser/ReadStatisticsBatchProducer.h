@@ -31,7 +31,6 @@ public:
   ReadStatisticsBatchProducer(u64 max_batches, u64 max_reads_);
 
 protected:
-  auto do_at_batch_start() -> void override;
   auto get_default_value() -> shared_ptr<ReadStatisticsBatch> override;
 };
 

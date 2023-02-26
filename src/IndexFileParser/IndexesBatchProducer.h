@@ -31,7 +31,6 @@ public:
 
 private:
   auto get_default_value() -> shared_ptr<IndexesBatch> override;
-  auto do_at_batch_start() -> void override;
   auto get_current_write() -> shared_ptr<IndexesBatch>;
 };
 

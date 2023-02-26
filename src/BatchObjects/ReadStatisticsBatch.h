@@ -27,9 +27,12 @@ public:
   vector<u64> not_found_idxs;
 
   auto reset() -> void {
-    found_idxs.resize(0);
-    invalid_idxs.resize(0);
-    not_found_idxs.resize(0);
+    found_idxs.resize(1);
+    found_idxs[0] = 0;
+    invalid_idxs.resize(1);
+    invalid_idxs[0] = 0;
+    not_found_idxs.resize(1);
+    not_found_idxs[0] = 0;
   }
 };
 

@@ -18,11 +18,6 @@ WarpsBeforeNewReadBatchProducer::WarpsBeforeNewReadBatchProducer(
   }
 }
 
-auto WarpsBeforeNewReadBatchProducer::do_at_batch_start() -> void {
-  SharedBatchesProducer<WarpsBeforeNewReadBatch>::do_at_batch_start();
-  current_write()->reset();
-}
-
 auto WarpsBeforeNewReadBatchProducer::get_default_value()
   -> shared_ptr<WarpsBeforeNewReadBatch> {
   return make_shared<WarpsBeforeNewReadBatch>();

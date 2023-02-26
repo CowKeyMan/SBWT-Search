@@ -14,11 +14,6 @@ ReadStatisticsBatchProducer::ReadStatisticsBatchProducer(
   initialise_batches();
 }
 
-auto ReadStatisticsBatchProducer::do_at_batch_start() -> void {
-  SharedBatchesProducer<ReadStatisticsBatch>::do_at_batch_start();
-  current_write()->reset();
-}
-
 auto ReadStatisticsBatchProducer::get_default_value()
   -> shared_ptr<ReadStatisticsBatch> {
   auto batch = make_shared<ReadStatisticsBatch>();
