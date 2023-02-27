@@ -9,8 +9,8 @@ flowchart TD
     ColorsIntervalBatch(["
     ColorsIntervalBatch
         <i>
-        warps_before_new_read ((max_reads + 1) * 64)
-        reads_before_newfile ((max_reads + 1) * 64)
+        warps_before_new_read ((reads + 1) * 64)
+        reads_before_newfile ((files + 1) * 64)
 
         </i>
     "])
@@ -24,9 +24,9 @@ flowchart TD
     ReadStatisticsBatch(["
         ReadStatisticsBatch
         <i>
-        found_indexes (max_reads * 64)
-        invalid (max_reads * 64)
-        not_found (max_reads * 64)
+        found_indexes (reads * 64)
+        invalid (reads * 64)
+        not_found (reads * 64)
 
         </i>
     "])

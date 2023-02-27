@@ -29,7 +29,6 @@ protected:
   auto run_test(
     u64 max_batches,
     u64 max_indexes_per_batch,
-    u64 max_reads,
     u64 read_padding,
     const vector<string> &filenames,
     const vector<vector<u64>> &expected_indexes,
@@ -41,7 +40,7 @@ protected:
   ) {
     write_fake_binary_results_to_file();
     auto host = ContinuousIndexFileParser(
-      max_batches, max_indexes_per_batch, max_reads, read_padding, filenames
+      max_batches, max_indexes_per_batch, read_padding, filenames
     );
     const auto num_sections = 5;
 #pragma omp parallel sections num_threads(num_sections)
@@ -165,7 +164,6 @@ protected:
 
 TEST_F(ContinuousIndexFileParserTest, TestAll) {
   const u64 max_indexes_per_batch = 4;
-  const u64 max_reads = 4;
   const vector<string> filenames = {
     "test_objects/example_index_search_result.txt",
     get_binary_index_output_filename()};
@@ -208,7 +206,6 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
     run_test(
       max_batches,
       max_indexes_per_batch,
-      max_reads,
       read_padding,
       filenames,
       to_u64s(expected_indexes),
@@ -223,7 +220,6 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
 
 TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
   const u64 max_indexes_per_batch = 999;
-  const u64 max_reads = 999;
   const vector<string> filenames = {
     "test_objects/example_index_search_result.txt",
     get_binary_index_output_filename()};
@@ -281,7 +277,6 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
     run_test(
       max_batches,
       max_indexes_per_batch,
-      max_reads,
       read_padding,
       filenames,
       to_u64s(expected_indexes),

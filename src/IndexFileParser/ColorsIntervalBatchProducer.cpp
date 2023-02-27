@@ -10,12 +10,9 @@ using std::make_shared;
 using std::numeric_limits;
 
 ColorsIntervalBatchProducer::ColorsIntervalBatchProducer(
-  u64 max_batches,
-  u64 max_reads_,
-  const vector<shared_ptr<vector<u64>>> &warps_before_new_read
+  u64 max_batches, const vector<shared_ptr<vector<u64>>> &warps_before_new_read
 ):
-    SharedBatchesProducer<ColorsIntervalBatch>(max_batches),
-    max_reads(max_reads_) {
+    SharedBatchesProducer<ColorsIntervalBatch>(max_batches) {
   initialise_batches();
   assert(max_batches == warps_before_new_read.size());
   for (int i = 0; i < max_batches; ++i) {
@@ -26,7 +23,6 @@ ColorsIntervalBatchProducer::ColorsIntervalBatchProducer(
 auto ColorsIntervalBatchProducer::get_default_value()
   -> shared_ptr<ColorsIntervalBatch> {
   auto batch = make_shared<ColorsIntervalBatch>();
-  batch->reads_before_newfile.reserve(max_reads + 1);
   batch->warps_before_new_read = nullptr;
   return batch;
 }

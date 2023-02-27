@@ -21,13 +21,9 @@ class ColorsIntervalBatchProducer:
     public SharedBatchesProducer<ColorsIntervalBatch> {
   friend ContinuousIndexFileParser;
 
-private:
-  u64 max_reads;
-
 public:
   ColorsIntervalBatchProducer(
     u64 max_batches,
-    u64 max_reads,
     const vector<shared_ptr<vector<u64>>> &warps_before_new_read
   );
 

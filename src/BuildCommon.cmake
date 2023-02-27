@@ -168,7 +168,7 @@ target_link_libraries(results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_C
 # Colors
 add_library(
   index_file_parser
-  # "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
 
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser.cpp"

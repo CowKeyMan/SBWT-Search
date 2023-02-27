@@ -24,11 +24,8 @@ class ReadStatisticsBatchProducer:
     public SharedBatchesProducer<ReadStatisticsBatch> {
   friend ContinuousIndexFileParser;
 
-private:
-  u64 max_reads;
-
 public:
-  ReadStatisticsBatchProducer(u64 max_batches, u64 max_reads_);
+  explicit ReadStatisticsBatchProducer(u64 max_batches);
 
 protected:
   auto get_default_value() -> shared_ptr<ReadStatisticsBatch> override;

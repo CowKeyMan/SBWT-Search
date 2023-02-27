@@ -72,9 +72,8 @@ auto ColorSearchMain::get_components(
   -> std::tuple<
     shared_ptr<ContinuousIndexFileParser>,
     shared_ptr<ContinuousColorSearcher>> {
-  const u64 read_padding = gpu_warp_size;
   auto index_file_parser = make_shared<ContinuousIndexFileParser>(
-    max_indexes_per_batch, max_batches, get_input_filenames(), read_padding
+    max_batches, max_indexes_per_batch, gpu_warp_size, get_input_filenames()
   );
   auto searcher = make_shared<ContinuousColorSearcher>(
     gpu_container,

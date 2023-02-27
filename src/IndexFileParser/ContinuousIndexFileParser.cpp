@@ -1,21 +1,3 @@
-#include <algorithm>
-#include <iostream>
-#include <limits>
-#include <span>
-#include <vector>
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::vector;
-template <class T>
-auto print_vec(
-  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
-) {
-  cout << "---------------------" << endl;
-  for (int i = 0; i < std::min(limit, v.size()); ++i) { cout << v[i] << " "; }
-  cout << endl << "---------------------" << endl;
-}
-
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -41,20 +23,17 @@ using std::numeric_limits;
 ContinuousIndexFileParser::ContinuousIndexFileParser(
   u64 max_batches,
   u64 max_indexes_per_batch_,
-  u64 max_reads,
   u64 warp_size_,
   vector<string> filenames_
 ):
-    warps_before_new_read(
-      create_warps_before_new_read(max_batches, max_reads + 1)
-    ),
+    warps_before_new_read(create_warps_before_new_read(max_batches)),
     max_indexes_per_batch(max_indexes_per_batch_),
     warp_size(warp_size_),
     colors_interval_batch_producer(make_shared<ColorsIntervalBatchProducer>(
-      max_batches, max_reads, warps_before_new_read
+      max_batches, warps_before_new_read
     )),
     read_statistics_batch_producer(
-      make_shared<ReadStatisticsBatchProducer>(max_batches, max_reads)
+      make_shared<ReadStatisticsBatchProducer>(max_batches)
     ),
     warps_before_new_read_batch_producer(
       make_shared<WarpsBeforeNewReadBatchProducer>(
@@ -239,12 +218,11 @@ auto ContinuousIndexFileParser::get_indexes_batch_producer() const
   return indexes_batch_producer;
 }
 
-auto ContinuousIndexFileParser::create_warps_before_new_read(
-  u64 amount, u64 size
-) const -> const vector<shared_ptr<vector<u64>>> {
+auto ContinuousIndexFileParser::create_warps_before_new_read(u64 amount) const
+  -> const vector<shared_ptr<vector<u64>>> {
   vector<shared_ptr<vector<u64>>> result;
   for (int i = 0; i < amount; ++i) {
-    result.push_back(make_shared<vector<u64>>(size));
+    result.push_back(make_shared<vector<u64>>());
   }
   return result;
 }

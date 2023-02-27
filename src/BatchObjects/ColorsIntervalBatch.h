@@ -10,7 +10,8 @@
  * reads we need to process in the current batch before starting the next file.
  * Similar to `warps_before_new_read`, a u64::max() is added at the end to
  * signify that the current file continues in the next batch. The size of each
- * vector is (max_reads + 1) * 64 bits (meaning [max_reads + 1] elements)
+ * vector is (number_of_files + 1) * 64 bits (meaning [number_of_files + 1]
+ * elements)
  */
 
 #include <memory>
