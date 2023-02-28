@@ -24,16 +24,19 @@ using design_utils::SharedBatchesProducer;
 class ContinuousColorSearcher:
     public SharedBatchesProducer<ColorSearchResultsBatch> {
 private:
-  shared_ptr<IndexesBatchProducer> indexes_batch_producer;
+  shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer;
   shared_ptr<IndexesBatch> indexes_batch;
   ColorSearcher searcher;
+  u64 max_indexes_per_batch;
+  u64 num_colors;
 
 public:
   ContinuousColorSearcher(
     shared_ptr<GpuColorIndexContainer> color_index_container_,
-    shared_ptr<IndexesBatchProducer> indexes_batch_producer_,
-    u64 max_indexes_per_batch,
-    u64 max_batches
+    shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer_,
+    u64 max_indexes_per_batch_,
+    u64 max_batches,
+    u64 num_colors_
   );
 
 private:

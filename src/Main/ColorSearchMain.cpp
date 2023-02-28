@@ -34,10 +34,10 @@ auto ColorSearchMain::main(int argc, char **argv) -> int {
     Logger::LOG_LEVEL::INFO,
     format("Running OpenMP with {} threads", get_threads())
   );
-  auto [index_file_parser, searcher]
+  auto [index_file_parser, searcher, post_processor]
     = get_components(gpu_container, args.get_print_mode());
   Logger::log(Logger::LOG_LEVEL::INFO, "Running queries");
-  run_components(index_file_parser, searcher);
+  run_components(index_file_parser, searcher, post_processor);
   Logger::log(Logger::LOG_LEVEL::INFO, "Finished");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
   return 0;
@@ -71,7 +71,8 @@ auto ColorSearchMain::get_components(
 )
   -> std::tuple<
     shared_ptr<ContinuousIndexFileParser>,
-    shared_ptr<ContinuousColorSearcher>> {
+    shared_ptr<ContinuousColorSearcher>,
+    shared_ptr<ContinuousColorResultsPostProcessor>> {
   auto index_file_parser = make_shared<ContinuousIndexFileParser>(
     max_batches, max_indexes_per_batch, gpu_warp_size, get_input_filenames()
   );
@@ -79,23 +80,33 @@ auto ColorSearchMain::get_components(
     gpu_container,
     index_file_parser->get_indexes_batch_producer(),
     max_indexes_per_batch,
-    max_batches
+    max_batches,
+    gpu_container->num_colors
   );
-  return {index_file_parser, searcher};
+  auto post_processor = make_shared<ContinuousColorResultsPostProcessor>(
+    searcher,
+    index_file_parser->get_warps_before_new_read_batch_producer(),
+    max_batches,
+    gpu_container->num_colors
+  );
+  return {index_file_parser, searcher, post_processor};
 }
 
 auto ColorSearchMain::run_components(
   shared_ptr<ContinuousIndexFileParser> &index_file_parser,
-  shared_ptr<ContinuousColorSearcher> &color_searcher
+  shared_ptr<ContinuousColorSearcher> &color_searcher,
+  shared_ptr<ContinuousColorResultsPostProcessor> &post_processor
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
-  const u64 sections = 2;
+  const u64 sections = 3;
 #pragma omp parallel sections num_threads(sections)
   {
 #pragma omp section
     { index_file_parser->read_and_generate(); }
 #pragma omp section
     { color_searcher->read_and_generate(); }
+#pragma omp section
+    { post_processor->read_and_generate(); }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
 }

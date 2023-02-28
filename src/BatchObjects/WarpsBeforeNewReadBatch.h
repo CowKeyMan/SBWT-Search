@@ -21,7 +21,6 @@ using std::vector;
 class WarpsBeforeNewReadBatch {
 public:
   shared_ptr<vector<u64>> warps_before_new_read;
-
   auto reset() -> void { warps_before_new_read->resize(0); }
 };
 

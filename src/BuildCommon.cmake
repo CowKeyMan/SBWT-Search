@@ -216,10 +216,15 @@ set_source_files_properties(
 )
 target_link_libraries(color_searcher_gpu PRIVATE gpu_utils fmt::fmt)
 add_library(
-  continuous_color_searcher
+  color_searcher
   "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
 )
-target_link_libraries(continuous_color_searcher PRIVATE fmt::fmt color_searcher_cpu color_searcher_gpu)
+target_link_libraries(color_searcher PRIVATE fmt::fmt color_searcher_cpu color_searcher_gpu)
+add_library(
+  color_results_post_processor
+  "${PROJECT_SOURCE_DIR}/ColorResultsPostProcessor/ContinuousColorResultsPostProcessor.cpp"
+)
+target_link_libraries(color_results_post_processor PRIVATE fmt::fmt OpenMP::OpenMP_CXX)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -264,7 +269,8 @@ target_link_libraries(
   # Color search libraries
   color_index_builder
   color_index_container
-  continuous_color_searcher
+  color_searcher
+  color_results_post_processor
 
   index_file_parser
 )

@@ -67,6 +67,8 @@ add_executable(
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser_test.cpp"
+  "${PROJECT_SOURCE_DIR}/ColorResultsPostProcessor/ContinuousColorResultsPostProcessor_test.cpp"
+
 
   "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cpp"
   "${PROJECT_SOURCE_DIR}/UtilityKernels/GetBoolFromBitVector_test.cpp"
