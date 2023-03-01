@@ -20,8 +20,4 @@ auto IndexesBatchProducer::get_default_value() -> shared_ptr<IndexesBatch> {
   return batch;
 }
 
-auto IndexesBatchProducer::get_current_write() -> shared_ptr<IndexesBatch> {
-  return current_write();
-}
-
 }  // namespace sbwt_search

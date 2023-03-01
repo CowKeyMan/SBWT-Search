@@ -18,7 +18,8 @@ auto CpuColorIndexContainer::to_gpu() const
     core_kmer_marks,
     core_kmer_marks_poppy,
     color_set_idxs,
-    num_color_sets
+    num_color_sets,
+    num_colors
   );
 }
 

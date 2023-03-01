@@ -5,6 +5,9 @@
 
 # gcno files are built when object is compiled
 # gcda files are built after execution
+
+./scripts/configure/download_large_test_objects.sh
+
 TMP_SPDLOG_LEVEL=${SPDLOG_LEVEL}
 unset SPDLOG_LEVEL
 find build/src -name "*.gcda" -type f -delete

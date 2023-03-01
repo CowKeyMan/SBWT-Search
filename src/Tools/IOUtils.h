@@ -27,6 +27,12 @@ public:
   static void check_file_exists(const string &filename);
 
   auto read_string_with_size() -> string;
+  template <class Real>
+  auto read_real() -> Real {
+    Real r = 0;
+    read(bit_cast<char *>(&r), sizeof(Real));
+    return r;
+  }
 };
 
 class ThrowingOfstream: public ofstream {

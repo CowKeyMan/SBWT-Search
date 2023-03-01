@@ -140,8 +140,7 @@ auto ContinuousIndexFileParser::read_next() -> void {
 }
 
 auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
-  auto num_indexes
-    = indexes_batch_producer->get_current_write()->indexes.size();
+  auto num_indexes = indexes_batch_producer->current_write()->indexes.size();
   auto read_statistics_batch
     = get_read_statistics_batch_producer()->current_write();
   auto reads = colors_interval_batch_producer->current_write()

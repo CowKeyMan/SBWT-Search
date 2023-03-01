@@ -31,7 +31,6 @@ public:
 
 private:
   auto get_default_value() -> shared_ptr<IndexesBatch> override;
-  auto get_current_write() -> shared_ptr<IndexesBatch>;
 };
 
 }  // namespace sbwt_search

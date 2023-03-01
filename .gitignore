@@ -28,3 +28,5 @@ tmp/
 gmon*
 
 src/Global/GlobalDefinitions.h
+
+test_objects/themisto_example

@@ -29,6 +29,7 @@ ContinuousColorSearcher::ContinuousColorSearcher(
 auto ContinuousColorSearcher::get_default_value()
   -> shared_ptr<ColorSearchResultsBatch> {
   auto batch = make_shared<ColorSearchResultsBatch>();
+  batch->results = make_shared<vector<u64>>();
   batch->results->reserve(max_indexes_per_batch / gpu_warp_size * num_colors);
   return batch;
 }

@@ -67,6 +67,10 @@ auto ColorIndexBuilder::get_cpu_color_index_container()
 
   num_color_sets = is_dense_marks.size();
 
+  in_stream.read_real<u64>();  // u64 max_color_set_idx
+  u64 num_colors = in_stream.read_real<u64>() + 1;
+  in_stream.read_real<u64>();  // u64 cumulative_sum_color_sets
+
   return {
     dense_arrays,
     dense_arrays_intervals,
@@ -77,7 +81,8 @@ auto ColorIndexBuilder::get_cpu_color_index_container()
     core_kmer_marks,
     core_kmer_marks_poppy,
     color_set_idxs,
-    num_color_sets};
+    num_color_sets,
+    num_colors};
 }
 
 }  // namespace sbwt_search

@@ -1,3 +1,21 @@
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <span>
+#include <vector>
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::vector;
+template <class T>
+auto print_vec(
+  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
+) {
+  cout << "---------------------" << endl;
+  for (int i = 0; i < std::min(limit, v.size()); ++i) { cout << v[i] << " "; }
+  cout << endl << "---------------------" << endl;
+}
+
 #include <omp.h>
 #include <stdexcept>
 #include <string>
@@ -34,10 +52,16 @@ auto ColorSearchMain::main(int argc, char **argv) -> int {
     Logger::LOG_LEVEL::INFO,
     format("Running OpenMP with {} threads", get_threads())
   );
-  auto [index_file_parser, searcher, post_processor]
-    = get_components(gpu_container, args.get_print_mode());
+  auto [index_file_parser, searcher, post_processor, results_printer]
+    = get_components(
+      gpu_container,
+      get_input_filenames(),
+      get_output_filenames(),
+      args.get_print_mode(),
+      args.get_threshold()
+    );
   Logger::log(Logger::LOG_LEVEL::INFO, "Running queries");
-  run_components(index_file_parser, searcher, post_processor);
+  run_components(index_file_parser, searcher, post_processor, results_printer);
   Logger::log(Logger::LOG_LEVEL::INFO, "Finished");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
   return 0;
@@ -67,14 +91,18 @@ auto ColorSearchMain::load_batch_info(
 
 auto ColorSearchMain::get_components(
   const shared_ptr<GpuColorIndexContainer> &gpu_container,
-  const string &print_mode
+  const vector<string> &input_filenames,
+  const vector<string> &output_filenames,
+  const string &print_mode,
+  double threshold
 )
   -> std::tuple<
     shared_ptr<ContinuousIndexFileParser>,
     shared_ptr<ContinuousColorSearcher>,
-    shared_ptr<ContinuousColorResultsPostProcessor>> {
+    shared_ptr<ContinuousColorResultsPostProcessor>,
+    shared_ptr<ContinuousColorSearchResultsPrinter>> {
   auto index_file_parser = make_shared<ContinuousIndexFileParser>(
-    max_batches, max_indexes_per_batch, gpu_warp_size, get_input_filenames()
+    max_batches, max_indexes_per_batch, gpu_warp_size, input_filenames
   );
   auto searcher = make_shared<ContinuousColorSearcher>(
     gpu_container,
@@ -89,24 +117,51 @@ auto ColorSearchMain::get_components(
     max_batches,
     gpu_container->num_colors
   );
-  return {index_file_parser, searcher, post_processor};
+  auto results_printer = make_shared<ContinuousColorSearchResultsPrinter>(
+    index_file_parser->get_colors_interval_batch_producer(),
+    index_file_parser->get_read_statistics_batch_producer(),
+    post_processor,
+    output_filenames,
+    gpu_container->num_colors,
+    threshold
+  );
+  return {index_file_parser, searcher, post_processor, results_printer};
 }
 
 auto ColorSearchMain::run_components(
   shared_ptr<ContinuousIndexFileParser> &index_file_parser,
   shared_ptr<ContinuousColorSearcher> &color_searcher,
-  shared_ptr<ContinuousColorResultsPostProcessor> &post_processor
+  shared_ptr<ContinuousColorResultsPostProcessor> &post_processor,
+  shared_ptr<ContinuousColorSearchResultsPrinter> &results_printer
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
-  const u64 sections = 3;
+  const u64 sections = 4;
 #pragma omp parallel sections num_threads(sections)
   {
 #pragma omp section
-    { index_file_parser->read_and_generate(); }
+    {
+      cout << __LINE__ << endl;
+      index_file_parser->read_and_generate();
+      cout << __LINE__ << endl;
+    }
 #pragma omp section
-    { color_searcher->read_and_generate(); }
+    {
+      cout << __LINE__ << endl;
+      color_searcher->read_and_generate();
+      cout << __LINE__ << endl;
+    }
 #pragma omp section
-    { post_processor->read_and_generate(); }
+    {
+      cout << __LINE__ << endl;
+      post_processor->read_and_generate();
+      cout << __LINE__ << endl;
+    }
+#pragma omp section
+    {
+      cout << __LINE__ << endl;
+      results_printer->read_and_generate();
+      cout << __LINE__ << endl;
+    }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
 }

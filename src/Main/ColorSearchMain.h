@@ -12,6 +12,7 @@
 
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
 #include "ColorResultsPostProcessor/ContinuousColorResultsPostProcessor.h"
+#include "ColorSearchResultsPrinter/ContinuousColorSearchResultsPrinter.hpp"
 #include "ColorSearcher/ContinuousColorSearcher.h"
 #include "IndexFileParser/ContinuousIndexFileParser.h"
 #include "Main/Main.h"
@@ -37,16 +38,21 @@ private:
     -> void;
   auto get_components(
     const shared_ptr<GpuColorIndexContainer> &gpu_container,
-    const string &print_mode
+    const vector<string> &input_filenames,
+    const vector<string> &output_filenames,
+    const string &print_mode,
+    double threshold
   )
     -> std::tuple<
       shared_ptr<ContinuousIndexFileParser>,
       shared_ptr<ContinuousColorSearcher>,
-      shared_ptr<ContinuousColorResultsPostProcessor>>;
+      shared_ptr<ContinuousColorResultsPostProcessor>,
+      shared_ptr<ContinuousColorSearchResultsPrinter>>;
   auto run_components(
     shared_ptr<ContinuousIndexFileParser> &index_file_parser,
     shared_ptr<ContinuousColorSearcher> &color_searcher,
-    shared_ptr<ContinuousColorResultsPostProcessor> &post_processor
+    shared_ptr<ContinuousColorResultsPostProcessor> &post_processor,
+    shared_ptr<ContinuousColorSearchResultsPrinter> &results_processor
   ) -> void;
 };
 

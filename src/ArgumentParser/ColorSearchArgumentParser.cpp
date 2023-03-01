@@ -1,3 +1,4 @@
+#include <iostream>
 #include <limits>
 #include <string>
 
@@ -67,7 +68,10 @@ auto ColorSearchArgumentParser::create_options() -> void {
     )
     ("b,batches",
       "The number of files to read and process at once. This implies dividing the available memory into <memory>/<batches> pieces, so each batch will process less items at a time, but there is instead more parallelism.",
-      value<u64>()->default_value(to_string(default_batches))
+      value<u64>()->default_value(to_string(default_batches)))
+    ("t,threshold",
+      "The percentage of kmers which need to be attributed to a color in order for us to accept that color as being part of our output. Must be a value between 1 and 0 (both included)",
+      value<double>()->default_value("1")
     )("h,help", "Print usage", value<bool>()->default_value("false"));
   get_options().allow_unrecognised_options();
 }
@@ -94,6 +98,16 @@ auto ColorSearchArgumentParser::get_print_mode() -> string {
 }
 auto ColorSearchArgumentParser::get_batches() -> u64 {
   return get_args()["batches"].as<u64>();
+}
+auto ColorSearchArgumentParser::get_threshold() -> double {
+  auto threshold = get_args()["threshold"].as<u64>();
+  if (threshold < 0 || threshold > 1) {
+    std::cerr
+      << "Invalid value for threshold, must be between 1 and 0 (both included)"
+      << std::endl;
+    std::quick_exit(1);
+  }
+  return threshold;
 }
 auto ColorSearchArgumentParser::get_required_options() -> vector<string> {
   return {

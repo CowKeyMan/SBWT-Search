@@ -36,6 +36,7 @@ public:
   auto get_max_cpu_memory() -> u64;
   auto get_print_mode() -> string;
   auto get_batches() -> u64;
+  auto get_threshold() -> double;
 
 private:
   auto create_options() -> void;

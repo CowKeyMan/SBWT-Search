@@ -20,7 +20,8 @@ GpuColorIndexContainer::GpuColorIndexContainer(
   const sdsl::bit_vector &cpu_core_kmer_marks,
   const Poppy &cpu_core_kmer_marks_poppy,
   const sdsl::int_vector<> &cpu_color_set_idxs,
-  u64 num_color_sets_
+  u64 num_color_sets_,
+  u64 num_colors_
 ):
     dense_arrays(
       cpu_dense_arrays.data(), cpu_dense_arrays.capacity() / u64_bits
@@ -29,7 +30,7 @@ GpuColorIndexContainer::GpuColorIndexContainer(
       // we add + 1 element to make accessing easier in the kernel
       cpu_dense_arrays_intervals.capacity() / u64_bits + 1
     ),
-    dense_arrays_intervals_width(cpu_dense_arrays.width()),
+    dense_arrays_intervals_width(cpu_dense_arrays_intervals.width()),
     sparse_arrays(
       // we add + 1 element to make accessing easier in the kernel
       cpu_sparse_arrays.capacity() / u64_bits + 1
@@ -56,7 +57,7 @@ GpuColorIndexContainer::GpuColorIndexContainer(
     ),
     color_set_idxs_width(cpu_color_set_idxs.width()),
     num_color_sets(num_color_sets_),
-    num_colors(cpu_is_dense_marks.size()) {
+    num_colors(num_colors_) {
   dense_arrays_intervals.memset(
     cpu_dense_arrays_intervals.capacity() / u64_bits, 1, 0
   );

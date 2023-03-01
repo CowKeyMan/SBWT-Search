@@ -30,6 +30,7 @@ public:
   Poppy core_kmer_marks_poppy;
   sdsl::int_vector<> color_set_idxs;
   u64 num_color_sets;
+  u64 num_colors;
 
   [[nodiscard]] auto to_gpu() const -> shared_ptr<GpuColorIndexContainer>;
 };

@@ -48,7 +48,8 @@ public:
     const sdsl::bit_vector &cpu_core_kmer_marks,
     const Poppy &cpu_core_kmer_marks_poppy,
     const sdsl::int_vector<> &cpu_color_set_idxs,
-    u64 num_color_sets_
+    u64 num_color_sets_,
+    u64 num_colors_
   );
 };
 
