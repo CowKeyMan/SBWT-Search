@@ -35,11 +35,13 @@ auto SbwtBuilder::get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer> {
   ThrowingIfstream in_stream(filename, std::ios::in);
   Logger::log_timed_event("SBWTReadAndPopppy", Logger::EVENT_STATE::START);
   const string variant = in_stream.read_string_with_size();
-  if (variant != "plain-matrix") {
-    throw runtime_error("Error input is not a plain-matrix SBWT");
+  if (variant != "v0.1") {  // may not contain variant string
+    if (variant != "plain-matrix") {
+      throw runtime_error("Error input is not a plain-matrix SBWT");
+    }
+    const string version = in_stream.read_string_with_size();
+    if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); }
   }
-  const string version = in_stream.read_string_with_size();
-  if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); }
   u64 num_bits = 0;
   in_stream.read(bit_cast<char *>(&num_bits), sizeof(u64));
   const u64 vectors_start_position = in_stream.tellg();

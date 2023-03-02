@@ -1,9 +1,9 @@
-#ifndef CONTINUOUS_COLOR_SEARCH_RESULTS_PRINTER_H
-#define CONTINUOUS_COLOR_SEARCH_RESULTS_PRINTER_H
+#ifndef CONTINUOUS_COLOR_SEARCH_RESULTS_PRINTER_HPP
+#define CONTINUOUS_COLOR_SEARCH_RESULTS_PRINTER_HPP
 
 /**
- * @file ContinuousColorSearchResultsPrinter.h
- * @brief
+ * @file ContinuousColorSearchResultsPrinter.hpp
+ * @brief Prints out the color results
  */
 
 #include <ios>
@@ -92,6 +92,11 @@ public:
         format("batch {}", batch_id)
       );
     }
+    impl().do_print_read(
+      previous_last_results.begin(),
+      previous_last_found_idx + previous_last_not_found_idx
+        + previous_last_invalid_idx
+    );
     impl().do_at_file_end();
   }
 
@@ -135,7 +140,9 @@ protected:
     auto &rbnfs = interval_batch->reads_before_newfile;
     if (rbnfs[0] == 0) {
       impl().do_print_read(
-        0, found_idxs[0] + not_found_idxs[0] + invalid_idxs[0]
+        previous_last_results.begin(),
+        previous_last_found_idx + previous_last_not_found_idx
+          + previous_last_invalid_idx
       );
     } else {
       // Fill in from previous batch (read is continued)
@@ -148,37 +155,37 @@ protected:
       }
     }
     u64 rbnf_idx = 0;
+    u64 wbnr = 0;
     for (u64 wbnr_idx = 0; wbnr_idx < wbnrs.size(); ++wbnr_idx) {
       const auto &read_idx = wbnr_idx;
       while (rbnfs[rbnf_idx] == read_idx) {
         impl().do_start_next_file();
         ++rbnf_idx;
       }
-      if (wbnrs[wbnr_idx + 1] == numeric_limits<u64>::max()) {
+      if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
         previous_last_found_idx = found_idxs[read_idx];
         previous_last_not_found_idx = not_found_idxs[read_idx];
         previous_last_invalid_idx = invalid_idxs[read_idx];
 #pragma omp simd
         for (int i = 0; i < num_colors; ++i) {
-          previous_last_results[i] = results[wbnrs[wbnr_idx] * num_colors + i];
+          previous_last_results[i] = results[wbnr * num_colors + i];
         }
         break;
       }
       impl().do_print_read(
-        wbnrs[wbnr_idx] * num_colors,
+        results.begin() + wbnr * num_colors,
         found_idxs[read_idx] + not_found_idxs[read_idx] + invalid_idxs[read_idx]
       );
+      wbnr = wbnrs[wbnr_idx];
     }
   }
-  auto do_print_read(u64 results_idx, u64 read_size) -> void {
-    const auto &results = *results_batch->results;
+  auto do_print_read(vector<u64>::iterator results, u64 read_size) -> void {
     u64 minimum_found
       = static_cast<u64>(static_cast<double>(read_size) * threshold);
-    for (u64 res_idx = results_idx; res_idx < results_idx + num_colors;
-         ++res_idx) {
-      if (results[res_idx] > minimum_found) {
-        *out_stream << results[res_idx];
-        if (res_idx + 1 < results_idx + num_colors) { *out_stream << " "; }
+    for (u64 color_idx = 0; color_idx < num_colors; ++color_idx, ++results) {
+      if (*results > minimum_found) {
+        *out_stream << color_idx;
+        if (color_idx + 1 < num_colors) { *out_stream << " "; }
       }
     }
     *out_stream << "\n";

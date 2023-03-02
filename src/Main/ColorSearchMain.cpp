@@ -1,21 +1,4 @@
-#include <algorithm>
 #include <iostream>
-#include <limits>
-#include <span>
-#include <vector>
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::vector;
-template <class T>
-auto print_vec(
-  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
-) {
-  cout << "---------------------" << endl;
-  for (int i = 0; i < std::min(limit, v.size()); ++i) { cout << v[i] << " "; }
-  cout << endl << "---------------------" << endl;
-}
-
 #include <omp.h>
 #include <stdexcept>
 #include <string>
@@ -31,6 +14,8 @@ namespace sbwt_search {
 
 using fmt::format;
 using log_utils::Logger;
+using std::cout;
+using std::endl;
 using std::runtime_error;
 using std::to_string;
 

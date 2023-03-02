@@ -151,7 +151,6 @@ __global__ void d_color_search(
     if (thread_idx % gpu_warp_size == 0) {
       results[num_colors * thread_idx / gpu_warp_size + color_idx]
         = __popcll(ballot_result);
-      printf("%lu %lu %d\n", color_idx, thread_idx, __popcll(ballot_result));
     }
 #elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
     const unsigned full_mask = 0xFFFFFFFF;
@@ -159,7 +158,6 @@ __global__ void d_color_search(
     if (thread_idx % gpu_warp_size == 0) {
       results[num_colors * thread_idx / gpu_warp_size + color_idx]
         = __popc(ballot_result);
-      printf("%lu %lu %d\n", color_idx, thread_idx, __popc(ballot_result));
     }
 #else
 #error("No runtime defined");

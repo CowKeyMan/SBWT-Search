@@ -100,7 +100,7 @@ auto ColorSearchArgumentParser::get_batches() -> u64 {
   return get_args()["batches"].as<u64>();
 }
 auto ColorSearchArgumentParser::get_threshold() -> double {
-  auto threshold = get_args()["threshold"].as<u64>();
+  auto threshold = get_args()["threshold"].as<double>();
   if (threshold < 0 || threshold > 1) {
     std::cerr
       << "Invalid value for threshold, must be between 1 and 0 (both included)"
