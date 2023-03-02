@@ -41,7 +41,7 @@ protected:
   auto initialise_args(int argc, char **argv) -> void;
   [[nodiscard]] auto get_args() const -> const cxxopts::ParseResult &;
   auto get_options() -> cxxopts::Options &;
-  virtual auto get_required_options() -> vector<string> = 0;
+  virtual auto get_required_options() const -> vector<string> = 0;
 
 private:
   auto is_required_all_provided(ParseResult &args) -> bool;

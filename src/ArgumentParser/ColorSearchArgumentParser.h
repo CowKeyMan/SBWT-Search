@@ -29,20 +29,23 @@ public:
     int argc,
     char **argv
   );
-  auto get_query_file() -> string;
-  auto get_colors_file() -> string;
-  auto get_output_file() -> string;
-  auto get_unavailable_ram() -> u64;
-  auto get_max_cpu_memory() -> u64;
-  auto get_print_mode() -> string;
-  auto get_batches() -> u64;
-  auto get_threshold() -> double;
+  auto get_query_file() const -> string;
+  auto get_colors_file() const -> string;
+  auto get_output_file() const -> string;
+  auto get_unavailable_ram() const -> u64;
+  auto get_max_cpu_memory() const -> u64;
+  auto get_print_mode() const -> string;
+  auto get_batches() const -> u64;
+  auto get_threshold() const -> double;
+  auto get_base_pairs_per_read() const -> u64;
+  auto get_cpu_memory_percentage() const -> double;
+  auto get_gpu_memory_percentage() const -> double;
 
 private:
   auto create_options() -> void;
 
 protected:
-  auto get_required_options() -> vector<string> override;
+  auto get_required_options() const -> vector<string> override;
 };
 
 }  // namespace sbwt_search

@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 
+#include "ArgumentParser/ColorSearchArgumentParser.h"
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
 #include "ColorResultsPostProcessor/ContinuousColorResultsPostProcessor.h"
 #include "ColorSearchResultsPrinter/ContinuousColorSearchResultsPrinter.hpp"
@@ -25,23 +26,25 @@ using std::string;
 class ColorSearchMain: public Main {
 private:
   u64 max_indexes_per_batch = 0;
-  u64 max_batches = 0;
+  u64 num_colors = 0;
+  unique_ptr<ColorSearchArgumentParser> args;
 
 public:
   auto main(int argc, char **argv) -> int override;
 
 private:
-  auto get_gpu_container(const string &colors_filename)
-    -> shared_ptr<GpuColorIndexContainer>;
-  auto
-  load_batch_info(u64 max_batches_, u64 unavailable_ram, u64 max_cpu_memory)
-    -> void;
+  [[nodiscard]] auto get_args() const -> const ColorSearchArgumentParser &;
+  auto get_gpu_container() -> shared_ptr<GpuColorIndexContainer>;
+  auto load_batch_info() -> void;
+  auto get_max_chars_per_batch_cpu() -> u64;
+  auto get_max_chars_per_batch_gpu() -> u64;
+  auto get_max_chars_per_batch() -> u64;
+  auto get_input_output_filenames()
+    -> std::tuple<vector<vector<string>>, vector<vector<string>>>;
   auto get_components(
     const shared_ptr<GpuColorIndexContainer> &gpu_container,
     const vector<string> &input_filenames,
-    const vector<string> &output_filenames,
-    const string &print_mode,
-    double threshold
+    const vector<string> &output_filenames
   )
     -> std::tuple<
       shared_ptr<ContinuousIndexFileParser>,

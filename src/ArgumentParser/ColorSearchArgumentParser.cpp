@@ -14,7 +14,6 @@ using std::to_string;
 using units_parser::MemoryUnitsParser;
 
 const u64 default_unavailable_gB = 4;
-const u64 default_batches = 1;
 
 ColorSearchArgumentParser::ColorSearchArgumentParser(
   const string &program_name,
@@ -62,13 +61,16 @@ auto ColorSearchArgumentParser::create_options() -> void {
       "unavailable-main-memory option",
       value<string>()->default_value(to_string(numeric_limits<u64>::max()))
      )
+    ("b,batches",
+      "The number of files to read and process at once. This implies dividing the available memory into <memory>/<batches> pieces, so each batch will process less items at a time, but there is instead more parallelism.",
+      value<u64>()->default_value("4"))
+     ("r,base-pairs-per-read", "The approximate number of base pairs in every read. This is necessary because we need to store 'pointers' where each read starts and ends in our list of base pairs. As such we must allocate memory for it. By defalt, this value is 100, meaning that we would then allocate enough memory for 1 unisgned integer per 100 base pairs. This option is available in case you need more memory than that.", value<u64>()->default_value("100"))
+     ("g,gpu-memory-percentage", "The percentage of gpu memory to use from the remaining free memory after the index has been loaded. This means that if we have 40GB of memory, and the index is 30GB, then we have 10GB left. If this value is set to 0.9, then 9GB will be used and the last 1GB of memory on the GPU will be left unused. The default value is 0.95, and unless you are running anything else on the machine which is also GPU heavy, it is recommended to leave it at this value.", value<double>()->default_value("0.95"))
+    ("p,cpu-memory-percentage", "After calculating the memory usage using the formula: 'min(system_max_memory, max-memory) - unavailable-max-memory', we multiply that value by memory-percentage, which is this parameter. This parameter is useful in case the program is unexpectedly taking too much memory. By default it is 0.8, which indicates that 80\% of available memory will be used. Note, the total memory used is not set in store, and this is more a minimum. The actual memory used will be slightly more for smal variables and other registers.", value<double>()->default_value("0.8"))
     ("c,print-mode",
       "The mode used when printing the result to the output file. Options: ascii",
       value<string>()->default_value("ascii")
     )
-    ("b,batches",
-      "The number of files to read and process at once. This implies dividing the available memory into <memory>/<batches> pieces, so each batch will process less items at a time, but there is instead more parallelism.",
-      value<u64>()->default_value(to_string(default_batches)))
     ("t,threshold",
       "The percentage of kmers which need to be attributed to a color in order for us to accept that color as being part of our output. Must be a value between 1 and 0 (both included)",
       value<double>()->default_value("1")
@@ -76,30 +78,30 @@ auto ColorSearchArgumentParser::create_options() -> void {
   get_options().allow_unrecognised_options();
 }
 
-auto ColorSearchArgumentParser::get_query_file() -> string {
+auto ColorSearchArgumentParser::get_query_file() const -> string {
   return get_args()["query-file"].as<string>();
 }
-auto ColorSearchArgumentParser::get_colors_file() -> string {
+auto ColorSearchArgumentParser::get_colors_file() const -> string {
   return get_args()["colors-file"].as<string>();
 }
-auto ColorSearchArgumentParser::get_output_file() -> string {
+auto ColorSearchArgumentParser::get_output_file() const -> string {
   return get_args()["output-prefix"].as<string>();
 }
-auto ColorSearchArgumentParser::get_unavailable_ram() -> u64 {
+auto ColorSearchArgumentParser::get_unavailable_ram() const -> u64 {
   return MemoryUnitsParser::convert(
     get_args()["unavailable-main-memory"].as<string>()
   );
 }
-auto ColorSearchArgumentParser::get_max_cpu_memory() -> u64 {
+auto ColorSearchArgumentParser::get_max_cpu_memory() const -> u64 {
   return MemoryUnitsParser::convert(get_args()["max-main-memory"].as<string>());
 }
-auto ColorSearchArgumentParser::get_print_mode() -> string {
+auto ColorSearchArgumentParser::get_print_mode() const -> string {
   return get_args()["print-mode"].as<string>();
 }
-auto ColorSearchArgumentParser::get_batches() -> u64 {
+auto ColorSearchArgumentParser::get_batches() const -> u64 {
   return get_args()["batches"].as<u64>();
 }
-auto ColorSearchArgumentParser::get_threshold() -> double {
+auto ColorSearchArgumentParser::get_threshold() const -> double {
   auto threshold = get_args()["threshold"].as<double>();
   if (threshold < 0 || threshold > 1) {
     std::cerr
@@ -109,7 +111,30 @@ auto ColorSearchArgumentParser::get_threshold() -> double {
   }
   return threshold;
 }
-auto ColorSearchArgumentParser::get_required_options() -> vector<string> {
+auto ColorSearchArgumentParser::get_base_pairs_per_read() const -> u64 {
+  return get_args()["base-pairs-per-read"].as<u64>();
+}
+auto ColorSearchArgumentParser::get_cpu_memory_percentage() const -> double {
+  auto result = get_args()["cpu-memory-percentage"].as<double>();
+  if (result < 0 || result > 1) {
+    std::cerr
+      << "Invalid value for cpu-memory-percentage. Must be between 0 and 1."
+      << std::endl;
+    std::quick_exit(1);
+  }
+  return result;
+}
+auto ColorSearchArgumentParser::get_gpu_memory_percentage() const -> double {
+  auto result = get_args()["gpu-memory-percentage"].as<double>();
+  if (result < 0 || result > 1) {
+    std::cerr
+      << "Invalid value for gpu-memory-percentage. Must be between 0 and 1."
+      << std::endl;
+    std::quick_exit(1);
+  }
+  return result;
+}
+auto ColorSearchArgumentParser::get_required_options() const -> vector<string> {
   return {
     "query-file",
     "colors-file",
