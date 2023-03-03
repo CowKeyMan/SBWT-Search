@@ -199,8 +199,7 @@ __device__ void d_dense_get_arrays_start_end(
 __device__ bool d_dense_get_next_color_present(
   const u64 color_idx, u64 &array_idx, u64 *dense_arrays
 ) {
-  ++array_idx;
-  return d_get_bool_from_bit_vector(dense_arrays, array_idx);
+  return d_get_bool_from_bit_vector(dense_arrays, array_idx++);
 }
 
 __device__ void d_sparse_get_arrays_start_end(
