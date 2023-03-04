@@ -144,7 +144,7 @@ private:
       }
       u64 results_in_file = last_results_idx - first_results_idx;
       u64 rbnl_idx = nlbnf_idx > 0 ? nlbnfs[nlbnf_idx - 1] : 0;
-      dump_starting_newlines(rbnl_idx, nlbnf_idx);
+      dump_starting_newlines(first_results_idx, rbnl_idx, nlbnf_idx);
 #pragma omp parallel num_threads(buffers.size())
       {
         u64 thread_idx = omp_get_thread_num();
@@ -231,14 +231,14 @@ private:
     rbnl.back() = cbnl.back();
   }
 
-  auto dump_starting_newlines(u64 &rbnl_idx, u64 nlbnf_idx) -> void {
+  auto dump_starting_newlines(u64 res_idx, u64 &rbnl_idx, u64 nlbnf_idx)
+    -> void {
     u64 buffer_idx = 0;
     auto &buffer = buffers[0];
     buffer.resize(buffer.capacity());
     const auto &nlbnfs = interval_batch->newlines_before_newfile;
     const auto &rbnls = results_before_newline;
-    while (rbnls[rbnl_idx - 1] == rbnls[rbnl_idx]
-           && rbnl_idx < nlbnfs[nlbnf_idx + 1]) {
+    while (rbnls[rbnl_idx] == res_idx && rbnl_idx < nlbnfs[nlbnf_idx]) {
       if (buffer_idx + element_size > buffer.size()) {
         impl().do_write_buffer(buffer, buffer_idx);
         buffer_idx = 0;

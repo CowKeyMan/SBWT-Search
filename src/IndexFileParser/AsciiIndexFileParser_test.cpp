@@ -148,6 +148,55 @@ TEST_F(AsciiIndexFileParserTest, BreakInMiddle) {
   }
 }
 
+TEST_F(AsciiIndexFileParserTest, NewlinesAtStart) {
+  const u64 max_indexes = 12;
+  const u64 warp_size = 4;
+  const int pad = -1;
+  const vector<vector<int>> expected_indexes = {
+    {39,
+     164,
+     216,
+     59,  // end of 1st read
+          // 2nd read is empty
+     1,
+     2,
+     3,
+     4,  // end of 3rd read
+     0,
+     1,
+     2,
+     4},
+    {
+      5,
+      6,
+      pad,
+      pad  // end of 4th read
+    }};
+  const vector<vector<u64>> expected_warps_before_new_reads
+    = {{0, 0, 1, 1, 2, 2}, {}};
+  const vector<vector<u64>> expected_found_idxs = {{0, 0, 4, 0, 4, 0, 4}, {2}};
+  const vector<vector<u64>> expected_not_found_idxs
+    = {{0, 0, 1, 5, 0, 0, 0}, {0}};
+  const vector<vector<u64>> expected_invalid_idxs
+    = {{0, 0, 2, 2, 0, 0, 0}, {0}};
+
+  // 22 is how many characters are on the first line, 23 includes '\n'
+  // 63 is how many characters are in entire file, 24 includes EOF
+  for (auto buffer_size : {1, 2, 3, 4, 22, 23, 63, 64, 999}) {
+    run_test(
+      "test_objects/example_index_search_result_with_newlines_at_start.txt",
+      max_indexes,
+      warp_size,
+      buffer_size,
+      test_utils::to_u64s(expected_indexes),
+      expected_warps_before_new_reads,
+      expected_found_idxs,
+      expected_not_found_idxs,
+      expected_invalid_idxs
+    );
+  }
+}
+
 TEST_F(AsciiIndexFileParserTest, MultipleBatches) {
   const u64 max_indexes = 8;
   const u64 warp_size = 4;
