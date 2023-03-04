@@ -2,14 +2,14 @@
 
 # Build the main executable, run the executable on
 # test_objects/full_pipeline/index_search/ and verify that the outputs are
-# correct (ie equal to the expected values)
+# correct (ie equal to the expected values, which can be found in the same folder)
 
 # build
 ./scripts/build/release.sh
 # run
 ./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 5 -c ascii
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 5 -c binary
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 5 -c bool
+./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 4 -c binary
+./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 4 -c bool
 
 cd test_objects/full_pipeline/index_search/expected
 files=`ls *.txt`
