@@ -31,38 +31,34 @@
 #SBATCH --time=03:00:00
 #SBATCH --partition=gpusmall
 
-## Remove unnecessary modules
-module purge
 ## Load in modules
 module load cmake gcc cuda python-data bzip2 git
 
 chmod +777 scripts/**/*
-DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
+export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
+export OUTPUT_FOLDER="${DATETIME}"
 ## We want to perform our work in LOCAL_SCRATCH
 export OLD_PWD="${PWD}"
-# time the copy
-t1=$(date +%s%3N)
-mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/build/bin"
-cp "${PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt"
-cp -r "${PWD}/src/" "${LOCAL_SCRATCH}/SBWT-Search/src"
-mkdir "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
-cp "${PWD}/benchmark_objects/"*.fnq "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
-cp "${PWD}/benchmark_objects/"*.fna "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
-cp "${PWD}/benchmark_objects/"*.sbwt "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
-cp -r "${PWD}/cmake/" "${LOCAL_SCRATCH}/SBWT-Search/cmake"
-cp -r "${PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts"
-t2=$(date +%s%3N)
-
+mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
-mkdir -p "benchmark_results/${DATETIME}"
-echo "Time taken to copy to LOCAL_SCRATCH: $((t2-t1)) ms" >> "benchmark_results/${DATETIME}/benchmark_out.txt"
-
 rm -rf build
 
-## Build
-sh scripts/build/release.sh
+# time the copy and build
+t1=$(date +%s%3N)
+cp -r "${OLD_PWD}/src/" "${LOCAL_SCRATCH}/SBWT-Search/src" &
+cp -r "${OLD_PWD}/cmake/" "${LOCAL_SCRATCH}/SBWT-Search/cmake" &
+cp -r "${OLD_PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts" &
+cp "${OLD_PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt" &
+wait < <(jobs -p) # wait for jobs to finish
+bash ./scripts/build/release.sh &
+cp -r "${OLD_PWD}/benchmark_objects/" "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects" &
+wait < <(jobs -p) # wait for jobs to finish
+t2=$(date +%s%3N)
 
-sh -x scripts/standalone/benchmark.sh "${DATETIME}"
+mkdir -p "benchmark_results/${OUTPUT_FOLDER}"
+echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
+
+sh -x scripts/standalone/benchmark.sh "${OUTPUT_FOLDER}"
 
 cd "${OLD_PWD}"
 cp -r "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results" .

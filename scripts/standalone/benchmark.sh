@@ -7,7 +7,7 @@ results_folder_name="$1"
 
 ## By default this is 1, which would halt our program
 unset OMP_NUM_THREADS
-## adjust this accordingly - by default it is warn
+## Set loglevel to trace because we use this to get timing statistics
 export SPDLOG_LEVEL=TRACE
 
 # top_level_directory="/dev/shm"
@@ -22,51 +22,38 @@ if [ "${top_level_directory}" != "." ]; then
   cp -r "benchmark_results/${results_folder_name}/" "${top_level_directory}/benchmark_results/${results_folder_name}/"
 fi
 
-input_files=(
-  "${input_folder}/365.fna"
-  "${input_folder}/FASTA1GB.fna"
-  "${input_folder}/FASTQ1GB.fnq"
-  "${input_folder}/combined_input.txt"
-)
+dbg_file="${input_folder}/ecoli_index/index.tdbg"
+colors_file="${input_folder}/ecoli_index/index.tcolors"
 
-output_files=(
-  "${results_folder}/365"
-  "${results_folder}/FASTA1GB"
-  "${results_folder}/FASTQ1GB"
-  "${input_folder}/combined_output.txt"
-)
+out_file="${results_folder}/benchmark_out.txt"
 
-sbwt_file="${input_folder}/coli3.sbwt"
-batches=(1 3 5 10 100 1000)
+batches=(1)
 
-stdoutput="${results_folder}/benchmark_out.txt"
-
-printing_modes=(
+index_printing_modes=(
   "binary"
   "bool"
   "ascii"
 )
-extensions=(
-  ".bin"
-  ".bool"
-  ".txt"
+
+colors_printing_modes=(
+  "binary"
+  "bool"
+  "ascii"
 )
 
-# populate combined_input.txt
-printf "" > "${input_folder}/combined_input.txt"
-printf "" > "${input_folder}/combined_output.txt"
-for (( i=0; i<${#input_files[@]}-1; i++ )); do
-  printf "${input_files[i]}\n" >> "${input_folder}/combined_input.txt"
-  printf "file_${i}\n" >> "${input_folder}/combined_output.txt"
-done
+index_input_files=(
+  "${input_folder}/combined_reads_zipped.txt"
+  "${input_folder}/combined_reads_unzipped.txt"
+)
+index_output_file="${input_folder}/combined_indexes_output.txt"
 
 echo Running at ${results_folder_name}
 for batch in ${batches[@]}; do
-  for (( i=0; i<${#input_files[@]}; i++ )); do
-    for (( p=0; p<${#printing_modes[@]}; p++ )); do
-      echo Now running: File ${input_files[i]} with ${batch} batches in ${printing_modes[p]} format
-      echo Now running: File ${input_files[i]} with ${batch} batches in ${printing_modes[p]} format >> ${stdoutput}
-      ./build/bin/sbwt_search index -i ${sbwt_file} -q ${input_files[i]} -o ${output_files[i]} -b ${batch} -c ${printing_modes[p]} >> ${stdoutput}
+  for (( i=0; i<${#index_input_files[@]}; i++ )); do
+    for (( p=0; p<${#index_printing_modes[@]}; p++ )); do
+      echo Now running: File ${index_input_files[i]} with ${batch} batches in ${index_printing_modes[p]} format
+      echo Now running: File ${index_input_files[i]} with ${batch} batches in ${index_printing_modes[p]} format >> ${out_file}
+      ./build/bin/sbwt_search index -i ${dbg_file} -q ${index_input_files[i]} -o ${index_output_file} -b ${batch} -c ${index_printing_modes[p]} >> ${out_file}
     done
   done
 done
