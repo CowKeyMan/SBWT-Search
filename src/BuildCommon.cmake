@@ -205,6 +205,9 @@ add_library(
   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cpp"
 )
 target_link_libraries(color_searcher_cpu PRIVATE gpu_utils fmt::fmt)
+if (NOT SDSL_FOUND)
+  add_dependencies(color_searcher_cpu sdsl)
+endif()
 add_library(
   color_searcher_gpu
   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
@@ -215,6 +218,9 @@ set_source_files_properties(
   PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
 )
 target_link_libraries(color_searcher_gpu PRIVATE gpu_utils fmt::fmt)
+if (NOT SDSL_FOUND)
+  add_dependencies(color_searcher_gpu sdsl)
+endif()
 add_library(
   color_searcher
   "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
