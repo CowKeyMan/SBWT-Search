@@ -50,9 +50,10 @@ private:
   u64 num_colors;
   double threshold;
   vector<u64> previous_last_results;
-  u64 previous_last_found_idx = 0;
-  u64 previous_last_not_found_idx = 0;
-  u64 previous_last_invalid_idx = 0;
+  u64 previous_last_found_idx = numeric_limits<u64>::max();
+  u64 previous_last_not_found_idx = numeric_limits<u64>::max();
+  u64 previous_last_invalid_idx = numeric_limits<u64>::max();
+  bool printed_last_read = false;
 
 public:
   ContinuousColorSearchResultsPrinter(
@@ -85,6 +86,7 @@ public:
         Logger::EVENT_STATE::START,
         format("batch {}", batch_id)
       );
+      printed_last_read = false;
       process_batch();
       Logger::log_timed_event(
         "ColorSearchResultsPrinter",
@@ -92,11 +94,14 @@ public:
         format("batch {}", batch_id)
       );
     }
-    impl().do_print_read(
-      previous_last_results.begin(),
-      previous_last_found_idx + previous_last_not_found_idx
-        + previous_last_invalid_idx
-    );
+    // TODO: do not do this if no read in last line
+    if (!printed_last_read) {
+      impl().do_print_read(
+        previous_last_results.begin(),
+        previous_last_found_idx + previous_last_not_found_idx
+          + previous_last_invalid_idx
+      );
+    }
     impl().do_at_file_end();
   }
 
@@ -111,9 +116,9 @@ private:
   }
 
 protected:
-  auto do_get_extension() -> string { return ".out"; }  // TODO: change
-  auto do_get_format() -> string { return "format"; }
-  auto do_get_version() -> string { return "version"; }
+  auto do_get_extension() -> string { return ".txt"; }  // TODO: change
+  auto do_get_format() -> string { return "ascii"; }
+  auto do_get_version() -> string { return "v1.0"; }
 
   auto do_start_next_file() -> void {
     if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
@@ -144,6 +149,7 @@ protected:
         previous_last_found_idx + previous_last_not_found_idx
           + previous_last_invalid_idx
       );
+      printed_last_read = true;
     } else {
       // Fill in from previous batch (read is continued)
       found_idxs[0] += previous_last_found_idx;
@@ -181,9 +187,9 @@ protected:
   }
   auto do_print_read(vector<u64>::iterator results, u64 read_size) -> void {
     u64 minimum_found
-      = static_cast<u64>(static_cast<double>(read_size) * threshold);
+      = static_cast<u64>(std::ceil(static_cast<double>(read_size) * threshold));
     for (u64 color_idx = 0; color_idx < num_colors; ++color_idx, ++results) {
-      if (*results > minimum_found) {
+      if (*results >= minimum_found && minimum_found > 0) {
         *out_stream << color_idx;
         if (color_idx + 1 < num_colors) { *out_stream << " "; }
       }
