@@ -6,6 +6,7 @@
  * @brief Prints out the color results
  */
 
+#include <cmath>
 #include <ios>
 #include <limits>
 #include <memory>
@@ -51,9 +52,11 @@ private:
   double threshold;
   vector<u64> previous_last_results;
   u64 previous_last_found_idx = numeric_limits<u64>::max();
-  u64 previous_last_not_found_idx = numeric_limits<u64>::max();
-  u64 previous_last_invalid_idx = numeric_limits<u64>::max();
+  u64 previous_last_not_found_idxs = numeric_limits<u64>::max();
+  u64 previous_last_invalid_idxs = numeric_limits<u64>::max();
   bool printed_last_read = false;
+  u64 include_not_found;
+  u64 include_invalid;
 
 public:
   ContinuousColorSearchResultsPrinter(
@@ -65,7 +68,9 @@ public:
       results_batch_producer_,
     const vector<string> &filenames_,
     u64 num_colors_,
-    double threshold_
+    double threshold_,
+    bool include_not_found_,
+    bool include_invalid_
   ):
       interval_batch_producer(std::move(interval_batch_producer_)),
       read_statistics_batch_producer(std::move(read_statistics_batch_producer_)
@@ -74,7 +79,9 @@ public:
       filenames(filenames_),
       num_colors(num_colors_),
       threshold(threshold_),
-      previous_last_results(num_colors_, 0){};
+      previous_last_results(num_colors_, 0),
+      include_not_found(static_cast<u64>(include_not_found_)),
+      include_invalid(static_cast<u64>(include_invalid_)){};
 
   auto read_and_generate() -> void {
     current_filename = filenames.begin();
@@ -94,12 +101,12 @@ public:
         format("batch {}", batch_id)
       );
     }
-    // TODO: do not do this if no read in last line
     if (!printed_last_read) {
       impl().do_print_read(
         previous_last_results.begin(),
-        previous_last_found_idx + previous_last_not_found_idx
-          + previous_last_invalid_idx
+        previous_last_found_idx,
+        previous_last_not_found_idxs,
+        previous_last_invalid_idxs
       );
     }
     impl().do_at_file_end();
@@ -146,15 +153,16 @@ protected:
     if (rbnfs[0] == 0) {
       impl().do_print_read(
         previous_last_results.begin(),
-        previous_last_found_idx + previous_last_not_found_idx
-          + previous_last_invalid_idx
+        previous_last_found_idx,
+        previous_last_not_found_idxs,
+        previous_last_invalid_idxs
       );
       printed_last_read = true;
     } else {
       // Fill in from previous batch (read is continued)
       found_idxs[0] += previous_last_found_idx;
-      not_found_idxs[0] += previous_last_not_found_idx;
-      invalid_idxs[0] += previous_last_invalid_idx;
+      not_found_idxs[0] += previous_last_not_found_idxs;
+      invalid_idxs[0] += previous_last_invalid_idxs;
 #pragma omp simd
       for (int i = 0; i < num_colors; ++i) {
         results[i] += previous_last_results[i];
@@ -170,8 +178,8 @@ protected:
       }
       if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
         previous_last_found_idx = found_idxs[read_idx];
-        previous_last_not_found_idx = not_found_idxs[read_idx];
-        previous_last_invalid_idx = invalid_idxs[read_idx];
+        previous_last_not_found_idxs = not_found_idxs[read_idx];
+        previous_last_invalid_idxs = invalid_idxs[read_idx];
 #pragma omp simd
         for (int i = 0; i < num_colors; ++i) {
           previous_last_results[i] = results[wbnr * num_colors + i];
@@ -180,12 +188,21 @@ protected:
       }
       impl().do_print_read(
         results.begin() + wbnr * num_colors,
-        found_idxs[read_idx] + not_found_idxs[read_idx] + invalid_idxs[read_idx]
+        found_idxs[read_idx],
+        not_found_idxs[read_idx],
+        invalid_idxs[read_idx]
       );
       wbnr = wbnrs[wbnr_idx];
     }
   }
-  auto do_print_read(vector<u64>::iterator results, u64 read_size) -> void {
+  auto do_print_read(
+    vector<u64>::iterator results,
+    u64 found_idxs,
+    u64 not_found_idxs,
+    u64 invalid_idxs
+  ) -> void {
+    u64 read_size = found_idxs + include_not_found * not_found_idxs
+      + include_invalid * invalid_idxs;
     u64 minimum_found
       = static_cast<u64>(std::ceil(static_cast<double>(read_size) * threshold));
     for (u64 color_idx = 0; color_idx < num_colors; ++color_idx, ++results) {

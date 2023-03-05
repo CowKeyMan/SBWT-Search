@@ -40,6 +40,8 @@ public:
   auto get_base_pairs_per_read() const -> u64;
   auto get_cpu_memory_percentage() const -> double;
   auto get_gpu_memory_percentage() const -> double;
+  auto get_include_not_found() const -> bool;
+  auto get_include_invalid() const -> bool;
 
 private:
   auto create_options() -> void;

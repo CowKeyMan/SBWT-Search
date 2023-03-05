@@ -73,8 +73,12 @@ auto ColorSearchArgumentParser::create_options() -> void {
     )
     ("t,threshold",
       "The percentage of kmers which need to be attributed to a color in order for us to accept that color as being part of our output. Must be a value between 1 and 0 (both included)",
-      value<double>()->default_value("1")
-    )("h,help", "Print usage", value<bool>()->default_value("false"));
+      value<double>()->default_value("1"))
+    ("no-ignore-not-found",
+      "By default, indexes which have not been found in the sbwt (represented by -1s) are not considered by the algorithm, and they are simply skipped over and considered to not be part of the read. If this option is set, then they will be considered as reads which have had no colors found.")
+    ("no-ignore-invalid",
+      "By default, indexes which are invalid, that is, they contain characters other than acgt/ACGT (represented by -2s) are not considered by the algorithm, and they are simply skipped over and considered to not be part of the read. If this option is set, then they will be considered as reads which have had no colors found.")
+    ("h,help", "Print usage", value<bool>()->default_value("false"));
   get_options().allow_unrecognised_options();
 }
 
@@ -133,6 +137,12 @@ auto ColorSearchArgumentParser::get_gpu_memory_percentage() const -> double {
     std::quick_exit(1);
   }
   return result;
+}
+auto ColorSearchArgumentParser::get_include_not_found() const -> bool {
+  return get_args()["no-ignore-not-found"].as<bool>();
+}
+auto ColorSearchArgumentParser::get_include_invalid() const -> bool {
+  return get_args()["no-ignore-invalid"].as<bool>();
 }
 auto ColorSearchArgumentParser::get_required_options() const -> vector<string> {
   return {

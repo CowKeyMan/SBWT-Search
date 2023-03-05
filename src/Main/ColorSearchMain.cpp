@@ -204,7 +204,9 @@ auto ColorSearchMain::get_components(
     post_processor,
     output_filenames,
     gpu_container->num_colors,
-    get_args().get_threshold()
+    get_args().get_threshold(),
+    get_args().get_include_not_found(),
+    get_args().get_include_invalid()
   );
   return {index_file_parser, searcher, post_processor, results_printer};
 }
