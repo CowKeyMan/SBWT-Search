@@ -128,7 +128,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cpp"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cpp"
 )
-target_link_libraries(sbwt_container PUBLIC gpu_utils)
+target_link_libraries(sbwt_container PRIVATE gpu_utils)
 add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"

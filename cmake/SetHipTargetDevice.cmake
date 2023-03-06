@@ -70,6 +70,14 @@ if(${HIP_TARGET_DEVICE} STREQUAL "CPU")
   set(GPU_WARP_SIZE 64 CACHE STRING "The warp size of the target device" FORCE)
 endif()
 
+if(${HIP_TARGET_DEVICE} STREQUAL "AMD")
+  enable_language(HIP)
+  set(CMAKE_HIP_COMPILER "/opt/rocm/llvm/bin/clang++")
+  set(HIP_TARGET_LANGUAGE HIP)
+  set(CMAKE_HIP_ARCHITECTURES gfx701 gfx801 gfx802 gfx803 gfx900 gfx90a gfx906 gfx908 gfx1010 gfx1011 gfx1012 gfx1030 gfx1031)
+  set(GPU_WARP_SIZE 64 CACHE STRING "The warp size of the target device" FORCE)
+endif()
+
 configure_file(
   "${CMAKE_SOURCE_DIR}/src/Global/GlobalDefinitions.h.in"
   "${CMAKE_SOURCE_DIR}/src/Global/GlobalDefinitions.h"

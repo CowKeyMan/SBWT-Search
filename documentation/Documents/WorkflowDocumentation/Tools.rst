@@ -161,12 +161,29 @@ Github pages
 
 We use github pages to publish the documentation and code coverage. To set this up, we must have a separate branch called *gh-pages*. Then go to github, and in your repository's settings you can find the settings for the pages. Set this up so that it uses the root folder of your gh-pages branch.
 
+HIP
++++
+
+The kernels and kernel calls are HIP-ified so that we call CUDA or ROCm (or CPU as well!) from a single codebase. This however instead requires multiple compilations if we want to compile for different target devices. This switch is a simple cmake option switch, which can be seen in `cmake/SetHipTargetDevice.cmake`. An example of this switch is in `scripts/build/release.sh`: "HIP_TARGET_DEVICE".
+
 CUDA
-++++
+----
 
-This template also supports CUDA. Check the official installation guides for more info, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can turn the build off. For more information look at the **build** folder section in :ref:`File Documentation`.
+For CUDA installation, check the official installation guides for more info on this topic, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can switch the cmake option to CPU. For more information look at the **build** folder section in :ref:`File Documentation`.
 
-On github actions we do not have GPUs, but we can still compile and test our code. Thus, our gpu tests will fail but we will still have the code coverage report on the site.
+ROCm
+--------
+
+To install ROCm, follow the instructions at: https://docs.amd.com/bundle/ROCm-Installation-Guide-v5.1/page/How_to_Install_ROCm.html.
+
+The instructions on the site may be slightly complicated to follow, but TLDR, first navigate to 'Download and install the installer', where you will find commands to download a file wget and install it with apt. This will install a new command in your system called 'amdgpu-install'. If you then run `amdgpu-install --usecase=hiplibsdk`, you *SHOULD* have hip installed.
+
+Unfortunately I do not have much experience with this as I was using a server to test AMD products and do not have access to a fresh AMD machine to test this out with, so you will have to figure out the rest yourself if the above fails. I could not get HIP to compile locally.
+
+CPU
+---
+
+On AMD platforms, we can use the HIP compiler to compile for this platform. By switching the platform to CPU, this will automatically download the necessary headers to run the kernels on the CPU using the repository https://github.com/ROCm-Developer-Tools/HIP-CPU.
 
 kseqpp_REad
 +++++++++++
