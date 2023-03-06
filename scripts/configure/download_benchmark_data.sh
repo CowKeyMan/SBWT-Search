@@ -23,7 +23,7 @@ yes n | gunzip -k *fastq.gz
 if [ ! -d "ecoli_index" ]; then
   mkdir -p ecoli_index
   cd ecoli_index
-  wget -nc wget https://zenodo.org/record/6656897/files/E_coli_lineage_index_v1-0-0.tar.gz
+  head -20 scripts/configure/full_benchmark_data_list.txt | wget -nc -i -
   tar -xvf E_coli_lineage_index_v1-0-0.tar.gz
   mv wrk/users/temaklin/cocov2-reference-sequences/E_col/E_col_index/index.tdbg .
   mv wrk/users/temaklin/cocov2-reference-sequences/E_col/E_col_index/index.tcolors .
