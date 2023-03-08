@@ -15,7 +15,7 @@ FetchContent_Declare(
   reklibpp
   QUIET
   GIT_REPOSITORY       "https://github.com/CowKeyMan/kseqpp_REad"
-  GIT_TAG              v1.2.0
+  GIT_TAG              v1.4.0
   GIT_SHALLOW          TRUE
 )
 FetchContent_MakeAvailable(reklibpp)

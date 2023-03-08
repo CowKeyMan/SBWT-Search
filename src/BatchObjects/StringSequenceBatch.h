@@ -27,12 +27,11 @@
 
 namespace sbwt_search {
 
-using std::string;
 using std::vector;
 
 class StringSequenceBatch {
 public:
-  const string *seq;
+  const vector<char> *seq;
 };
 
 }  // namespace sbwt_search

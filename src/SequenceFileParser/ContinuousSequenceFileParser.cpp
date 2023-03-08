@@ -37,12 +37,14 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
   const vector<string> &filenames_,
   u64 kmer_size_,
   u64 max_chars_per_batch_,
+  u64 max_reads_per_batch_,
   u64 max_batches
 ):
     filenames(filenames_),
     kmer_size(kmer_size_),
     batches(max_batches),
     max_chars_per_batch(max_chars_per_batch_),
+    max_reads_per_batch(max_reads_per_batch_),
     string_sequence_batch_producer(
       make_shared<StringSequenceBatchProducer>(max_batches)
     ),
@@ -52,7 +54,9 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
     interval_batch_producer(make_shared<IntervalBatchProducer>(max_batches)) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {
-    batches.set(i, make_shared<Seq>(Seq(max_chars_per_batch)));
+    batches.set(
+      i, make_shared<Seq>(Seq(max_chars_per_batch, max_reads_per_batch_))
+    );
   }
 }
 
@@ -74,12 +78,12 @@ auto ContinuousSequenceFileParser::reset_rec() -> void {
     return;
   }
   int amount_to_copy = 0;
-  if (prev_rec->chars_before_newline.size() == 1) {
+  if (prev_rec->chars_before_new_read.size() == 1) {
     amount_to_copy = min<int>(
       static_cast<int>(kmer_size - 1), static_cast<int>(prev_rec->seq.size())
     );
   } else {
-    auto &chars_before_newline = prev_rec->chars_before_newline;
+    auto &chars_before_newline = prev_rec->chars_before_new_read;
     amount_to_copy = min<int>(
       static_cast<int>(kmer_size - 1),
       static_cast<int>(
@@ -88,18 +92,18 @@ auto ContinuousSequenceFileParser::reset_rec() -> void {
       )
     );
   }
-  rec->seq.resize(rec->max_seq_size);
+  rec->seq.resize(rec->max_chars);
   copy(
     prev_rec->seq.end() - amount_to_copy, prev_rec->seq.end(), rec->seq.begin()
   );
   rec->seq.resize(amount_to_copy);
-  rec->chars_before_newline.resize(0);
+  rec->chars_before_new_read.resize(0);
 }
 
 auto ContinuousSequenceFileParser::start_next_file() -> bool {
   while (filename_iterator != filenames.end()) {
     interval_batch_producer->add_file_start(
-      batches.current_write()->chars_before_newline.size()
+      batches.current_write()->chars_before_new_read.size()
     );
     auto filename = *filename_iterator++;
     try {
@@ -133,16 +137,17 @@ auto ContinuousSequenceFileParser::do_at_batch_start() -> void {
 auto ContinuousSequenceFileParser::read_next() -> void {
   auto rec = batches.current_write();
   while ((rec->seq.size() < max_chars_per_batch)
+         && (rec->chars_before_new_read.size() < max_reads_per_batch)
          && ((*stream) >> (*rec) || start_next_file())) {}
   string_sequence_batch_producer->set_string(rec->seq);
-  string_break_batch_producer->set(rec->chars_before_newline, rec->seq.size());
-  interval_batch_producer->set_chars_before_newline(rec->chars_before_newline);
+  string_break_batch_producer->set(rec->chars_before_new_read, rec->seq.size());
+  interval_batch_producer->set_chars_before_newline(rec->chars_before_new_read);
 }
 
 auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
   batches.step_read();
   auto seq_size = batches.current_write()->seq.size();
-  auto &str_breaks = batches.current_write()->chars_before_newline;
+  auto &str_breaks = batches.current_write()->chars_before_new_read;
   str_breaks.push_back(std::numeric_limits<u64>::max());
   auto strings_in_batch = str_breaks.size()
     + static_cast<u64>(!str_breaks.empty()

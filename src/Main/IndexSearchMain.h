@@ -44,6 +44,7 @@ public:
 private:
   u64 kmer_size = 0;
   u64 max_chars_per_batch = 0;
+  u64 max_reads_per_batch = 0;
   unique_ptr<IndexSearchArgumentParser> args;
 
   [[nodiscard]] auto get_args() const -> const IndexSearchArgumentParser &;

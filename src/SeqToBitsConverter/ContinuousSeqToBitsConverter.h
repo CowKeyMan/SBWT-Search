@@ -46,7 +46,8 @@ public:
 
 private:
   auto parallel_generate(StringSequenceBatch &read_batch) -> void;
-  auto convert_int(const string &string, u64 start_index, u64 end_index) -> u64;
+  auto convert_int(const vector<char> &str, u64 start_index, u64 end_index)
+    -> u64;
 };
 
 }  // namespace sbwt_search

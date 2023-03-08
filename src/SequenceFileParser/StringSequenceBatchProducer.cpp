@@ -7,7 +7,6 @@
 
 using std::make_shared;
 using std::shared_ptr;
-using std::string;
 
 namespace sbwt_search {
 
@@ -21,7 +20,7 @@ auto StringSequenceBatchProducer::get_default_value()
   return make_shared<StringSequenceBatch>();
 }
 
-auto StringSequenceBatchProducer::set_string(const string &s) -> void {
+auto StringSequenceBatchProducer::set_string(const vector<char> &s) -> void {
   current_write()->seq = &s;
 }
 

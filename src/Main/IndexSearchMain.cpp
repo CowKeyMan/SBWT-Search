@@ -91,10 +91,16 @@ auto IndexSearchMain::get_gpu_container() -> shared_ptr<GpuSbwtContainer> {
 
 auto IndexSearchMain::load_batch_info() -> void {
   max_chars_per_batch = get_max_chars_per_batch();
+  max_reads_per_batch
+    = max_chars_per_batch / get_args().get_base_pairs_per_read();
   if (max_chars_per_batch == 0) { throw runtime_error("Not enough memory"); }
   Logger::log(
     Logger::LOG_LEVEL::INFO,
-    "Using " + to_string(max_chars_per_batch) + " characters per batch"
+    format(
+      "Using {} max characters per batch and {} max reads per batch",
+      max_chars_per_batch,
+      max_reads_per_batch
+    )
   );
 }
 
@@ -184,7 +190,11 @@ auto IndexSearchMain::get_components(
     ResultsPrinter> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   auto sequence_file_parser = make_shared<ContinuousSequenceFileParser>(
-    input_filenames, kmer_size, max_chars_per_batch, num_components
+    input_filenames,
+    kmer_size,
+    max_chars_per_batch,
+    max_reads_per_batch,
+    num_components
   );
 
   auto seq_to_bits_converter = make_shared<ContinuousSeqToBitsConverter>(

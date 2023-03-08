@@ -85,14 +85,14 @@ auto ContinuousSeqToBitsConverter::parallel_generate(
 }
 
 auto ContinuousSeqToBitsConverter::convert_int(
-  const string &string, u64 start_index, u64 end_index
+  const vector<char> &str, u64 start_index, u64 end_index
 ) -> u64 {
   const u64 bits_per_character = 2;
   u64 result = 0;
   for (u64 internal_shift = u64_bits - bits_per_character, index = 0;
        internal_shift < u64_bits && index + start_index < end_index;
        internal_shift -= bits_per_character, ++index) {
-    u64 c = char_to_bits(string[index + start_index]);
+    u64 c = char_to_bits(str[index + start_index]);
     if (c == invalid_char_to_bits_value) {
       invalid_chars_producer->set(index + start_index);
       continue;

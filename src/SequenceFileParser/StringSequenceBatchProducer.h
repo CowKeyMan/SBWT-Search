@@ -19,7 +19,7 @@ class ContinuousSequenceFileParser;
 
 using design_utils::SharedBatchesProducer;
 using std::shared_ptr;
-using std::string;
+using std::vector;
 
 class StringSequenceBatchProducer:
     public SharedBatchesProducer<StringSequenceBatch> {
@@ -30,7 +30,7 @@ public:
   explicit StringSequenceBatchProducer(u64 max_batches);
 
 private:
-  void set_string(const string &s);
+  void set_string(const vector<char> &s);
   auto get_default_value() -> shared_ptr<StringSequenceBatch> override;
 };
 
