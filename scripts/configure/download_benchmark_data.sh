@@ -15,7 +15,7 @@
 mkdir -p benchmark_objects
 cd benchmark_objects
 
-wget -nc -i scripts/configure/benchmark_data_list.txt
+wget -nc -i ../scripts/configure/benchmark_data_list.txt
 # "yes n" skips files if they exist as unzipped already
 yes n | gunzip -k *fastq.gz
 
