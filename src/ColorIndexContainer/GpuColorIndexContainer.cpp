@@ -76,7 +76,7 @@ GpuColorIndexContainer::GpuColorIndexContainer(
   );
   sparse_arrays_intervals.set(
     cpu_sparse_arrays_intervals.data(),
-    cpu_dense_arrays_intervals.capacity() / u64_bits
+    cpu_sparse_arrays_intervals.capacity() / u64_bits
   );
 
   color_set_idxs.memset(cpu_color_set_idxs.capacity() / u64_bits, 1, 0);

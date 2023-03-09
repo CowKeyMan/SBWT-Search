@@ -46,11 +46,14 @@ auto BinaryIndexFileParser::generate_batch(
   const u64 initial_size = get_indexes_batch()->indexes.size()
     + get_warps_before_new_read_batch()->warps_before_new_read->size();
   while (get_indexes().size() < get_max_indexes()
-         && get_read_statistics_batch()->found_idxs.size() < get_max_reads()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
     i = get_next();
     if (buffer_size == 0) { break; }  // EOF
     if (new_read) {
+      if (get_read_statistics_batch()->found_idxs.size() == get_max_reads()) {
+        --buffer_index;
+        break;
+      }
       begin_new_read();
       new_read = false;
     }

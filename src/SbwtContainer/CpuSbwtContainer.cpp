@@ -20,6 +20,8 @@ CpuSbwtContainer::CpuSbwtContainer(
     acgt(std::move(acgt_)),
     poppys(std::move(poppys_)),
     c_map(std::move(c_map_)) {
+  // NOLINTNEXTLINE
+  // (cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
   if (acgt.size() != 4 || poppys.size() != 4 || c_map.size() != 5) {
     throw std::runtime_error(
       "Wrong acgt, poppy or cmap size in CpuSbwtContainer"

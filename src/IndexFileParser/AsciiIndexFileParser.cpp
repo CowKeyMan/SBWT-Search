@@ -46,11 +46,14 @@ auto AsciiIndexFileParser::generate_batch(
     + get_warps_before_new_read_batch()->warps_before_new_read->size();
   char c = '\0';
   while (get_indexes().size() < get_max_indexes()
-         && get_read_statistics_batch()->found_idxs.size() < get_max_reads()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
     c = getc();
     if (c == '\0') { break; }  // EOF
     if (new_read) {
+      if (get_read_statistics_batch()->found_idxs.size() == get_max_reads()) {
+        --buffer_index;
+        break;
+      }
       begin_new_read();
       new_read = false;
     }
