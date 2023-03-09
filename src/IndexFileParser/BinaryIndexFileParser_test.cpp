@@ -12,13 +12,13 @@ namespace sbwt_search {
 
 using std::ios;
 using std::make_shared;
-using std::filesystem::remove;
 
 class BinaryIndexFileParserTest: public ::testing::Test {
 protected:
   auto run_test(
     const string &filename,
     u64 max_indexes,
+    u64 max_reads,
     u64 padding,
     u64 buffer_size,
     const vector<vector<u64>> &expected_indexes,
@@ -36,8 +36,9 @@ protected:
     warps_before_new_read_batch->warps_before_new_read
       = make_shared<vector<u64>>();
     auto indexes_batch = make_shared<IndexesBatch>();
-    auto host
-      = BinaryIndexFileParser(in_stream, max_indexes, padding, buffer_size);
+    auto host = BinaryIndexFileParser(
+      in_stream, max_indexes, max_reads, padding, buffer_size
+    );
     for (int i = 0; i < expected_indexes.size(); ++i) {
       read_statistics_batch->reset();
       warps_before_new_read_batch->reset();
@@ -61,6 +62,7 @@ protected:
 
 TEST_F(BinaryIndexFileParserTest, OneBatch) {
   const u64 max_indexes = 999;
+  const u64 max_reads = 999;
   const u64 padding = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {{
@@ -93,6 +95,7 @@ TEST_F(BinaryIndexFileParserTest, OneBatch) {
     run_test(
       get_binary_index_output_filename(),
       max_indexes,
+      max_reads,
       padding,
       buffer_size,
       test_utils::to_u64s(expected_indexes),
@@ -106,6 +109,7 @@ TEST_F(BinaryIndexFileParserTest, OneBatch) {
 
 TEST_F(BinaryIndexFileParserTest, BreakInMiddle) {
   const u64 max_indexes = 12;
+  const u64 max_reads = 999;
   const u64 warp_size = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {
@@ -140,6 +144,7 @@ TEST_F(BinaryIndexFileParserTest, BreakInMiddle) {
     run_test(
       get_binary_index_output_filename(),
       max_indexes,
+      max_reads,
       warp_size,
       buffer_size,
       test_utils::to_u64s(expected_indexes),
@@ -153,6 +158,7 @@ TEST_F(BinaryIndexFileParserTest, BreakInMiddle) {
 
 TEST_F(BinaryIndexFileParserTest, MultipleBatches) {
   const u64 max_indexes = 8;
+  const u64 max_reads = 999;
   const u64 padding = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {
@@ -181,6 +187,7 @@ TEST_F(BinaryIndexFileParserTest, MultipleBatches) {
     run_test(
       get_binary_index_output_filename(),
       max_indexes,
+      max_reads,
       padding,
       buffer_size,
       test_utils::to_u64s(expected_indexes),

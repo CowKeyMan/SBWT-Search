@@ -68,7 +68,9 @@ inline auto ColorSearchMain::get_gpu_container()
 }
 
 auto ColorSearchMain::load_batch_info() -> void {
-  max_indexes_per_batch = 1024;  // TODO: turn into a function, calculate c/gpu
+  max_indexes_per_batch = get_max_chars_per_batch();
+  max_reads_per_batch
+    = max_indexes_per_batch / get_args().get_indexes_per_read();
   if (max_indexes_per_batch == 0) { throw runtime_error("Not enough memory"); }
   Logger::log(
     Logger::LOG_LEVEL::INFO,
@@ -136,7 +138,7 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     + 64.0 * static_cast<double>(num_colors)
       / static_cast<double>(gpu_warp_size)
     + (20 + 1) * 8
-    + (1.0 / static_cast<double>(get_args().get_base_pairs_per_read()))
+    + (1.0 / static_cast<double>(get_args().get_indexes_per_read()))
       * (64.0 * 4)
   );
   auto max_chars_per_batch = round_down<u64>(
@@ -183,7 +185,11 @@ auto ColorSearchMain::get_components(
     shared_ptr<ContinuousColorResultsPostProcessor>,
     shared_ptr<ContinuousColorSearchResultsPrinter>> {
   auto index_file_parser = make_shared<ContinuousIndexFileParser>(
-    num_components, max_indexes_per_batch, gpu_warp_size, input_filenames
+    num_components,
+    max_indexes_per_batch,
+    max_reads_per_batch,
+    gpu_warp_size,
+    input_filenames
   );
   auto searcher = make_shared<ContinuousColorSearcher>(
     gpu_container,

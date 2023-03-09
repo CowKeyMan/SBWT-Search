@@ -53,6 +53,8 @@ auto to_u64s(const vector<vector<Source>> &int_vec)
   return ret_val;
 }
 
+auto to_char_vec(const vector<string> &str_vec) -> vector<vector<char>>;
+
 }  // namespace test_utils
 
 #endif

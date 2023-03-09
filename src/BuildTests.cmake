@@ -46,6 +46,8 @@ add_executable(
   test_main
   "${PROJECT_SOURCE_DIR}/test_main.cpp"
 
+  "${PROJECT_SOURCE_DIR}/Tools/TestUtils.cpp"
+
   "${PROJECT_SOURCE_DIR}/Tools/CircularQueue_test.cpp"
   "${PROJECT_SOURCE_DIR}/Tools/CircularBuffer_test.cpp"
   "${PROJECT_SOURCE_DIR}/Tools/IOUtils_test.cpp"

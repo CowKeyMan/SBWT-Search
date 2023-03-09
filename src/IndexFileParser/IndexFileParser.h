@@ -36,15 +36,20 @@ private:
   shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch;
   shared_ptr<IndexesBatch> indexes_batch;
   u64 max_indexes;
+  u64 max_reads;
   u64 warp_size;
 
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
   [[nodiscard]] auto get_indexes() const -> vector<u64> &;
   [[nodiscard]] auto get_max_indexes() const -> u64;
+  [[nodiscard]] auto get_max_reads() const -> u64;
   [[nodiscard]] auto get_read_padding() const -> u64;
   IndexFileParser(
-    shared_ptr<ThrowingIfstream> in_stream_, u64 max_indexes_, u64 read_padding_
+    shared_ptr<ThrowingIfstream> in_stream_,
+    u64 max_indexes_,
+    u64 max_reads_,
+    u64 read_padding_
   );
 
 public:

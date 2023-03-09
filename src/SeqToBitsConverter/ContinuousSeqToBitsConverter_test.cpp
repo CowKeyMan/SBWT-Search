@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <memory>
@@ -21,13 +22,12 @@ namespace sbwt_search {
 using rng_utils::get_uniform_int_generator;
 using std::make_shared;
 using std::string;
-using std::unique_ptr;
 using std::vector;
-using std::chrono::duration_cast;
 using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 using std::this_thread::sleep_for;
 using test_utils::DummyBatchProducer;
+using test_utils::to_char_vec;
 
 using DummyStringSequenceBatchProducer
   = DummyBatchProducer<StringSequenceBatch>;
@@ -36,7 +36,7 @@ class ContinuousSeqToBitsConverterTest: public ::testing::Test {
 protected:
   auto run_test(
     u64 kmer_size,
-    const vector<string> &seqs,
+    const vector<vector<char>> &seqs,
     const vector<vector<u64>> &bits,
     const vector<vector<char>> &invalid_chars,
     u64 max_chars_per_batch,
@@ -48,7 +48,7 @@ protected:
 #pragma omp single
     { threads = omp_get_num_threads(); }
     vector<shared_ptr<StringSequenceBatch>> shared_seqs;
-    for (auto &seq : seqs) {
+    for (const auto &seq : seqs) {
       auto a = make_shared<StringSequenceBatch>(StringSequenceBatch({&seq}));
       shared_seqs.push_back(a);
     }
@@ -104,7 +104,7 @@ auto convert_binary(string bin) -> u64 {
 }
 
 TEST_F(ContinuousSeqToBitsConverterTest, TestAll) {
-  vector<string> seqs = {
+  vector<string> str_seqs = {
     "ACgTgnGAtGtCa"  // A00 C01 g10 T11 g10 n00 G10 A00 t11 G10 t11 C01 a00
     "AAAAaAAaAAAAAAAaAAAAAAAAAAAAAAAA"  // 32 As = 64 0s
     "GC",                               // 1001
@@ -138,12 +138,17 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestAll) {
   const u64 max_chars_per_batch = 200;
   for (auto kmer_size : {3}) {
     const vector<vector<char>> expected_invalid_chars = [&] {
+      // NOLINTBEGIN
+      // (cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       vector<vector<char>> ret_val
         = {vector<char>(47 + kmer_size, 0), vector<char>(128 + kmer_size, 0)};
       ret_val[0][5] = 1;
+      // NOLINTEND
+      // (cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
       for (auto i : {0, 63, 64, 126}) { ret_val[1][i] = 1; }
       return ret_val;
     }();
+    auto seqs = to_char_vec(str_seqs);
     for (auto max_batches : {1}) {
       run_test(
         kmer_size,

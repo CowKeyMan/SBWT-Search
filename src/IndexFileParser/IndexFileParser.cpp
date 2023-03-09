@@ -5,10 +5,14 @@
 namespace sbwt_search {
 
 IndexFileParser::IndexFileParser(
-  shared_ptr<ThrowingIfstream> in_stream_, u64 max_indexes_, u64 warp_size_
+  shared_ptr<ThrowingIfstream> in_stream_,
+  u64 max_indexes_,
+  u64 max_reads_,
+  u64 warp_size_
 ):
     in_stream(std::move(in_stream_)),
     max_indexes(max_indexes_),
+    max_reads(max_reads_),
     warp_size(warp_size_) {}
 
 auto IndexFileParser::get_istream() const -> ThrowingIfstream & {
@@ -18,6 +22,7 @@ auto IndexFileParser::get_indexes() const -> vector<u64> & {
   return indexes_batch->indexes;
 }
 auto IndexFileParser::get_max_indexes() const -> u64 { return max_indexes; }
+auto IndexFileParser::get_max_reads() const -> u64 { return max_reads; }
 auto IndexFileParser::get_read_padding() const -> u64 { return warp_size; }
 
 auto IndexFileParser::generate_batch(

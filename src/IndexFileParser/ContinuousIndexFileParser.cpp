@@ -23,11 +23,13 @@ using std::numeric_limits;
 ContinuousIndexFileParser::ContinuousIndexFileParser(
   u64 max_batches,
   u64 max_indexes_per_batch_,
+  u64 max_reads_per_batch_,
   u64 warp_size_,
   vector<string> filenames_
 ):
     warps_before_new_read(create_warps_before_new_read(max_batches)),
     max_indexes_per_batch(max_indexes_per_batch_),
+    max_reads_per_batch(max_reads_per_batch_),
     warp_size(warp_size_),
     colors_interval_batch_producer(make_shared<ColorsIntervalBatchProducer>(
       max_batches, warps_before_new_read
@@ -100,11 +102,17 @@ auto ContinuousIndexFileParser::start_new_file(const string &filename) -> void {
   const string file_format = in_stream->read_string_with_size();
   if (file_format == "ascii") {  // NOLINT (bugprone-branch-clone)
     index_file_parser = make_unique<AsciiIndexFileParser>(
-      std::move(in_stream), max_indexes_per_batch, warp_size
+      std::move(in_stream),
+      max_indexes_per_batch,
+      max_reads_per_batch,
+      warp_size
     );
   } else if (file_format == "binary") {
     index_file_parser = make_unique<BinaryIndexFileParser>(
-      std::move(in_stream), max_indexes_per_batch, warp_size
+      std::move(in_stream),
+      max_indexes_per_batch,
+      max_reads_per_batch,
+      warp_size
     );
   } else {
     Logger::log(
@@ -218,7 +226,7 @@ auto ContinuousIndexFileParser::get_indexes_batch_producer() const
 }
 
 auto ContinuousIndexFileParser::create_warps_before_new_read(u64 amount) const
-  -> const vector<shared_ptr<vector<u64>>> {
+  -> vector<shared_ptr<vector<u64>>> {
   vector<shared_ptr<vector<u64>>> result;
   for (int i = 0; i < amount; ++i) {
     result.push_back(make_shared<vector<u64>>());

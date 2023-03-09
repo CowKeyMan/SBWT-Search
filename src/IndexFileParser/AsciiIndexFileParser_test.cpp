@@ -17,6 +17,7 @@ protected:
   auto run_test(
     const string &filename,
     u64 max_indexes,
+    u64 max_reads,
     u64 warp_size,
     u64 buffer_size,
     const vector<vector<u64>> &expected_indexes,
@@ -33,8 +34,9 @@ protected:
     warps_before_new_read_batch->warps_before_new_read
       = make_shared<vector<u64>>();
     auto indexes_batch = make_shared<IndexesBatch>();
-    auto host
-      = AsciiIndexFileParser(in_stream, max_indexes, warp_size, buffer_size);
+    auto host = AsciiIndexFileParser(
+      in_stream, max_indexes, max_reads, warp_size, buffer_size
+    );
     for (int i = 0; i < expected_indexes.size(); ++i) {
       read_statistics_batch->reset();
       warps_before_new_read_batch->reset();
@@ -58,6 +60,7 @@ protected:
 
 TEST_F(AsciiIndexFileParserTest, OneBatch) {
   const u64 max_indexes = 999;
+  const u64 max_reads = 999;
   const u64 warp_size = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {{
@@ -90,6 +93,7 @@ TEST_F(AsciiIndexFileParserTest, OneBatch) {
     run_test(
       "test_objects/example_index_search_result.txt",
       max_indexes,
+      max_reads,
       warp_size,
       buffer_size,
       test_utils::to_u64s(expected_indexes),
@@ -103,6 +107,7 @@ TEST_F(AsciiIndexFileParserTest, OneBatch) {
 
 TEST_F(AsciiIndexFileParserTest, BreakInMiddle) {
   const u64 max_indexes = 12;
+  const u64 max_reads = 999;
   const u64 warp_size = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {
@@ -137,6 +142,7 @@ TEST_F(AsciiIndexFileParserTest, BreakInMiddle) {
     run_test(
       "test_objects/example_index_search_result.txt",
       max_indexes,
+      max_reads,
       warp_size,
       buffer_size,
       test_utils::to_u64s(expected_indexes),
@@ -150,6 +156,7 @@ TEST_F(AsciiIndexFileParserTest, BreakInMiddle) {
 
 TEST_F(AsciiIndexFileParserTest, NewlinesAtStart) {
   const u64 max_indexes = 12;
+  const u64 max_reads = 999;
   const u64 warp_size = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {
@@ -186,6 +193,7 @@ TEST_F(AsciiIndexFileParserTest, NewlinesAtStart) {
     run_test(
       "test_objects/example_index_search_result_with_newlines_at_start.txt",
       max_indexes,
+      max_reads,
       warp_size,
       buffer_size,
       test_utils::to_u64s(expected_indexes),
@@ -199,6 +207,7 @@ TEST_F(AsciiIndexFileParserTest, NewlinesAtStart) {
 
 TEST_F(AsciiIndexFileParserTest, MultipleBatches) {
   const u64 max_indexes = 8;
+  const u64 max_reads = 999;
   const u64 warp_size = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {
@@ -227,6 +236,7 @@ TEST_F(AsciiIndexFileParserTest, MultipleBatches) {
     run_test(
       "test_objects/example_index_search_result.txt",
       max_indexes,
+      max_reads,
       warp_size,
       buffer_size,
       test_utils::to_u64s(expected_indexes),

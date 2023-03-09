@@ -26,6 +26,7 @@ using std::string;
 class ColorSearchMain: public Main {
 private:
   u64 max_indexes_per_batch = 0;
+  u64 max_reads_per_batch = 0;
   u64 num_colors = 0;
   unique_ptr<ColorSearchArgumentParser> args;
 

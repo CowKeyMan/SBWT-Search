@@ -37,7 +37,7 @@ public:
   auto get_print_mode() const -> string;
   auto get_batches() const -> u64;
   auto get_threshold() const -> double;
-  auto get_base_pairs_per_read() const -> u64;
+  auto get_indexes_per_read() const -> u64;
   auto get_cpu_memory_percentage() const -> double;
   auto get_gpu_memory_percentage() const -> double;
   auto get_include_not_found() const -> bool;

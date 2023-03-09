@@ -15,6 +15,7 @@
 #include "SequenceFileParser/StringBreakBatchProducer.h"
 #include "SequenceFileParser/StringSequenceBatchProducer.h"
 #include "Tools/RNGUtils.hpp"
+#include "Tools/TestUtils.hpp"
 
 namespace sbwt_search {
 
@@ -24,6 +25,7 @@ using std::numeric_limits;
 using std::shared_ptr;
 using std::chrono::milliseconds;
 using std::this_thread::sleep_for;
+using test_utils::to_char_vec;
 
 const auto max = numeric_limits<u64>::max();
 const u64 time_to_wait = 100;
@@ -34,13 +36,18 @@ protected:
     const vector<string> &filenames,
     u64 kmer_size,
     u64 max_chars_per_batch,
-    const vector<string> &seq,
+    u64 max_reads_per_batch,
+    const vector<vector<char>> &seq,
     const vector<vector<u64>> &chars_before_newline,
     const vector<vector<u64>> &newlines_before_newfile,
     u64 max_batches
   ) {
     auto host = make_unique<ContinuousSequenceFileParser>(
-      filenames, kmer_size, max_chars_per_batch, max_batches
+      filenames,
+      kmer_size,
+      max_chars_per_batch,
+      max_reads_per_batch,
+      max_batches
     );
     u64 expected_batches = seq.size();
 #pragma omp parallel sections num_threads(4)
@@ -88,7 +95,7 @@ private:
 
   auto assert_string_break_batch_correct(
     StringBreakBatchProducer &string_break_batch_producer,
-    const vector<string> &seq,
+    const vector<vector<char>> &seq,
     u64 expected_batches,
     const vector<vector<u64>> &chars_before_newline
   ) const -> void {
@@ -108,7 +115,7 @@ private:
 
   auto assert_string_sequence_batch_correct(
     StringSequenceBatchProducer &string_sequence_batch_producer,
-    const vector<string> &seq,
+    const vector<vector<char>> &seq,
     u64 expected_batches
   ) const -> void {
     auto rng = get_uniform_int_generator(0UL, time_to_wait);
@@ -148,11 +155,13 @@ private:
 TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
   const u64 kmer_size = 10;
   const u64 max_chars_per_batch = 999;
-  const vector<string> seq
+  const u64 max_reads_per_batch = 999;
+  const vector<string> str_seq
     = {"1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGA"
        "TGGATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA61A"
        "CTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGATG"
        "GATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6"};
+  auto seq = to_char_vec(str_seq);
   const vector<vector<u64>> chars_before_newline
     = {{36UL, 36UL * 2UL, 36UL * 3UL, 36UL * 4UL, 36UL * 5UL, 36UL * 6UL, max}};
   const vector<vector<u64>> newlines_before_newfile = {{3, max}};
@@ -161,6 +170,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
+      max_reads_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,
@@ -172,12 +182,14 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
 TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
   const u64 kmer_size = 15;
   const u64 max_chars_per_batch = 36 * 3 + 10;
-  const vector<string> seq = {
+  const u64 max_reads_per_batch = 999;
+  const vector<string> str_seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGATGGATGGAATGTGATG45T"
     "GAGTGAGATGAGGTGATAGTGACGTAGTGAGGA61ACTGCAATG",
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGATGGATGGAATGTGATG45T"
     "GAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6",
   };
+  auto seq = to_char_vec(str_seq);
   const vector<vector<u64>> chars_before_newline
     = {{36, 36ULL * 2, 36ULL * 3, max}, {36, 36ULL * 2, 36ULL * 3, max}};
   vector<vector<u64>> newlines_before_newfile = {{3, max}, {max}};
@@ -186,6 +198,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
+      max_reads_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,
@@ -197,12 +210,14 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
 TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
   u64 kmer_size = 3;
   const u64 max_chars_per_batch = 36 * 3 - 10;
-  const vector<string> seq = {
+  const u64 max_reads_per_batch = 999;
+  const vector<string> str_seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACT"
     "GATGGATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACG",
     "CGTAGTGAGGA61ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTA"
     "GCTACTACTACTGATGGATGGAATGTGATG45TGAGTGAGATGAG",
     "AGGTGATAGTGACGTAGTGAGGA6"};
+  auto seq = to_char_vec(str_seq);
   const vector<vector<u64>> chars_before_newline
     = {{36, 36ULL * 2, max}, {12, 12 + 36, 12 + 36ULL * 2, max}, {24, max}};
   const vector<vector<u64>> newlines_before_newfile = {{max}, {1, max}, {max}};
@@ -211,6 +226,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
+      max_reads_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,
@@ -222,11 +238,13 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
 TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
   const u64 kmer_size = 3;
   const u64 max_chars_per_batch = 30;
-  const vector<string> seq = {
+  const u64 max_reads_per_batch = 999;
+  const vector<string> str_seq = {
     {"1ACTGCAATGGGCAATATGTCTCTGTGTGG"},
     {"GGATTAC23TCTAGCTACTACTACTGATGG"},
     {"GGATGGAATGTGATG45TGAGTGAGATGAG"},
     {"AGGTGATAGTGACGTAGTGAGGA6"}};
+  auto seq = to_char_vec(str_seq);
   const vector<vector<u64>> chars_before_newline
     = {{max}, {8, max}, {16, max}, {24, max}};
   const vector<vector<u64>> newlines_before_newfile
@@ -236,6 +254,7 @@ TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
       {"test_objects/small_fasta.fna", "garbage_filename"},
       kmer_size,
       max_chars_per_batch,
+      max_reads_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,

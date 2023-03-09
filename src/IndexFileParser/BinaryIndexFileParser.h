@@ -32,6 +32,7 @@ public:
   BinaryIndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
     u64 max_indexes_,
+    u64 max_reads_,
     u64 warp_size_,
     u64 buffer_size = sixteen_kB / sizeof(u64)
   );
