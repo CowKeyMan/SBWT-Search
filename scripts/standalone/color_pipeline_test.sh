@@ -6,13 +6,9 @@
 # folder)
 
 # build
-# ./scripts/build/release.sh
+./scripts/build/release.sh
 # run
-# ./build/bin/sbwt_search colors -o test_objects/full_pipeline/color_search/combined_output.list -i test_objects/themisto_example/GCA_combined_d1.tcolors -q test_objects/full_pipeline/color_search/combined_input.list -b 1 -c ascii -t 0.7
-
-cd test_objects/full_pipeline/color_search/expected
-files=`ls *.txt`
-cd -
+./build/bin/sbwt_search colors -o test_objects/full_pipeline/color_search/combined_output.list -i test_objects/themisto_example/GCA_combined_d1.tcolors -q test_objects/full_pipeline/color_search/combined_input.list -b 1 -c ascii -t 0.7
 
 extensions=(
   ".txt"
@@ -36,7 +32,7 @@ do
   done
 done
 
-# rm test_objects/full_pipeline/color_search/actual/*
+rm test_objects/full_pipeline/color_search/actual/*
 
 if [[ ${bad_exits} -gt 0 ]]; then
   exit 1
