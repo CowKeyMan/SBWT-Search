@@ -15,7 +15,7 @@
 mkdir -p benchmark_objects
 cd benchmark_objects
 
-wget -nc -i ../scripts/configure/benchmark_data_list.txt
+head -20 ../scripts/configure/full_benchmark_data_list.txt | wget -nc -i -
 # "yes n" skips files if they exist as unzipped already
 yes n | gunzip -k *fastq.gz
 
@@ -23,25 +23,25 @@ yes n | gunzip -k *fastq.gz
 if [ ! -d "ecoli_index" ]; then
   mkdir -p ecoli_index
   cd ecoli_index
-  head -20 scripts/configure/full_benchmark_data_list.txt | wget -nc -i -
   tar -xvf E_coli_lineage_index_v1-0-0.tar.gz
   mv wrk/users/temaklin/cocov2-reference-sequences/E_col/E_col_index/index.tdbg .
   mv wrk/users/temaklin/cocov2-reference-sequences/E_col/E_col_index/index.tcolors .
   mv wrk/users/temaklin/cocov2-reference-sequences/E_col/E_col_mSWEEP_indicators.txt .
   rm -r wrk
+  cd ..
 fi
 
-cd ../..
+cd ..
 
-find benchmark_objects/*.fastq.gz > benchmark_objects/combined_reads_zipped.txt
-find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.fastq/' > benchmark_objects/combined_reads_unzipped.txt
-find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.indexes/' > benchmark_objects/combined_indexes_output.txt
+find benchmark_objects/*.fastq.gz > benchmark_objects/combined_reads_zipped.list
+find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.fastq/' > benchmark_objects/combined_reads_unzipped.list
+find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.indexes/' > benchmark_objects/combined_indexes_output.list
 
-find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.indexes.txt/' > benchmark_objects/combined_indexes_ascii.txt
-find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.indexes.bin/' > benchmark_objects/combined_indexes_binary.txt
+find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.indexes.txt/' > benchmark_objects/combined_indexes_ascii.list
+find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.indexes.bin/' > benchmark_objects/combined_indexes_binary.list
 
-find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.colors.txt/' > benchmark_objects/combined_colors_ascii.txt
-find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.colors.csv/' > benchmark_objects/combined_colors_csv.txt
-find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.colors.bin/' > benchmark_objects/combined_colors_binary.txt
+find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.colors.txt/' > benchmark_objects/combined_colors_ascii.list
+find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.colors.csv/' > benchmark_objects/combined_colors_csv.list
+find benchmark_objects/*.fastq.gz | sed -e 's/\.fastq\.gz$/.colors.bin/' > benchmark_objects/combined_colors_binary.list
 
 cd ..

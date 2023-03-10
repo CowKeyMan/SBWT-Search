@@ -42,10 +42,10 @@ colors_printing_modes=(
 )
 
 index_input_files=(
-  "${input_folder}/combined_reads_zipped.txt"
-  "${input_folder}/combined_reads_unzipped.txt"
+  "${input_folder}/combined_reads_zipped.list"
+  "${input_folder}/combined_reads_unzipped.list"
 )
-index_output_file="${input_folder}/combined_indexes_output.txt"
+index_output_file="${input_folder}/combined_indexes_output.list"
 
 echo Running at ${results_folder_name}
 for batch in ${batches[@]}; do
