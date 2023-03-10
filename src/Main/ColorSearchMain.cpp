@@ -1,4 +1,3 @@
-#include <iostream>
 #include <omp.h>
 #include <stdexcept>
 #include <string>
@@ -22,8 +21,6 @@ using log_utils::Logger;
 using math_utils::bits_to_gB;
 using math_utils::round_down;
 using memory_utils::get_total_system_memory;
-using std::cout;
-using std::endl;
 using std::min;
 using std::runtime_error;
 using std::to_string;
@@ -231,29 +228,13 @@ auto ColorSearchMain::run_components(
 #pragma omp parallel sections num_threads(num_components)
   {
 #pragma omp section
-    {
-      cout << __LINE__ << endl;
-      index_file_parser->read_and_generate();
-      cout << __LINE__ << endl;
-    }
+    { index_file_parser->read_and_generate(); }
 #pragma omp section
-    {
-      cout << __LINE__ << endl;
-      color_searcher->read_and_generate();
-      cout << __LINE__ << endl;
-    }
+    { color_searcher->read_and_generate(); }
 #pragma omp section
-    {
-      cout << __LINE__ << endl;
-      post_processor->read_and_generate();
-      cout << __LINE__ << endl;
-    }
+    { post_processor->read_and_generate(); }
 #pragma omp section
-    {
-      cout << __LINE__ << endl;
-      results_printer->read_and_generate();
-      cout << __LINE__ << endl;
-    }
+    { results_printer->read_and_generate(); }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
 }
