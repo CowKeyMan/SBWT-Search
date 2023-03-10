@@ -29,7 +29,7 @@ do
   do
     actual="${no_extension}${extension}"
     echo Checking differences between ${file} and ${actual}
-    python3 scripts/standalone/verify_color_results_equal.py \
+    python3 scripts/test/verify_color_results_equal.py \
       -x "test_objects/full_pipeline/color_search/expected/${file}" \
       -y "test_objects/full_pipeline/color_search/actual/${actual}"
     ((bad_exits+=$?))

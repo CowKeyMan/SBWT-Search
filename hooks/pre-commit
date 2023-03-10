@@ -14,8 +14,8 @@ hook_commands=(
   "./scripts/standalone/generate_file_documentation.py --no-print"
   "flake8"
   "pylint ."
-  "./scripts/standalone/index_pipeline_test.sh"
-  "./scripts/standalone/color_pipeline_test.sh"
+  "./scripts/test/index_pipeline_test.sh"
+  "./scripts/test/color_pipeline_test.sh"
   # "python scripts/static_analysers/clang_tidy.py"
 )
 

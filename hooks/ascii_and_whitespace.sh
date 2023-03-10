@@ -48,6 +48,6 @@ whitespaces=$?
 if [ ${whitespaces} -gt 0 ]
 then
   printf "\n################################################################################\n"
-  printf "To fix whitespaces, consider running './scripts/standalone/unix_line_endings.sh'\n"
+  printf "To fix whitespaces, consider running './scripts/modifiers/unix_line_endings.sh'\n"
   printf "################################################################################\n\n"
 fi
