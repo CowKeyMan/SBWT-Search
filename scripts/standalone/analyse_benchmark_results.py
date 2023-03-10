@@ -65,7 +65,7 @@ with open(args['i'], 'r', encoding="utf-8") as f:
 benchmark_name_to_lines = defaultdict(list)
 for line in lines:
     line = line.strip()
-    if line.startswith('Time taken to copy to LOCAL_SCRATCH'):
+    if line.startswith('Time taken to copy and build in LOCAL_SCRATCH'):
         continue
     start_string = 'Now running: '
     if line.startswith(start_string):
