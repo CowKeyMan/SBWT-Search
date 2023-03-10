@@ -16,19 +16,17 @@ using log_utils::Logger;
 using math_utils::round_up;
 
 auto Searcher::launch_search_kernel(u64 num_queries, u64 batch_id) -> void {
-  hipEvent_t search_start;  // NOLINT(cppcoreguidelines-init-variables)
-  hipEvent_t search_stop;   // NOLINT(cppcoreguidelines-init-variables)
-  GPU_CHECK(hipEventCreate(&search_start));
-  GPU_CHECK(hipEventCreate(&search_stop));
   u32 blocks_per_grid
     = round_up<u64>(num_queries, threads_per_block) / threads_per_block;
-  GPU_CHECK(hipEventRecord(search_start));
+  hipEvent_t &start_timer_ = *reinterpret_cast<hipEvent_t *>(start_timer.get());
+  hipEvent_t &end_timer_ = *reinterpret_cast<hipEvent_t *>(end_timer.get());
+  GPU_CHECK(hipEventRecord(start_timer_););
   hipLaunchKernelGGL(
     d_search,
     blocks_per_grid,
     threads_per_block,
     0,
-    nullptr,
+    *reinterpret_cast<hipStream_t *>(gpu_stream.get()),
     container->get_kmer_size(),
     container->get_c_map().get(),
     container->get_acgt_pointers().get(),
@@ -40,11 +38,11 @@ auto Searcher::launch_search_kernel(u64 num_queries, u64 batch_id) -> void {
     d_bit_seqs.get(),
     d_kmer_positions.get()
   );
-  GPU_CHECK(hipEventRecord(search_stop));
+  GPU_CHECK(hipEventRecord(end_timer_));
   GPU_CHECK(hipPeekAtLastError());
   GPU_CHECK(hipDeviceSynchronize());
   float milliseconds = -1;
-  GPU_CHECK(hipEventElapsedTime(&milliseconds, search_start, search_stop));
+  GPU_CHECK(hipEventElapsedTime(&milliseconds, start_timer_, end_timer_));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format("Batch {} took {} ms to search in the GPU", batch_id, milliseconds)

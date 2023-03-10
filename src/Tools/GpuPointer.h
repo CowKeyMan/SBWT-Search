@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "Tools/GpuStream.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace gpu_utils {
@@ -34,15 +35,37 @@ public:
 
   auto memset(u64 index, u64 amount, uint8_t value) -> void;
 
+  auto get() const -> T *;
+
   auto set(const T *source, u64 amount, u64 destination_index = 0) -> void;
   auto set(const vector<T> &source, u64 amount, u64 destination_index = 0)
     -> void;
-  auto get() const -> T *;
+  auto set_async(
+    const T *source,
+    u64 amount,
+    GpuStream &gpu_stream,
+    u64 destination_index = 0
+  ) -> void;
+  auto set_async(
+    const vector<T> &source,
+    u64 amount,
+    GpuStream &gpu_stream,
+    u64 destination_index = 0
+  ) -> void;
 
   auto copy_to(T *destination, u64 amount) const -> void;
   auto copy_to(T *destination) const -> void;
   auto copy_to(vector<T> &destination, u64 amount) const -> void;
   auto copy_to(vector<T> &destination) const -> void;
+
+  auto copy_to_async(T *destination, u64 amount, GpuStream &gpu_stream) const
+    -> void;
+  auto copy_to_async(T *destination, GpuStream &gpu_stream) const -> void;
+  auto
+  copy_to_async(vector<T> &destination, u64 amount, GpuStream &gpu_stream) const
+    -> void;
+  auto copy_to_async(vector<T> &destination, GpuStream &gpu_stream) const
+    -> void;
 
   ~GpuPointer();
 };

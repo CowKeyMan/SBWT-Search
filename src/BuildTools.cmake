@@ -72,15 +72,21 @@ add_library(
 )
 target_link_libraries(semaphore PRIVATE OpenMP::OpenMP_CXX omp_lock)
 
-add_library(
-  gpu_utils
+set(
+  gpu_sources
   "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
   "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu"
+  "${PROJECT_SOURCE_DIR}/Tools/GpuStream.cu"
+  "${PROJECT_SOURCE_DIR}/Tools/GpuEvent.cu"
+)
+
+add_library(
+  gpu_utils
+  ${gpu_sources}
 )
 target_link_libraries(gpu_utils PUBLIC hip_rt)
 set_source_files_properties(
-  "${PROJECT_SOURCE_DIR}/Tools/GpuUtils.cu"
-  "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu"
+  ${gpu_sources}
   TARGET_DIRECTORY gpu_utils
   PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
 )

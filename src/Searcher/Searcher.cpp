@@ -52,7 +52,7 @@ auto Searcher::copy_to_gpu(
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  d_bit_seqs.set(bit_seqs, bit_seqs.size());
+  d_bit_seqs.set_async(bit_seqs, bit_seqs.size(), gpu_stream);
   auto padded_query_size
     = round_up<u64>(kmer_positions.size(), superblock_bits);
   d_kmer_positions.set(kmer_positions.data(), kmer_positions.size());
@@ -73,7 +73,9 @@ auto Searcher::copy_from_gpu(
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  d_kmer_positions.copy_to(results.data(), kmer_positions.size());
+  d_kmer_positions.copy_to_async(
+    results.data(), kmer_positions.size(), gpu_stream
+  );
   Logger::log_timed_event(
     "SearcherCopyFromGpu",
     Logger::EVENT_STATE::STOP,

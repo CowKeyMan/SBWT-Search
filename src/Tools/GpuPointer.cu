@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include "Tools/GpuPointer.h"
@@ -20,6 +21,11 @@ GpuPointer<T>::GpuPointer(const T *cpu_ptr, u64 size): GpuPointer(size) {
 template <class T>
 GpuPointer<T>::GpuPointer(const vector<T> &v):
     GpuPointer<T>(v.data(), v.size()) {}
+
+template <class T>
+auto GpuPointer<T>::get() const -> T * {
+  return ptr;
+}
 
 template <class T>
 auto GpuPointer<T>::memset(u64 index, u64 amount, uint8_t value) -> void {
@@ -46,8 +52,26 @@ auto GpuPointer<T>::set(
 }
 
 template <class T>
-auto GpuPointer<T>::get() const -> T * {
-  return ptr;
+auto GpuPointer<T>::set_async(
+  const T *source, u64 amount, GpuStream &gpu_stream, u64 destination_index
+) -> void {
+  GPU_CHECK(hipMemcpyAsync(
+    // NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
+    ptr + destination_index,
+    source,
+    amount * sizeof(T),
+    hipMemcpyHostToDevice,
+    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+  ));
+}
+template <class T>
+auto GpuPointer<T>::set_async(
+  const vector<T> &source,
+  u64 amount,
+  GpuStream &gpu_stream,
+  u64 destination_index
+) -> void {
+  set_async(source.data(), amount, gpu_stream, destination_index);
 }
 
 template <class T>
@@ -71,10 +95,40 @@ auto GpuPointer<T>::copy_to(vector<T> &destination) const -> void {
 }
 
 template <class T>
+auto GpuPointer<T>::copy_to_async(
+  T *destination, u64 amount, GpuStream &gpu_stream
+) const -> void {
+  GPU_CHECK(hipMemcpyAsync(
+    destination,
+    ptr,
+    amount * sizeof(T),
+    hipMemcpyDeviceToHost,
+    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+  ));
+}
+template <class T>
+auto GpuPointer<T>::copy_to_async(T *destination, GpuStream &gpu_stream) const
+  -> void {
+  copy_to_async(destination, bytes / sizeof(T), gpu_stream);
+}
+template <class T>
+auto GpuPointer<T>::copy_to_async(
+  vector<T> &destination, u64 amount, GpuStream &gpu_stream
+) const -> void {
+  copy_to_async(destination.data(), amount, gpu_stream);
+}
+template <class T>
+auto GpuPointer<T>::copy_to_async(vector<T> &destination, GpuStream &gpu_stream)
+  const -> void {
+  destination.resize(bytes / sizeof(T));
+  copy_to_async(destination.data(), gpu_stream);
+}
+
+template <class T>
 GpuPointer<T>::~GpuPointer() {
   try {
     GPU_CHECK(hipFree(ptr));
-  } catch (std::runtime_error) {}
+  } catch (std::runtime_error &e) { std::cerr << e.what() << std::endl; }
 }
 
 // We set these here because we need the class to be instantiated since we are
