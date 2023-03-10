@@ -74,7 +74,11 @@ auto ColorSearchMain::load_batch_info() -> void {
   if (max_indexes_per_batch == 0) { throw runtime_error("Not enough memory"); }
   Logger::log(
     Logger::LOG_LEVEL::INFO,
-    "Using " + to_string(max_indexes_per_batch) + " characters per batch"
+    format(
+      "Using {} max indexes per batch and {} max reads per batch",
+      max_indexes_per_batch,
+      max_reads_per_batch
+    )
   );
 }
 

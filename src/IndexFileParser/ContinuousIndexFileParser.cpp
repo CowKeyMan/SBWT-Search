@@ -136,6 +136,7 @@ auto ContinuousIndexFileParser::do_at_batch_start() -> void {
 auto ContinuousIndexFileParser::read_next() -> void {
   while (
     (indexes_batch_producer->current_write()->indexes.size() < max_indexes_per_batch)
+     && (read_statistics_batch_producer->current_write()->found_idxs.size() < max_reads_per_batch)
      && (
        index_file_parser->generate_batch(
          read_statistics_batch_producer->current_write(),
@@ -151,8 +152,7 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
   auto num_indexes = indexes_batch_producer->current_write()->indexes.size();
   auto read_statistics_batch
     = get_read_statistics_batch_producer()->current_write();
-  auto reads = colors_interval_batch_producer->current_write()
-                 ->reads_before_newfile.size();
+  auto reads = read_statistics_batch->found_idxs.size();
   auto num_found_idxs = std::accumulate(
     get_read_statistics_batch_producer()->current_write()->found_idxs.begin(),
     get_read_statistics_batch_producer()->current_write()->found_idxs.end(),

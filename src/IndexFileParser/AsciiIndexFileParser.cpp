@@ -43,7 +43,7 @@ auto AsciiIndexFileParser::generate_batch(
     std::move(indexes_batch_)
   );
   const u64 initial_size = get_indexes_batch()->indexes.size()
-    + get_warps_before_new_read_batch()->warps_before_new_read->size();
+    + get_read_statistics_batch()->found_idxs.size();
   char c = '\0';
   while (get_indexes().size() < get_max_indexes()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
@@ -78,7 +78,7 @@ auto AsciiIndexFileParser::generate_batch(
   }
   pad_read();
   return (get_indexes_batch()->indexes.size()
-          + get_warps_before_new_read_batch()->warps_before_new_read->size())
+          + get_read_statistics_batch()->found_idxs.size())
     > initial_size;
 }
 
