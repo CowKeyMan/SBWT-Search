@@ -130,7 +130,7 @@ protected:
   auto do_start_next_file() -> void {
     if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
     impl().do_open_next_file(*current_filename);
-    impl().do_write_file_header();
+    impl().do_write_file_header();  // TODO: reactivate this
     current_filename = next(current_filename);
   }
   auto do_at_file_end() -> void {}
@@ -205,10 +205,12 @@ protected:
       + include_invalid * invalid_idxs;
     u64 minimum_found
       = static_cast<u64>(std::ceil(static_cast<double>(read_size) * threshold));
+    bool first_print = true;
     for (u64 color_idx = 0; color_idx < num_colors; ++color_idx, ++results) {
       if (*results >= minimum_found && minimum_found > 0) {
+        if (!first_print) { *out_stream << " "; }
+        first_print = false;
         *out_stream << color_idx;
-        if (color_idx + 1 < num_colors) { *out_stream << " "; }
       }
     }
     *out_stream << "\n";
