@@ -161,7 +161,6 @@ add_library(
   results_printer
   "${PROJECT_SOURCE_DIR}/ResultsPrinter/AsciiContinuousResultsPrinter.cpp"
   "${PROJECT_SOURCE_DIR}/ResultsPrinter/BinaryContinuousResultsPrinter.cpp"
-  "${PROJECT_SOURCE_DIR}/ResultsPrinter/BoolContinuousResultsPrinter.cpp"
 )
 target_link_libraries(results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
 

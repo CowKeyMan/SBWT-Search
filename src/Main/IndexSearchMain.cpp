@@ -1,3 +1,5 @@
+#include <cstdlib>
+#include <iostream>
 #include <omp.h>
 #include <stdexcept>
 #include <string>
@@ -14,6 +16,7 @@
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"
 #include "Tools/MemoryUtils.h"
+#include "Tools/StdUtils.hpp"
 #include "fmt/core.h"
 
 namespace sbwt_search {
@@ -24,9 +27,12 @@ using log_utils::Logger;
 using math_utils::bits_to_gB;
 using math_utils::round_down;
 using memory_utils::get_total_system_memory;
+using std::cerr;
+using std::endl;
 using std::min;
 using std::runtime_error;
 using std::to_string;
+using std_utils::split_vector;
 
 const u64 num_components = 5;
 
@@ -40,7 +46,8 @@ auto IndexSearchMain::main(int argc, char **argv) -> int {
   Logger::log(Logger::LOG_LEVEL::INFO, "Loading components into memory");
   auto gpu_container = get_gpu_container();
   kmer_size = gpu_container->get_kmer_size();
-  auto [input_filenames, output_filenames] = get_input_output_filenames();
+  auto [split_input_filenames, split_output_filenames]
+    = get_input_output_filenames();
   load_batch_info();
   omp_set_nested(1);
   load_threads();
@@ -49,19 +56,21 @@ auto IndexSearchMain::main(int argc, char **argv) -> int {
     format("Running OpenMP with {} threads", get_threads())
   );
   auto
-    [sequence_file_parser,
-     seq_to_bits_converter,
-     positions_builder,
-     searcher,
-     results_printer]
-    = get_components(gpu_container, input_filenames[0], output_filenames[0]);
+    [sequence_file_parsers,
+     seq_to_bits_converters,
+     positions_builders,
+     searchers,
+     results_printers]
+    = get_components(
+      gpu_container, split_input_filenames, split_output_filenames
+    );
   Logger::log(Logger::LOG_LEVEL::INFO, "Running queries");
   run_components(
-    sequence_file_parser,
-    seq_to_bits_converter,
-    positions_builder,
-    searcher,
-    results_printer
+    sequence_file_parsers,
+    seq_to_bits_converters,
+    positions_builders,
+    searchers,
+    results_printers
   );
   Logger::log(Logger::LOG_LEVEL::INFO, "Finished");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
@@ -105,9 +114,15 @@ auto IndexSearchMain::load_batch_info() -> void {
 }
 
 auto IndexSearchMain::get_max_chars_per_batch() -> u64 {
+  if (batches == 0) {
+    cerr << "Initialise batches before max_chars_per_batch" << endl;
+    std::quick_exit(1);
+  }
   auto gpu_chars = get_max_chars_per_batch_gpu();
   auto cpu_chars = get_max_chars_per_batch_cpu();
-  return min(gpu_chars, cpu_chars);
+  return round_down<u64>(
+    min(gpu_chars, cpu_chars) / batches, threads_per_block
+  );
 }
 
 auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
@@ -118,8 +133,7 @@ auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
   // 64 for each position where each result is also stored
   // 2 for each base pair since these are bit packed
   const u64 bits_required_per_character = 64 + 2;
-  auto max_chars_per_batch
-    = round_down<u64>(free / bits_required_per_character, threads_per_block);
+  auto max_chars_per_batch = free / bits_required_per_character;
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -161,9 +175,8 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     + (1.0 / static_cast<double>(get_args().get_base_pairs_per_read()))
       * (64.0 + 8.0)
   );
-  auto max_chars_per_batch = round_down<u64>(
-    free_bits / bits_required_per_character / num_components, threads_per_block
-  );
+  auto max_chars_per_batch
+    = free_bits / bits_required_per_character / num_components;
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -179,61 +192,68 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
 
 auto IndexSearchMain::get_components(
   const shared_ptr<GpuSbwtContainer> &gpu_container,
-  const vector<string> &input_filenames,
-  const vector<string> &output_filenames
+  const vector<vector<string>> &split_input_filenames,
+  const vector<vector<string>> &split_output_filenames
 )
   -> std::tuple<
-    shared_ptr<ContinuousSequenceFileParser>,
-    shared_ptr<ContinuousSeqToBitsConverter>,
-    shared_ptr<ContinuousPositionsBuilder>,
-    shared_ptr<ContinuousSearcher>,
-    ResultsPrinter> {
+    vector<shared_ptr<ContinuousSequenceFileParser>>,
+    vector<shared_ptr<ContinuousSeqToBitsConverter>>,
+    vector<shared_ptr<ContinuousPositionsBuilder>>,
+    vector<shared_ptr<ContinuousSearcher>>,
+    vector<ResultsPrinter>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
-  auto sequence_file_parser = make_shared<ContinuousSequenceFileParser>(
-    input_filenames,
-    kmer_size,
-    max_chars_per_batch,
-    max_reads_per_batch,
-    num_components
-  );
+  vector<shared_ptr<ContinuousSequenceFileParser>> sequence_file_parsers;
+  vector<shared_ptr<ContinuousSeqToBitsConverter>> seq_to_bits_converters;
+  vector<shared_ptr<ContinuousPositionsBuilder>> positions_builders;
+  vector<shared_ptr<ContinuousSearcher>> searchers;
+  vector<ResultsPrinter> results_printers;
+  for (u64 i = 0; i < split_input_filenames.size(); ++i) {
+    sequence_file_parsers.push_back(make_shared<ContinuousSequenceFileParser>(
+      split_input_filenames[i],
+      kmer_size,
+      max_chars_per_batch,
+      max_reads_per_batch,
+      num_components
+    ));
 
-  auto seq_to_bits_converter = make_shared<ContinuousSeqToBitsConverter>(
-    sequence_file_parser->get_string_sequence_batch_producer(),
-    get_threads(),
-    kmer_size,
-    max_chars_per_batch,
-    num_components
-  );
+    seq_to_bits_converters.push_back(make_shared<ContinuousSeqToBitsConverter>(
+      sequence_file_parsers[i]->get_string_sequence_batch_producer(),
+      get_threads(),
+      kmer_size,
+      max_chars_per_batch,
+      num_components
+    ));
 
-  auto positions_builder = make_shared<ContinuousPositionsBuilder>(
-    sequence_file_parser->get_string_break_batch_producer(),
-    kmer_size,
-    max_chars_per_batch,
-    num_components
-  );
+    positions_builders.push_back(make_shared<ContinuousPositionsBuilder>(
+      sequence_file_parsers[i]->get_string_break_batch_producer(),
+      kmer_size,
+      max_chars_per_batch,
+      num_components
+    ));
 
-  auto searcher = make_shared<ContinuousSearcher>(
-    gpu_container,
-    seq_to_bits_converter->get_bits_producer(),
-    positions_builder,
-    num_components,
-    max_chars_per_batch
-  );
+    searchers.push_back(make_shared<ContinuousSearcher>(
+      gpu_container,
+      seq_to_bits_converters[i]->get_bits_producer(),
+      positions_builders[i],
+      num_components,
+      max_chars_per_batch
+    ));
 
-  ResultsPrinter results_printer = get_results_printer(
-    searcher,
-    sequence_file_parser->get_interval_batch_producer(),
-    seq_to_bits_converter->get_invalid_chars_producer(),
-    output_filenames
-  );
+    results_printers.push_back(get_results_printer(
+      searchers[i],
+      sequence_file_parsers[i]->get_interval_batch_producer(),
+      seq_to_bits_converters[i]->get_invalid_chars_producer(),
+      split_output_filenames[i]
+    ));
+  }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
 
   return {
-    std::move(sequence_file_parser),
-    std::move(seq_to_bits_converter),
-    std::move(positions_builder),
-    std::move(searcher),
-    std::move(results_printer)};
+    std::move(sequence_file_parsers),
+    std::move(seq_to_bits_converters),
+    std::move(positions_builders),
+    std::move(searchers),
+    std::move(results_printers)};
 }
 
 auto IndexSearchMain::get_results_printer(
@@ -264,16 +284,6 @@ auto IndexSearchMain::get_results_printer(
       max_chars_per_batch
     );
   }
-  if (get_args().get_print_mode() == "bool") {
-    return make_shared<BoolContinuousResultsPrinter>(
-      searcher,
-      interval_batch_producer,
-      invalid_chars_producer,
-      output_filenames,
-      kmer_size,
-      max_chars_per_batch
-    );
-  }
   throw runtime_error("Invalid value passed by user for print_mode");
 }
 
@@ -287,32 +297,54 @@ auto IndexSearchMain::get_input_output_filenames()
   if (all_input_filenames.size() != all_output_filenames.size()) {
     throw runtime_error("Input and output file sizes differ");
   }
-  return {{all_input_filenames}, {all_output_filenames}};
+  batches = std::min(args->get_batches(), all_input_filenames.size());
+  return {
+    split_vector(all_input_filenames, batches),
+    split_vector(all_output_filenames, batches)};
 }
 
 auto IndexSearchMain::run_components(
-  shared_ptr<ContinuousSequenceFileParser> &sequence_file_parser,
-  shared_ptr<ContinuousSeqToBitsConverter> &seq_to_bits_converter,
-  shared_ptr<ContinuousPositionsBuilder> &positions_builder,
-  shared_ptr<ContinuousSearcher> &searcher,
-  ResultsPrinter &results_printer
+  vector<shared_ptr<ContinuousSequenceFileParser>> &sequence_file_parsers,
+  vector<shared_ptr<ContinuousSeqToBitsConverter>> &seq_to_bits_converters,
+  vector<shared_ptr<ContinuousPositionsBuilder>> &positions_builders,
+  vector<shared_ptr<ContinuousSearcher>> &searchers,
+  vector<ResultsPrinter> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
 #pragma omp parallel sections num_threads(num_components)
   {
 #pragma omp section
-    { sequence_file_parser->read_and_generate(); }
-#pragma omp section
-    { seq_to_bits_converter->read_and_generate(); }
-#pragma omp section
-    { positions_builder->read_and_generate(); }
-#pragma omp section
-    { searcher->read_and_generate(); }
+    {
+#pragma omp parallel for num_threads(batches)
+      for (auto &element : sequence_file_parsers) {
+        element->read_and_generate();
+      }
+    }
 #pragma omp section
     {
-      std::visit(
-        [](auto &arg) -> void { arg->read_and_generate(); }, results_printer
-      );
+#pragma omp parallel for num_threads(batches)
+      for (auto &element : seq_to_bits_converters) {
+        element->read_and_generate();
+      }
+    }
+#pragma omp section
+    {
+#pragma omp parallel for num_threads(batches)
+      for (auto &element : positions_builders) { element->read_and_generate(); }
+    }
+#pragma omp section
+    {
+#pragma omp parallel for num_threads(batches)
+      for (auto &element : searchers) { element->read_and_generate(); }
+    }
+#pragma omp section
+    {
+#pragma omp parallel for num_threads(batches)
+      for (auto &element : results_printers) {
+        std::visit(
+          [](auto &arg) -> void { arg->read_and_generate(); }, element
+        );
+      }
     }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);

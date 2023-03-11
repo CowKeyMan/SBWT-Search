@@ -18,7 +18,6 @@
 #include "PositionsBuilder/ContinuousPositionsBuilder.h"
 #include "ResultsPrinter/AsciiContinuousResultsPrinter.h"
 #include "ResultsPrinter/BinaryContinuousResultsPrinter.h"
-#include "ResultsPrinter/BoolContinuousResultsPrinter.h"
 #include "SbwtContainer/GpuSbwtContainer.h"
 #include "Searcher/ContinuousSearcher.h"
 #include "SeqToBitsConverter/ContinuousSeqToBitsConverter.h"
@@ -34,8 +33,7 @@ using std::vector;
 
 using ResultsPrinter = variant<
   shared_ptr<AsciiContinuousResultsPrinter>,
-  shared_ptr<BinaryContinuousResultsPrinter>,
-  shared_ptr<BoolContinuousResultsPrinter>>;
+  shared_ptr<BinaryContinuousResultsPrinter>>;
 
 class IndexSearchMain: public Main {
 public:
@@ -43,6 +41,7 @@ public:
 
 private:
   u64 kmer_size = 0;
+  u64 batches = 1;
   u64 max_chars_per_batch = 0;
   u64 max_reads_per_batch = 0;
   unique_ptr<IndexSearchArgumentParser> args;
@@ -55,15 +54,15 @@ private:
   auto get_max_chars_per_batch() -> u64;
   auto get_components(
     const shared_ptr<GpuSbwtContainer> &gpu_container,
-    const vector<string> &input_filenames,
-    const vector<string> &output_filenames
+    const vector<vector<string>> &input_filenames,
+    const vector<vector<string>> &output_filenames
   )
     -> tuple<
-      shared_ptr<ContinuousSequenceFileParser>,
-      shared_ptr<ContinuousSeqToBitsConverter>,
-      shared_ptr<ContinuousPositionsBuilder>,
-      shared_ptr<ContinuousSearcher>,
-      ResultsPrinter>;
+      vector<shared_ptr<ContinuousSequenceFileParser>>,
+      vector<shared_ptr<ContinuousSeqToBitsConverter>>,
+      vector<shared_ptr<ContinuousPositionsBuilder>>,
+      vector<shared_ptr<ContinuousSearcher>>,
+      vector<ResultsPrinter>>;
   auto load_input_output_filenames(
     const string &input_file, const string &output_file
   ) -> void;
@@ -73,11 +72,15 @@ private:
     const shared_ptr<ContinuousSearcher> &searcher,
     const shared_ptr<IntervalBatchProducer> &interval_batch_producer,
     const shared_ptr<InvalidCharsProducer> &invalid_chars_producer,
-    const vector<string> &output_filenames
+    const vector<string> &split_output_filenames
   ) -> ResultsPrinter;
-  auto
-  run_components(shared_ptr<ContinuousSequenceFileParser> &, shared_ptr<ContinuousSeqToBitsConverter> &, shared_ptr<ContinuousPositionsBuilder> &, shared_ptr<ContinuousSearcher> &, ResultsPrinter &)
-    -> void;
+  auto run_components(
+    vector<shared_ptr<ContinuousSequenceFileParser>> &sequence_file_parsers,
+    vector<shared_ptr<ContinuousSeqToBitsConverter>> &seq_to_bits_converters,
+    vector<shared_ptr<ContinuousPositionsBuilder>> &positions_builders,
+    vector<shared_ptr<ContinuousSearcher>> &searchers,
+    vector<ResultsPrinter> &results_printers
+  ) -> void;
 };
 
 }  // namespace sbwt_search

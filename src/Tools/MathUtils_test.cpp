@@ -21,4 +21,8 @@ TEST(MathUtils, RoundDown) {
   ASSERT_EQ(64, round_down<u64>(64, 64));
 }
 
+TEST(MathUtils, DivideAndRound) {
+  ASSERT_EQ(2ULL, divide_and_round<u64>(3ULL, 2ULL));
+}
+
 }  // namespace math_utils

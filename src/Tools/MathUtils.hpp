@@ -6,6 +6,8 @@
  * @brief A collection of utility scripts to extend math functionality
  */
 
+#include <cmath>
+
 #include <type_traits>
 
 #include "Tools/TypeDefinitions.h"
@@ -38,6 +40,13 @@ auto constexpr round_down(
 
 auto bits_to_gB(u64 bits) -> double;
 auto gB_to_bits(double gB) -> u64;
+
+template <class Return, class Real1, class Real2>
+auto divide_and_round(Real1 a, Real2 b) -> Return {
+  return static_cast<Return>(
+    std::round(static_cast<double>(a) / static_cast<double>(b))
+  );
+}
 
 }  // namespace math_utils
 
