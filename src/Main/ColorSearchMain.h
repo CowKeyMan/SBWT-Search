@@ -25,9 +25,10 @@ using std::string;
 
 class ColorSearchMain: public Main {
 private:
+  u64 num_colors = 0;
+  u64 streams = 0;
   u64 max_indexes_per_batch = 0;
   u64 max_reads_per_batch = 0;
-  u64 num_colors = 0;
   unique_ptr<ColorSearchArgumentParser> args;
 
 public:
@@ -44,19 +45,19 @@ private:
     -> std::tuple<vector<vector<string>>, vector<vector<string>>>;
   auto get_components(
     const shared_ptr<GpuColorIndexContainer> &gpu_container,
-    const vector<string> &input_filenames,
-    const vector<string> &output_filenames
+    const vector<vector<string>> &split_input_filenames,
+    const vector<vector<string>> &split_output_filenames
   )
     -> std::tuple<
-      shared_ptr<ContinuousIndexFileParser>,
-      shared_ptr<ContinuousColorSearcher>,
-      shared_ptr<ContinuousColorResultsPostProcessor>,
-      shared_ptr<ContinuousColorSearchResultsPrinter>>;
+      vector<shared_ptr<ContinuousIndexFileParser>>,
+      vector<shared_ptr<ContinuousColorSearcher>>,
+      vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
+      vector<shared_ptr<ContinuousColorSearchResultsPrinter>>>;
   auto run_components(
-    shared_ptr<ContinuousIndexFileParser> &index_file_parser,
-    shared_ptr<ContinuousColorSearcher> &color_searcher,
-    shared_ptr<ContinuousColorResultsPostProcessor> &post_processor,
-    shared_ptr<ContinuousColorSearchResultsPrinter> &results_processor
+    vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
+    vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
+    vector<shared_ptr<ContinuousColorResultsPostProcessor>> &post_processors,
+    vector<shared_ptr<ContinuousColorSearchResultsPrinter>> &results_processors
   ) -> void;
 };
 

@@ -18,6 +18,14 @@ parser.add_argument(
 parser.add_argument(
     '-y', '--file2', help='Second file to compare with first', required=True
 )
+parser.add_argument(
+    '-q',
+    '--quiet',
+    help='Do not print anything if contents match',
+    required=False,
+    action='store_true',
+    default=False
+)
 args = vars(parser.parse_args())
 
 u64_bytes = 8
@@ -121,4 +129,5 @@ with ExitStack() as stack:
             break
         position += 1
 
-print('The file contents match!')
+if not args['quiet']:
+    print('The file contents match!')

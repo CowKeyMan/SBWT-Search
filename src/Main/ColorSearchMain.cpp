@@ -1,3 +1,4 @@
+#include <iostream>
 #include <omp.h>
 #include <stdexcept>
 #include <string>
@@ -11,6 +12,7 @@
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"
 #include "Tools/MemoryUtils.h"
+#include "Tools/StdUtils.hpp"
 #include "fmt/core.h"
 
 namespace sbwt_search {
@@ -21,9 +23,11 @@ using log_utils::Logger;
 using math_utils::bits_to_gB;
 using math_utils::round_down;
 using memory_utils::get_total_system_memory;
+using std::cerr;
+using std::endl;
 using std::min;
 using std::runtime_error;
-using std::to_string;
+using std_utils::split_vector;
 
 const u64 num_components = 4;
 
@@ -46,7 +50,7 @@ auto ColorSearchMain::main(int argc, char **argv) -> int {
     format("Running OpenMP with {} threads", get_threads())
   );
   auto [index_file_parser, searcher, post_processor, results_printer]
-    = get_components(gpu_container, input_filenames[0], output_filenames[0]);
+    = get_components(gpu_container, input_filenames, output_filenames);
   Logger::log(Logger::LOG_LEVEL::INFO, "Running queries");
   run_components(index_file_parser, searcher, post_processor, results_printer);
   Logger::log(Logger::LOG_LEVEL::INFO, "Finished");
@@ -80,9 +84,15 @@ auto ColorSearchMain::load_batch_info() -> void {
 }
 
 auto ColorSearchMain::get_max_chars_per_batch() -> u64 {
+  if (streams == 0) {
+    cerr << "ERROR: Initialise batches before max_chars_per_batch" << endl;
+    std::quick_exit(1);
+  }
   auto gpu_chars = get_max_chars_per_batch_gpu();
   auto cpu_chars = get_max_chars_per_batch_cpu();
-  return min(gpu_chars, cpu_chars);
+  return round_down<u64>(
+    min(gpu_chars, cpu_chars) / streams, threads_per_block
+  );
 }
 
 auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
@@ -97,8 +107,7 @@ auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
     + static_cast<double>(num_colors) * 64.0
       / static_cast<double>(gpu_warp_size)
   );
-  auto max_chars_per_batch
-    = round_down<u64>(free / bits_required_per_character, threads_per_block);
+  auto max_chars_per_batch = free / bits_required_per_character;
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -142,9 +151,8 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     + (1.0 / static_cast<double>(get_args().get_indexes_per_read()))
       * (64.0 * 4)
   );
-  auto max_chars_per_batch = round_down<u64>(
-    free_bits / bits_required_per_character / num_components, threads_per_block
-  );
+  auto max_chars_per_batch
+    = free_bits / bits_required_per_character / num_components;
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -168,7 +176,10 @@ auto ColorSearchMain::get_input_output_filenames()
   if (all_input_filenames.size() != all_output_filenames.size()) {
     throw runtime_error("Input and output file sizes differ");
   }
-  return {{all_input_filenames}, {all_output_filenames}};
+  streams = std::min(args->get_streams(), all_input_filenames.size());
+  return {
+    split_vector(all_input_filenames, streams),
+    split_vector(all_output_filenames, streams)};
 }
 
 auto ColorSearchMain::get_args() const -> const ColorSearchArgumentParser & {
@@ -177,64 +188,84 @@ auto ColorSearchMain::get_args() const -> const ColorSearchArgumentParser & {
 
 auto ColorSearchMain::get_components(
   const shared_ptr<GpuColorIndexContainer> &gpu_container,
-  const vector<string> &input_filenames,
-  const vector<string> &output_filenames
+  const vector<vector<string>> &split_input_filenames,
+  const vector<vector<string>> &split_output_filenames
 )
   -> std::tuple<
-    shared_ptr<ContinuousIndexFileParser>,
-    shared_ptr<ContinuousColorSearcher>,
-    shared_ptr<ContinuousColorResultsPostProcessor>,
-    shared_ptr<ContinuousColorSearchResultsPrinter>> {
-  auto index_file_parser = make_shared<ContinuousIndexFileParser>(
-    num_components,
-    max_indexes_per_batch,
-    max_reads_per_batch,
-    gpu_warp_size,
-    input_filenames
-  );
-  auto searcher = make_shared<ContinuousColorSearcher>(
-    gpu_container,
-    index_file_parser->get_indexes_batch_producer(),
-    max_indexes_per_batch,
-    num_components,
-    gpu_container->num_colors
-  );
-  auto post_processor = make_shared<ContinuousColorResultsPostProcessor>(
-    searcher,
-    index_file_parser->get_warps_before_new_read_batch_producer(),
-    num_components,
-    gpu_container->num_colors
-  );
-  auto results_printer = make_shared<ContinuousColorSearchResultsPrinter>(
-    index_file_parser->get_colors_interval_batch_producer(),
-    index_file_parser->get_read_statistics_batch_producer(),
-    post_processor,
-    output_filenames,
-    gpu_container->num_colors,
-    get_args().get_threshold(),
-    get_args().get_include_not_found(),
-    get_args().get_include_invalid()
-  );
-  return {index_file_parser, searcher, post_processor, results_printer};
+    vector<shared_ptr<ContinuousIndexFileParser>>,
+    vector<shared_ptr<ContinuousColorSearcher>>,
+    vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
+    vector<shared_ptr<ContinuousColorSearchResultsPrinter>>> {
+  Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
+  vector<shared_ptr<ContinuousIndexFileParser>> index_file_parsers;
+  vector<shared_ptr<ContinuousColorSearcher>> searchers;
+  vector<shared_ptr<ContinuousColorResultsPostProcessor>> post_processors;
+  vector<shared_ptr<ContinuousColorSearchResultsPrinter>> results_printers;
+  for (u64 i = 0; i < split_input_filenames.size(); ++i) {
+    index_file_parsers.push_back(make_shared<ContinuousIndexFileParser>(
+      num_components,
+      max_indexes_per_batch,
+      max_reads_per_batch,
+      gpu_warp_size,
+      split_input_filenames[i]
+    ));
+    searchers.push_back(make_shared<ContinuousColorSearcher>(
+      gpu_container,
+      index_file_parsers[i]->get_indexes_batch_producer(),
+      max_indexes_per_batch,
+      num_components,
+      gpu_container->num_colors
+    ));
+    post_processors.push_back(make_shared<ContinuousColorResultsPostProcessor>(
+      searchers[i],
+      index_file_parsers[i]->get_warps_before_new_read_batch_producer(),
+      num_components,
+      gpu_container->num_colors
+    ));
+    results_printers.push_back(make_shared<ContinuousColorSearchResultsPrinter>(
+      index_file_parsers[i]->get_colors_interval_batch_producer(),
+      index_file_parsers[i]->get_read_statistics_batch_producer(),
+      post_processors[i],
+      split_output_filenames[i],
+      gpu_container->num_colors,
+      get_args().get_threshold(),
+      get_args().get_include_not_found(),
+      get_args().get_include_invalid()
+    ));
+  }
+  Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
+  return {index_file_parsers, searchers, post_processors, results_printers};
 }
 
 auto ColorSearchMain::run_components(
-  shared_ptr<ContinuousIndexFileParser> &index_file_parser,
-  shared_ptr<ContinuousColorSearcher> &color_searcher,
-  shared_ptr<ContinuousColorResultsPostProcessor> &post_processor,
-  shared_ptr<ContinuousColorSearchResultsPrinter> &results_printer
+  vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
+  vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
+  vector<shared_ptr<ContinuousColorResultsPostProcessor>> &post_processors,
+  vector<shared_ptr<ContinuousColorSearchResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
 #pragma omp parallel sections num_threads(num_components)
   {
 #pragma omp section
-    { index_file_parser->read_and_generate(); }
+    {
+#pragma omp parallel for num_threads(streams)
+      for (auto &element : index_file_parsers) { element->read_and_generate(); }
+    }
 #pragma omp section
-    { color_searcher->read_and_generate(); }
+    {
+#pragma omp parallel for num_threads(streams)
+      for (auto &element : color_searchers) { element->read_and_generate(); }
+    }
 #pragma omp section
-    { post_processor->read_and_generate(); }
+    {
+#pragma omp parallel for num_threads(streams)
+      for (auto &element : post_processors) { element->read_and_generate(); }
+    }
 #pragma omp section
-    { results_printer->read_and_generate(); }
+    {
+#pragma omp parallel for num_threads(streams)
+      for (auto &element : results_printers) { element->read_and_generate(); }
+    }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
 }

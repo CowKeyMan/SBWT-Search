@@ -31,7 +31,6 @@ using std::cerr;
 using std::endl;
 using std::min;
 using std::runtime_error;
-using std::to_string;
 using std_utils::split_vector;
 
 const u64 num_components = 5;
@@ -114,14 +113,14 @@ auto IndexSearchMain::load_batch_info() -> void {
 }
 
 auto IndexSearchMain::get_max_chars_per_batch() -> u64 {
-  if (batches == 0) {
-    cerr << "Initialise batches before max_chars_per_batch" << endl;
+  if (streams == 0) {
+    cerr << "ERROR: Initialise batches before max_chars_per_batch" << endl;
     std::quick_exit(1);
   }
   auto gpu_chars = get_max_chars_per_batch_gpu();
   auto cpu_chars = get_max_chars_per_batch_cpu();
   return round_down<u64>(
-    min(gpu_chars, cpu_chars) / batches, threads_per_block
+    min(gpu_chars, cpu_chars) / streams, threads_per_block
   );
 }
 
@@ -297,10 +296,10 @@ auto IndexSearchMain::get_input_output_filenames()
   if (all_input_filenames.size() != all_output_filenames.size()) {
     throw runtime_error("Input and output file sizes differ");
   }
-  batches = std::min(args->get_batches(), all_input_filenames.size());
+  streams = std::min(args->get_streams(), all_input_filenames.size());
   return {
-    split_vector(all_input_filenames, batches),
-    split_vector(all_output_filenames, batches)};
+    split_vector(all_input_filenames, streams),
+    split_vector(all_output_filenames, streams)};
 }
 
 auto IndexSearchMain::run_components(
@@ -315,31 +314,31 @@ auto IndexSearchMain::run_components(
   {
 #pragma omp section
     {
-#pragma omp parallel for num_threads(batches)
+#pragma omp parallel for num_threads(streams)
       for (auto &element : sequence_file_parsers) {
         element->read_and_generate();
       }
     }
 #pragma omp section
     {
-#pragma omp parallel for num_threads(batches)
+#pragma omp parallel for num_threads(streams)
       for (auto &element : seq_to_bits_converters) {
         element->read_and_generate();
       }
     }
 #pragma omp section
     {
-#pragma omp parallel for num_threads(batches)
+#pragma omp parallel for num_threads(streams)
       for (auto &element : positions_builders) { element->read_and_generate(); }
     }
 #pragma omp section
     {
-#pragma omp parallel for num_threads(batches)
+#pragma omp parallel for num_threads(streams)
       for (auto &element : searchers) { element->read_and_generate(); }
     }
 #pragma omp section
     {
-#pragma omp parallel for num_threads(batches)
+#pragma omp parallel for num_threads(streams)
       for (auto &element : results_printers) {
         std::visit(
           [](auto &arg) -> void { arg->read_and_generate(); }, element

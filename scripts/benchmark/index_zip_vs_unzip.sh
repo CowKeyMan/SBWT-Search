@@ -23,7 +23,6 @@ if [ "${top_level_directory}" != "." ]; then
 fi
 
 dbg_file="${input_folder}/ecoli_index/index.tdbg"
-colors_file="${input_folder}/ecoli_index/index.tcolors"
 
 out_file="${results_folder}/benchmark_out.txt"
 
@@ -31,13 +30,6 @@ batches=(1)
 
 index_printing_modes=(
   "binary"
-  "bool"
-  "ascii"
-)
-
-colors_printing_modes=(
-  "binary"
-  "bool"
   "ascii"
 )
 

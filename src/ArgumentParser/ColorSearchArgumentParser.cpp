@@ -61,8 +61,8 @@ auto ColorSearchArgumentParser::create_options() -> void {
       "unavailable-main-memory option",
       value<string>()->default_value(to_string(numeric_limits<u64>::max()))
      )
-    ("b,batches",
-      "The number of files to read and process at once. This implies dividing the available memory into <memory>/<batches> pieces, so each batch will process less items at a time, but there is instead more parallelism.",
+    ("s,streams",
+      "The number of files to read and write in parallel. This implies dividing the available memory into <memory>/<streams> pieces, so each batch will process less items at a time, but there is instead more parallelism. This should not be too high nor too large, as the number of threads spawned per file is already large, and it also depends on your disk drive. The default is 4.",
       value<u64>()->default_value("4"))
      ("r,indexes-per-read", "The approximate number of indexes generated for every read. This is necessary because we need to store 'checkpoints' where each read starts and ends in our list of base pairs. As such we must allocate memory for it. By default, this value is 100, meaning that we would then allocate enough memory for 1 unisgned integer per 100 indexes. This option is available in case you need more memory than that.", value<u64>()->default_value("100"))
      ("g,gpu-memory-percentage", "The percentage of gpu memory to use from the remaining free memory after the index has been loaded. This means that if we have 40GB of memory, and the index is 30GB, then we have 10GB left. If this value is set to 0.9, then 9GB will be used and the last 1GB of memory on the GPU will be left unused. The default value is 0.95, and unless you are running anything else on the machine which is also GPU heavy, it is recommended to leave it at this value.", value<double>()->default_value("0.95"))
@@ -102,8 +102,8 @@ auto ColorSearchArgumentParser::get_max_cpu_memory() const -> u64 {
 auto ColorSearchArgumentParser::get_print_mode() const -> string {
   return get_args()["print-mode"].as<string>();
 }
-auto ColorSearchArgumentParser::get_batches() const -> u64 {
-  return get_args()["batches"].as<u64>();
+auto ColorSearchArgumentParser::get_streams() const -> u64 {
+  return get_args()["streams"].as<u64>();
 }
 auto ColorSearchArgumentParser::get_threshold() const -> double {
   auto threshold = get_args()["threshold"].as<double>();
@@ -152,7 +152,7 @@ auto ColorSearchArgumentParser::get_required_options() const -> vector<string> {
     "unavailable-main-memory",
     "max-main-memory",
     "print-mode",
-    "batches"};
+    "streams"};
 }
 
 }  // namespace sbwt_search

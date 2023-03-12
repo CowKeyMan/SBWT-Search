@@ -11,6 +11,10 @@ cd test_objects/full_pipeline/index_search/expected
 files=`ls *.txt`
 cd -
 
+modes=(
+  ascii
+  binary
+)
 extensions=(
   ".txt"
   ".bin"
@@ -25,57 +29,42 @@ function run_tests() {
     for extension in ${extensions[@]}
     do
       actual="${no_extension}${extension}"
-      echo Checking differences between ${file} and ${actual}
       python3 scripts/test/verify_index_results_equal.py \
         -x "test_objects/full_pipeline/index_search/expected/${file}" \
-        -y "test_objects/full_pipeline/index_search/actual/${actual}"
-      ((bad_exits+=$?))
+        -y "test_objects/full_pipeline/index_search/actual/${actual}" \
+        --quiet
+      last_exit=$?
+      if [ ${last_exit} -ne 0 ]; then
+        echo ${file} and ${actual} do not match
+        echo ""
+      fi
+      ((bad_exits+=${last_exit}))
     done
   done
 
   rm test_objects/full_pipeline/index_search/actual/*
-
-  echo ""
 }
 
-echo "Running combined with batches = 1"
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 1 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 1 -c binary -p 0.1
-run_tests
-
-echo "Running combined with batches = 2"
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 2 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 2 -c binary -p 0.1
-run_tests
-
-echo "Running combined with batches = 3"
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 3 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 3 -c binary -p 0.1
-run_tests
-
-echo "Running combined with batches = 4"
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 4 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 4 -c binary -p 0.1
-run_tests
-
-echo "Running combined with batches = 5"
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 5 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -b 5 -c binary -p 0.1
-run_tests
+for streams in {1..5}; do
+  echo "Running combined with streams = ${streams}"
+  for mode in ${modes[@]}; do
+    ./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -s ${streams} -c ${mode} -p 0.1
+  done
+  run_tests
+done
 
 echo "Running individually"
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta1 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta1.fna -b 1 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta1 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta1.fna -b 1 -c binary -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta2 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta2.fna -b 1 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta2 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta2.fna -b 1 -c binary -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta3 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta3.fna -b 1 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta3 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta3.fna -b 1 -c binary -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta4 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta4.fna -b 1 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fasta4 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fasta4.fna -b 1 -c binary -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fastq1 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fastq1.fnq -b 1 -c ascii -p 0.1
-./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/actual/fastq1 -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/fastq1.fnq -b 1 -c binary -p 0.1
+input_files=(`cat test_objects/full_pipeline/index_search/combined_input.list`)
+output_files=(`cat test_objects/full_pipeline/index_search/combined_output.list`)
+for mode in ${modes[@]}; do
+  for i in ${!input_files[@]}; do
+    ./build/bin/sbwt_search index -o "${output_files[i]}" -i test_objects/search_test_index.sbwt -q "${input_files[i]}"  -s 1 -c ${mode} -p 0.1
+  done
+done
 run_tests
 
 if [[ ${bad_exits} -gt 0 ]]; then
   exit 1
+else
+  echo "Index pipeline test passed!"
 fi
