@@ -43,9 +43,11 @@ private:
   shared_ptr<StringBreakBatchProducer> string_break_batch_producer;
   shared_ptr<IntervalBatchProducer> interval_batch_producer;
   CircularBuffer<shared_ptr<Seq>> batches;
+  u64 stream_id;
 
 public:
   ContinuousSequenceFileParser(
+    u64 stream_id,
     const vector<string> &_filenames,
     u64 _kmer_size,
     u64 max_chars_per_batch_,

@@ -23,6 +23,7 @@ using std::make_shared;
 using std::shared_ptr;
 
 ContinuousSearcher::ContinuousSearcher(
+  u64 stream_id_,
   shared_ptr<GpuSbwtContainer> container,
   shared_ptr<SharedBatchesProducer<BitSeqBatch>> bit_seq_producer_,
   shared_ptr<SharedBatchesProducer<PositionsBatch>> positions_producer_,
@@ -33,7 +34,8 @@ ContinuousSearcher::ContinuousSearcher(
     bit_seq_producer(std::move(bit_seq_producer_)),
     positions_producer(std::move(positions_producer_)),
     max_chars_per_batch(max_chars_per_batch_),
-    SharedBatchesProducer<ResultsBatch>(max_batches) {
+    SharedBatchesProducer<ResultsBatch>(max_batches),
+    stream_id(stream_id_) {
   initialise_batches();
 }
 
@@ -60,13 +62,17 @@ auto ContinuousSearcher::generate() -> void {
 auto ContinuousSearcher::do_at_batch_start() -> void {
   SharedBatchesProducer<ResultsBatch>::do_at_batch_start();
   Logger::log_timed_event(
-    "Searcher", Logger::EVENT_STATE::START, format("batch {}", get_batch_id())
+    format("Searcher_{}", stream_id),
+    Logger::EVENT_STATE::START,
+    format("batch {}", get_batch_id())
   );
 }
 
 auto ContinuousSearcher::do_at_batch_finish() -> void {
   Logger::log_timed_event(
-    "Searcher", Logger::EVENT_STATE::STOP, format("batch {}", get_batch_id())
+    format("Searcher_{}", stream_id),
+    Logger::EVENT_STATE::STOP,
+    format("batch {}", get_batch_id())
   );
   SharedBatchesProducer<ResultsBatch>::do_at_batch_finish();
 }

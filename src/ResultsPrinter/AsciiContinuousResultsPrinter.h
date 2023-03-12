@@ -22,6 +22,7 @@ private:
 
 public:
   AsciiContinuousResultsPrinter(
+    u64 stream_id,
     shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
     shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,

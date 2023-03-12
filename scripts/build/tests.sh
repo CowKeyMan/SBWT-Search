@@ -18,6 +18,8 @@ then
     -DHIP_TARGET_DEVICE=CPU \
     -DROCM_BRANCH="rocm-5.4.x" \
     ..
+  if [ $? -ne 0 ]; then >&2echo "Cmake generation failed" && cd .. && exit 1; fi
 fi
 cmake --build . -j8
+if [ $? -ne 0 ]; then >&2 echo "Build" && cd .. && exit 1; fi
 cd ..

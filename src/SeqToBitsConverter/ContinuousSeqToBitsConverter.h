@@ -28,9 +28,11 @@ private:
   shared_ptr<BitsProducer> bits_producer;
   u64 threads;
   CharToBits char_to_bits;
+  u64 stream_id;
 
 public:
   ContinuousSeqToBitsConverter(
+    u64 stream_id_,
     shared_ptr<SharedBatchesProducer<StringSequenceBatch>> producer,
     u64 threads,
     u64 kmer_size,

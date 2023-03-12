@@ -26,9 +26,11 @@ class ContinuousSearcher: public SharedBatchesProducer<ResultsBatch> {
   shared_ptr<BitSeqBatch> bit_seq_batch;
   shared_ptr<PositionsBatch> positions_batch;
   u64 max_chars_per_batch;
+  u64 stream_id;
 
 public:
   ContinuousSearcher(
+    u64 stream_id,
     shared_ptr<GpuSbwtContainer> container,
     shared_ptr<SharedBatchesProducer<BitSeqBatch>> bit_seq_producer_,
     shared_ptr<SharedBatchesProducer<PositionsBatch>> positions_producer_,

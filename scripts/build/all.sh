@@ -8,23 +8,12 @@
 mkdir -p build
 cd build
 
-# Run the cmake / static analysis checks
-if [[ $# == 0 ]];
-then
-  cmake \
-    -DCMAKE_EXPORT_COMPILE_COMMANDS=OFF \
-    -DCMAKE_BUILD_TYPE=Debug \
-    -DBUILD_MAIN=OFF \
-    -DBUILD_TESTS=OFF \
-    -DBUILD_DOCS=OFF \
-    -DENABLE_PROFILING=OFF \
-    ..
-fi
-cd ..
-
-
 # ./scripts/build/debug.sh
-./scripts/build/release.sh
+# ./scripts/build/release_nvidia.sh
+./scripts/build/release_cpu.sh
+if [ $? -ne 0 ]; then >&2echo "Building release failed" && cd .. && exit 1; fi
+# ./scripts/build/release_amd.sh
 ./scripts/build/docs.sh
-./scripts/build/verify.sh
+if [ $? -ne 0 ]; then >&2echo "Building docs failed" && cd .. && exit 1; fi
 ./scripts/build/tests.sh
+if [ $? -ne 0 ]; then >&2echo "Building tests failed" && cd .. && exit 1; fi

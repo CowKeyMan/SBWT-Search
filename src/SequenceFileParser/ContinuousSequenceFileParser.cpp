@@ -34,6 +34,7 @@ using std::string;
 using std::vector;
 
 ContinuousSequenceFileParser::ContinuousSequenceFileParser(
+  u64 stream_id_,
   const vector<string> &filenames_,
   u64 kmer_size_,
   u64 max_chars_per_batch_,
@@ -51,7 +52,8 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
     string_break_batch_producer(
       make_shared<StringBreakBatchProducer>(max_batches)
     ),
-    interval_batch_producer(make_shared<IntervalBatchProducer>(max_batches)) {
+    interval_batch_producer(make_shared<IntervalBatchProducer>(max_batches)),
+    stream_id(stream_id_) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {
     batches.set(

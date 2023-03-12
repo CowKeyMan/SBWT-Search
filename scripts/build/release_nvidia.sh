@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Build the main executable.
-# If any argument at all is passed to this script, it will skip the cmake step and just execute the build step only.
+# Build the main executable for NVIDIA/CUDA platform. If any argument at all
+# is passed to this script, it will skip the cmake step and just execute the
+# build step only.
 
 mkdir -p build
 cd build
@@ -18,6 +19,8 @@ then
     -DHIP_TARGET_DEVICE=NVIDIA \
     -DROCM_BRANCH="rocm-5.4.x" \
     ..
+  if [ $? -ne 0 ]; then >&2echo "Cmake generation failed" && cd .. && exit 1; fi
 fi
 cmake --build . -j8
+if [ $? -ne 0 ]; then >&2 echo "Build" && cd .. && exit 1; fi
 cd ..

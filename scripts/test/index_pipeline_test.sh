@@ -4,8 +4,13 @@
 # test_objects/full_pipeline/index_search/ and verify that the outputs are
 # correct (ie equal to the expected values, which can be found in the same folder)
 
+if [ "$1" != "nvidia" ] && [ "$1" != "cpu" ] && [ "$1" != "amd" ]; then
+  echo "Invalid platform, must be nvidia, cpu or amd"
+  exit 1
+fi
+
 # build
-./scripts/build/release.sh
+./scripts/build/release_$1.sh
 
 cd test_objects/full_pipeline/index_search/expected
 files=`ls *.txt`

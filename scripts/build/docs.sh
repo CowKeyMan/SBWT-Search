@@ -5,11 +5,7 @@
 
 cp documentation/Documents/FileDocumentation.rst.in documentation/Documents/FileDocumentation.rst
 ./scripts/standalone/generate_file_documentation.py >> documentation/Documents/FileDocumentation.rst
-if [[ $? -ne 0 ]];
-then
-  echo "Generating file documentation failed. See above errors (in stderr) for details"
-  exit 1
-fi
+if [[ $? -ne 0 ]]; then >&2 echo "Generating file documentation failed." && exit 1; fi
 
 mkdir -p build
 cd build
@@ -24,8 +20,10 @@ then
     -DENABLE_PROFILING=OFF \
     -DENABLE_MARCH_NATIVE=OFF \
     ..
+  if [ $? -ne 0 ]; then >&2echo "Cmake generation failed" && cd .. && exit 1; fi
 fi
 cmake --build . -j8
+if [ $? -ne 0 ]; then >&2 echo "Build" && cd .. && exit 1; fi
 cd ../documentation
 rm `grep -r -L -P "(.gitignore|.dir_docstring)" RST`
 doxygen Doxyfile

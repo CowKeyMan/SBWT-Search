@@ -16,7 +16,7 @@
 ## Number of tasks per node.
 #SBATCH --ntasks-per-node=1
 ## Number of cpus per task.
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=64
 ## Since this is a benchmarking script, we might not want it to share resources
 ##SBATCH --exclusive
 ## Amount of memory per node

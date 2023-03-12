@@ -48,7 +48,7 @@ protected:
     const auto max_chars_per_batch = 999;
     auto producer = get_producer(chars_before_newline, string_sizes);
     auto host = ContinuousPositionsBuilder(
-      producer, kmer_size, max_chars_per_batch, max_batches
+      0, producer, kmer_size, max_chars_per_batch, max_batches
     );
     u64 expected_batches = chars_before_newline.size();
     u64 batches = 0;

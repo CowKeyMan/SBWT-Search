@@ -69,6 +69,7 @@ private:
   auto get_input_output_filenames()
     -> tuple<vector<vector<string>>, vector<vector<string>>>;
   auto get_results_printer(
+    u64 stream_id,
     const shared_ptr<ContinuousSearcher> &searcher,
     const shared_ptr<IntervalBatchProducer> &interval_batch_producer,
     const shared_ptr<InvalidCharsProducer> &invalid_chars_producer,

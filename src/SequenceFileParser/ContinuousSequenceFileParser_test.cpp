@@ -43,6 +43,7 @@ protected:
     u64 max_batches
   ) {
     auto host = make_unique<ContinuousSequenceFileParser>(
+      0,
       filenames,
       kmer_size,
       max_chars_per_batch,

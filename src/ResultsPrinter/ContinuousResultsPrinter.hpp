@@ -70,9 +70,11 @@ private:
   u64 kmer_size;
   u64 threads;
   u64 element_size;
+  u64 stream_id;
 
 public:
   ContinuousResultsPrinter(
+    u64 stream_id_,
     shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer_,
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer_,
     shared_ptr<SharedBatchesProducer<InvalidCharsBatch>>
@@ -90,7 +92,8 @@ public:
       threads(threads_),
       kmer_size(kmer_size),
       write_locks(threads_ - 1),
-      element_size(element_size_) {
+      element_size(element_size_),
+      stream_id(stream_id_) {
     buffers.resize(threads);
     for (auto &b : buffers) {
       impl().do_allocate_buffer(b, max_chars_per_batch, threads);
@@ -103,13 +106,13 @@ public:
     impl().do_start_next_file();
     for (u64 batch_id = 0; get_batch(); ++batch_id) {
       Logger::log_timed_event(
-        "ResultsPrinter",
+        format("ResultsPrinter_{}", stream_id),
         Logger::EVENT_STATE::START,
         format("batch {}", batch_id)
       );
       impl().process_batch();
       Logger::log_timed_event(
-        "ResultsPrinter",
+        format("ResultsPrinter_{}", stream_id),
         Logger::EVENT_STATE::STOP,
         format("batch {}", batch_id)
       );

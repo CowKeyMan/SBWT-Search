@@ -26,9 +26,11 @@ private:
   shared_ptr<StringBreakBatch> read_batch;
   PositionsBuilder builder;
   u64 max_chars_per_batch;
+  u64 stream_id;
 
 public:
   ContinuousPositionsBuilder(
+    u64 stream_id_,
     shared_ptr<SharedBatchesProducer<StringBreakBatch>> _producer,
     u64 kmer_size,
     u64 _max_chars_per_batch,

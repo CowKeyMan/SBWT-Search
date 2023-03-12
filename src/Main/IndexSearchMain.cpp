@@ -86,9 +86,9 @@ auto IndexSearchMain::get_gpu_container() -> shared_ptr<GpuSbwtContainer> {
   auto builder = SbwtBuilder(get_args().get_index_file());
   auto cpu_container = builder.get_cpu_sbwt();
   Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::STOP);
-  Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::START);
+  Logger::log_timed_event("SbwtGpuTransfer", Logger::EVENT_STATE::START);
   auto gpu_container = cpu_container->to_gpu();
-  Logger::log_timed_event("SBWT_GPU_Transfer", Logger::EVENT_STATE::STOP);
+  Logger::log_timed_event("SbwtGpuTransfer", Logger::EVENT_STATE::STOP);
   auto presearcher = Presearcher(gpu_container);
   Logger::log_timed_event("Presearcher", Logger::EVENT_STATE::START);
   presearcher.presearch();
@@ -208,6 +208,7 @@ auto IndexSearchMain::get_components(
   vector<ResultsPrinter> results_printers;
   for (u64 i = 0; i < split_input_filenames.size(); ++i) {
     sequence_file_parsers.push_back(make_shared<ContinuousSequenceFileParser>(
+      i,
       split_input_filenames[i],
       kmer_size,
       max_chars_per_batch,
@@ -216,6 +217,7 @@ auto IndexSearchMain::get_components(
     ));
 
     seq_to_bits_converters.push_back(make_shared<ContinuousSeqToBitsConverter>(
+      i,
       sequence_file_parsers[i]->get_string_sequence_batch_producer(),
       get_threads(),
       kmer_size,
@@ -224,6 +226,7 @@ auto IndexSearchMain::get_components(
     ));
 
     positions_builders.push_back(make_shared<ContinuousPositionsBuilder>(
+      i,
       sequence_file_parsers[i]->get_string_break_batch_producer(),
       kmer_size,
       max_chars_per_batch,
@@ -231,6 +234,7 @@ auto IndexSearchMain::get_components(
     ));
 
     searchers.push_back(make_shared<ContinuousSearcher>(
+      i,
       gpu_container,
       seq_to_bits_converters[i]->get_bits_producer(),
       positions_builders[i],
@@ -239,6 +243,7 @@ auto IndexSearchMain::get_components(
     ));
 
     results_printers.push_back(get_results_printer(
+      i,
       searchers[i],
       sequence_file_parsers[i]->get_interval_batch_producer(),
       seq_to_bits_converters[i]->get_invalid_chars_producer(),
@@ -256,6 +261,7 @@ auto IndexSearchMain::get_components(
 }
 
 auto IndexSearchMain::get_results_printer(
+  u64 stream_id,
   const shared_ptr<ContinuousSearcher> &searcher,
   const shared_ptr<IntervalBatchProducer> &interval_batch_producer,
   const shared_ptr<InvalidCharsProducer> &invalid_chars_producer,
@@ -263,6 +269,7 @@ auto IndexSearchMain::get_results_printer(
 ) -> ResultsPrinter {
   if (get_args().get_print_mode() == "ascii") {
     return make_shared<AsciiContinuousResultsPrinter>(
+      stream_id,
       searcher,
       interval_batch_producer,
       invalid_chars_producer,
@@ -274,6 +281,7 @@ auto IndexSearchMain::get_results_printer(
   }
   if (get_args().get_print_mode() == "binary") {
     return make_shared<BinaryContinuousResultsPrinter>(
+      stream_id,
       searcher,
       interval_batch_producer,
       invalid_chars_producer,

@@ -12,6 +12,7 @@ using log_utils::Logger;
 using std::min;
 
 ContinuousSeqToBitsConverter::ContinuousSeqToBitsConverter(
+  u64 stream_id_,
   shared_ptr<SharedBatchesProducer<StringSequenceBatch>> producer,
   u64 threads,
   u64 kmer_size,
@@ -23,8 +24,8 @@ ContinuousSeqToBitsConverter::ContinuousSeqToBitsConverter(
     invalid_chars_producer(make_shared<InvalidCharsProducer>(
       kmer_size, max_chars_per_batch, max_batches
     )),
-    bits_producer(make_shared<BitsProducer>(max_chars_per_batch, max_batches)) {
-}
+    bits_producer(make_shared<BitsProducer>(max_chars_per_batch, max_batches)),
+    stream_id(stream_id_) {}
 
 auto ContinuousSeqToBitsConverter::get_invalid_chars_producer() const
   -> const shared_ptr<InvalidCharsProducer> & {
@@ -41,13 +42,13 @@ auto ContinuousSeqToBitsConverter::read_and_generate() -> void {
     invalid_chars_producer->start_new_batch(read_batch->seq->size());
     bits_producer->start_new_batch(read_batch->seq->size());
     Logger::log_timed_event(
-      "SeqToBitsConverter",
+      format("SeqToBitsConverter_{}", stream_id),
       Logger::EVENT_STATE::START,
       format("batch {}", batch_idx)
     );
     parallel_generate(*read_batch);
     Logger::log_timed_event(
-      "SeqToBitsConverter",
+      format("SeqToBitsConverter_{}", stream_id),
       Logger::EVENT_STATE::STOP,
       format("batch {}", batch_idx)
     );

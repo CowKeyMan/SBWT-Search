@@ -5,6 +5,7 @@
 namespace sbwt_search {
 
 BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
+  u64 stream_id,
   shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
   shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
   shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
@@ -14,6 +15,7 @@ BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
   u64 max_chars_per_batch
 ):
     Base(
+      stream_id,
       std::move(results_producer),
       std::move(interval_producer),
       std::move(invalid_chars_producer),
