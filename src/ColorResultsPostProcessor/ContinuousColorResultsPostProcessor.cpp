@@ -13,6 +13,7 @@ using log_utils::Logger;
 using std::make_shared;
 
 ContinuousColorResultsPostProcessor::ContinuousColorResultsPostProcessor(
+  u64 stream_id_,
   shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
     results_batch_producer_,
   shared_ptr<SharedBatchesProducer<WarpsBeforeNewReadBatch>>
@@ -25,7 +26,8 @@ ContinuousColorResultsPostProcessor::ContinuousColorResultsPostProcessor(
     warps_before_new_read_batch_producer(
       std::move(warps_before_new_read_batch_producer_)
     ),
-    num_colors(num_colors_) {
+    num_colors(num_colors_),
+    stream_id(stream_id_) {
   initialise_batches();
 }
 
@@ -81,7 +83,7 @@ auto ContinuousColorResultsPostProcessor::get_default_value()
 auto ContinuousColorResultsPostProcessor::do_at_batch_start() -> void {
   SharedBatchesProducer<ColorSearchResultsBatch>::do_at_batch_start();
   Logger::log_timed_event(
-    "ColorResultsPostProcessor",
+    format("ColorResultsPostProcessor_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", get_batch_id())
   );
@@ -89,7 +91,7 @@ auto ContinuousColorResultsPostProcessor::do_at_batch_start() -> void {
 
 auto ContinuousColorResultsPostProcessor::do_at_batch_finish() -> void {
   Logger::log_timed_event(
-    "ResultsPostProcessor",
+    format("ResultsPostProcessor_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", get_batch_id())
   );

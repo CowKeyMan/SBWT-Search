@@ -42,6 +42,7 @@ protected:
         warps_before_new_read_batches
       );
     auto host = ContinuousColorResultsPostProcessor(
+      0,
       results_producer,
       warps_before_new_read_batch_producer,
       max_batches,

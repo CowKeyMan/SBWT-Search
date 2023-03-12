@@ -21,6 +21,7 @@ using std::make_shared;
 using std::numeric_limits;
 
 ContinuousIndexFileParser::ContinuousIndexFileParser(
+  u64 stream_id_,
   u64 max_batches,
   u64 max_indexes_per_batch_,
   u64 max_reads_per_batch_,
@@ -45,7 +46,8 @@ ContinuousIndexFileParser::ContinuousIndexFileParser(
     indexes_batch_producer(
       make_shared<IndexesBatchProducer>(max_indexes_per_batch_, max_batches)
     ),
-    filenames(std::move(filenames_)) {
+    filenames(std::move(filenames_)),
+    stream_id(stream_id_) {
   filename_iterator = filenames.begin();
 }
 
@@ -127,7 +129,7 @@ auto ContinuousIndexFileParser::do_at_batch_start() -> void {
   warps_before_new_read_batch_producer->do_at_batch_start();
   indexes_batch_producer->do_at_batch_start();
   Logger::log_timed_event(
-    "ContinuousIndexFileParser",
+    format("ContinuousIndexFileParser_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
@@ -186,7 +188,7 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
     )
   );
   Logger::log_timed_event(
-    "ContinuousIndexFileParser",
+    format("ContinuousIndexFileParser_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_id)
   );

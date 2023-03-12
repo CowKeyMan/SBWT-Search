@@ -64,10 +64,10 @@ auto ContinuousSeqToBitsConverter::parallel_generate(
 ) -> void {
   const u64 chars_per_u64 = 32;
   auto seq_size = read_batch.seq->size();
-  u64 chars_per_thread
-    = static_cast<u64>(
-        ceil((ceil(static_cast<double>(seq_size) / chars_per_u64)) / threads)
-      )
+  u64 chars_per_thread = static_cast<u64>(ceil(
+                           (ceil(static_cast<double>(seq_size) / chars_per_u64))
+                           / static_cast<double>(threads)
+                         ))
     * chars_per_u64;
 #pragma omp parallel num_threads(threads) shared(read_batch)
   {

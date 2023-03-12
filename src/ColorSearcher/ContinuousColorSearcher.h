@@ -29,9 +29,11 @@ private:
   ColorSearcher searcher;
   u64 max_indexes_per_batch;
   u64 num_colors;
+  u64 stream_id;
 
 public:
   ContinuousColorSearcher(
+    u64 stream_id_,
     shared_ptr<GpuColorIndexContainer> color_index_container_,
     shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer_,
     u64 max_indexes_per_batch_,

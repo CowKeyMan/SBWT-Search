@@ -41,6 +41,7 @@ protected:
   ) {
     write_fake_binary_results_to_file();
     auto host = ContinuousIndexFileParser(
+      0,
       max_batches,
       max_indexes_per_batch,
       max_reads_per_batch,

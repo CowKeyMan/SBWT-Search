@@ -54,7 +54,7 @@ protected:
     }
     auto producer = make_shared<DummyStringSequenceBatchProducer>(shared_seqs);
     auto host = make_shared<ContinuousSeqToBitsConverter>(
-      producer, threads, kmer_size, max_chars_per_batch, max_batches
+      0, producer, threads, kmer_size, max_chars_per_batch, max_batches
     );
     auto bits_producer = host->get_bits_producer();
     auto invalid_chars_producer = host->get_invalid_chars_producer();

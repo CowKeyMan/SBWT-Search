@@ -28,9 +28,11 @@ private:
     warps_before_new_read_batch_producer;
   shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch;
   u64 num_colors;
+  u64 stream_id;
 
 public:
   ContinuousColorResultsPostProcessor(
+    u64 stream_id_,
     shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
       results_batch_producer_,
     shared_ptr<SharedBatchesProducer<WarpsBeforeNewReadBatch>>

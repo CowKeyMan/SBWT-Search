@@ -38,9 +38,11 @@ private:
   u64 max_indexes_per_batch;
   u64 max_reads_per_batch;
   u64 warp_size;
+  u64 stream_id;
 
 public:
   ContinuousIndexFileParser(
+    u64 stream_id_,
     u64 max_batches,
     u64 max_indexes_per_batch_,
     u64 max_reads_per_batch_,

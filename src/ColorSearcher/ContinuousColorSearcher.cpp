@@ -12,6 +12,7 @@ using log_utils::Logger;
 using std::make_shared;
 
 ContinuousColorSearcher::ContinuousColorSearcher(
+  u64 stream_id_,
   shared_ptr<GpuColorIndexContainer> color_index_container_,
   shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer_,
   u64 max_indexes_per_batch_,
@@ -22,7 +23,8 @@ ContinuousColorSearcher::ContinuousColorSearcher(
     searcher(std::move(color_index_container_), max_indexes_per_batch_),
     indexes_batch_producer(std::move(indexes_batch_producer_)),
     max_indexes_per_batch(max_indexes_per_batch_),
-    num_colors(num_colors_) {
+    num_colors(num_colors_),
+    stream_id(stream_id_) {
   initialise_batches();
 }
 
@@ -47,7 +49,7 @@ auto ContinuousColorSearcher::generate() -> void {
 auto ContinuousColorSearcher::do_at_batch_start() -> void {
   SharedBatchesProducer<ColorSearchResultsBatch>::do_at_batch_start();
   Logger::log_timed_event(
-    "ColorSearcher",
+    format("ColorSearcher_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", get_batch_id())
   );
@@ -55,7 +57,7 @@ auto ContinuousColorSearcher::do_at_batch_start() -> void {
 
 auto ContinuousColorSearcher::do_at_batch_finish() -> void {
   Logger::log_timed_event(
-    "ColorSearcher",
+    format("ColorSearcher_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", get_batch_id())
   );

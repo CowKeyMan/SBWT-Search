@@ -203,6 +203,7 @@ auto ColorSearchMain::get_components(
   vector<shared_ptr<ContinuousColorSearchResultsPrinter>> results_printers;
   for (u64 i = 0; i < split_input_filenames.size(); ++i) {
     index_file_parsers.push_back(make_shared<ContinuousIndexFileParser>(
+      i,
       num_components,
       max_indexes_per_batch,
       max_reads_per_batch,
@@ -210,6 +211,7 @@ auto ColorSearchMain::get_components(
       split_input_filenames[i]
     ));
     searchers.push_back(make_shared<ContinuousColorSearcher>(
+      i,
       gpu_container,
       index_file_parsers[i]->get_indexes_batch_producer(),
       max_indexes_per_batch,
@@ -217,12 +219,14 @@ auto ColorSearchMain::get_components(
       gpu_container->num_colors
     ));
     post_processors.push_back(make_shared<ContinuousColorResultsPostProcessor>(
+      i,
       searchers[i],
       index_file_parsers[i]->get_warps_before_new_read_batch_producer(),
       num_components,
       gpu_container->num_colors
     ));
     results_printers.push_back(make_shared<ContinuousColorSearchResultsPrinter>(
+      i,
       index_file_parsers[i]->get_colors_interval_batch_producer(),
       index_file_parsers[i]->get_read_statistics_batch_producer(),
       post_processors[i],

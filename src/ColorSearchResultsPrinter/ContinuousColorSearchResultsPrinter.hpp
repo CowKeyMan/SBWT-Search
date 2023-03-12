@@ -57,9 +57,11 @@ private:
   bool printed_last_read = false;
   u64 include_not_found;
   u64 include_invalid;
+  u64 stream_id;
 
 public:
   ContinuousColorSearchResultsPrinter(
+    u64 stream_id_,
     shared_ptr<SharedBatchesProducer<ColorsIntervalBatch>>
       interval_batch_producer_,
     shared_ptr<SharedBatchesProducer<ReadStatisticsBatch>>
@@ -81,7 +83,8 @@ public:
       threshold(threshold_),
       previous_last_results(num_colors_, 0),
       include_not_found(static_cast<u64>(include_not_found_)),
-      include_invalid(static_cast<u64>(include_invalid_)){};
+      include_invalid(static_cast<u64>(include_invalid_)),
+      stream_id(stream_id_){};
 
   auto read_and_generate() -> void {
     current_filename = filenames.begin();
@@ -89,14 +92,14 @@ public:
     impl().do_start_next_file();
     for (u64 batch_id = 0; get_batch(); ++batch_id) {
       Logger::log_timed_event(
-        "ColorSearchResultsPrinter",
+        format("ColorSearchResultsPrinter_{}", stream_id),
         Logger::EVENT_STATE::START,
         format("batch {}", batch_id)
       );
       printed_last_read = false;
       process_batch();
       Logger::log_timed_event(
-        "ColorSearchResultsPrinter",
+        format("ColorSearchResultsPrinter_{}", stream_id),
         Logger::EVENT_STATE::STOP,
         format("batch {}", batch_id)
       );
