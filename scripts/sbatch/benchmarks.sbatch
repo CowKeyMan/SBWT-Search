@@ -16,11 +16,11 @@
 ## Number of tasks per node.
 #SBATCH --ntasks-per-node=1
 ## Number of cpus per task.
-#SBATCH --cpus-per-task=64
+#SBATCH --cpus-per-task=32
 ## Since this is a benchmarking script, we might not want it to share resources
 ##SBATCH --exclusive
 ## Amount of memory per node
-#SBATCH --mem-per-cpu=29G
+#SBATCH --mem-per-cpu=14G
 ## We only want a single a100 gpu and 10GB of NVME storage
 #SBATCH --gres=gpu:a100:1,nvme:300
 
@@ -50,15 +50,16 @@ cp -r "${OLD_PWD}/cmake/" "${LOCAL_SCRATCH}/SBWT-Search/cmake" &
 cp -r "${OLD_PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts" &
 cp "${OLD_PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt" &
 wait < <(jobs -p) # wait for jobs to finish
-bash ./scripts/build/release.sh &
 cp -r "${OLD_PWD}/benchmark_objects/" "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects" &
+bash ./scripts/build/release_cpu.sh >&2
+bash ./scripts/build/release_nvidia.sh >&2
 wait < <(jobs -p) # wait for jobs to finish
 t2=$(date +%s%3N)
 
 mkdir -p "benchmark_results/${OUTPUT_FOLDER}"
 echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
 
-sh -x scripts/standalone/benchmark.sh "${OUTPUT_FOLDER}"
+bash -x scripts/benchmark/index_search.sh "${OUTPUT_FOLDER}"
 
 cd "${OLD_PWD}"
 cp -r "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results" .
