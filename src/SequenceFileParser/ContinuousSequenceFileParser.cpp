@@ -128,7 +128,7 @@ auto ContinuousSequenceFileParser::do_at_batch_start() -> void {
   string_break_batch_producer->do_at_batch_start();
   interval_batch_producer->do_at_batch_start();
   Logger::log_timed_event(
-    "SequenceFileParser",
+    format("SequenceFileParser_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
@@ -164,7 +164,7 @@ auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
     )
   );
   Logger::log_timed_event(
-    "SequenceFileParser",
+    format("SequenceFileParser_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_id)
   );
