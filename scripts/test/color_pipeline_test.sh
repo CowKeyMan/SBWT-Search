@@ -58,7 +58,7 @@ function run_tests() {
 for streams in {1..5}; do
   echo "Running combined with streams = ${streams}"
   for mode in ${modes[@]}; do
-    ./build/bin/sbwt_search colors -o test_objects/full_pipeline/color_search/combined_output.list -i test_objects/themisto_example/GCA_combined_d1.tcolors -q test_objects/full_pipeline/color_search/combined_input.list -s ${streams} -c ${mode} -t 0.7 -p 0.1
+    ./build/bin/sbwt_search colors -o test_objects/full_pipeline/color_search/combined_output.list -i test_objects/themisto_example/GCA_combined_d1.tcolors -q test_objects/full_pipeline/color_search/combined_input.list -s ${streams} -p ${mode} -t 0.7 -c 0.1
   done
   run_tests
 done
@@ -68,7 +68,7 @@ input_files=(`cat test_objects/full_pipeline/color_search/combined_input.list`)
 output_files=(`cat test_objects/full_pipeline/color_search/combined_output.list`)
 for mode in ${modes[@]}; do
   for i in ${!input_files[@]}; do
-    ./build/bin/sbwt_search colors -o "${output_files[i]}" -i test_objects/themisto_example/GCA_combined_d1.tcolors -q "${input_files[i]}" -s 1 -c ${mode} -t 0.7 -p 0.1
+    ./build/bin/sbwt_search colors -o "${output_files[i]}" -i test_objects/themisto_example/GCA_combined_d1.tcolors -q "${input_files[i]}" -s 1 -p ${mode} -t 0.7 -c 0.1
   done
 done
 run_tests

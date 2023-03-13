@@ -51,6 +51,7 @@ printf "" > ${out_file}
 devices=(
   "nvidia"
   "cpu"
+  "amd"
 )
 
 streams_options=({1..8})
@@ -63,7 +64,7 @@ for device in ${devices[@]}; do
       for (( p=0; p<${#printing_modes[@]}; p++ )); do
         echo Now running: File ${input_files[i]} with ${streams} streams in ${printing_modes[p]} format on ${device} device
         echo Now running: File ${input_files[i]} with ${streams} streams in ${printing_modes[p]} format on ${device} device >> ${out_file}
-        ./build/bin/sbwt_search index -i ${dbg_file} -q ${input_files[i]} -o ${output_file} -s ${streams} -c ${printing_modes[p]} >> ${out_file}
+        ./build/bin/sbwt_search index -i ${dbg_file} -q ${input_files[i]} -o ${output_file} -s ${streams} -p ${printing_modes[p]} >> ${out_file}
       done
     done
   done

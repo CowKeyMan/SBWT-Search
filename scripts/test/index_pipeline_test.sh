@@ -53,7 +53,7 @@ function run_tests() {
 for streams in {1..5}; do
   echo "Running combined with streams = ${streams}"
   for mode in ${modes[@]}; do
-    ./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -s ${streams} -c ${mode} -p 0.1
+    ./build/bin/sbwt_search index -o test_objects/full_pipeline/index_search/combined_output.list -i test_objects/search_test_index.sbwt -q test_objects/full_pipeline/index_search/combined_input.list -s ${streams} -p ${mode} -c 0.1
   done
   run_tests
 done
@@ -63,7 +63,7 @@ input_files=(`cat test_objects/full_pipeline/index_search/combined_input.list`)
 output_files=(`cat test_objects/full_pipeline/index_search/combined_output.list`)
 for mode in ${modes[@]}; do
   for i in ${!input_files[@]}; do
-    ./build/bin/sbwt_search index -o "${output_files[i]}" -i test_objects/search_test_index.sbwt -q "${input_files[i]}"  -s 1 -c ${mode} -p 0.1
+    ./build/bin/sbwt_search index -o "${output_files[i]}" -i test_objects/search_test_index.sbwt -q "${input_files[i]}"  -s 1 -p ${mode} -c 0.1
   done
 done
 run_tests
