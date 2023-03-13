@@ -70,7 +70,7 @@ auto ColorSearcher::copy_from_gpu(vector<u64> &results, u64 batch_id) -> void {
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  d_results.copy_to(results);
+  d_results.copy_to(results, results.size());
   Logger::log_timed_event(
     "SearcherCopyFromGpu",
     Logger::EVENT_STATE::STOP,
