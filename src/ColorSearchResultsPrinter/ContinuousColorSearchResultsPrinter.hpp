@@ -146,6 +146,7 @@ protected:
     out_stream->write_string_with_size(impl().do_get_format());
     out_stream->write_string_with_size(impl().do_get_version());
   }
+
   auto process_batch() -> void {
     auto &results = *results_batch->results;
     auto &found_idxs = read_statistics_batch->found_idxs;
@@ -153,7 +154,7 @@ protected:
     auto &invalid_idxs = read_statistics_batch->invalid_idxs;
     auto &wbnrs = *interval_batch->warps_before_new_read;
     auto &rbnfs = interval_batch->reads_before_newfile;
-    if (rbnfs[0] == 0) {
+    if (wbnrs[0] == 0) {
       impl().do_print_read(
         previous_last_results.begin(),
         previous_last_found_idx,
@@ -171,10 +172,10 @@ protected:
         results[i] += previous_last_results[i];
       }
     }
-    u64 rbnf_idx = 0;
-    u64 wbnr = 0;
-    for (u64 wbnr_idx = 0; wbnr_idx < wbnrs.size(); ++wbnr_idx) {
-      const auto &read_idx = wbnr_idx;
+    u64 rbnf_idx = static_cast<u64>(printed_last_read);
+    u64 wbnr = printed_last_read? wbnrs[0]: 0;
+    for (u64 wbnr_idx = static_cast<u64>(printed_last_read); wbnr_idx < wbnrs.size(); ++wbnr_idx) {
+      const auto read_idx = wbnr_idx;
       while (rbnfs[rbnf_idx] == read_idx) {
         impl().do_start_next_file();
         ++rbnf_idx;
@@ -187,6 +188,7 @@ protected:
         for (int i = 0; i < num_colors; ++i) {
           previous_last_results[i] = results[wbnr * num_colors + i];
         }
+        printed_last_read = false;
         break;
       }
       impl().do_print_read(
@@ -198,6 +200,7 @@ protected:
       wbnr = wbnrs[wbnr_idx];
     }
   }
+  u64 debug_counter = 1;
   auto do_print_read(
     vector<u64>::iterator results,
     u64 found_idxs,
@@ -206,11 +209,12 @@ protected:
   ) -> void {
     u64 read_size = found_idxs + include_not_found * not_found_idxs
       + include_invalid * invalid_idxs;
-    u64 minimum_found
+    const u64 minimum_found
       = static_cast<u64>(std::ceil(static_cast<double>(read_size) * threshold));
     bool first_print = true;
-    for (u64 color_idx = 0; color_idx < num_colors; ++color_idx, ++results) {
-      if (*results >= minimum_found && minimum_found > 0) {
+    for (u64 color_idx = 0; minimum_found > 0 && color_idx < num_colors;
+         ++color_idx, ++results) {
+      if (*results >= minimum_found) {
         if (!first_print) { *out_stream << " "; }
         first_print = false;
         *out_stream << color_idx;
