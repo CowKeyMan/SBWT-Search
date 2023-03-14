@@ -16,19 +16,15 @@ using math_utils::round_up;
 
 auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   -> void {
-  hipEvent_t search_start;  // NOLINT(cppcoreguidelines-init-variables)
-  hipEvent_t search_stop;   // NOLINT(cppcoreguidelines-init-variables)
-  GPU_CHECK(hipEventCreate(&search_start));
-  GPU_CHECK(hipEventCreate(&search_stop));
   u32 blocks_per_grid
     = round_up<u64>(num_queries, threads_per_block) / threads_per_block;
-  GPU_CHECK(hipEventRecord(search_start));
+  start_timer.record(&gpu_stream);
   hipLaunchKernelGGL(
     d_color_search,
     blocks_per_grid,
     threads_per_block,
     0,
-    nullptr,
+    *static_cast<hipStream_t *>(gpu_stream.get()),
     d_sbwt_index_idxs.get(),
     container->core_kmer_marks.get(),
     container->core_kmer_marks_poppy_layer_0.get(),
@@ -52,14 +48,13 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
     container->num_colors,
     d_results.get()
   );
-  GPU_CHECK(hipEventRecord(search_stop));
+  end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());
   GPU_CHECK(hipDeviceSynchronize());
-  float milliseconds = -1;
-  GPU_CHECK(hipEventElapsedTime(&milliseconds, search_start, search_stop));
+  float millis = start_timer.time_elapsed_ms(end_timer);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
-    format("Batch {} took {} ms to search in the GPU", batch_id, milliseconds)
+    format("Batch {} took {} ms to search in the GPU", batch_id, millis)
   );
 }
 

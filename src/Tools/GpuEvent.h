@@ -9,6 +9,8 @@
 
 #include <memory>
 
+#include "Tools/GpuStream.h"
+
 namespace gpu_utils {
 
 using std::shared_ptr;
@@ -23,7 +25,11 @@ public:
   auto operator=(GpuEvent &) = delete;
   auto operator=(GpuEvent &&) = delete;
   ~GpuEvent();
+  auto record(GpuStream *s = nullptr) -> void;
+  // call this function from the start-timer, and give the end-timer as a
+  // parameter
   [[nodiscard]] auto get() const -> void *;
+  auto time_elapsed_ms(const GpuEvent &e) -> float;
 };
 
 }  // namespace gpu_utils

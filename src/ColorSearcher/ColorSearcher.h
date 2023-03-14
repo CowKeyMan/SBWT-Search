@@ -9,9 +9,13 @@
 #include <memory>
 
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
+#include "Tools/GpuEvent.h"
+#include "Tools/GpuStream.h"
 
 namespace sbwt_search {
 
+using gpu_utils::GpuEvent;
+using gpu_utils::GpuStream;
 using std::shared_ptr;
 
 class ColorSearcher {
@@ -19,6 +23,8 @@ private:
   shared_ptr<GpuColorIndexContainer> container;
   GpuPointer<u64> d_sbwt_index_idxs;
   GpuPointer<u64> d_results;
+  GpuEvent start_timer{}, end_timer{};
+  GpuStream gpu_stream{};
 
 public:
   ColorSearcher(

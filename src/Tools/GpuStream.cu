@@ -4,7 +4,7 @@
 namespace gpu_utils {
 
 // NOLINTNEXTLINE (cppcoreguidelines-pro-type-reinterpret-cast)
-GpuStream::GpuStream(): element(reinterpret_cast<void *>(new hipStream_t{})) {
+GpuStream::GpuStream(): element(static_cast<void *>(new hipStream_t{})) {
   hipStreamCreate(static_cast<hipStream_t *>(element));
 }
 
