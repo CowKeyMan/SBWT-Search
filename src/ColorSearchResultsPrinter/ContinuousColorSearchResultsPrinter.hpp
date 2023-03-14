@@ -173,8 +173,10 @@ protected:
       }
     }
     u64 rbnf_idx = static_cast<u64>(printed_last_read);
-    u64 wbnr = printed_last_read? wbnrs[0]: 0;
-    for (u64 wbnr_idx = static_cast<u64>(printed_last_read); wbnr_idx < wbnrs.size(); ++wbnr_idx) {
+    u64 wbnr = printed_last_read ? wbnrs[0] : 0;
+    for (u64 wbnr_idx = static_cast<u64>(printed_last_read);
+         wbnr_idx < wbnrs.size();
+         ++wbnr_idx) {
       const auto read_idx = wbnr_idx;
       while (rbnfs[rbnf_idx] == read_idx) {
         impl().do_start_next_file();
