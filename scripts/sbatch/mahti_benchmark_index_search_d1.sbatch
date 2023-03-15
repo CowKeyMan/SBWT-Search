@@ -34,6 +34,9 @@
 ## Load in modules
 module load cmake gcc cuda python-data bzip2 git
 
+## By default this is 1, which would halt our program
+unset OMP_NUM_THREADS
+
 chmod +777 scripts/**/*
 export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
 export OUTPUT_FOLDER="${DATETIME}"
@@ -57,9 +60,7 @@ wait < <(jobs -p) # wait for jobs to finish
 t2=$(date +%s%3N)
 
 mkdir -p "benchmark_results/${OUTPUT_FOLDER}"
-echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
+echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
 
-bash -x scripts/benchmark/index_search.sh "${OUTPUT_FOLDER}"
-
+bash -x scripts/benchmark/index_search.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
 cd "${OLD_PWD}"
-cp -r "${LOCAL_SCRATCH}/SBWT-Search/benchmark_results" .

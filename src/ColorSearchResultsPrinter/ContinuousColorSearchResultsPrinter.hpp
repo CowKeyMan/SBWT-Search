@@ -172,7 +172,7 @@ protected:
         results[i] += previous_last_results[i];
       }
     }
-    u64 rbnf_idx = static_cast<u64>(printed_last_read);
+    u64 rbnf_idx = 0;
     u64 wbnr = printed_last_read ? wbnrs[0] : 0;
     for (u64 wbnr_idx = static_cast<u64>(printed_last_read);
          wbnr_idx < wbnrs.size();
