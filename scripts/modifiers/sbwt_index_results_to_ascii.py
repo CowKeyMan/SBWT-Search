@@ -24,7 +24,7 @@ with ExitStack() as stack:
         open(args['input'], mode='r', encoding="utf-8")
     )
     out_file = stack.enter_context(
-        open(args['output_prefix'] + '.txt', mode='wb')
+        open(args['output_prefix'], mode='wb')
     )
     mode_str = 'ascii'
     ver_str = 'v1.0'
@@ -37,5 +37,5 @@ with ExitStack() as stack:
     )
     out_file.write(ver_str.encode('ascii'))
     for i, line in enumerate(in_file):
-        line[-1] = '\n'
+        line = line.strip() + '\n'
         out_file.write(line.encode('ascii'))
