@@ -12,10 +12,7 @@ parser.add_argument(
     '-i', '--input', help='The file to convert', required=True
 )
 parser.add_argument(
-    '-o',
-    '--output',
-    help='Where to store the output.',
-    required=True
+    '-o', '--output', help='Where to store the output.', required=True
 )
 args = vars(parser.parse_args())
 

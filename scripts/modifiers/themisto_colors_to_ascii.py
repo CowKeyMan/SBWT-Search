@@ -40,8 +40,6 @@ with ExitStack() as stack:
     )
     out_file.write(ver_str.encode('ascii'))
     for i, line in enumerate(in_file):
-        if i % 2 == 0:
-            print(i, end=' ', flush=True)
         numbers = [int(x) for x in line.split(' ')]
         out_file.write(
             (' '.join([str(x) for x in (numbers[1:])]) + '\n')
