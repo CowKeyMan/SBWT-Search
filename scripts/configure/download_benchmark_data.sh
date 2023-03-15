@@ -11,29 +11,111 @@
 # https://doi.org/10.1099/mgen.0.000499, https://doi.org/10.1099/mgen.0.000499
 # and https://doi.org/10.1038/s41586-019-1560-1
 
+sbwt_executable=$1
+themisto_executable=$2
 
-mkdir -p benchmark_objects
-cd benchmark_objects
+if [ ! -f "${sbwt_executable}" ]; then
+  echo "sbwt executable not found, required as the first 1st to this script" >&2
+  exit 1
+fi
+if [ ! -f "${themisto_executable}" ]; then
+  echo "themisto executable not found, required as the 2nd argument to this script" >&2
+  exit 1
+fi
+if [ ! -d "benchmark_objects/index"] || [ ! -f "benchmark_objects/index/index.tdbg" ] || [ ! -f "benchmark_objects/index/index_d1.tcolors" ]; then
+  echo "This script expects index.tdbg and index_d1.tcolors in the benchmark_objects/index folder"
+  exit 1
+fi
 
-head -20 ../scripts/configure/full_benchmark_data_list.txt | wget -nc -i -
-# "yes n" skips files if they exist as unzipped already
-yes n | gunzip -k *fastq.gz
+download_files=(`head -20 scripts/configure/full_benchmark_data_list.txt`)
+
+mkdir -p "benchmark_objects/color_search_results_t0.7"
+mkdir -p "benchmark_objects/index"
+mkdir -p "benchmark_objects/index_search_results_d1"
+mkdir -p "benchmark_objects/index_search_results_d20"
+mkdir -p "benchmark_objects/list_files/input"
+mkdir -p "benchmark_objects/list_files/output"
+mkdir -p "benchmark_objects/running"
+mkdir -p "benchmark_objects/unzipped_seqs"
+mkdir -p "benchmark_objects/zipped_seqs"
+cd benchmark_objects/zipped_seqs
+
+# download the files
+for file in "${download_files[@]}"; do
+ wget -nc -q "${file}" -o /dev/null &
+done
+# kill $(jobs -p)  # IN CASE OF EMERGENCY, USE THIS
+wait < <(jobs -p) # wait for jobs to finish
+
+# unzip the downloaded files to proper folder
+files=(`ls`)
+cd ..
+for file in "${files[@]}"; do
+  if [ ! -f "unzipped_seqs/${file}" ]; then
+    gunzip -k -c "zipped_seqs/${file}" > "unzipped_seqs/${file%.*}" &
+  fi
+done
+wait < <(jobs -p)
 
 cd ..
 
-function zipped_files() {
-  find benchmark_objects/*.fastq.gz
-}
+# create sbwt_index from index
+python3 scripts/modifiers/themisto_tdbg_to_sbwt.py -i benchmark_objects/index/index.tdbg -o benchmark_objects/running/index.sbwt
 
-zipped_files > benchmark_objects/combined_reads_zipped.list
-zipped_files | sed -e 's/\.fastq\.gz$/.fastq/' > benchmark_objects/combined_reads_unzipped.list
-zipped_files | sed -e 's/\.fastq\.gz$/.indexes/' > benchmark_objects/combined_indexes_output.list
+# run sbwt on the sequence files
+files=(`cd benchmark_objects/unzipped_seqs && ls`)
+for file in "${files[@]}"; do
+  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.txt" ]; then
+    ${sbwt_executable} search -i benchmark_objects/running/index.sbwt -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/index_search_results_d1/${file%.*}.indexes.sbwt_txt" > /dev/null 2>&1 &
+  fi
+done
+wait < <(jobs -p)
 
-zipped_files | sed -e 's/\.fastq\.gz$/.indexes.txt/' > benchmark_objects/combined_indexes_ascii.list
-zipped_files | sed -e 's/\.fastq\.gz$/.indexes.bin/' > benchmark_objects/combined_indexes_binary.list
+# convert the sbwt output
+files=(`cd benchmark_objects/index_search_results_d1 && ls *.sbwt_txt`)
+for file in "${files[@]}"; do
+  python3 scripts/modifiers/sbwt_index_results_to_ascii.py -i "benchmark_objects/index_search_results_d1/${file}" -o "benchmark_objects/index_search_results_d1/${file%.*}.txt" > /dev/null
+done
+wait < <(jobs -p)
+rm -f benchmark_objects/index_search_results_d1/*.sbwt_txt
 
-zipped_files | sed -e 's/\.fastq\.gz$/.colors.txt/' > benchmark_objects/combined_colors_ascii.list
-zipped_files | sed -e 's/\.fastq\.gz$/.colors.csv/' > benchmark_objects/combined_colors_csv.list
-zipped_files | sed -e 's/\.fastq\.gz$/.colors.bin/' > benchmark_objects/combined_colors_binary.list
+# run themisto on sequence files
+files=(`cd benchmark_objects/unzipped_seqs && ls`)
+mv benchmark_objects/index/index_d1.tcolors benchmark_objects/index/index.tcolors
+for file in "${files[@]}"; do
+  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.txt" ]; then
+    ${themisto_executable} pseudoalign -i benchmark_objects/index/index -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.colors.themisto_txt" --threshold 0.7 --temp-dir benchmark_objects/running &
+  fi
+done
+wait < <(jobs -p)
+mv benchmark_objects/index/index.tcolors benchmark_objects/index/index_d1.tcolors
 
-cd ..
+# convert the colors to this program's format
+files=(`cd benchmark_objects/color_search_results_t0.7/ && ls`)
+for file in "${files[@]}"; do
+  if [ ! -f "benchmark_objects/color_search_results_d1/${file%.*}.txt" ]; then
+    python3 scripts/modifiers/themisto_colors_to_ascii.py -i "benchmark_objects/color_search_results_t0.7/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.txt" &
+  fi
+done
+wait < <(jobs -p)
+
+rm benchmark_objects/color_search_results_t0.7/*.themisto_txt
+
+# populate input list files
+find benchmark_objects/color_search_results_t0.7/* > benchmark_objects/list_files/input/color_search_results.list
+find benchmark_objects/index_search_results_d1/* > benchmark_objects/list_files/input/index_search_results_d1.list
+cp benchmark_objects/list_files/input/index_search_results_d1.list benchmark_objects/list_files/input/index_search_results_d20.list
+sed -i "s/_d1\//_d20\//g" benchmark_objects/list_files/input/index_search_results_d20.list
+find benchmark_objects/zipped_seqs/* > benchmark_objects/list_files/input/zipped_seqs.list
+find benchmark_objects/unzipped_seqs/* > benchmark_objects/list_files/input/unzipped_seqs.list
+
+# populate output list files
+files=(`cd benchmark_objects/unzipped_seqs && ls`)
+printf "" > benchmark_objects/list_files/output/color_search_results.list
+printf "" > benchmark_objects/list_files/output/index_search_results.list
+for file in "${files[@]}"; do
+  echo benchmark_objects/running/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results.list
+  echo benchmark_objects/running/${file%.*}.colors >> benchmark_objects/list_files/output/color_search_results.list
+done
+
+rm benchmark_objects/running/*
