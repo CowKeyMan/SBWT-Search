@@ -12,10 +12,7 @@ parser.add_argument(
     '-i', '--input', help='The file to convert', required=True
 )
 parser.add_argument(
-    '-o',
-    '--output-prefix',
-    help='Where to store the output. ".txt" will be appended to this',
-    required=True
+    '-o', '--output', help='Where to store the output.', required=True
 )
 args = vars(parser.parse_args())
 
@@ -27,7 +24,7 @@ with ExitStack() as stack:
         open(args['input'], mode='r', encoding="utf-8")
     )
     out_file = stack.enter_context(
-        open(args['output_prefix'] + '.txt', mode='wb')
+        open(args['output'], mode='wb')
     )
     mode_str = 'ascii'
     ver_str = 'v1.0'
