@@ -54,7 +54,10 @@ for device in "${devices[@]}"; do
         printf "Size of outputs: "
         ls -lh "benchmark_objects/running" | head -1
         if [ "${printing_mode}" = "ascii" ]; then
-          sed -i 's/-2/-1/g' benchmarl_objects/running/*
+          for file in (`cd benchmark_objects/running/ && ls`); do
+            sed -i 's/-2/-1/g' "benchmark_objects/running/${file}" &
+          done
+          wait < <(jobs -p)
           diff -qr "benchmark_objects/running" "benchmark_objects/index_search_results_d1"
         fi
         rm benchmark_objects/running/*
