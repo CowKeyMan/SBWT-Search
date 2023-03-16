@@ -21,13 +21,13 @@ fi
 
 dbg_file="benchmark_objects/index/index.tdbg"
 input_files=(
-  "benchmark_objects/list_files/input/zipped_seqs.list"
   "benchmark_objects/list_files/input/unzipped_seqs.list"
+  "benchmark_objects/list_files/input/zipped_seqs.list"
 )
 output_file="benchmark_objects/list_files/output/index_search_results.list"
 printing_modes=(
-  "binary"
   "ascii"
+  "binary"
 )
 devices=(
   "nvidia"
@@ -51,6 +51,8 @@ for device in "${devices[@]}"; do
           -s "${streams}" \
           -p "${printing_mode}" \
           >> "${benchmark_out}"
+        printf "Size of outputs: "
+        ls -lh "benchmark_objects/running" | head -1
         if [ "${printing_mode}" = "ascii" ]; then
           sed -i 's/-2/-1/g' benchmarl_objects/running/*
           diff -qr "benchmark_objects/running" "benchmark_objects/index_search_results_d1"
