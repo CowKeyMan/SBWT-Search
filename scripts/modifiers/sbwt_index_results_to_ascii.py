@@ -37,5 +37,8 @@ with ExitStack() as stack:
     )
     out_file.write(ver_str.encode('ascii'))
     for i, line in enumerate(in_file):
-        line = line.strip() + '\n'
+        if i > 0:
+            line = '\n' + line.strip()
+        else:
+            line = line.strip()
         out_file.write(line.encode('ascii'))

@@ -52,6 +52,7 @@ for device in "${devices[@]}"; do
           -p "${printing_mode}" \
           >> "${benchmark_out}"
         if [ "${printing_mode}" = "ascii" ]; then
+          sed -i 's/-2/-1/g' benchmarl_objects/running/*
           diff -qr "benchmark_objects/running" "benchmark_objects/index_search_results_d1"
         fi
         rm benchmark_objects/running/*

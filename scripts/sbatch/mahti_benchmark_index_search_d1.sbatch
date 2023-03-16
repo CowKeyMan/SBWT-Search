@@ -59,7 +59,7 @@ bash ./scripts/build/release_nvidia.sh >&2
 wait < <(jobs -p) # wait for jobs to finish
 t2=$(date +%s%3N)
 
-mkdir -p "benchmark_results/${OUTPUT_FOLDER}"
+mkdir -p "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}"
 echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
 
 bash -x scripts/benchmark/index_search_d1.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"

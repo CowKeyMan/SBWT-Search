@@ -38,7 +38,13 @@ with ExitStack() as stack:
     out_file.write(ver_str.encode('ascii'))
     for i, line in enumerate(in_file):
         numbers = [int(x) for x in line.split(' ')]
-        out_file.write(
-            (' '.join([str(x) for x in (numbers[1:])]) + '\n')
-            .encode('ascii')
-        )
+        if i > 0:
+            out_file.write(
+                ('\n' + ' '.join([str(x) for x in (numbers[1:])]))
+                .encode('ascii')
+            )
+        else:
+            out_file.write(
+                (' '.join([str(x) for x in (numbers[1:])]))
+                .encode('ascii')
+            )
