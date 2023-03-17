@@ -119,9 +119,7 @@ auto IndexSearchMain::get_max_chars_per_batch() -> u64 {
   }
   auto gpu_chars = get_max_chars_per_batch_gpu();
   auto cpu_chars = get_max_chars_per_batch_cpu();
-  return round_down<u64>(
-    min(gpu_chars, cpu_chars) / streams, threads_per_block
-  );
+  return round_down<u64>(min(gpu_chars, cpu_chars), threads_per_block);
 }
 
 auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
@@ -132,7 +130,7 @@ auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
   // 64 for each position where each result is also stored
   // 2 for each base pair since these are bit packed
   const u64 bits_required_per_character = 64 + 2;
-  auto max_chars_per_batch = free / bits_required_per_character;
+  auto max_chars_per_batch = free / bits_required_per_character / streams;
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -175,7 +173,7 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
       * (64.0 + 8.0)
   );
   auto max_chars_per_batch
-    = free_bits / bits_required_per_character / num_components;
+    = free_bits / bits_required_per_character / num_components / streams;
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -305,6 +303,7 @@ auto IndexSearchMain::get_input_output_filenames()
     throw runtime_error("Input and output file sizes differ");
   }
   streams = std::min(args->get_streams(), all_input_filenames.size());
+  Logger::log(Logger::LOG_LEVEL::DEBUG, format("Using {} streams", streams));
   return {
     split_vector(all_input_filenames, streams),
     split_vector(all_output_filenames, streams)};

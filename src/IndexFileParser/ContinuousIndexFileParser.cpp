@@ -173,10 +173,10 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
-      "Batch {} contains {} indexes in {} reads, of which {} are found indexes "
-      "and {} is "
-      "padding. {} indexes were skipped, of which {} is not found and {} is "
-      "invalids.",
+      "Batch {} in stream {} contains {} indexes in {} reads, of which {} are "
+      "found indexes and {} is padding. {} indexes were skipped, of which {} "
+      "is not found and {} is invalids.",
+      stream_id,
       batch_id,
       num_indexes,
       reads,
