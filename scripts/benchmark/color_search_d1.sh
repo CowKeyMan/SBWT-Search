@@ -19,15 +19,14 @@ if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index.t
   exit 1
 fi
 
-dbg_file="benchmark_objects/index/index.tdbg"
+colors_file="benchmark_objects/index/index_d1.tcolors"
 input_files=(
-  "benchmark_objects/list_files/input/unzipped_seqs.list"
-  "benchmark_objects/list_files/input/zipped_seqs.list"
+  "benchmark_objects/list_files/input/index_search_results_d1.list"
 )
-output_file="benchmark_objects/list_files/output/index_search_results.list"
+output_file="benchmark_objects/list_files/output/color_search_results.list"
 printing_modes=(
   "ascii"
-  "binary"
+  # "binary"
 )
 devices=(
   "nvidia"
@@ -44,8 +43,8 @@ for device in "${devices[@]}"; do
       for printing_mode in "${printing_modes[@]}"; do
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device"
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device" >> "${benchmark_out}"
-        ./build/bin/sbwt_search index \
-          -i "${dbg_file}" \
+        ./build/bin/sbwt_search colors \
+          -i "${colors_file}" \
           -q "${input_files}" \
           -o "${output_file}" \
           -s "${streams}" \
@@ -54,12 +53,8 @@ for device in "${devices[@]}"; do
         printf "Size of outputs: "
         ls -lh "benchmark_objects/running" | head -1
         if [ "${printing_mode}" = "ascii" ]; then
-          files=(`cd benchmark_objects/running/ && ls`)
-          for file in ${files[@]}; do
-            sed -i 's/-2/-1/g' "benchmark_objects/running/${file}" &
-          done
-          wait < <(jobs -p)
-          diff -qr "benchmark_objects/running" "benchmark_objects/index_search_results_d1"
+          sed -i 's/-2/-1/g' benchmarl_objects/running/*
+          diff -qr "benchmark_objects/running" "benchmark_objects/color_search_results_t0.7"
         fi
         rm benchmark_objects/running/*
       done

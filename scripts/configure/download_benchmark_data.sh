@@ -22,7 +22,7 @@ if [ ! -f "${themisto_executable}" ]; then
   echo "themisto executable not found, required as the 2nd argument to this script" >&2
   exit 1
 fi
-if [ ! -d "benchmark_objects/index"] || [ ! -f "benchmark_objects/index/index.tdbg" ] || [ ! -f "benchmark_objects/index/index_d1.tcolors" ]; then
+if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index.tdbg" ] || [ ! -f "benchmark_objects/index/index_d1.tcolors" ]; then
   echo "This script expects index.tdbg and index_d1.tcolors in the benchmark_objects/index folder"
   exit 1
 fi
@@ -91,7 +91,7 @@ wait < <(jobs -p)
 mv benchmark_objects/index/index.tcolors benchmark_objects/index/index_d1.tcolors
 
 # convert the colors to this program's format
-files=(`cd benchmark_objects/color_search_results_t0.7/ && ls`)
+files=(`cd benchmark_objects/color_search_results_t0.7/ && ls *.themisto_txt`)
 for file in "${files[@]}"; do
   if [ ! -f "benchmark_objects/color_search_results_d1/${file%.*}.txt" ]; then
     python3 scripts/modifiers/themisto_colors_to_ascii.py -i "benchmark_objects/color_search_results_t0.7/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.txt" &
