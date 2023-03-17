@@ -93,7 +93,7 @@ mv benchmark_objects/index/index.tcolors benchmark_objects/index/index_d1.tcolor
 # convert the colors to this program's format
 files=(`cd benchmark_objects/color_search_results_t0.7/ && ls *.themisto_txt`)
 for file in "${files[@]}"; do
-  if [ ! -f "benchmark_objects/color_search_results_d1/${file%.*}.txt" ]; then
+  if [ ! -f "benchmark_objects/color_search_results_t0.7/${file%.*}.txt" ]; then
     python3 scripts/modifiers/themisto_colors_to_ascii.py -i "benchmark_objects/color_search_results_t0.7/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.txt" &
   fi
 done
