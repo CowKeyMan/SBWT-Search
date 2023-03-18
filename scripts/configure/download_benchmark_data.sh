@@ -65,7 +65,7 @@ python3 scripts/modifiers/themisto_tdbg_to_sbwt.py -i benchmark_objects/index/in
 # run sbwt on the sequence files
 files=(`cd benchmark_objects/unzipped_seqs && ls`)
 for file in "${files[@]}"; do
-  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.txt" ]; then
+  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.indexes.txt" ]; then
     ${sbwt_executable} search -i benchmark_objects/running/index.sbwt -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/index_search_results_d1/${file%.*}.indexes.sbwt_txt" > /dev/null 2>&1 &
   fi
 done
@@ -74,7 +74,9 @@ wait < <(jobs -p)
 # convert the sbwt output
 files=(`cd benchmark_objects/index_search_results_d1 && ls *.sbwt_txt`)
 for file in "${files[@]}"; do
-  python3 scripts/modifiers/sbwt_index_results_to_ascii.py -i "benchmark_objects/index_search_results_d1/${file}" -o "benchmark_objects/index_search_results_d1/${file%.*}.txt" > /dev/null
+  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.txt" ]; then
+    python3 scripts/modifiers/sbwt_index_results_to_ascii.py -i "benchmark_objects/index_search_results_d1/${file}" -o "benchmark_objects/index_search_results_d1/${file%.*}.txt" > /dev/null
+  fi
 done
 wait < <(jobs -p)
 rm -f benchmark_objects/index_search_results_d1/*.sbwt_txt
