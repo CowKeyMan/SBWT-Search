@@ -13,7 +13,7 @@
 #SBATCH --cpus-per-task=32
 ##SBATCH --exclusive
 #SBATCH --mem-per-cpu=14G
-#SBATCH --gres=gpu:1,nvme:300
+#SBATCH --gres=gpu:1
 
 ## Maximum time
 #SBATCH --time=10:00:00
@@ -22,7 +22,7 @@
 ## Load in modules
 ## Note: on lumi, you will need to download and install your own cmake
 module swap craype-x86-rome craype-x86-trento
-module load gcc rocm craype-accel-amd-gfx90a
+module load gcc rocm craype-accel-amd-gfx90a cray-python
 
 ## By default this is 1, which would halt our program
 unset OMP_NUM_THREADS
