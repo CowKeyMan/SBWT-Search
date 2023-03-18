@@ -14,11 +14,14 @@ using math_utils::round_up;
 using std::numeric_limits;
 
 ColorSearcher::ColorSearcher(
-  shared_ptr<GpuColorIndexContainer> container_, u64 max_indexes_per_batch
+  u64 stream_id_,
+  shared_ptr<GpuColorIndexContainer> container_,
+  u64 max_indexes_per_batch
 ):
     container(std::move(container_)),
     d_sbwt_index_idxs(max_indexes_per_batch),
-    d_results(max_indexes_per_batch / gpu_warp_size * container->num_colors) {}
+    d_results(max_indexes_per_batch / gpu_warp_size * container->num_colors),
+    stream_id(stream_id_) {}
 
 auto ColorSearcher::search(
   const vector<u64> &sbwt_index_idxs, vector<u64> &results, u64 batch_id
@@ -44,7 +47,7 @@ auto ColorSearcher::copy_to_gpu(
   u64 batch_id, const vector<u64> &sbwt_index_idxs, vector<u64> &results
 ) -> void {
   Logger::log_timed_event(
-    "SearcherCopyToGpu",
+    format("SearcherCopyToGpu_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
@@ -57,7 +60,9 @@ auto ColorSearcher::copy_to_gpu(
     numeric_limits<u8>::max()
   );
   Logger::log_timed_event(
-    "SearcherCopyToGpu", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
+    format("SearcherCopyToGpu_{}", stream_id),
+    Logger::EVENT_STATE::STOP,
+    format("batch {}", batch_id)
   );
   results.resize(
     sbwt_index_idxs.size() / gpu_warp_size * container->num_colors

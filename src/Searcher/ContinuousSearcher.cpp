@@ -30,7 +30,7 @@ ContinuousSearcher::ContinuousSearcher(
   u64 max_batches,
   u64 max_chars_per_batch_
 ):
-    searcher(std::move(container), max_chars_per_batch_),
+    searcher(stream_id_, std::move(container), max_chars_per_batch_),
     bit_seq_producer(std::move(bit_seq_producer_)),
     positions_producer(std::move(positions_producer_)),
     max_chars_per_batch(max_chars_per_batch_),

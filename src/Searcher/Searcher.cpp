@@ -12,11 +12,14 @@ using log_utils::Logger;
 using math_utils::round_up;
 
 Searcher::Searcher(
-  shared_ptr<GpuSbwtContainer> container, u64 max_chars_per_batch
+  u64 stream_id_,
+  shared_ptr<GpuSbwtContainer> container,
+  u64 max_chars_per_batch
 ):
     container(std::move(container)),
     d_bit_seqs(max_chars_per_batch / u64_bits * 2),
-    d_kmer_positions(max_chars_per_batch) {}
+    d_kmer_positions(max_chars_per_batch),
+    stream_id(stream_id_) {}
 
 auto Searcher::search(
   const vector<u64> &bit_seqs,
@@ -48,7 +51,7 @@ auto Searcher::copy_to_gpu(
   vector<u64> &results
 ) -> void {
   Logger::log_timed_event(
-    "SearcherCopyToGpu",
+    format("SearcherCopyToGpu_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
@@ -60,7 +63,9 @@ auto Searcher::copy_to_gpu(
     kmer_positions.size(), padded_query_size - kmer_positions.size(), 0
   );
   Logger::log_timed_event(
-    "SearcherCopyToGpu", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
+    format("SearcherCopyToGpu_{}", stream_id),
+    Logger::EVENT_STATE::STOP,
+    format("batch {}", batch_id)
   );
   results.resize(kmer_positions.size());
 }
@@ -69,7 +74,7 @@ auto Searcher::copy_from_gpu(
   vector<u64> &results, u64 batch_id, const vector<u64> &kmer_positions
 ) -> void {
   Logger::log_timed_event(
-    "SearcherCopyFromGpu",
+    format("SearcherCopyFromGpu_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
@@ -77,7 +82,7 @@ auto Searcher::copy_from_gpu(
     results.data(), kmer_positions.size(), gpu_stream
   );
   Logger::log_timed_event(
-    "SearcherCopyFromGpu",
+    format("SearcherCopyFromGpu_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_id)
   );

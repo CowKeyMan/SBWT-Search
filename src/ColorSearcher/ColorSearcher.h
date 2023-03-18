@@ -25,10 +25,13 @@ private:
   GpuPointer<u64> d_results;
   GpuEvent start_timer{}, end_timer{};
   GpuStream gpu_stream{};
+  u64 stream_id;
 
 public:
   ColorSearcher(
-    shared_ptr<GpuColorIndexContainer> container, u64 max_indexes_per_batch
+    u64 stream_id_,
+    shared_ptr<GpuColorIndexContainer> container,
+    u64 max_indexes_per_batch
   );
 
   auto

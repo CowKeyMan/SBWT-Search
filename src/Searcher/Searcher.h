@@ -25,9 +25,14 @@ private:
   GpuPointer<u64> d_kmer_positions;
   GpuEvent start_timer{}, end_timer{};
   GpuStream gpu_stream;
+  u64 stream_id;
 
 public:
-  Searcher(shared_ptr<GpuSbwtContainer> container, u64 max_chars_per_batch);
+  Searcher(
+    u64 stream_id_,
+    shared_ptr<GpuSbwtContainer> container,
+    u64 max_chars_per_batch
+  );
 
   auto search(
     const vector<u64> &bit_seqs,

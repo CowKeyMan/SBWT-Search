@@ -20,7 +20,9 @@ ContinuousColorSearcher::ContinuousColorSearcher(
   u64 num_colors_
 ):
     SharedBatchesProducer<ColorSearchResultsBatch>(max_batches),
-    searcher(std::move(color_index_container_), max_indexes_per_batch_),
+    searcher(
+      stream_id_, std::move(color_index_container_), max_indexes_per_batch_
+    ),
     indexes_batch_producer(std::move(indexes_batch_producer_)),
     max_indexes_per_batch(max_indexes_per_batch_),
     num_colors(num_colors_),

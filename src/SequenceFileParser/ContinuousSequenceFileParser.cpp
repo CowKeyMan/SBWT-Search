@@ -158,8 +158,8 @@ auto ContinuousSequenceFileParser::do_at_batch_finish() -> void {
     Logger::LOG_LEVEL::DEBUG,
     format(
       "Batch {} in stream {} contains {} indexes in {} reads",
-      stream_id,
       batch_id,
+      stream_id,
       seq_size,
       strings_in_batch
     )
