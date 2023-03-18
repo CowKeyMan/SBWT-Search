@@ -81,7 +81,7 @@ rm -f benchmark_objects/index_search_results_d1/*.sbwt_txt
 
 # run themisto on sequence files
 files=(`cd benchmark_objects/unzipped_seqs && ls`)
-mv benchmark_objects/index/index_d1.tcolors benchmark_objects/index/index.tcolors
+cp benchmark_objects/index/index_d1.tcolors benchmark_objects/index/index.tcolors
 for file in "${files[@]}"; do
   if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.colors.txt" ]; then
     ${themisto_executable} pseudoalign -i benchmark_objects/index/index -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.colors.themisto_txt" --threshold 0.7 --temp-dir benchmark_objects/running &
