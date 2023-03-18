@@ -5,7 +5,7 @@
 # supercomputer by CSC: https://research.csc.fi/-/mahti
 
 #SBATCH --job-name=SBWT_indexes_d1
-#SBATCH --account=dongelr1
+#SBATCH --account=project_462000116
 #SBATCH --error indexes_err.txt
 #SBATCH --output indexes_out.txt
 #SBATCH --nodes 1
@@ -13,16 +13,16 @@
 #SBATCH --cpus-per-task=32
 ##SBATCH --exclusive
 #SBATCH --mem-per-cpu=14G
-#SBATCH --gres=gpu:a100:1,nvme:300
+#SBATCH --gres=gpu:1,nvme:300
 
-##SBATCH --partition=gputest
-##SBATCH --time=00:15:00
-
+## Maximum time
 #SBATCH --time=10:00:00
-#SBATCH --partition=gpusmall
+#SBATCH --partition=standard-g
 
 ## Load in modules
-module load cmake gcc cuda python-data bzip2 git
+## Note: on lumi, you will need to download and install your own cmake
+module swap craype-x86-rome craype-x86-trento
+module load gcc rocm craype-accel-amd-gfx90a
 
 ## By default this is 1, which would halt our program
 unset OMP_NUM_THREADS
@@ -44,12 +44,12 @@ cp -r "${OLD_PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts" &
 cp "${OLD_PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt" &
 wait < <(jobs -p) # wait for jobs to finish
 cp -r "${OLD_PWD}/benchmark_objects/" "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects" &
-bash ./scripts/build/release_nvidia.sh >&2
+bash ./scripts/build/release_amd.sh >&2
 wait < <(jobs -p) # wait for jobs to finish
 t2=$(date +%s%3N)
 
 mkdir -p "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}"
 echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
 
-bash -x scripts/benchmark/index_search_d1.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt" "nvidia"
+bash -x scripts/benchmark/index_search_d1.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt" "amd"
 cd "${OLD_PWD}"

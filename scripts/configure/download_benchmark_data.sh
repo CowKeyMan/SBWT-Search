@@ -86,10 +86,9 @@ files=(`cd benchmark_objects/unzipped_seqs && ls`)
 cp benchmark_objects/index/index_d1.tcolors benchmark_objects/index/index.tcolors
 for file in "${files[@]}"; do
   if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.colors.txt" ]; then
-    ${themisto_executable} pseudoalign -i benchmark_objects/index/index -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.colors.themisto_txt" --threshold 0.7 --temp-dir benchmark_objects/running &
+    ${themisto_executable} pseudoalign -i benchmark_objects/index/index -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.colors.themisto_txt" --threshold 0.7 --temp-dir benchmark_objects/running
   fi
 done
-wait < <(jobs -p)
 mv benchmark_objects/index/index.tcolors benchmark_objects/index/index_d1.tcolors
 
 # convert the colors to this program's format

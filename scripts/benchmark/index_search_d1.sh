@@ -4,8 +4,8 @@
 # scipts/sbatch/benchmark.sbatch It is expected that the *.tdbg file is within
 # benchmark_objects/index folder
 
-if [ $# -ne 1 ]; then
-  echo "Please enter a single argument to this script, which is the output file location"
+if [ $# -ne 2 ]; then
+  echo "Usage: ./scripts/benchmark/index_search_d1.sh <output_file> <nvidia|amd>"
   exit 1
 fi
 
@@ -29,11 +29,14 @@ printing_modes=(
   "ascii"
   "binary"
 )
-devices=(
-  "nvidia"
-  "cpu"
-  # "amd"
-)
+
+if [ $2 = "nvidia" ]; then
+  devices=("nvidia")
+elif [ $2 = "amd" ]; then
+  devices=("amd")
+else
+  echo "2nd argument is incorrect"
+fi
 
 streams_options=(1 2 4 6 8 10 12 14 16)
 
