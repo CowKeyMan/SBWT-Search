@@ -117,9 +117,13 @@ auto IndexSearchMain::get_max_chars_per_batch() -> u64 {
     cerr << "ERROR: Initialise batches before max_chars_per_batch" << endl;
     std::quick_exit(1);
   }
-  auto gpu_chars = get_max_chars_per_batch_gpu();
   auto cpu_chars = get_max_chars_per_batch_cpu();
-  return round_down<u64>(min(gpu_chars, cpu_chars), threads_per_block);
+#if defined(__HIP_CPU_RT__)
+  auto gpu_chars = numeric_limits<u64>::max();
+#else
+  auto gpu_chars = get_max_chars_per_batch_gpu();
+#endif
+  return round_down<u64>(min(cpu_chars, gpu_chars), threads_per_block);
 }
 
 auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
@@ -169,8 +173,11 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
   // 8 bits per read for each newline
   const u64 bits_required_per_character = static_cast<u64>(
     static_cast<double>(8 + 64 + 64 + 8 + 2 + (20 + 1) * 8)
-    + (1.0 / static_cast<double>(get_args().get_base_pairs_per_read()))
-      * (64.0 + 8.0)
+      + (1.0 / static_cast<double>(get_args().get_base_pairs_per_read()))
+        * (64.0 + 8.0)
+#if defined(__HIP_CPU_RT__)  // include gpu required memory as well
+      + 64 + 2;
+#endif
   );
   auto max_chars_per_batch
     = free_bits / bits_required_per_character / num_components / streams;
