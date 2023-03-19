@@ -50,6 +50,7 @@ for device in "${devices[@]}"; do
           -o "${output_file}" \
           -s "${streams}" \
           -p "${printing_mode}" \
+          -t 0.7 \
           >> "${benchmark_out}"
         printf "Size of outputs: "
         ls -lh "benchmark_objects/running" | head -1
