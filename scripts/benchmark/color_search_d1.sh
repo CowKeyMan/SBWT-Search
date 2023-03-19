@@ -2,7 +2,7 @@
 
 # Run the benchmark_main several times and save the results to a file. Called by
 # scipts/sbatch/benchmark.sbatch It is expected that the *.tdbg file is within
-# benchmark_objects/index folder
+# benchmark_objects/colors folder
 
 if [ $# -ne 1 ]; then
   echo "Please enter a single argument to this script, which is the output file location"
@@ -14,8 +14,8 @@ export SPDLOG_LEVEL=TRACE
 
 benchmark_out="$1"
 
-if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index.tdbg" ]; then
-  echo "This script expects a 'benchmark_objects/index' folder with 'index.tdbg' to be present within that folder"
+if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index_d1.tcolors" ]; then
+  echo "This script expects a 'benchmark_objects/index' folder with 'index_d1.tcolors' to be present within that folder"
   exit 1
 fi
 
@@ -30,11 +30,11 @@ printing_modes=(
 )
 devices=(
   "nvidia"
-  "cpu"
+  # "cpu"
   # "amd"
 )
 
-streams_options=(1 2 4 6 8 10 12 14 16)
+streams_options=(1 2 3 4 5 8 12 16)
 
 for device in "${devices[@]}"; do
   ./scripts/build/release_${device}.sh >&2
@@ -53,7 +53,6 @@ for device in "${devices[@]}"; do
         printf "Size of outputs: "
         ls -lh "benchmark_objects/running" | head -1
         if [ "${printing_mode}" = "ascii" ]; then
-          sed -i 's/-2/-1/g' benchmarl_objects/running/*
           diff -qr "benchmark_objects/running" "benchmark_objects/color_search_results_t0.7"
         fi
         rm benchmark_objects/running/*
