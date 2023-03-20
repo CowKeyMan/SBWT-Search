@@ -33,11 +33,15 @@ auto ColorSearcher::search(
   copy_to_gpu(batch_id, sbwt_index_idxs, results);
   if (!sbwt_index_idxs.empty()) {
     Logger::log_timed_event(
-      "SearcherSearch", Logger::EVENT_STATE::START, format("batch {}", batch_id)
+      format("SearcherSearch_{}", stream_id),
+      Logger::EVENT_STATE::START,
+      format("batch {}", batch_id)
     );
     launch_search_kernel(sbwt_index_idxs.size(), batch_id);
     Logger::log_timed_event(
-      "SearcherSearch", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
+      format("SearcherSearch_{}", stream_id),
+      Logger::EVENT_STATE::STOP,
+      format("batch {}", batch_id)
     );
     copy_from_gpu(results, batch_id);
   }
@@ -71,13 +75,13 @@ auto ColorSearcher::copy_to_gpu(
 
 auto ColorSearcher::copy_from_gpu(vector<u64> &results, u64 batch_id) -> void {
   Logger::log_timed_event(
-    "SearcherCopyFromGpu",
+    format("SearcherCopyFromGpu_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
   d_results.copy_to(results, results.size());
   Logger::log_timed_event(
-    "SearcherCopyFromGpu",
+    format("SearcherCopyFromGpu_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_id)
   );

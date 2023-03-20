@@ -51,7 +51,7 @@ auto ContinuousColorSearcher::generate() -> void {
 auto ContinuousColorSearcher::do_at_batch_start() -> void {
   SharedBatchesProducer<ColorSearchResultsBatch>::do_at_batch_start();
   Logger::log_timed_event(
-    format("ColorSearcher_{}", stream_id),
+    format("Searcher_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", get_batch_id())
   );
@@ -59,7 +59,7 @@ auto ContinuousColorSearcher::do_at_batch_start() -> void {
 
 auto ContinuousColorSearcher::do_at_batch_finish() -> void {
   Logger::log_timed_event(
-    format("ColorSearcher_{}", stream_id),
+    format("Searcher_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", get_batch_id())
   );

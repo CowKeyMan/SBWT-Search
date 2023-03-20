@@ -92,14 +92,14 @@ public:
     impl().do_start_next_file();
     for (u64 batch_id = 0; get_batch(); ++batch_id) {
       Logger::log_timed_event(
-        format("ColorSearchResultsPrinter_{}", stream_id),
+        format("ResultsPrinter_{}", stream_id),
         Logger::EVENT_STATE::START,
         format("batch {}", batch_id)
       );
       printed_last_read = false;
       process_batch();
       Logger::log_timed_event(
-        format("ColorSearchResultsPrinter_{}", stream_id),
+        format("ResultsPrinter_{}", stream_id),
         Logger::EVENT_STATE::STOP,
         format("batch {}", batch_id)
       );
