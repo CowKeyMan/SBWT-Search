@@ -51,7 +51,7 @@ wait < <(jobs -p) # wait for jobs to finish
 files=(`ls`)
 cd ..
 for file in "${files[@]}"; do
-  if [ ! -f "unzipped_seqs/${file}" ]; then
+  if [ ! -f "unzipped_seqs/${file%.*}" ]; then
     gunzip -k -c "zipped_seqs/${file}" > "unzipped_seqs/${file%.*}" &
   fi
 done
