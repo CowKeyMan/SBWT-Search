@@ -205,35 +205,39 @@ auto ColorSearchMain::get_components(
     vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
     vector<shared_ptr<ContinuousColorSearchResultsPrinter>>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
-  vector<shared_ptr<ContinuousIndexFileParser>> index_file_parsers;
-  vector<shared_ptr<ContinuousColorSearcher>> searchers;
-  vector<shared_ptr<ContinuousColorResultsPostProcessor>> post_processors;
-  vector<shared_ptr<ContinuousColorSearchResultsPrinter>> results_printers;
-  for (u64 i = 0; i < split_input_filenames.size(); ++i) {
-    index_file_parsers.push_back(make_shared<ContinuousIndexFileParser>(
+  vector<shared_ptr<ContinuousIndexFileParser>> index_file_parsers(streams);
+  vector<shared_ptr<ContinuousColorSearcher>> searchers(streams);
+  vector<shared_ptr<ContinuousColorResultsPostProcessor>> post_processors(
+    streams
+  );
+  vector<shared_ptr<ContinuousColorSearchResultsPrinter>> results_printers(
+    streams
+  );
+  for (u64 i = 0; i < streams; ++i) {
+    index_file_parsers[i] = make_shared<ContinuousIndexFileParser>(
       i,
       num_components,
       max_indexes_per_batch,
       max_reads_per_batch,
       gpu_warp_size,
       split_input_filenames[i]
-    ));
-    searchers.push_back(make_shared<ContinuousColorSearcher>(
+    );
+    searchers[i] = make_shared<ContinuousColorSearcher>(
       i,
       gpu_container,
       index_file_parsers[i]->get_indexes_batch_producer(),
       max_indexes_per_batch,
       num_components,
       gpu_container->num_colors
-    ));
-    post_processors.push_back(make_shared<ContinuousColorResultsPostProcessor>(
+    );
+    post_processors[i] = make_shared<ContinuousColorResultsPostProcessor>(
       i,
       searchers[i],
       index_file_parsers[i]->get_warps_before_new_read_batch_producer(),
       num_components,
       gpu_container->num_colors
-    ));
-    results_printers.push_back(make_shared<ContinuousColorSearchResultsPrinter>(
+    );
+    results_printers[i] = make_shared<ContinuousColorSearchResultsPrinter>(
       i,
       index_file_parsers[i]->get_colors_interval_batch_producer(),
       index_file_parsers[i]->get_read_statistics_batch_producer(),
@@ -243,7 +247,7 @@ auto ColorSearchMain::get_components(
       get_args().get_threshold(),
       get_args().get_include_not_found(),
       get_args().get_include_invalid()
-    ));
+    );
   }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
   return {index_file_parsers, searchers, post_processors, results_printers};

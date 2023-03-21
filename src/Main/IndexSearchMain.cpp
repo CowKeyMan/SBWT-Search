@@ -196,8 +196,8 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
 
 auto IndexSearchMain::get_components(
   const shared_ptr<GpuSbwtContainer> &gpu_container,
-  const vector<vector<string>> &split_input_filenames,
-  const vector<vector<string>> &split_output_filenames
+  const vector<vector<string>> &input_filenames,
+  const vector<vector<string>> &output_filenames
 )
   -> std::tuple<
     vector<shared_ptr<ContinuousSequenceFileParser>>,
@@ -206,23 +206,27 @@ auto IndexSearchMain::get_components(
     vector<shared_ptr<ContinuousSearcher>>,
     vector<ResultsPrinter>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
-  vector<shared_ptr<ContinuousSequenceFileParser>> sequence_file_parsers;
-  vector<shared_ptr<ContinuousSeqToBitsConverter>> seq_to_bits_converters;
-  vector<shared_ptr<ContinuousPositionsBuilder>> positions_builders;
-  vector<shared_ptr<ContinuousSearcher>> searchers;
-  vector<ResultsPrinter> results_printers;
-  for (u64 i = 0; i < split_input_filenames.size(); ++i) {
+  vector<shared_ptr<ContinuousSequenceFileParser>> sequence_file_parsers(streams
+  );
+  vector<shared_ptr<ContinuousSeqToBitsConverter>> seq_to_bits_converters(
+    streams
+  );
+  vector<shared_ptr<ContinuousPositionsBuilder>> positions_builders(streams);
+  vector<shared_ptr<ContinuousSearcher>> searchers(streams);
+  vector<ResultsPrinter> results_printers(streams);
+#pragma omp parallel for
+  for (u64 i = 0; i < streams; ++i) {
     Logger::log_timed_event(
       format("SequenceFileParserAllocator_{}", i), Logger::EVENT_STATE::START
     );
-    sequence_file_parsers.push_back(make_shared<ContinuousSequenceFileParser>(
+    sequence_file_parsers[i] = make_shared<ContinuousSequenceFileParser>(
       i,
-      split_input_filenames[i],
+      input_filenames[i],
       kmer_size,
       max_chars_per_batch,
       max_reads_per_batch,
       num_components
-    ));
+    );
     Logger::log_timed_event(
       format("SequenceFileParserAllocator_{}", i), Logger::EVENT_STATE::STOP
     );
@@ -230,14 +234,14 @@ auto IndexSearchMain::get_components(
     Logger::log_timed_event(
       format("SeqToBitsConverterAllocator_{}", i), Logger::EVENT_STATE::START
     );
-    seq_to_bits_converters.push_back(make_shared<ContinuousSeqToBitsConverter>(
+    seq_to_bits_converters[i] = make_shared<ContinuousSeqToBitsConverter>(
       i,
       sequence_file_parsers[i]->get_string_sequence_batch_producer(),
       get_threads(),
       kmer_size,
       max_chars_per_batch,
       num_components
-    ));
+    );
     Logger::log_timed_event(
       format("SeqToBitsConverterAllocator_{}", i), Logger::EVENT_STATE::STOP
     );
@@ -245,13 +249,13 @@ auto IndexSearchMain::get_components(
     Logger::log_timed_event(
       format("PositionsBuilderAllocator_{}", i), Logger::EVENT_STATE::START
     );
-    positions_builders.push_back(make_shared<ContinuousPositionsBuilder>(
+    positions_builders[i] = make_shared<ContinuousPositionsBuilder>(
       i,
       sequence_file_parsers[i]->get_string_break_batch_producer(),
       kmer_size,
       max_chars_per_batch,
       num_components
-    ));
+    );
     Logger::log_timed_event(
       format("PositionsBuilderAllocator_{}", i), Logger::EVENT_STATE::STOP
     );
@@ -259,14 +263,14 @@ auto IndexSearchMain::get_components(
     Logger::log_timed_event(
       format("SearcherAllocator_{}", i), Logger::EVENT_STATE::START
     );
-    searchers.push_back(make_shared<ContinuousSearcher>(
+    searchers[i] = make_shared<ContinuousSearcher>(
       i,
       gpu_container,
       seq_to_bits_converters[i]->get_bits_producer(),
       positions_builders[i],
       num_components,
       max_chars_per_batch
-    ));
+    );
     Logger::log_timed_event(
       format("SearcherAllocator_{}", i), Logger::EVENT_STATE::STOP
     );
@@ -274,13 +278,13 @@ auto IndexSearchMain::get_components(
     Logger::log_timed_event(
       format("ResultsPrinterAllocator_{}", i), Logger::EVENT_STATE::START
     );
-    results_printers.push_back(get_results_printer(
+    results_printers[i] = get_results_printer(
       i,
       searchers[i],
       sequence_file_parsers[i]->get_interval_batch_producer(),
       seq_to_bits_converters[i]->get_invalid_chars_producer(),
-      split_output_filenames[i]
-    ));
+      output_filenames[i]
+    );
     Logger::log_timed_event(
       format("ResultsPrinterAllocator_{}", i), Logger::EVENT_STATE::STOP
     );
