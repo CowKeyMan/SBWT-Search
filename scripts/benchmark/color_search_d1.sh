@@ -19,6 +19,8 @@ if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index_d
   exit 1
 fi
 
+python3 -m pip install -q prtpy
+
 colors_file="benchmark_objects/index/index_d1.tcolors"
 input_files=(
   "benchmark_objects/list_files/input/index_search_results_d1.list"
@@ -35,13 +37,17 @@ else
   echo "2nd argument is incorrect"
 fi
 
-streams_options=(1 2 3 4 5 8 12 16)
+streams_options=(1 2 3 4)
 
 for device in "${devices[@]}"; do
   ./scripts/build/release_${device}.sh >&2
   for streams in "${streams_options[@]}"; do
     for input_file in "${input_files[@]}"; do
       for printing_mode in "${printing_modes[@]}"; do
+        python3 scripts/configure/partition_for_streams.py \
+          -i ${input_files} \
+          -o ${output_file} \
+          -p ${streams}
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device"
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device" >> "${benchmark_out}"
         ./build/bin/sbwt_search colors \

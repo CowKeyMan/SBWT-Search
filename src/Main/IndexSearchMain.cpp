@@ -334,16 +334,21 @@ auto IndexSearchMain::get_input_output_filenames()
   FilenamesParser filenames_parser(
     get_args().get_query_file(), get_args().get_output_file()
   );
-  auto all_input_filenames = filenames_parser.get_input_filenames();
-  auto all_output_filenames = filenames_parser.get_output_filenames();
-  if (all_input_filenames.size() != all_output_filenames.size()) {
+  auto input_filenames = filenames_parser.get_input_filenames();
+  auto output_filenames = filenames_parser.get_output_filenames();
+  if (input_filenames.size() != output_filenames.size()) {
     throw runtime_error("Input and output file sizes differ");
   }
-  streams = std::min(args->get_streams(), all_input_filenames.size());
+  for (u64 i = 0; i < input_filenames.size(); ++i) {
+    if (input_filenames[i].size() != output_filenames[i].size()) {
+      throw runtime_error(
+        format("Input and output partition {} is not of equal size", i)
+      );
+    }
+  }
+  streams = input_filenames.size();
   Logger::log(Logger::LOG_LEVEL::DEBUG, format("Using {} streams", streams));
-  return {
-    split_vector(all_input_filenames, streams),
-    split_vector(all_output_filenames, streams)};
+  return {input_filenames, output_filenames};
 }
 
 auto IndexSearchMain::run_components(

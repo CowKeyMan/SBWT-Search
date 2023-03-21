@@ -53,25 +53,54 @@ function run_tests() {
   rm test_objects/full_pipeline/color_search/actual/*
 }
 
+# populate combined list
+combined_input_file=test_objects/full_pipeline/color_search/combined_input.list
+combined_output_file=test_objects/full_pipeline/color_search/combined_output.list
+printf "" > ${combined_input_file}
+printf "" > ${combined_output_file}
+input_files=(`cd test_objects/full_pipeline/color_search/ && ls *indexes*.txt`)
+output_files=(`cd test_objects/full_pipeline/color_search/ && ls *.fna`)
+for file in ${input_files[@]}; do
+  echo test_objects/full_pipeline/color_search/${file} >> ${combined_input_file}
+done
+for file in ${output_files[@]}; do
+  echo test_objects/full_pipeline/color_search/actual/${file%.*} >> ${combined_output_file}
+done
 
 # build
 for streams in {1..5}; do
   echo "Running combined with streams = ${streams}"
   for mode in ${modes[@]}; do
-    ./build/bin/sbwt_search colors -o test_objects/full_pipeline/color_search/combined_output.list -i test_objects/themisto_example/GCA_combined_d1.tcolors -q test_objects/full_pipeline/color_search/combined_input.list -s ${streams} -p ${mode} -t 0.7 -c 0.1
+    python3 scripts/configure/partition_for_streams.py \
+      -i ${combined_input_file} \
+      -o ${combined_output_file} \
+      -p ${streams}
+    ./build/bin/sbwt_search colors \
+      -o test_objects/full_pipeline/color_search/combined_output.list \
+      -i test_objects/themisto_example/GCA_combined_d1.tcolors \
+      -q test_objects/full_pipeline/color_search/combined_input.list \
+      -p ${mode} \
+      -t 0.7 \
+      -c 0.1
   done
   run_tests
 done
 
 echo "Running individually"
-input_files=(`cat test_objects/full_pipeline/color_search/combined_input.list`)
-output_files=(`cat test_objects/full_pipeline/color_search/combined_output.list`)
 for mode in ${modes[@]}; do
   for i in ${!input_files[@]}; do
-    ./build/bin/sbwt_search colors -o "${output_files[i]}" -i test_objects/themisto_example/GCA_combined_d1.tcolors -q "${input_files[i]}" -s 1 -p ${mode} -t 0.7 -c 0.1
+    ./build/bin/sbwt_search colors \
+      -q "test_objects/full_pipeline/color_search/${input_files[i]}" \
+      -i test_objects/themisto_example/GCA_combined_d1.tcolors \
+      -o "test_objects/full_pipeline/color_search/actual/${output_files[i]%.*}"  \
+      -p ${mode} \
+      -t 0.7 \
+      -c 0.1
   done
 done
 run_tests
+
+rm test_objects/full_pipeline/color_search/combined*.list
 
 if [[ ${bad_exits} -gt 0 ]]; then
   exit 1

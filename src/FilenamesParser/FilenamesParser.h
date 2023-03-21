@@ -18,16 +18,16 @@ using std::vector;
 
 class FilenamesParser {
 private:
-  vector<string> input_filenames, output_filenames;
+  vector<vector<string>> input_filenames, output_filenames;
 
 public:
   FilenamesParser(const string &input_filename, const string &output_filename);
-  auto get_output_filenames() -> vector<string>;
-  auto get_input_filenames() -> vector<string>;
+  auto get_output_filenames() -> vector<vector<string>>;
+  auto get_input_filenames() -> vector<vector<string>>;
 
 private:
-  auto is_txt(const string &filename) -> bool;
-  auto file_lines_to_vector(const string &filename) -> vector<string>;
+  auto is_list(const string &filename) -> bool;
+  auto file_lines_to_vector(const string &filename) -> vector<vector<string>>;
 };
 }  // namespace sbwt_search
 

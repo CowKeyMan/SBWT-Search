@@ -15,7 +15,6 @@ import argparse
 import sys
 from collections import defaultdict
 from contextlib import ExitStack
-import prtpy
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -51,22 +50,32 @@ def get_all_files(path: str) -> list[str]:
     return result
 
 
+def partition_numbers(
+    bins: int, items: list[float]
+) -> list[list[float]]:
+    result = [[] for x in range(bins)]
+    items = sorted(items, reverse=True)
+    for item in items:
+        min_bin, min_bin_size = -1, float('inf')
+        for i, b in enumerate(result):
+            if sum(b) < min_bin_size:
+                min_bin, min_bin_size = i, sum(b)
+        result[min_bin].append(item)
+    return result
+
+
 input_files = get_all_files(args['input'])
 output_files = get_all_files(args['output'])
 
 if len(input_files) != len(output_files):
-    print("Number of input and output files differ")
+    print("Number of input and output files differ", file=sys.stderr)
     sys.exit(1)
 
 size_to_files = defaultdict(list)
 for in_file, out_file in zip(input_files, output_files):
     size_to_files[Path(in_file).stat().st_size].append((in_file, out_file))
 
-bins = prtpy.partition(
-    algorithm=prtpy.partitioning.greedy,
-    numbins=args['partitions'],
-    items=size_to_files.keys()
-)
+bins = partition_numbers(bins=args['partitions'], items=size_to_files.keys())
 
 with ExitStack() as stack:
     f_in = stack.enter_context(

@@ -16,3 +16,6 @@ disable=
   missing-class-docstring,
   too-few-public-methods,
   redefined-outer-name,
+  attribute-defined-outside-init,
+  too-many-instance-attributes,
+  too-many-arguments,

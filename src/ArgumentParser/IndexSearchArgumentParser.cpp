@@ -57,9 +57,6 @@ auto IndexSearchArgumentParser::create_options() -> void {
       "process, so that intial memory allocation is faster. The format of this value is the same as that for the "
       "unavailable-main-memory option",
       value<string>()->default_value(to_string(ULLONG_MAX))
-    )("s,streams",
-      "The number of files to read and write in parallel. This implies dividing the available memory into <memory>/<streams> pieces, so each batch will process less items at a time, but there is instead more parallelism. This should not be too high nor too large, as the number of threads spawned per file is already large, and it also depends on your disk drive. The default is 4.",
-      value<u64>()->default_value("4")
     )
     ("c,cpu-memory-percentage", "After calculating the memory usage using the formula: 'min(system_max_memory, max-memory) - unavailable-max-memory', we multiply that value by memory-percentage, which is this parameter. This parameter is useful in case the program is unexpectedly taking too much memory. By default it is 0.5, which indicates that 50\% of available memory will be used. Note, the total memory used is not set in store, and this is more a minimum. The actual memory used will be slightly more for smal variables and other registers.", value<double>()->default_value("0.5")
      )("r,base-pairs-per-read", "The approximate number of base pairs in every read. This is necessary because we need to store 'checkpoints' where each read starts and ends in our list of base pairs. As such we must allocate memory for it. By defalt, this value is 100, meaning that we would then allocate enough memory for 1 unisgned integer per 100 base pairs. This option is available in case you need more memory than that.", value<u64>()->default_value("100")
@@ -114,9 +111,6 @@ auto IndexSearchArgumentParser::get_unavailable_ram() const -> u64 {
 auto IndexSearchArgumentParser::get_max_cpu_memory() const -> u64 {
   return MemoryUnitsParser::convert(get_args()["max-main-memory"].as<string>());
 }
-auto IndexSearchArgumentParser::get_streams() const -> u64 {
-  return get_args()["streams"].as<u64>();
-}
 auto IndexSearchArgumentParser::get_print_mode() const -> string {
   return get_args()["print-mode"].as<string>();
 }
@@ -150,8 +144,7 @@ auto IndexSearchArgumentParser::get_required_options() const -> vector<string> {
     "output-prefix",
     "max-main-memory",
     "unavailable-main-memory",
-    "print-mode",
-    "streams"};
+    "print-mode"};
 }
 
 };  // namespace sbwt_search
