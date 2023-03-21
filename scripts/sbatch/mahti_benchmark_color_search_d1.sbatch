@@ -6,8 +6,8 @@
 
 #SBATCH --job-name=SBWT_colors_d1
 #SBATCH --account=dongelr1
-#SBATCH --error indexes_err.txt
-#SBATCH --output indexes_out.txt
+#SBATCH --error colors_d1_err.txt
+#SBATCH --output colors_d1_out.txt
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=32
@@ -18,7 +18,7 @@
 ##SBATCH --partition=gputest
 ##SBATCH --time=00:15:00
 
-#SBATCH --time=12:00:00
+#SBATCH --time=3:00:00
 #SBATCH --partition=gpusmall
 
 ## Load in modules
