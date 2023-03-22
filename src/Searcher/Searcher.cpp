@@ -34,11 +34,15 @@ auto Searcher::search(
   copy_to_gpu(batch_id, bit_seqs, kmer_positions, results);
   if (!kmer_positions.empty()) {
     Logger::log_timed_event(
-      "SearcherSearch", Logger::EVENT_STATE::START, format("batch {}", batch_id)
+      format("SearcherSearch_{}", stream_id),
+      Logger::EVENT_STATE::START,
+      format("batch {}", batch_id)
     );
     launch_search_kernel(kmer_positions.size(), batch_id);
     Logger::log_timed_event(
-      "SearcherSearch", Logger::EVENT_STATE::STOP, format("batch {}", batch_id)
+      format("SearcherSearch_{}", stream_id),
+      Logger::EVENT_STATE::STOP,
+      format("batch {}", batch_id)
     );
     copy_from_gpu(results, batch_id, kmer_positions);
   }
