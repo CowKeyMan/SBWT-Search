@@ -83,7 +83,7 @@ auto ContinuousColorResultsPostProcessor::get_default_value()
 auto ContinuousColorResultsPostProcessor::do_at_batch_start() -> void {
   SharedBatchesProducer<ColorSearchResultsBatch>::do_at_batch_start();
   Logger::log_timed_event(
-    format("ColorResultsPostProcessor_{}", stream_id),
+    format("ResultsPostProcessor_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", get_batch_id())
   );
