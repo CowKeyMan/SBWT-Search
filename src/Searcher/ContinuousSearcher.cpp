@@ -40,7 +40,9 @@ ContinuousSearcher::ContinuousSearcher(
 }
 
 auto ContinuousSearcher::get_default_value() -> shared_ptr<ResultsBatch> {
-  return make_shared<ResultsBatch>(vector<u64>(max_chars_per_batch));
+  auto batch = make_shared<ResultsBatch>();
+  batch->results.reserve(max_chars_per_batch);
+  return batch;
 }
 
 auto ContinuousSearcher::continue_read_condition() -> bool {

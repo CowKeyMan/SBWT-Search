@@ -21,7 +21,7 @@ InvalidCharsProducer::InvalidCharsProducer(
 auto InvalidCharsProducer::get_default_value()
   -> shared_ptr<InvalidCharsBatch> {
   auto batch = make_shared<InvalidCharsBatch>();
-  batch->invalid_chars.resize(max_chars_per_batch + kmer_size);
+  batch->invalid_chars.reserve(max_chars_per_batch + kmer_size);
   return batch;
 }
 

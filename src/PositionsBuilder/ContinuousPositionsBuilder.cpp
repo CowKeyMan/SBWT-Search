@@ -28,7 +28,7 @@ ContinuousPositionsBuilder::ContinuousPositionsBuilder(
 auto ContinuousPositionsBuilder::get_default_value()
   -> shared_ptr<PositionsBatch> {
   auto batch = make_shared<PositionsBatch>();
-  batch->positions.resize(max_chars_per_batch);
+  batch->positions.reserve(max_chars_per_batch);
   return batch;
 }
 

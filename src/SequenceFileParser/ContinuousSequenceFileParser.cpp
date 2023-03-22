@@ -56,9 +56,7 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
     stream_id(stream_id_) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {
-    batches.set(
-      i, make_shared<Seq>(Seq(max_chars_per_batch, max_reads_per_batch_))
-    );
+    batches.set(i, make_shared<Seq>(max_chars_per_batch, max_reads_per_batch));
   }
 }
 

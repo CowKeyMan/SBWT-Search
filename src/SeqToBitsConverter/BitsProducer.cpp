@@ -14,7 +14,7 @@ BitsProducer::BitsProducer(u64 max_chars_per_batch_, u64 max_batches):
 
 auto BitsProducer::get_default_value() -> shared_ptr<BitSeqBatch> {
   auto batch = make_shared<BitSeqBatch>();
-  batch->bit_seq.resize(
+  batch->bit_seq.reserve(
     round_up<u64>(max_chars_per_batch, chars_per_u64) / chars_per_u64
   );
   return batch;
