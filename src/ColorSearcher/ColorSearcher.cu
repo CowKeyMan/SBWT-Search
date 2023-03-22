@@ -50,7 +50,9 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   );
   end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());
-  GPU_CHECK(hipDeviceSynchronize());
+  // Turned off so that streams continue running
+  // Feel free to turn on for debugging
+  // GPU_CHECK(hipDeviceSynchronize());
   float millis = start_timer.time_elapsed_ms(end_timer);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
