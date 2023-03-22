@@ -27,7 +27,6 @@ using std::cerr;
 using std::endl;
 using std::min;
 using std::runtime_error;
-using std_utils::split_vector;
 
 const u64 num_components = 4;
 

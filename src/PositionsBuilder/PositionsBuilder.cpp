@@ -17,7 +17,8 @@ auto PositionsBuilder::build_positions(
   const u64 &string_size,
   vector<u64> &positions
 ) -> void {
-  u64 start_position_index = 0, end_position_index = 0;
+  u64 start_position_index = 0;
+  u64 end_position_index = 0;
   u64 first_string_index = 0;
   u64 string_position_index = 0;
   u64 previous_string_break = 0;

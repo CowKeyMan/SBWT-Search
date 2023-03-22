@@ -172,7 +172,7 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
   // 64 bits per read for the chars_before_newline
   // 8 bits per read for each newline
   const u64 bits_required_per_character = static_cast<u64>(
-    static_cast<double>(8 + 64 + 64 + 8 + 2 + (20 + 1) * 8)
+    static_cast<double>(8 + 8 + 64 + 64 + 2 + (20 + 1) * 8)
       + (1.0 / static_cast<double>(get_args().get_base_pairs_per_read()))
         * (64.0 + 8.0)
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
