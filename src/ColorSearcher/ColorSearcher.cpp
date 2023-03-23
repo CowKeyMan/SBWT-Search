@@ -28,7 +28,7 @@ auto ColorSearcher::search(
 ) -> void {
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
-    format("Batch {} consists of {} queries", batch_id, results.size())
+    format("Batch {} consists of {} queries", batch_id, sbwt_index_idxs.size())
   );
   copy_to_gpu(batch_id, sbwt_index_idxs, results);
   if (!sbwt_index_idxs.empty()) {
