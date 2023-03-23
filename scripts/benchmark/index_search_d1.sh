@@ -38,7 +38,7 @@ else
   echo "2nd argument is incorrect"
 fi
 
-streams_options=(1 2 3 4)
+streams_options=(1 2 3 4 5 6 7 8)
 
 for device in "${devices[@]}"; do
   ./scripts/build/release_${device}.sh >&2

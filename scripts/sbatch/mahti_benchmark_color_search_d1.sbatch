@@ -18,7 +18,7 @@
 ##SBATCH --partition=gputest
 ##SBATCH --time=00:15:00
 
-#SBATCH --time=3:00:00
+#SBATCH --time=5:00:00
 #SBATCH --partition=gpusmall
 
 ## Load in modules
