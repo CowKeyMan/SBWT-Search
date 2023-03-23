@@ -36,11 +36,9 @@ __device__ auto d_dense_get_arrays_start_end(
   u64 &arrays_start,
   u64 &arrays_end
 ) -> void;
-__device__ auto d_dense_get_next_color_present(
-  const u64 color_idx, u64 &array_idx, u64 *dense_arrays
-) -> bool;
 __device__ auto
-d_dense_get_minimum(u64 arrays_start, u64 array_idx, u64 *dense_arrays) -> u64;
+d_dense_get_next_color_present(u64 &array_idx, u64 *dense_arrays) -> bool;
+__device__ auto d_dense_get_minimum(u64 array_idx, u64 *dense_arrays) -> u64;
 
 __device__ auto d_sparse_get_arrays_start_end(
   u64 color_set_idx,
@@ -137,38 +135,11 @@ __global__ auto d_color_search(
     );
   }
   array_idx = arrays_start;
-  /* u64 minimum = -1; */
-  /* // If it got this far, it means it has at least one color */
-  /* if (is_dense) { */
-  /*   minimum = d_dense_get_minimum(arrays_start, array_idx, dense_arrays); */
-  /* } else { */
-  /*   minimum = d_sparse_get_minimum( */
-  /*     arrays_start, */
-  /*     sparse_arrays, */
-  /*     sparse_arrays_width, */
-  /*     sparse_arrays_width_set_bits */
-  /*   ); */
-  /* } */
-  /* #if (defined(__HIP_CPU_RT__) || defined(__HIP_PLATFORM_HCC__) ||
-   * defined(__HIP_PLATFORM_AMD__)) */
-  /* for (int i = 1; i < 32; i *= 2) { */
-  /*   minimum = std::min(minimum, __shfl_xor(minimum, i)); */
-  /* } */
-  /* #elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
-   */
-  /* for (int i = 1; i < 32; i *= 2) { */
-  /*   minimum = min(minimum, __shfl_xor_sync(full_mask, minimum, i)); */
-  /* } */
-  /* #else */
-  /* #error("No runtime defined"); */
-  /* #endif */
-  // TODO: color_idx = minimum
   for (u64 color_idx = 0; color_idx < num_colors; ++color_idx) {
     bool color_present = false;
     if (array_idx < arrays_end) {
       if (is_dense) {
-        color_present
-          = d_dense_get_next_color_present(color_idx, array_idx, dense_arrays);
+        color_present = d_dense_get_next_color_present(array_idx, dense_arrays);
       } else {
         color_present = d_sparse_get_next_color_present(
           color_idx,
@@ -228,10 +199,16 @@ __device__ auto d_dense_get_arrays_start_end(
   );
 }
 
-__device__ auto d_dense_get_next_color_present(
-  const u64 color_idx, u64 &array_idx, u64 *dense_arrays
-) -> bool {
+__device__ auto
+d_dense_get_next_color_present(u64 &array_idx, u64 *dense_arrays) -> bool {
   return d_get_bool_from_bit_vector(dense_arrays, array_idx++);
+}
+
+__device__ auto d_dense_get_minimum(u64 array_idx, u64 *dense_arrays) -> u64 {
+  u64 color_idx = 0;
+  for (; !d_dense_get_next_color_present(array_idx, dense_arrays);
+       ++color_idx) {}
+  return color_idx;
 }
 
 __device__ auto d_sparse_get_arrays_start_end(
