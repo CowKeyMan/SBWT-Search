@@ -6,6 +6,7 @@
 
 #include "ArgumentParser/IndexSearchArgumentParser.h"
 #include "FilenamesParser/FilenamesParser.h"
+#include "FilesizeLoadBalancer/FilesizeLoadBalancer.h"
 #include "Global/GlobalDefinitions.h"
 #include "Main/IndexSearchMain.h"
 #include "Presearcher/Presearcher.h"
@@ -343,16 +344,10 @@ auto IndexSearchMain::get_input_output_filenames()
   if (input_filenames.size() != output_filenames.size()) {
     throw runtime_error("Input and output file sizes differ");
   }
-  for (u64 i = 0; i < input_filenames.size(); ++i) {
-    if (input_filenames[i].size() != output_filenames[i].size()) {
-      throw runtime_error(
-        format("Input and output partition {} is not of equal size", i)
-      );
-    }
-  }
-  streams = input_filenames.size();
+  streams = min(input_filenames.size(), args->get_streams());
   Logger::log(Logger::LOG_LEVEL::DEBUG, format("Using {} streams", streams));
-  return {input_filenames, output_filenames};
+  return FilesizeLoadBalancer(input_filenames, output_filenames)
+    .partition(streams);
 }
 
 auto IndexSearchMain::run_components(

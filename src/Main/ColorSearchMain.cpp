@@ -6,6 +6,7 @@
 #include "ArgumentParser/ColorSearchArgumentParser.h"
 #include "ColorIndexBuilder/ColorIndexBuilder.h"
 #include "FilenamesParser/FilenamesParser.h"
+#include "FilesizeLoadBalancer/FilesizeLoadBalancer.h"
 #include "Global/GlobalDefinitions.h"
 #include "Main/ColorSearchMain.h"
 #include "Tools/GpuUtils.h"
@@ -184,9 +185,10 @@ auto ColorSearchMain::get_input_output_filenames()
   if (input_filenames.size() != output_filenames.size()) {
     throw runtime_error("Input and output file sizes differ");
   }
-  streams = input_filenames.size();
+  streams = min(input_filenames.size(), args->get_streams());
   Logger::log(Logger::LOG_LEVEL::DEBUG, format("Using {} streams", streams));
-  return {input_filenames, output_filenames};
+  return FilesizeLoadBalancer(input_filenames, output_filenames)
+    .partition(streams);
 }
 
 auto ColorSearchMain::get_args() const -> const ColorSearchArgumentParser & {

@@ -71,16 +71,13 @@ done
 for streams in {1..5}; do
   echo "Running combined with streams = ${streams}"
   for mode in ${modes[@]}; do
-    python3 scripts/configure/partition_for_streams.py \
-      -i ${combined_input_file} \
-      -o ${combined_output_file} \
-      -p ${streams}
     ./build/bin/sbwt_search colors \
       -o test_objects/full_pipeline/color_search/combined_output.list \
       -i test_objects/themisto_example/GCA_combined_d1.tcolors \
       -q test_objects/full_pipeline/color_search/combined_input.list \
       -p ${mode} \
       -t 0.7 \
+      -s ${streams} \
       -c 0.1
   done
   run_tests
@@ -95,6 +92,7 @@ for mode in ${modes[@]}; do
       -o "test_objects/full_pipeline/color_search/actual/${output_files[i]%.*}"  \
       -p ${mode} \
       -t 0.7 \
+      -s 1 \
       -c 0.1
   done
 done

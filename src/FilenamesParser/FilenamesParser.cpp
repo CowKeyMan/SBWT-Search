@@ -37,24 +37,18 @@ auto FilenamesParser::is_list(const string &filename) -> bool {
 }
 
 auto FilenamesParser::file_lines_to_vector(const string &filename)
-  -> vector<vector<string>> {
-  vector<vector<string>> result(1);
+  -> vector<string> {
+  vector<string> result;
   ThrowingIfstream stream(filename, ios::in);
   string buffer;
-  while (getline(stream, buffer)) {
-    if (buffer == "/") {
-      result.emplace_back(vector<string>());
-    } else {
-      result.back().push_back(buffer);
-    }
-  }
+  while (getline(stream, buffer)) { result.push_back(buffer); }
   return result;
 }
 
-auto FilenamesParser::get_input_filenames() -> vector<vector<string>> {
+auto FilenamesParser::get_input_filenames() -> vector<string> {
   return input_filenames;
 }
-auto FilenamesParser::get_output_filenames() -> vector<vector<string>> {
+auto FilenamesParser::get_output_filenames() -> vector<string> {
   return output_filenames;
 }
 

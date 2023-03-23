@@ -62,7 +62,10 @@ auto IndexSearchArgumentParser::create_options() -> void {
      )("r,base-pairs-per-read", "The approximate number of base pairs in every read. This is necessary because we need to store 'checkpoints' where each read starts and ends in our list of base pairs. As such we must allocate memory for it. By defalt, this value is 100, meaning that we would then allocate enough memory for 1 unisgned integer per 100 base pairs. This option is available in case you need more memory than that.", value<u64>()->default_value("100")
      )
      ("g,gpu-memory-percentage", "The percentage of gpu memory to use from the remaining free memory after the index has been loaded. This means that if we have 40GB of memory, and the index is 30GB, then we have 10GB left. If this value is set to 0.9, then 9GB will be used and the last 1GB of memory on the GPU will be left unused. The default value is 0.95, and unless you are running anything else on the machine which is also GPU heavy, it is recommended to leave it at this value.", value<double>()->default_value("0.95")
-     )("p,print-mode",
+     )("s,streams",
+      "The number of files to read and write in parallel. This implies dividing the available memory into <memory>/<streams> pieces, so each batch will process less items at a time, but there is instead more parallelism. This should not be too high nor too large, as the number of threads spawned per file is already large, and it also depends on your disk drive. The default is 4.",
+      value<u64>()->default_value("4")
+    )("p,print-mode",
       "The mode used when printing the result to the output file. Options "
       "are 'ascii' (default), 'binary' or 'boolean'. In ascii mode the "
       "results will be printed in ASCII format so that the number viewed "
@@ -137,6 +140,9 @@ auto IndexSearchArgumentParser::get_gpu_memory_percentage() const -> double {
   }
   return result;
 }
+auto IndexSearchArgumentParser::get_streams() const -> u64 {
+  return get_args()["streams"].as<u64>();
+}
 auto IndexSearchArgumentParser::get_required_options() const -> vector<string> {
   return {
     "query-file",
@@ -144,6 +150,7 @@ auto IndexSearchArgumentParser::get_required_options() const -> vector<string> {
     "output-prefix",
     "max-main-memory",
     "unavailable-main-memory",
+    "streams",
     "print-mode"};
 }
 

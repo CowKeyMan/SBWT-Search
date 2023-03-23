@@ -68,6 +68,9 @@ auto ColorSearchArgumentParser::create_options() -> void {
       "The mode used when printing the result to the output file. Options: ascii",
       value<string>()->default_value("ascii")
     )
+    ("s,streams",
+      "The number of files to read and write in parallel. This implies dividing the available memory into <memory>/<streams> pieces, so each batch will process less items at a time, but there is instead more parallelism. This should not be too high nor too large, as the number of threads spawned per file is already large, and it also depends on your disk drive. The default is 4.",
+      value<u64>()->default_value("4"))
     ("t,threshold",
       "The percentage of kmers which need to be attributed to a color in order for us to accept that color as being part of our output. Must be a value between 1 and 0 (both included)",
       value<double>()->default_value("1"))
@@ -138,6 +141,9 @@ auto ColorSearchArgumentParser::get_include_not_found() const -> bool {
 auto ColorSearchArgumentParser::get_include_invalid() const -> bool {
   return get_args()["no-ignore-invalid"].as<bool>();
 }
+auto ColorSearchArgumentParser::get_streams() const -> u64 {
+  return get_args()["streams"].as<u64>();
+}
 auto ColorSearchArgumentParser::get_required_options() const -> vector<string> {
   return {
     "query-file",
@@ -145,6 +151,7 @@ auto ColorSearchArgumentParser::get_required_options() const -> vector<string> {
     "output-prefix",
     "unavailable-main-memory",
     "max-main-memory",
+    "streams",
     "print-mode"};
 }
 

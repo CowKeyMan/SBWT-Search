@@ -59,6 +59,7 @@ add_executable(
   "${PROJECT_SOURCE_DIR}/Tools/BenchmarkUtils_test.cpp"
 
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser_test.cpp"
+  "${PROJECT_SOURCE_DIR}/FilesizeLoadBalancer/FilesizeLoadBalancer_test.cpp"
 
   "${PROJECT_SOURCE_DIR}/SequenceFileParser/ContinuousSequenceFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder_test.cpp"

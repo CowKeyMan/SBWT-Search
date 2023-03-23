@@ -19,8 +19,6 @@ if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index_d
   exit 1
 fi
 
-python3 -m pip install -q prtpy
-
 colors_file="benchmark_objects/index/index_d1.tcolors"
 input_files=(
   "benchmark_objects/list_files/input/index_search_results_d1.list"
@@ -44,10 +42,6 @@ for device in "${devices[@]}"; do
   for streams in "${streams_options[@]}"; do
     for input_file in "${input_files[@]}"; do
       for printing_mode in "${printing_modes[@]}"; do
-        python3 scripts/configure/partition_for_streams.py \
-          -i ${input_files} \
-          -o ${output_file} \
-          -p ${streams}
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device"
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device" >> "${benchmark_out}"
         ./build/bin/sbwt_search colors \
@@ -56,6 +50,7 @@ for device in "${devices[@]}"; do
           -o "${output_file}" \
           -s "${streams}" \
           -p "${printing_mode}" \
+          -s "${streams}" \
           -t 0.7 \
           >> "${benchmark_out}"
         printf "Size of outputs: "

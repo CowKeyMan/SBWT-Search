@@ -30,3 +30,6 @@ gmon*
 src/Global/GlobalDefinitions.h
 
 test_objects/themisto_example
+
+test_objects/full_pipeline/color_search/*.list
+test_objects/full_pipeline/index_search/*.list

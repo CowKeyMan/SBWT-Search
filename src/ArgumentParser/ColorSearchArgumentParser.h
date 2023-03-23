@@ -41,6 +41,7 @@ public:
   auto get_gpu_memory_percentage() const -> double;
   auto get_include_not_found() const -> bool;
   auto get_include_invalid() const -> bool;
+  auto get_streams() const -> u64;
 
 private:
   auto create_options() -> void;

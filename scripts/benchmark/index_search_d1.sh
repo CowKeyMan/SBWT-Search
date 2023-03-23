@@ -19,8 +19,6 @@ if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index.t
   exit 1
 fi
 
-python3 -m pip install -q prtpy
-
 dbg_file="benchmark_objects/index/index.tdbg"
 input_files=(
   "benchmark_objects/list_files/input/unzipped_seqs.list"
@@ -47,10 +45,6 @@ for device in "${devices[@]}"; do
   for streams in "${streams_options[@]}"; do
     for input_file in "${input_files[@]}"; do
       for printing_mode in "${printing_modes[@]}"; do
-        python3 scripts/configure/partition_for_streams.py \
-          -i ${input_files} \
-          -o ${output_file} \
-          -p ${streams}
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device"
         echo "Now running: File ${input_file} with ${streams} streams in ${printing_mode} format on ${device} device" >> "${benchmark_out}"
         ./build/bin/sbwt_search index \
@@ -58,6 +52,7 @@ for device in "${devices[@]}"; do
           -q "${input_files}" \
           -o "${output_file}" \
           -p "${printing_mode}" \
+          -s "${streams}" \
           >> "${benchmark_out}"
         printf "Size of outputs: "
         ls -lh "benchmark_objects/running" | head -1

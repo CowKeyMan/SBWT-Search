@@ -64,15 +64,12 @@ done
 for streams in {1..5}; do
   echo "Running combined with streams = ${streams}"
   for mode in ${modes[@]}; do
-    python3 scripts/configure/partition_for_streams.py \
-      -i ${combined_input_file} \
-      -o ${combined_output_file} \
-      -p ${streams}
     ./build/bin/sbwt_search index \
       -o test_objects/full_pipeline/index_search/combined_output.list \
       -i test_objects/search_test_index.sbwt \
       -q test_objects/full_pipeline/index_search/combined_input.list \
       -p ${mode} \
+      -s ${streams} \
       -c 0.1
   done
   run_tests
@@ -86,6 +83,7 @@ for mode in ${modes[@]}; do
       -i test_objects/search_test_index.sbwt \
       -o "test_objects/full_pipeline/index_search/actual/${file%.*}"  \
       -p ${mode} \
+      -s 1 \
       -c 0.1
   done
 done

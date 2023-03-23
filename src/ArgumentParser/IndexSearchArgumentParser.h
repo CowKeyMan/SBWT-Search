@@ -38,6 +38,7 @@ public:
   auto get_base_pairs_per_read() const -> u64;
   auto get_cpu_memory_percentage() const -> double;
   auto get_gpu_memory_percentage() const -> double;
+  auto get_streams() const -> u64;
 
 protected:
   auto get_required_options() const -> vector<string> override;

@@ -107,6 +107,10 @@ add_library(
   "${PROJECT_SOURCE_DIR}/FilenamesParser/FilenamesParser.cpp"
 )
 add_library(
+  filesize_load_balancer
+  "${PROJECT_SOURCE_DIR}/FilesizeLoadBalancer/FilesizeLoadBalancer.cpp"
+)
+add_library(
   poppy_builder
   "${PROJECT_SOURCE_DIR}/PoppyBuilder/PoppyBuilder.cpp"
 )
@@ -259,6 +263,7 @@ target_link_libraries(
 
   ## Index search libraries
   filenames_parser
+  filesize_load_balancer
   sbwt_builder
   sbwt_container
   poppy_builder
