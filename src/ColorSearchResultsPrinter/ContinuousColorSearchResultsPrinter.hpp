@@ -179,42 +179,40 @@ protected:
         std::plus<>()
       );
     }
-    // TODO: parallelise from here
     u64 rbnf_idx = 0;
     u64 wbnr = printed_last_read ? wbnrs[0] : 0;
-    for (u64 wbnr_idx = static_cast<u64>(printed_last_read);
-         wbnr_idx < wbnrs.size();
-         ++wbnr_idx) {
-      const auto read_idx = wbnr_idx;
-      while (rbnfs[rbnf_idx] == read_idx) {
-        impl().do_start_next_file();
-        ++rbnf_idx;
-      }
-      if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
-        previous_last_found_idx = found_idxs[read_idx];
-        previous_last_not_found_idxs = not_found_idxs[read_idx];
-        previous_last_invalid_idxs = invalid_idxs[read_idx];
-        previous_last_results.insert(
-          previous_last_results.begin(),
-          std::make_move_iterator(
-            copy_advance(results.begin(), wbnr * num_colors)
-          ),
-          std::make_move_iterator(
-            copy_advance(results.begin(), (wbnr + 1) * num_colors)
-          )
+    u64 wbnr_idx = static_cast<u64>(printed_last_read);
+    u64 &read_idx = wbnr_idx;
+    for (rbnf_idx = 0; rbnf_idx < rbnfs.size(); ++rbnf_idx) {
+      // TODO: parallelise this loop with openmp (set num threads yourself)
+      // TODO: write to a buffer
+      for (; wbnr_idx < std::min(wbnrs.size(), rbnfs[rbnf_idx]); ++wbnr_idx) {
+        if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
+          previous_last_found_idx = found_idxs[read_idx];
+          previous_last_not_found_idxs = not_found_idxs[read_idx];
+          previous_last_invalid_idxs = invalid_idxs[read_idx];
+          previous_last_results.insert(
+            previous_last_results.begin(),
+            std::make_move_iterator(
+              copy_advance(results.begin(), wbnr * num_colors)
+            ),
+            std::make_move_iterator(
+              copy_advance(results.begin(), (wbnr + 1) * num_colors)
+            )
+          );
+          printed_last_read = false;
+          break;
+        }
+        impl().do_print_read(
+          copy_advance(results.begin(), wbnr * num_colors),
+          found_idxs[read_idx],
+          not_found_idxs[read_idx],
+          invalid_idxs[read_idx]
         );
-        printed_last_read = false;
-        break;
+        wbnr = wbnrs[wbnr_idx];
       }
-      impl().do_print_read(
-        copy_advance(results.begin(), wbnr * num_colors),
-        found_idxs[read_idx],
-        not_found_idxs[read_idx],
-        invalid_idxs[read_idx]
-      );
-      wbnr = wbnrs[wbnr_idx];
+      if (rbnfs[rbnf_idx] == wbnr_idx) { impl().do_start_next_file(); }
     }
-    // TODO: parallelise until here
   }
   auto do_print_read(
     vector<u64>::iterator results,
