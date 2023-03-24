@@ -17,6 +17,7 @@
 #include <bit>
 #include <cmath>
 #include <functional>
+#include <iterator>
 #include <memory>
 
 #include "BatchObjects/IntervalBatch.h"
@@ -28,6 +29,7 @@
 #include "Tools/MathUtils.hpp"
 #include "Tools/OmpLock.h"
 #include "Tools/SharedBatchesProducer.hpp"
+#include "Tools/StdUtils.hpp"
 #include "Tools/TypeDefinitions.h"
 #include "fmt/core.h"
 
@@ -47,6 +49,7 @@ using std::next;
 using std::numeric_limits;
 using std::shared_ptr;
 using std::unique_ptr;
+using std_utils::copy_advance;
 using threading_utils::OmpLock;
 
 template <class TImplementation, class Buffer_t>
@@ -195,7 +198,9 @@ private:
           bool newline = false;
           while (result_idx + 1 == rbnls[bnl_idx] && bnl_idx < nlbnf) {
             newline = true;
-            buffer_idx += impl().do_with_newline(buffer.begin() + buffer_idx);
+            buffer_idx
+              += impl().do_with_newline(copy_advance(buffer.begin(), buffer_idx)
+              );
             ++bnl_idx;
           }
           if (newline) {
@@ -204,7 +209,8 @@ private:
               = get_invalid_chars_left_first_kmer(char_idx, cbnls[bnl_idx]);
           } else {
             ++char_idx;
-            buffer_idx += impl().do_with_space(buffer.begin() + buffer_idx);
+            buffer_idx
+              += impl().do_with_space(copy_advance(buffer.begin(), buffer_idx));
           }
         }
         buffer.resize(static_cast<std::streamsize>(buffer_idx));
@@ -246,7 +252,8 @@ private:
         impl().do_write_buffer(buffer, buffer_idx);
         buffer_idx = 0;
       }
-      buffer_idx += impl().do_with_newline(buffer.begin() + buffer_idx);
+      buffer_idx
+        += impl().do_with_newline(copy_advance(buffer.begin(), buffer_idx));
       ++rbnl_idx;
     }
     impl().do_write_buffer(buffer, buffer_idx);
@@ -283,12 +290,16 @@ private:
   ) -> void {
     const auto &results = results_batch->results;
     if (invalid_chars_left > 0) {
-      buffer_idx += impl().do_with_invalid(buffer.begin() + buffer_idx);
+      buffer_idx
+        += impl().do_with_invalid(copy_advance(buffer.begin(), buffer_idx));
       --invalid_chars_left;
     } else if (result == numeric_limits<u64>::max()) {
-      buffer_idx += impl().do_with_not_found(buffer.begin() + buffer_idx);
+      buffer_idx
+        += impl().do_with_not_found(copy_advance(buffer.begin(), buffer_idx));
     } else {
-      buffer_idx += impl().do_with_result(buffer.begin() + buffer_idx, result);
+      buffer_idx += impl().do_with_result(
+        copy_advance(buffer.begin(), buffer_idx), result
+      );
     }
   }
 

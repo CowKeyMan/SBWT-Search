@@ -19,6 +19,7 @@
 #include "Tools/IOUtils.h"
 #include "Tools/Logger.h"
 #include "Tools/SharedBatchesProducer.hpp"
+#include "Tools/StdUtils.hpp"
 #include "fmt/core.h"
 
 namespace sbwt_search {
@@ -31,6 +32,7 @@ using std::ios;
 using std::numeric_limits;
 using std::shared_ptr;
 using std::unique_ptr;
+using std_utils::copy_advance;
 
 class ContinuousColorSearchResultsPrinter {
 private:
@@ -171,10 +173,10 @@ protected:
       invalid_idxs[0] += previous_last_invalid_idxs;
       std::transform(
         results.begin(),
-        results.begin() + num_colors,
+        copy_advance(results.begin(), num_colors),
         previous_last_results.begin(),
-        results.begin(),
-        std::plus<int>()
+        results.data(),
+        std::plus<>()
       );
     }
     // TODO: parallelise from here
@@ -194,14 +196,18 @@ protected:
         previous_last_invalid_idxs = invalid_idxs[read_idx];
         previous_last_results.insert(
           previous_last_results.begin(),
-          std::make_move_iterator(results.begin() + wbnr * num_colors),
-          std::make_move_iterator(results.begin() + (wbnr + 1) * num_colors)
+          std::make_move_iterator(
+            copy_advance(results.begin(), wbnr * num_colors)
+          ),
+          std::make_move_iterator(
+            copy_advance(results.begin(), (wbnr + 1) * num_colors)
+          )
         );
         printed_last_read = false;
         break;
       }
       impl().do_print_read(
-        results.begin() + wbnr * num_colors,
+        copy_advance(results.begin(), wbnr * num_colors),
         found_idxs[read_idx],
         not_found_idxs[read_idx],
         invalid_idxs[read_idx]
