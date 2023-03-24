@@ -167,11 +167,13 @@ protected:
       found_idxs[0] += previous_last_found_idx;
       not_found_idxs[0] += previous_last_not_found_idxs;
       invalid_idxs[0] += previous_last_invalid_idxs;
+      // TODO: use standard library
 #pragma omp simd
       for (int i = 0; i < num_colors; ++i) {
         results[i] += previous_last_results[i];
       }
     }
+    // TODO: parallelise from here
     u64 rbnf_idx = 0;
     u64 wbnr = printed_last_read ? wbnrs[0] : 0;
     for (u64 wbnr_idx = static_cast<u64>(printed_last_read);
@@ -186,6 +188,7 @@ protected:
         previous_last_found_idx = found_idxs[read_idx];
         previous_last_not_found_idxs = not_found_idxs[read_idx];
         previous_last_invalid_idxs = invalid_idxs[read_idx];
+        // TODO: use standard library copy
 #pragma omp simd
         for (int i = 0; i < num_colors; ++i) {
           previous_last_results[i] = results[wbnr * num_colors + i];
@@ -201,8 +204,8 @@ protected:
       );
       wbnr = wbnrs[wbnr_idx];
     }
+    // TODO: parallelise until here
   }
-  u64 debug_counter = 1;
   auto do_print_read(
     vector<u64>::iterator results,
     u64 found_idxs,
@@ -216,6 +219,7 @@ protected:
     bool first_print = true;
     for (u64 color_idx = 0; minimum_found > 0 && color_idx < num_colors;
          ++color_idx, ++results) {
+      // TODO: replace with buffer output : D
       if (*results >= minimum_found) {
         if (!first_print) { *out_stream << " "; }
         first_print = false;
