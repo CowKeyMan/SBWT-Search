@@ -6,8 +6,10 @@
  * @brief Prints out the color results
  */
 
+#include <algorithm>
 #include <cmath>
 #include <ios>
+#include <iterator>
 #include <limits>
 #include <memory>
 
@@ -167,11 +169,13 @@ protected:
       found_idxs[0] += previous_last_found_idx;
       not_found_idxs[0] += previous_last_not_found_idxs;
       invalid_idxs[0] += previous_last_invalid_idxs;
-      // TODO: use standard library
-#pragma omp simd
-      for (int i = 0; i < num_colors; ++i) {
-        results[i] += previous_last_results[i];
-      }
+      std::transform(
+        results.begin(),
+        results.begin() + num_colors,
+        previous_last_results.begin(),
+        results.begin(),
+        std::plus<int>()
+      );
     }
     // TODO: parallelise from here
     u64 rbnf_idx = 0;
@@ -188,11 +192,11 @@ protected:
         previous_last_found_idx = found_idxs[read_idx];
         previous_last_not_found_idxs = not_found_idxs[read_idx];
         previous_last_invalid_idxs = invalid_idxs[read_idx];
-        // TODO: use standard library copy
-#pragma omp simd
-        for (int i = 0; i < num_colors; ++i) {
-          previous_last_results[i] = results[wbnr * num_colors + i];
-        }
+        previous_last_results.insert(
+          previous_last_results.begin(),
+          std::make_move_iterator(results.begin() + wbnr * num_colors),
+          std::make_move_iterator(results.begin() + (wbnr + 1) * num_colors)
+        );
         printed_last_read = false;
         break;
       }
