@@ -204,16 +204,14 @@ auto ColorSearchMain::get_components(
     vector<shared_ptr<ContinuousIndexFileParser>>,
     vector<shared_ptr<ContinuousColorSearcher>>,
     vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
-    vector<shared_ptr<ContinuousColorSearchResultsPrinter>>> {
+    vector<ColorResultsPrinter>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   vector<shared_ptr<ContinuousIndexFileParser>> index_file_parsers(streams);
   vector<shared_ptr<ContinuousColorSearcher>> searchers(streams);
   vector<shared_ptr<ContinuousColorResultsPostProcessor>> post_processors(
     streams
   );
-  vector<shared_ptr<ContinuousColorSearchResultsPrinter>> results_printers(
-    streams
-  );
+  vector<ColorResultsPrinter> results_printers(streams);
   for (u64 i = 0; i < streams; ++i) {
     index_file_parsers[i] = make_shared<ContinuousIndexFileParser>(
       i,
@@ -238,27 +236,43 @@ auto ColorSearchMain::get_components(
       num_components,
       gpu_container->num_colors
     );
-    results_printers[i] = make_shared<ContinuousColorSearchResultsPrinter>(
+    results_printers[i] = get_results_printer(
       i,
-      index_file_parsers[i]->get_colors_interval_batch_producer(),
-      index_file_parsers[i]->get_read_statistics_batch_producer(),
+      index_file_parsers[i],
       post_processors[i],
       split_output_filenames[i],
-      gpu_container->num_colors,
-      get_args().get_threshold(),
-      get_args().get_include_not_found(),
-      get_args().get_include_invalid()
+      num_colors
     );
   }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
   return {index_file_parsers, searchers, post_processors, results_printers};
 }
 
+auto ColorSearchMain::get_results_printer(
+  u64 stream_id,
+  shared_ptr<ContinuousIndexFileParser> index_file_parser,
+  shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
+  vector<string> filenames,
+  u64 num_colors
+) -> ColorResultsPrinter {
+  return make_shared<AsciiContinuousColorResultsPrinter>(
+    stream_id,
+    index_file_parser->get_colors_interval_batch_producer(),
+    index_file_parser->get_read_statistics_batch_producer(),
+    post_processor,
+    std::move(filenames),
+    num_colors,
+    get_args().get_threshold(),
+    get_args().get_include_not_found(),
+    get_args().get_include_invalid()
+  );
+}
+
 auto ColorSearchMain::run_components(
   vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
   vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
   vector<shared_ptr<ContinuousColorResultsPostProcessor>> &post_processors,
-  vector<shared_ptr<ContinuousColorSearchResultsPrinter>> &results_printers
+  vector<ColorResultsPrinter> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
 #pragma omp parallel sections num_threads(num_components)
@@ -281,7 +295,11 @@ auto ColorSearchMain::run_components(
 #pragma omp section
     {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : results_printers) { element->read_and_generate(); }
+      for (auto &element : results_printers) {
+        std::visit(
+          [](auto &arg) -> void { arg->read_and_generate(); }, element
+        );
+      }
     }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);

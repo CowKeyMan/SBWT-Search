@@ -234,6 +234,11 @@ add_library(
   "${PROJECT_SOURCE_DIR}/ColorResultsPostProcessor/ContinuousColorResultsPostProcessor.cpp"
 )
 target_link_libraries(color_results_post_processor PRIVATE fmt::fmt OpenMP::OpenMP_CXX)
+add_library(
+  color_results_printer
+  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/AsciiContinuousColorResultsPrinter.cpp"
+)
+target_link_libraries(color_results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -279,10 +284,10 @@ target_link_libraries(
   # Color search libraries
   color_index_builder
   color_index_container
+  index_file_parser
   color_searcher
   color_results_post_processor
-
-  index_file_parser
+  color_results_printer
 )
 if (NOT SDSL_FOUND)
   add_dependencies(common_libraries sdsl)

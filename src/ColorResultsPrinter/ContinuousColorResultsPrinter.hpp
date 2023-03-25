@@ -1,8 +1,8 @@
-#ifndef CONTINUOUS_COLOR_SEARCH_RESULTS_PRINTER_HPP
-#define CONTINUOUS_COLOR_SEARCH_RESULTS_PRINTER_HPP
+#ifndef CONTINUOUS_COLOR_RESULTS_PRINTER_HPP
+#define CONTINUOUS_COLOR_RESULTS_PRINTER_HPP
 
 /**
- * @file ContinuousColorSearchResultsPrinter.hpp
+ * @file ContinuousColorResultsPrinter.hpp
  * @brief Prints out the color results
  */
 
@@ -34,12 +34,12 @@ using std::shared_ptr;
 using std::unique_ptr;
 using std_utils::copy_advance;
 
-class ContinuousColorSearchResultsPrinter {
+template <class TImplementation, class Buffer_t>
+class ContinuousColorResultsPrinter {
 private:
-  /* auto impl() -> TImplementation & { */
-  /*   return static_cast<TImplementation &>(*this); */
-  /* } */
-  auto impl() -> ContinuousColorSearchResultsPrinter & { return *this; }
+  auto impl() -> TImplementation & {
+    return static_cast<TImplementation &>(*this);
+  }
   shared_ptr<SharedBatchesProducer<ColorsIntervalBatch>>
     interval_batch_producer;
   shared_ptr<SharedBatchesProducer<ReadStatisticsBatch>>
@@ -51,7 +51,11 @@ private:
   shared_ptr<ColorSearchResultsBatch> results_batch;
   vector<string> filenames;
   vector<string>::iterator current_filename;
+
+protected:  // TODO: revert
   unique_ptr<ThrowingOfstream> out_stream;
+
+private:
   u64 num_colors;
   double threshold;
   vector<u64> previous_last_results;
@@ -64,7 +68,7 @@ private:
   u64 stream_id;
 
 public:
-  ContinuousColorSearchResultsPrinter(
+  ContinuousColorResultsPrinter(
     u64 stream_id_,
     shared_ptr<SharedBatchesProducer<ColorsIntervalBatch>>
       interval_batch_producer_,
@@ -130,14 +134,14 @@ private:
   }
 
 protected:
-  auto do_get_extension() -> string { return ".txt"; }  // TODO: change
-  auto do_get_format() -> string { return "ascii"; }
-  auto do_get_version() -> string { return "v1.0"; }
+  auto do_get_extension() -> string;
+  auto do_get_format() -> string;
+  auto do_get_version() -> string;
 
   auto do_start_next_file() -> void {
     if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
     impl().do_open_next_file(*current_filename);
-    impl().do_write_file_header();  // TODO: reactivate this
+    impl().do_write_file_header();
     current_filename = next(current_filename);
   }
   auto do_at_file_end() -> void {}
@@ -229,13 +233,17 @@ protected:
          ++color_idx, ++results) {
       // TODO: replace with buffer output : D
       if (*results >= minimum_found) {
-        if (!first_print) { *out_stream << " "; }
+        if (!first_print) { impl().do_with_space(); }
         first_print = false;
-        *out_stream << color_idx;
+        impl().do_with_result(color_idx);
       }
     }
-    *out_stream << "\n";
+    impl().do_with_newline();
   }
+
+  auto do_with_newline() -> u64;
+  auto do_with_space() -> u64 { return 0; }
+  auto do_with_result(u64 result) -> u64;
 };
 
 }  // namespace sbwt_search
