@@ -13,7 +13,7 @@
 #SBATCH --cpus-per-task=32
 ##SBATCH --exclusive
 #SBATCH --mem-per-cpu=14G
-#SBATCH --gres=nvme:350
+#SBATCH --gres=gpu:a100:0,nvme:350
 
 ##SBATCH --partition=gputest
 ##SBATCH --time=00:15:00
