@@ -181,12 +181,14 @@ protected:
         std::plus<>()
       );
     }
-    u64 wbnr = printed_last_read ? wbnrs[0] : 0;
-    u64 wbnr_idx = printed_last_read ? 1 : 0;
+    u64 start_wbnr_idx = printed_last_read ? 1 : 0;
     for (auto rbnf : rbnfs) {
       // TODO: parallelise this loop with openmp (set num threads yourself)
       // TODO: write to a buffer
-      for (; wbnr_idx < std::min(wbnrs.size(), rbnf); ++wbnr_idx) {
+      for (u64 wbnr_idx = start_wbnr_idx;
+           wbnr_idx < std::min(wbnrs.size(), rbnf);
+           ++wbnr_idx) {
+        u64 wbnr = (wbnr_idx == 0) ? 0 : wbnrs[wbnr_idx - 1];
         const u64 read_idx = wbnr_idx;
         if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
           previous_last_found_idx = found_idxs[read_idx];
@@ -210,9 +212,9 @@ protected:
           not_found_idxs[read_idx],
           invalid_idxs[read_idx]
         );
-        wbnr = wbnrs[wbnr_idx];
       }
-      if (rbnf == wbnr_idx) { impl().do_start_next_file(); }
+      start_wbnr_idx = std::min(wbnrs.size(), rbnf);
+      if (rbnf == std::min(wbnrs.size(), rbnf)) { impl().do_start_next_file(); }
     }
   }
 
