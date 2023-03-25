@@ -1,13 +1,7 @@
-#include <algorithm>
-#include <bit>
-#include <cmath>
-#include <ios>
-#include <omp.h>
-
 #include <fmt/format.h>
-#include <spdlog/fmt/bundled/format.h>
 
 #include "ResultsPrinter/AsciiContinuousResultsPrinter.h"
+#include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
@@ -28,7 +22,6 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
       std::move(invalid_chars_producer),
       std::move(filenames),
       kmer_size,
-      max_chars_in_u64 + 1,
       threads,
       max_chars_per_batch
     ) {
@@ -47,7 +40,7 @@ auto AsciiContinuousResultsPrinter::do_with_result(
     result,
     static_cast<int>(tiny_buffers[thread_idx].size())
   );
-  std::copy(a, b, buffer);
+  std::move(a, b, buffer);
   return b - a;
 }
 
@@ -67,16 +60,16 @@ auto AsciiContinuousResultsPrinter::do_with_invalid(
   return 2;
 }
 
+auto AsciiContinuousResultsPrinter::do_with_space(vector<char>::iterator buffer)
+  -> u64 {
+  *buffer = ' ';
+  return 1;
+}
+
 auto AsciiContinuousResultsPrinter::do_with_newline(
   vector<char>::iterator buffer
 ) -> u64 {
   *buffer = '\n';
-  return 1;
-}
-
-auto AsciiContinuousResultsPrinter::do_with_space(vector<char>::iterator buffer)
-  -> u64 {
-  *buffer = ' ';
   return 1;
 }
 

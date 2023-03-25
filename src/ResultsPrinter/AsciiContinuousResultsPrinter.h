@@ -10,8 +10,6 @@
 
 namespace sbwt_search {
 
-const u64 max_chars_in_u64 = 20;
-
 class AsciiContinuousResultsPrinter:
     public ContinuousResultsPrinter<AsciiContinuousResultsPrinter, char> {
   using Base = ContinuousResultsPrinter<AsciiContinuousResultsPrinter, char>;
@@ -40,8 +38,8 @@ protected:
   auto do_with_result(vector<char>::iterator buffer, u64 result) -> u64;
   auto do_with_not_found(vector<char>::iterator buffer) -> u64;
   auto do_with_invalid(vector<char>::iterator buffer) -> u64;
-  auto do_with_newline(vector<char>::iterator buffer) -> u64;
   auto do_with_space(vector<char>::iterator buffer) -> u64;
+  auto do_with_newline(vector<char>::iterator buffer) -> u64;
 };
 
 }  // namespace sbwt_search

@@ -17,5 +17,6 @@ using u8 = uint8_t;
 using i8 = int8_t;
 
 const u64 u64_bits = 64;
+const u64 max_chars_in_u64 = 20;
 
 #endif

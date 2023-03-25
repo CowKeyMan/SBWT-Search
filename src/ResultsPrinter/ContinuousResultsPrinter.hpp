@@ -72,7 +72,6 @@ private:
   vector<vector<Buffer_t>> buffers;
   u64 kmer_size;
   u64 threads;
-  u64 element_size;
   u64 stream_id;
 
 public:
@@ -84,7 +83,6 @@ public:
       invalid_chars_producer_,
     vector<string> filenames_,
     u64 kmer_size,
-    u64 element_size_,
     u64 threads_,
     u64 max_chars_per_batch
   ):
@@ -95,7 +93,6 @@ public:
       threads(threads_),
       kmer_size(kmer_size),
       write_locks(threads_ - 1),
-      element_size(element_size_),
       stream_id(stream_id_) {
     buffers.resize(threads);
     for (auto &b : buffers) {
@@ -151,7 +148,7 @@ private:
       u64 results_in_file = last_results_idx - first_results_idx;
       u64 rbnl_idx = nlbnf_idx > 0 ? nlbnfs[nlbnf_idx - 1] : 0;
       dump_starting_newlines(first_results_idx, rbnl_idx, nlbnf_idx);
-#pragma omp parallel num_threads(buffers.size())
+#pragma omp parallel num_threads(threads)
       {
         u64 thread_idx = omp_get_thread_num();
         if (!write_locks.empty() && thread_idx < buffers.size() - 1) {
@@ -188,9 +185,6 @@ private:
         for (u64 i = start_idx; i < end_idx; ++i, ++result_idx) {
           if (invalid_chars[char_idx + kmer_size - 1] == 1) {
             invalid_chars_left = kmer_size;
-          }
-          if (buffer.size() - buffer_idx < element_size) {
-            buffer.resize(buffer.size() + element_size);
           }
           add_new_result(
             buffer, invalid_chars_left, buffer_idx, results[result_idx]
@@ -248,10 +242,6 @@ private:
     const auto &nlbnfs = interval_batch->newlines_before_newfile;
     const auto &rbnls = results_before_newline;
     while (rbnls[rbnl_idx] == res_idx && rbnl_idx < nlbnfs[nlbnf_idx]) {
-      if (buffer_idx + element_size > buffer.size()) {
-        impl().do_write_buffer(buffer, buffer_idx);
-        buffer_idx = 0;
-      }
       buffer_idx
         += impl().do_with_newline(copy_advance(buffer.begin(), buffer_idx));
       ++rbnl_idx;
@@ -313,7 +303,6 @@ protected:
   ) -> void {
     buffer.reserve(static_cast<u64>(std::ceil(
       static_cast<double>(max_chars_per_batch) / static_cast<double>(threads)
-      * static_cast<double>(element_size)
     )));
   }
 
