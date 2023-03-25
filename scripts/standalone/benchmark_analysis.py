@@ -1,28 +1,7 @@
 #!/bin/python3
 
 """
-| Script to analyse the benchmark output, which is produced by
-| 'scripts/benchmark/color_search_d1.sh'. It works by creating a
-| dataframe containing the following columns:
-| {
-|    input_file
-|    print_mode
-|    streams
-|    component
-|    component_id
-|    batch_no
-|    state
-|    time
-|    device
-|    max_chars_per_batch
-|    max_reads_per_batch
-|    chars_in_batch
-|    reads_in_batch
-|    num_threads
-|    num_threads
-|    kmer_size
-| }
-| This is basically a database merged into a single table
+Script to analyse the benchmark output.
 """
 
 import argparse
@@ -36,6 +15,52 @@ from pathlib import Path
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
+import numpy as np
+
+total_time_component = 'Querier'
+
+
+ordered_components = [
+    # 'main',
+    # 'SBWTLoader',
+    # 'SBWTParserAndIndex',
+    'SBWTReadAndPopppy',
+    'SbwtGpuTransfer',
+    'Presearcher',
+    # 'PresearchFunction',
+    'MemoryAllocator',
+    # 'Querier',
+    'IndexFileParser',
+    'SequenceFileParser',
+    'PositionsBuilder',
+    'SeqToBitsConverter',
+    'Searcher',
+    # 'SearcherCopyToGpu',
+    # 'SearcherSearch',
+    # 'SearcherCopyFromGpu',
+    'ResultsPostProcessor',
+    'ResultsPrinter',
+]
+
+query_components = {
+    'IndexFileParser',
+    'SequenceFileParser',
+    'PositionsBuilder',
+    'SeqToBitsConverter',
+    'Searcher',
+    'ResultsPostProcessor',
+    'ResultsPrinter',
+}
+
+tabled_components = {
+    'IndexFileParser',
+    'SequenceFileParser',
+    'PositionsBuilder',
+    'SeqToBitsConverter',
+    'Searcher',
+    'ResultsPostProcessor',
+    'ResultsPrinter',
+}
 
 
 parser = argparse.ArgumentParser()
@@ -116,7 +141,19 @@ class DataFrameGenerator:
                 ) from exc
         self.merge_working_dict()
         print()
-        return pd.concat(self.dfs)
+        df = pd.concat(self.dfs)
+        df = df.astype({
+            'component': 'category',
+            'stream': int,
+            'time': float,
+            'state': 'category',
+            'batch': int,
+            'file': 'category',
+            'print_mode': 'category',
+            'device': 'category',
+            'streams_total': int,
+        })
+        return df
 
     def parse_line(self, line: str):
         for (pattern, parser) in self.line_pattern_to_parser.items():
@@ -204,7 +241,6 @@ class DataFrameGenerator:
         self.working_dict = defaultdict(list)
         df['file'] = Path(self.current_input_file).stem
         df['print_mode'] = self.current_print_mode
-        df['kmer_size'] = self.kmer_size
         df['device'] = self.current_device
         df['time'] = pd.to_datetime(df['time'])
         df['time'] = (
@@ -270,9 +306,16 @@ class StreamsVsTime:
             graph_dict['memory_alloc_time'].append(
                 get_time_for_component(filtered_df, 'MemoryAllocator')
             )
-            graph_dict['loading_time'].append(
-                get_time_for_component(filtered_df, 'SBWTLoader')
-            )
+            if 'SBWTLoader' in filtered_df['component'].values:
+                graph_dict['loading_time'].append(
+                    get_time_for_component(filtered_df, 'SBWTLoader')
+                )
+            elif 'ColorsLoader' in filtered_df['component'].values:
+                graph_dict['loading_time'].append(
+                    get_time_for_component(filtered_df, 'ColorsLoader')
+                )
+            else:
+                raise RuntimeError("No Loader found")
         df = pd.DataFrame(graph_dict)
         print(title)
         print(df)
@@ -339,48 +382,85 @@ class IndividualAnalysis:
         df: pd.DataFrame,
         output_folder: str,
         include_loader: bool = False,
-        included_memory_allocator: bool = False
+        include_memory_allocator: bool = False
     ):
         self.df = df
         self.output_folder = output_folder
         self.include_loader = include_loader
-        self.included_memory_allocator = included_memory_allocator
+        self.include_memory_allocator = include_memory_allocator
 
     def generate(self):
         unique_graph_cols = (
             self.df['file print_mode device streams_total'.split()]
         ).drop_duplicates()
+        ugcs = []
         for _, ugc in unique_graph_cols.iterrows():
-            filtered_df = filter_df_by_series(df, ugc)
-            fig, ax = plt.subplots()
-            plt.title(
-                f"Individual Analysis for file {ugc['file']} running\n"
-                f"on {ugc['device']} hardware with {ugc['streams_total']} "
-                "streams"
+            single_df = filter_df_by_series(df, ugc)
+            ugcs.append((ugc, get_time_for_component(single_df, 'Querier')))
+        unique_graph_cols_sorted = pd.DataFrame([
+            x[0] for x in
+            sorted(ugcs, key=lambda ugc: ugc[1])
+        ])
+        for _, ugc in unique_graph_cols_sorted.iterrows():
+            single_df = filter_df_by_series(df, ugc)
+            self.generate_single(
+                single_df,
+                ugc['file'],
+                ugc['device'],
+                ugc['streams_total'],
+                ugc['print_mode'],
             )
-            self.generate_timeline(ax, filtered_df)
-            plt.savefig(
-                self.output_folder
-                / f"Individual_{ugc['file']}_{ugc['device']}_"
-                f"{ugc['print_mode']}_{ugc['streams_total']}_streams.svg",
-                bbox_inches='tight',
-                format='svg'
-            )
-            plt.close(fig)
+
+    def generate_single(
+        self,
+        df: pd.DataFrame,
+        file: str,
+        device: str,
+        streams_total: str,
+        print_mode: str
+    ):
+        fig, axs = plt.subplots(2, 1)
+        title = (
+            f"Individual Analysis for file {file} running\n"
+            f"on {device} hardware with {streams_total} "
+            f"streams and outputting in {print_mode} format"
+        )
+        plt.title(title)
+        print(title)
+        self.generate_timeline(axs[0], df)
+        self.generate_table(axs[1], df)
+        plt.savefig(
+            self.output_folder
+            / f"Individual_{file}_{device}_"
+            f"{print_mode}_{streams_total}_streams.svg",
+            bbox_inches='tight',
+            format='svg'
+        )
+        plt.close(fig)
 
     def generate_timeline(self, ax: plt.axis, df: pd.DataFrame):
         index = 0
         components_df = df['component stream'.split()].drop_duplicates()
-        # TODO: FILTER first based on components and sort above dataset
+        components_df = components_df.sort_values(
+            by='component',
+            key=lambda column: [
+                ordered_components.index(x) if x in ordered_components
+                else -1
+                for x in column
+            ],
+            ascending=False
+        )
         component_ticks = []
         for _, row in (
             components_df
             .reset_index(drop=True)
             .iterrows()
         ):
+            if row['component'] not in ordered_components:
+                continue
             component_ticks.append(
                 f"{row['component']}_{row['stream']}"
-            ) # TODO: DO NOT APPEND STREAM IF NOT STREAM OBJECT, USE SOME SET
+            )
             filtered_df = filter_df_by_series(df, row)
             for batch_df in (
                 filtered_df[filtered_df['batch'] == x]
@@ -395,15 +475,59 @@ class IndividualAnalysis:
                 ax.barh(
                     index,
                     width=stop_time - start_time,
-                    height=1,
+                    height=0.3,
                     left=start_time,
                 )
             index += 1
         ax.yaxis.set_ticks(
-            range(len(component_ticks)), component_ticks, fontsize=5
+            range(len(component_ticks)), component_ticks, fontsize=11
         )
         ax.set_xlabel('Time (s)')
 
+    def generate_table(self, ax: plt.axis, df: pd.DataFrame):
+        component_to_batch_time = defaultdict(list)
+        component_to_stream_time = defaultdict(
+            lambda: [0] * df['streams_total'].iloc[0]
+        )
+        components_df = df['component stream'.split()].drop_duplicates()
+        for _, row in components_df.iterrows():
+            filtered_df = filter_df_by_series(df, row)
+            component = row['component']
+            for batch_df in (
+                filtered_df[filtered_df['batch'] == x]
+                for x in filtered_df['batch'].unique()
+            ):
+                time = get_time_for_component(batch_df, component)
+                component_to_batch_time[component].append(time)
+                component_to_stream_time[row['component']][row['stream']] += (
+                    time
+                )
+        result_df = pd.DataFrame()
+        batches_values = component_to_batch_time.values()
+        streams_values = component_to_stream_time.values()
+        result_df['component'] = list(component_to_batch_time.keys())
+        # result_df['total_batches'] = [len(x) for x in batches_values]
+        # result_df['avg_batch_time'] = [np.mean(x) for x in batches_values]
+        # result_df['median_batch_time'] = [
+        #     np.median(x) for x in batches_values
+        # ]
+        # result_df['std_dev_batch_time'] = [np.std(x) for x in batches_values]
+        result_df['min_stream_time'] = [np.min(x) for x in streams_values]
+        result_df['max_stream_time'] = [np.max(x) for x in streams_values]
+        # result_df['avg_stream_time'] = [np.mean(x) for x in streams_values]
+        # result_df['std_dev_stream_time'] = [
+        #     np.std(x) for x in streams_values
+        # ]
+        result_df['total_time'] = [np.sum(x) for x in batches_values]
+        print(result_df)
+        ax.table(
+            result_df.values,
+            colLabels=result_df.columns,
+            loc='bottom',
+            fontsize=6
+        )
+        ax.axis('off')
+        ax.axis('tight')
 
 
 input_file = Path(args['input'])
@@ -412,16 +536,15 @@ output_folder = input_file.parent
 print('Parsing: ', end='')
 df = DataFrameGenerator().generate(input_file)
 
-print('Generating streams vs time')
+print('Generating streams vs time:')
 StreamsVsTime(df, output_folder).generate()
 
-print('Generating IndividualAnalysis')
+print('Generating IndividualAnalysis:')
 IndividualAnalysis(df, output_folder).generate()
 
 # import cProfile
 # import pstats
 # import sys
-
 
 # def print_profiling_results(pr) -> None:
 #     pstats.Stats(pr, stream=sys.stdout) \
