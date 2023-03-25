@@ -25,8 +25,7 @@ using std::shared_ptr;
 using std::string;
 using std::variant;
 
-using ColorResultsPrinter
-  = variant<shared_ptr<AsciiContinuousColorResultsPrinter>>;
+using ColorResultsPrinter = variant<AsciiContinuousColorResultsPrinter>;
 
 class ColorSearchMain: public Main {
 private:
@@ -57,19 +56,19 @@ private:
       vector<shared_ptr<ContinuousIndexFileParser>>,
       vector<shared_ptr<ContinuousColorSearcher>>,
       vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
-      vector<ColorResultsPrinter>>;
+      vector<shared_ptr<ColorResultsPrinter>>>;
   auto get_results_printer(
     u64 stream_id,
     shared_ptr<ContinuousIndexFileParser> &index_file_parser,
     shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
     vector<string> filenames,
     u64 num_colors
-  ) -> ColorResultsPrinter;
+  ) -> shared_ptr<ColorResultsPrinter>;
   auto run_components(
     vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
     vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
     vector<shared_ptr<ContinuousColorResultsPostProcessor>> &post_processors,
-    vector<ColorResultsPrinter> &results_processors
+    vector<shared_ptr<ColorResultsPrinter>> &results_processors
   ) -> void;
 };
 

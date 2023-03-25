@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include <omp.h>
 #include <stdexcept>
 #include <string>
@@ -26,6 +27,7 @@ using math_utils::round_down;
 using memory_utils::get_total_system_memory;
 using std::cerr;
 using std::endl;
+using std::make_shared;
 using std::min;
 using std::runtime_error;
 
@@ -204,14 +206,14 @@ auto ColorSearchMain::get_components(
     vector<shared_ptr<ContinuousIndexFileParser>>,
     vector<shared_ptr<ContinuousColorSearcher>>,
     vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
-    vector<ColorResultsPrinter>> {
+    vector<shared_ptr<ColorResultsPrinter>>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   vector<shared_ptr<ContinuousIndexFileParser>> index_file_parsers(streams);
   vector<shared_ptr<ContinuousColorSearcher>> searchers(streams);
   vector<shared_ptr<ContinuousColorResultsPostProcessor>> post_processors(
     streams
   );
-  vector<ColorResultsPrinter> results_printers(streams);
+  vector<shared_ptr<ColorResultsPrinter>> results_printers(streams);
   for (u64 i = 0; i < streams; ++i) {
     index_file_parsers[i] = make_shared<ContinuousIndexFileParser>(
       i,
@@ -254,8 +256,8 @@ auto ColorSearchMain::get_results_printer(
   shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
   vector<string> filenames,
   u64 num_colors
-) -> ColorResultsPrinter {
-  return make_shared<AsciiContinuousColorResultsPrinter>(
+) -> shared_ptr<ColorResultsPrinter> {
+  return make_shared<ColorResultsPrinter>(AsciiContinuousColorResultsPrinter(
     stream_id,
     index_file_parser->get_colors_interval_batch_producer(),
     index_file_parser->get_read_statistics_batch_producer(),
@@ -269,14 +271,14 @@ auto ColorSearchMain::get_results_printer(
     get_args().get_include_invalid(),
     get_threads(),
     gpu_warp_size
-  );
+  ));
 }
 
 auto ColorSearchMain::run_components(
   vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
   vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
   vector<shared_ptr<ContinuousColorResultsPostProcessor>> &post_processors,
-  vector<ColorResultsPrinter> &results_printers
+  vector<shared_ptr<ColorResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
 #pragma omp parallel sections num_threads(num_components)
@@ -301,7 +303,7 @@ auto ColorSearchMain::run_components(
 #pragma omp parallel for num_threads(streams)
       for (auto &element : results_printers) {
         std::visit(
-          [](auto &arg) -> void { arg->read_and_generate(); }, element
+          [](auto &arg) -> void { arg.read_and_generate(); }, *element
         );
       }
     }

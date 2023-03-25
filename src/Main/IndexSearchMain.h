@@ -31,9 +31,8 @@ using std::tuple;
 using std::variant;
 using std::vector;
 
-using ResultsPrinter = variant<
-  shared_ptr<AsciiContinuousResultsPrinter>,
-  shared_ptr<BinaryContinuousResultsPrinter>>;
+using IndexResultsPrinter
+  = variant<AsciiContinuousResultsPrinter, BinaryContinuousResultsPrinter>;
 
 class IndexSearchMain: public Main {
 public:
@@ -62,7 +61,7 @@ private:
       vector<shared_ptr<ContinuousSeqToBitsConverter>>,
       vector<shared_ptr<ContinuousPositionsBuilder>>,
       vector<shared_ptr<ContinuousSearcher>>,
-      vector<ResultsPrinter>>;
+      vector<shared_ptr<IndexResultsPrinter>>>;
   auto load_input_output_filenames(
     const string &input_file, const string &output_file
   ) -> void;
@@ -74,13 +73,13 @@ private:
     const shared_ptr<IntervalBatchProducer> &interval_batch_producer,
     const shared_ptr<InvalidCharsProducer> &invalid_chars_producer,
     const vector<string> &split_output_filenames
-  ) -> ResultsPrinter;
+  ) -> shared_ptr<IndexResultsPrinter>;
   auto run_components(
     vector<shared_ptr<ContinuousSequenceFileParser>> &sequence_file_parsers,
     vector<shared_ptr<ContinuousSeqToBitsConverter>> &seq_to_bits_converters,
     vector<shared_ptr<ContinuousPositionsBuilder>> &positions_builders,
     vector<shared_ptr<ContinuousSearcher>> &searchers,
-    vector<ResultsPrinter> &results_printers
+    vector<shared_ptr<IndexResultsPrinter>> &results_printers
   ) -> void;
 };
 

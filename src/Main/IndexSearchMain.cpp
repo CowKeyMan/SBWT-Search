@@ -205,7 +205,7 @@ auto IndexSearchMain::get_components(
     vector<shared_ptr<ContinuousSeqToBitsConverter>>,
     vector<shared_ptr<ContinuousPositionsBuilder>>,
     vector<shared_ptr<ContinuousSearcher>>,
-    vector<ResultsPrinter>> {
+    vector<shared_ptr<IndexResultsPrinter>>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   vector<shared_ptr<ContinuousSequenceFileParser>> sequence_file_parsers(streams
   );
@@ -214,7 +214,7 @@ auto IndexSearchMain::get_components(
   );
   vector<shared_ptr<ContinuousPositionsBuilder>> positions_builders(streams);
   vector<shared_ptr<ContinuousSearcher>> searchers(streams);
-  vector<ResultsPrinter> results_printers(streams);
+  vector<shared_ptr<IndexResultsPrinter>> results_printers(streams);
 #pragma omp parallel for
   for (u64 i = 0; i < streams; ++i) {
     Logger::log_timed_event(
@@ -306,9 +306,9 @@ auto IndexSearchMain::get_results_printer(
   const shared_ptr<IntervalBatchProducer> &interval_batch_producer,
   const shared_ptr<InvalidCharsProducer> &invalid_chars_producer,
   const vector<string> &output_filenames
-) -> ResultsPrinter {
+) -> shared_ptr<IndexResultsPrinter> {
   if (get_args().get_print_mode() == "ascii") {
-    return make_shared<AsciiContinuousResultsPrinter>(
+    return make_shared<IndexResultsPrinter>(AsciiContinuousResultsPrinter(
       stream_id,
       searcher,
       interval_batch_producer,
@@ -318,10 +318,10 @@ auto IndexSearchMain::get_results_printer(
       get_threads(),
       max_chars_per_batch,
       max_reads_per_batch
-    );
+    ));
   }
   if (get_args().get_print_mode() == "binary") {
-    return make_shared<BinaryContinuousResultsPrinter>(
+    return make_shared<IndexResultsPrinter>(BinaryContinuousResultsPrinter(
       stream_id,
       searcher,
       interval_batch_producer,
@@ -331,7 +331,7 @@ auto IndexSearchMain::get_results_printer(
       get_threads(),
       max_chars_per_batch,
       max_reads_per_batch
-    );
+    ));
   }
   throw runtime_error("Invalid value passed by user for print_mode");
 }
@@ -357,7 +357,7 @@ auto IndexSearchMain::run_components(
   vector<shared_ptr<ContinuousSeqToBitsConverter>> &seq_to_bits_converters,
   vector<shared_ptr<ContinuousPositionsBuilder>> &positions_builders,
   vector<shared_ptr<ContinuousSearcher>> &searchers,
-  vector<ResultsPrinter> &results_printers
+  vector<shared_ptr<IndexResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
 #pragma omp parallel sections num_threads(num_components)
@@ -391,7 +391,7 @@ auto IndexSearchMain::run_components(
 #pragma omp parallel for num_threads(streams)
       for (auto &element : results_printers) {
         std::visit(
-          [](auto &arg) -> void { arg->read_and_generate(); }, element
+          [](auto &arg) -> void { arg.read_and_generate(); }, *element
         );
       }
     }
