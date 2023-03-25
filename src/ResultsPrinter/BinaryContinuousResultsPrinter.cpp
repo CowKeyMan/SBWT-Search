@@ -12,7 +12,8 @@ BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
   vector<string> filenames,
   u64 kmer_size,
   u64 threads,
-  u64 max_chars_per_batch
+  u64 max_chars_per_batch,
+  u64 max_reads_per_batch
 ):
     Base(
       stream_id,
@@ -22,7 +23,9 @@ BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
       std::move(filenames),
       kmer_size,
       threads,
-      max_chars_per_batch
+      max_chars_per_batch,
+      max_reads_per_batch,
+      1
     ) {}
 
 auto BinaryContinuousResultsPrinter::do_get_extension() -> string {

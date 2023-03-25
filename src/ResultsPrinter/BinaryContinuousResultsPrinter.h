@@ -29,7 +29,8 @@ public:
     vector<string> filenames,
     u64 kmer_size,
     u64 threads,
-    u64 max_chars_per_batch
+    u64 max_chars_per_batch,
+    u64 max_reads_per_batch
   );
 
 protected:

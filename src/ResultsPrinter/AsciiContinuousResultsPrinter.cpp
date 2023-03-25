@@ -13,7 +13,8 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
   vector<string> filenames,
   u64 kmer_size,
   u64 threads,
-  u64 max_chars_per_batch
+  u64 max_chars_per_batch,
+  u64 max_reads_per_batch
 ):
     Base(
       stream_id,
@@ -23,7 +24,9 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
       std::move(filenames),
       kmer_size,
       threads,
-      max_chars_per_batch
+      max_chars_per_batch,
+      max_reads_per_batch,
+      max_chars_in_u64 + 1
     ) {
   tiny_buffers.resize(threads);
   for (u64 i = 0; i < threads; ++i) {

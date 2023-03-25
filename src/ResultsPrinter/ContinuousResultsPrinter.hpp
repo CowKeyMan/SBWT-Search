@@ -84,7 +84,9 @@ public:
     vector<string> filenames_,
     u64 kmer_size,
     u64 threads_,
-    u64 max_chars_per_batch
+    u64 max_chars_per_batch,
+    u64 max_reads_per_batch,
+    u64 element_size
   ):
       results_producer(std::move(results_producer_)),
       interval_producer(std::move(interval_producer_)),
@@ -93,10 +95,12 @@ public:
       threads(threads_),
       kmer_size(kmer_size),
       write_locks(threads_ - 1),
-      stream_id(stream_id_) {
-    buffers.resize(threads);
+      stream_id(stream_id_),
+      buffers(threads_) {
     for (auto &b : buffers) {
-      impl().do_allocate_buffer(b, max_chars_per_batch, threads);
+      impl().do_allocate_buffer(
+        b, max_chars_per_batch, max_reads_per_batch, threads, element_size
+      );
     }
   }
 
@@ -299,10 +303,18 @@ protected:
   auto do_get_version() -> string;
 
   auto do_allocate_buffer(
-    vector<Buffer_t> &buffer, u64 max_chars_per_batch, u64 threads
+    vector<Buffer_t> &buffer,
+    u64 max_chars_per_batch,
+    u64 max_reads_per_batch,
+    u64 threads,
+    u64 element_size
   ) -> void {
     buffer.reserve(static_cast<u64>(std::ceil(
       static_cast<double>(max_chars_per_batch) / static_cast<double>(threads)
+        * static_cast<double>(element_size)
+      + std::ceil(
+        static_cast<double>(max_reads_per_batch) / static_cast<double>(threads)
+      )
     )));
   }
 
@@ -335,8 +347,7 @@ protected:
   auto do_with_invalid(vector<Buffer_t>::iterator buffer) -> u64;
   auto do_with_not_found(vector<Buffer_t>::iterator buffer) -> u64;
   auto do_with_newline(vector<Buffer_t>::iterator buffer) -> u64;
-  // NOLINTNEXTLINE(misc-unused-parameters)
-  auto do_with_space(vector<Buffer_t>::iterator buffer) -> u64 { return 0; }
+  auto do_with_space(vector<Buffer_t>::iterator) -> u64 { return 0; }
 
   auto do_at_file_end() -> void{};
 };

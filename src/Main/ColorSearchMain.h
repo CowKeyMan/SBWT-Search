@@ -60,7 +60,7 @@ private:
       vector<ColorResultsPrinter>>;
   auto get_results_printer(
     u64 stream_id,
-    shared_ptr<ContinuousIndexFileParser> index_file_parser,
+    shared_ptr<ContinuousIndexFileParser> &index_file_parser,
     shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
     vector<string> filenames,
     u64 num_colors

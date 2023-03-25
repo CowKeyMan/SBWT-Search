@@ -20,6 +20,9 @@ class AsciiContinuousColorResultsPrinter:
     = ContinuousColorResultsPrinter<AsciiContinuousColorResultsPrinter, char>;
   friend Base;
 
+private:
+  vector<vector<char>> tiny_buffers;
+
 public:
   AsciiContinuousColorResultsPrinter(
     u64 stream_id_,
@@ -31,9 +34,13 @@ public:
       results_batch_producer_,
     const vector<string> &filenames_,
     u64 num_colors_,
+    u64 max_indexes_per_batch,
+    u64 max_reads_per_batch,
     double threshold_,
     bool include_not_found_,
-    bool include_invalid_
+    bool include_invalid_,
+    u64 threads,
+    u64 warp_size
   );
 
 protected:
@@ -41,9 +48,9 @@ protected:
   auto do_get_format() -> string;
   auto do_get_version() -> string;
 
-  auto do_with_newline() -> u64;
-  auto do_with_space() -> u64;
-  auto do_with_result(u64 result) -> u64;
+  auto do_with_newline(vector<char>::iterator buffer) -> u64;
+  auto do_with_space(vector<char>::iterator buffer) -> u64;
+  auto do_with_result(vector<char>::iterator buffer, u64 result) -> u64;
 };
 
 }  // namespace sbwt_search

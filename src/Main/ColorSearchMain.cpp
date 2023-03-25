@@ -250,7 +250,7 @@ auto ColorSearchMain::get_components(
 
 auto ColorSearchMain::get_results_printer(
   u64 stream_id,
-  shared_ptr<ContinuousIndexFileParser> index_file_parser,
+  shared_ptr<ContinuousIndexFileParser> &index_file_parser,
   shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
   vector<string> filenames,
   u64 num_colors
@@ -259,12 +259,16 @@ auto ColorSearchMain::get_results_printer(
     stream_id,
     index_file_parser->get_colors_interval_batch_producer(),
     index_file_parser->get_read_statistics_batch_producer(),
-    post_processor,
+    std::move(post_processor),
     std::move(filenames),
     num_colors,
+    max_indexes_per_batch,
+    max_reads_per_batch,
     get_args().get_threshold(),
     get_args().get_include_not_found(),
-    get_args().get_include_invalid()
+    get_args().get_include_invalid(),
+    get_threads(),
+    gpu_warp_size
   );
 }
 

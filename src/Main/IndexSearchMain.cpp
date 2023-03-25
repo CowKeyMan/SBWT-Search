@@ -316,7 +316,8 @@ auto IndexSearchMain::get_results_printer(
       output_filenames,
       kmer_size,
       get_threads(),
-      max_chars_per_batch
+      max_chars_per_batch,
+      max_reads_per_batch
     );
   }
   if (get_args().get_print_mode() == "binary") {
@@ -328,7 +329,8 @@ auto IndexSearchMain::get_results_printer(
       output_filenames,
       kmer_size,
       get_threads(),
-      max_chars_per_batch
+      max_chars_per_batch,
+      max_reads_per_batch
     );
   }
   throw runtime_error("Invalid value passed by user for print_mode");
