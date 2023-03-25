@@ -125,8 +125,9 @@ public:
     u64 element_size
   ) -> void {
     buffer.reserve(static_cast<u64>(std::ceil(
-      static_cast<double>(max_indexes_per_batch) / static_cast<double>(threads)
-        / static_cast<double>(warp_size) * static_cast<double>(element_size)
+      static_cast<double>(max_indexes_per_batch) * num_colors
+        / static_cast<double>(threads) / static_cast<double>(warp_size)
+        * static_cast<double>(element_size)
       + std::ceil(
         static_cast<double>(max_reads_per_batch) / static_cast<double>(threads)
       )
