@@ -46,7 +46,7 @@ auto AsciiContinuousResultsPrinter::do_with_result(
 
 auto AsciiContinuousResultsPrinter::do_with_not_found(
   vector<char>::iterator buffer
-) -> u64 {
+) const -> u64 {
   *buffer = '-';
   *(buffer + 1) = '1';
   return 2;
@@ -54,21 +54,21 @@ auto AsciiContinuousResultsPrinter::do_with_not_found(
 
 auto AsciiContinuousResultsPrinter::do_with_invalid(
   vector<char>::iterator buffer
-) -> u64 {
+) const -> u64 {
   *buffer = '-';
   *(buffer + 1) = '2';
   return 2;
 }
 
-auto AsciiContinuousResultsPrinter::do_with_space(vector<char>::iterator buffer)
-  -> u64 {
+auto AsciiContinuousResultsPrinter::do_with_space(vector<char>::iterator buffer
+) const -> u64 {
   *buffer = ' ';
   return 1;
 }
 
 auto AsciiContinuousResultsPrinter::do_with_newline(
   vector<char>::iterator buffer
-) -> u64 {
+) const -> u64 {
   *buffer = '\n';
   return 1;
 }

@@ -35,11 +35,15 @@ protected:
   auto do_get_format() -> string;
   auto do_get_version() -> string;
 
-  auto do_with_result(vector<char>::iterator buffer, u64 result) -> u64;
-  auto do_with_not_found(vector<char>::iterator buffer) -> u64;
-  auto do_with_invalid(vector<char>::iterator buffer) -> u64;
-  auto do_with_space(vector<char>::iterator buffer) -> u64;
-  auto do_with_newline(vector<char>::iterator buffer) -> u64;
+  [[nodiscard]] auto do_with_result(vector<char>::iterator buffer, u64 result)
+    -> u64;
+  [[nodiscard]] auto do_with_not_found(vector<char>::iterator buffer) const
+    -> u64;
+  [[nodiscard]] auto do_with_invalid(vector<char>::iterator buffer) const
+    -> u64;
+  [[nodiscard]] auto do_with_space(vector<char>::iterator buffer) const -> u64;
+  [[nodiscard]] auto do_with_newline(vector<char>::iterator buffer) const
+    -> u64;
 };
 
 }  // namespace sbwt_search

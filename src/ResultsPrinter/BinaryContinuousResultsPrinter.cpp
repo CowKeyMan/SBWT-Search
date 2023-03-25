@@ -21,7 +21,6 @@ BinaryContinuousResultsPrinter::BinaryContinuousResultsPrinter(
       std::move(invalid_chars_producer),
       std::move(filenames),
       kmer_size,
-      1,
       threads,
       max_chars_per_batch
     ) {}
@@ -38,28 +37,28 @@ auto BinaryContinuousResultsPrinter::do_get_version() -> string {
 
 auto BinaryContinuousResultsPrinter::do_with_result(
   vector<u64>::iterator buffer, u64 result
-) -> u64 {
+) const -> u64 {
   *buffer = result;
   return 1;
 }
 
 auto BinaryContinuousResultsPrinter::do_with_not_found(
   vector<u64>::iterator buffer
-) -> u64 {
+) const -> u64 {
   *buffer = minus1;
   return 1;
 }
 
 auto BinaryContinuousResultsPrinter::do_with_invalid(
   vector<u64>::iterator buffer
-) -> u64 {
+) const -> u64 {
   *buffer = minus2;
   return 1;
 }
 
 auto BinaryContinuousResultsPrinter::do_with_newline(
   vector<u64>::iterator buffer
-) -> u64 {
+) const -> u64 {
   *buffer = minus3;
   return 1;
 }
