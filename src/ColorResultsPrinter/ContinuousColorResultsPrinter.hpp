@@ -51,11 +51,6 @@ private:
   shared_ptr<ColorSearchResultsBatch> results_batch;
   vector<string> filenames;
   vector<string>::iterator current_filename;
-
-protected:  // TODO: revert
-  unique_ptr<ThrowingOfstream> out_stream;
-
-private:
   u64 num_colors;
   double threshold;
   vector<u64> previous_last_results;
@@ -66,6 +61,9 @@ private:
   u64 include_not_found;
   u64 include_invalid;
   u64 stream_id;
+
+protected:
+  unique_ptr<ThrowingOfstream> out_stream;
 
 public:
   ContinuousColorResultsPrinter(
@@ -183,14 +181,13 @@ protected:
         std::plus<>()
       );
     }
-    u64 rbnf_idx = 0;
     u64 wbnr = printed_last_read ? wbnrs[0] : 0;
-    u64 wbnr_idx = static_cast<u64>(printed_last_read);
-    u64 &read_idx = wbnr_idx;
-    for (rbnf_idx = 0; rbnf_idx < rbnfs.size(); ++rbnf_idx) {
+    u64 wbnr_idx = printed_last_read ? 1 : 0;
+    for (auto rbnf : rbnfs) {
       // TODO: parallelise this loop with openmp (set num threads yourself)
       // TODO: write to a buffer
-      for (; wbnr_idx < std::min(wbnrs.size(), rbnfs[rbnf_idx]); ++wbnr_idx) {
+      for (; wbnr_idx < std::min(wbnrs.size(), rbnf); ++wbnr_idx) {
+        const u64 read_idx = wbnr_idx;
         if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
           previous_last_found_idx = found_idxs[read_idx];
           previous_last_not_found_idxs = not_found_idxs[read_idx];
@@ -215,9 +212,10 @@ protected:
         );
         wbnr = wbnrs[wbnr_idx];
       }
-      if (rbnfs[rbnf_idx] == wbnr_idx) { impl().do_start_next_file(); }
+      if (rbnf == wbnr_idx) { impl().do_start_next_file(); }
     }
   }
+
   auto do_print_read(
     vector<u64>::iterator results,
     u64 found_idxs,
