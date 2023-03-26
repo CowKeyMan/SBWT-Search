@@ -138,6 +138,8 @@ public:
     }
   }
 
+  u64 reservation_size = 0;
+
   auto do_allocate_buffer(
     vector<Buffer_t> &buffer,
     u64 max_indexes_per_batch,
@@ -149,6 +151,15 @@ public:
   ) -> void {
     const u64 read_insurance = 1;
     const u64 newline_insurance = 10;
+
+    reservation_size
+      = (divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
+         + read_insurance)
+        * element_size * num_colors
+      + (divide_and_ceil<u64>(max_reads_per_batch, threads) + newline_insurance)
+        * newline_element_size;
+    cerr << "Reserving: " << reservation_size << endl;
+
     buffer.reserve(
       (divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
        + read_insurance)
@@ -358,6 +369,10 @@ protected:
   }
 
   auto do_write_buffer(const vector<Buffer_t> &buffer, u64 amount) -> void {
+    if (buffer.size() > reservation_size) {
+      cerr << "OH NO: res_size" << reservation_size
+           << ", buf_size: " << buffer.size() << endl;
+    }
     out_stream->write(
       bit_cast<char *>(buffer.data()),
       static_cast<std::streamsize>(amount * sizeof(Buffer_t))
