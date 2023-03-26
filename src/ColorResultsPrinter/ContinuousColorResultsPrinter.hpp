@@ -129,13 +129,14 @@ public:
     u64 element_size,
     u64 newline_element_size
   ) -> void {
-    const u64 insurance = 10;
+    const u64 read_insurance = 1;
+    const u64 newline_insurance = 1;
     buffer.reserve(
-      divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
+      (divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
+       + read_insurance)
         * element_size * num_colors
-      + divide_and_ceil<u64>(max_reads_per_batch, threads)
+      + (divide_and_ceil<u64>(max_reads_per_batch, threads) + newline_insurance)
         * newline_element_size
-      + insurance
     );
   }
 
