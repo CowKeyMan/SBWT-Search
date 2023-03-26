@@ -86,7 +86,8 @@ public:
     u64 threads_,
     u64 max_chars_per_batch,
     u64 max_reads_per_batch,
-    u64 element_size
+    u64 element_size,
+    u64 newline_element_size = 1
   ):
       results_producer(std::move(results_producer_)),
       interval_producer(std::move(interval_producer_)),
@@ -99,7 +100,12 @@ public:
       buffers(threads_) {
     for (auto &b : buffers) {
       impl().do_allocate_buffer(
-        b, max_chars_per_batch, max_reads_per_batch, threads, element_size
+        b,
+        max_chars_per_batch,
+        max_reads_per_batch,
+        threads,
+        element_size,
+        newline_element_size
       );
     }
   }
@@ -307,15 +313,24 @@ protected:
     u64 max_chars_per_batch,
     u64 max_reads_per_batch,
     u64 threads,
-    u64 element_size
+    u64 element_size,
+    u64 newline_element_size
   ) -> void {
-    buffer.reserve(static_cast<u64>(std::ceil(
-      static_cast<double>(max_chars_per_batch) / static_cast<double>(threads)
-        * static_cast<double>(element_size)
-      + std::ceil(
-        static_cast<double>(max_reads_per_batch) / static_cast<double>(threads)
+    const u64 insurance = 10;
+    buffer.reserve(
+      static_cast<u64>(
+        std::ceil(
+          static_cast<double>(max_chars_per_batch)
+          / static_cast<double>(threads)
+        ) * static_cast<double>(element_size)
+        + std::ceil(
+            static_cast<double>(max_reads_per_batch)
+            / static_cast<double>(threads)
+          )
+          * newline_element_size
       )
-    )));
+      + insurance
+    );
   }
 
   auto do_write_buffer(const vector<Buffer_t> &buffer, u64 amount) -> void {

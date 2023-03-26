@@ -88,7 +88,8 @@ public:
     bool include_invalid_,
     u64 threads_,
     u64 warp_size,
-    u64 element_size
+    u64 element_size,
+    u64 newline_element_size = 1
   ):
       interval_batch_producer(std::move(interval_batch_producer_)),
       read_statistics_batch_producer(std::move(read_statistics_batch_producer_)
@@ -111,7 +112,8 @@ public:
         max_reads_per_batch,
         threads,
         warp_size,
-        element_size
+        element_size,
+        newline_element_size
       );
     }
   }
@@ -122,16 +124,25 @@ public:
     u64 max_reads_per_batch,
     u64 threads,
     u64 warp_size,
-    u64 element_size
+    u64 element_size,
+    u64 newline_element_size
   ) -> void {
-    buffer.reserve(static_cast<u64>(std::ceil(
-      static_cast<double>(max_indexes_per_batch) * num_colors
-        / static_cast<double>(threads) / static_cast<double>(warp_size)
-        * static_cast<double>(element_size)
-      + std::ceil(
-        static_cast<double>(max_reads_per_batch) / static_cast<double>(threads)
+    const u64 insurance = 10;
+    buffer.reserve(
+      static_cast<u64>(
+        std::ceil(
+          static_cast<double>(max_indexes_per_batch)
+          / static_cast<double>(threads) / static_cast<double>(warp_size)
+        ) * element_size
+          * num_colors
+        + std::ceil(
+            static_cast<double>(max_reads_per_batch)
+            / static_cast<double>(threads)
+          )
+          * newline_element_size
       )
-    )));
+      + insurance
+    );
   }
 
   auto read_and_generate() -> void {
