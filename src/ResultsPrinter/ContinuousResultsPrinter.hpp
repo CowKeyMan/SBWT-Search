@@ -39,6 +39,7 @@ using design_utils::SharedBatchesProducer;
 using fmt::format;
 using io_utils::ThrowingOfstream;
 using log_utils::Logger;
+using math_utils::divide_and_ceil;
 using math_utils::round_up;
 using std::bit_cast;
 using std::ceil;
@@ -318,17 +319,9 @@ protected:
   ) -> void {
     const u64 insurance = 10;
     buffer.reserve(
-      static_cast<u64>(
-        std::ceil(
-          static_cast<double>(max_chars_per_batch)
-          / static_cast<double>(threads)
-        ) * static_cast<double>(element_size)
-        + std::ceil(
-            static_cast<double>(max_reads_per_batch)
-            / static_cast<double>(threads)
-          )
-          * newline_element_size
-      )
+      divide_and_ceil<u64>(max_chars_per_batch, threads) * element_size
+      + divide_and_ceil<u64>(max_reads_per_batch, threads)
+        * newline_element_size
       + insurance
     );
   }

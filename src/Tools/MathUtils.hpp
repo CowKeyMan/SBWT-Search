@@ -48,6 +48,13 @@ auto divide_and_round(Real1 a, Real2 b) -> Return {
   );
 }
 
+template <class Return, class Real1, class Real2>
+auto divide_and_ceil(Real1 a, Real2 b) -> Return {
+  return static_cast<Return>(
+    std::ceil(static_cast<double>(a) / static_cast<double>(b))
+  );
+}
+
 }  // namespace math_utils
 
 #endif

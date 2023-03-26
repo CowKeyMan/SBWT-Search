@@ -19,6 +19,7 @@
 #include "BatchObjects/ReadStatisticsBatch.h"
 #include "Tools/IOUtils.h"
 #include "Tools/Logger.h"
+#include "Tools/MathUtils.hpp"
 #include "Tools/OmpLock.h"
 #include "Tools/SharedBatchesProducer.hpp"
 #include "Tools/StdUtils.hpp"
@@ -30,6 +31,7 @@ using design_utils::SharedBatchesProducer;
 using fmt::format;
 using io_utils::ThrowingOfstream;
 using log_utils::Logger;
+using math_utils::divide_and_ceil;
 using std::bit_cast;
 using std::ios;
 using std::numeric_limits;
@@ -129,18 +131,10 @@ public:
   ) -> void {
     const u64 insurance = 10;
     buffer.reserve(
-      static_cast<u64>(
-        std::ceil(
-          static_cast<double>(max_indexes_per_batch)
-          / static_cast<double>(threads) / static_cast<double>(warp_size)
-        ) * element_size
-          * num_colors
-        + std::ceil(
-            static_cast<double>(max_reads_per_batch)
-            / static_cast<double>(threads)
-          )
-          * newline_element_size
-      )
+      divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
+        * element_size * num_colors
+      + divide_and_ceil<u64>(max_reads_per_batch, threads)
+        * newline_element_size
       + insurance
     );
   }
