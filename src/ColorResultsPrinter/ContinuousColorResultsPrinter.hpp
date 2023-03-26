@@ -1,21 +1,3 @@
-#include <algorithm>
-#include <iostream>
-#include <limits>
-#include <span>
-#include <vector>
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::vector;
-template <class T>
-auto print_vec(
-  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
-) {
-  cout << "---------------------" << endl;
-  for (int i = 0; i < std::min(limit, v.size()); ++i) { cout << v[i] << " "; }
-  cout << endl << "---------------------" << endl;
-}
-
 #ifndef CONTINUOUS_COLOR_RESULTS_PRINTER_HPP
 #define CONTINUOUS_COLOR_RESULTS_PRINTER_HPP
 
@@ -151,15 +133,6 @@ public:
   ) -> void {
     const u64 read_insurance = 1;
     const u64 newline_insurance = 10;
-
-    reservation_size
-      = (divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
-         + read_insurance)
-        * element_size * num_colors
-      + (divide_and_ceil<u64>(max_reads_per_batch, threads) + newline_insurance)
-        * newline_element_size;
-    cerr << "Reserving: " << reservation_size << endl;
-
     buffer.reserve(
       (divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
        + read_insurance)
@@ -369,10 +342,6 @@ protected:
   }
 
   auto do_write_buffer(const vector<Buffer_t> &buffer, u64 amount) -> void {
-    if (buffer.size() > reservation_size) {
-      cerr << "OH NO: res_size" << reservation_size
-           << ", buf_size: " << buffer.size() << endl;
-    }
     out_stream->write(
       bit_cast<char *>(buffer.data()),
       static_cast<std::streamsize>(amount * sizeof(Buffer_t))
