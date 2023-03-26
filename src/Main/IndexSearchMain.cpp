@@ -154,15 +154,16 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     throw runtime_error("Not enough memory. Please specify a lower number of "
                         "unavailable-main-memory.");
   }
-  u64 free_bits = static_cast<u64>(
-    static_cast<double>(
-      min(
-        get_total_system_memory() * sizeof(u64), get_args().get_max_cpu_memory()
-      )
-      - get_args().get_unavailable_ram()
-    )
-    * get_args().get_cpu_memory_percentage()
+  u64 available_ram = min(
+    get_total_system_memory() * sizeof(u64), get_args().get_max_cpu_memory()
   );
+  u64 unavailable_ram = get_args().get_unavailable_ram();
+  u64 free_bits = (unavailable_ram > available_ram) ?
+    0 :
+    static_cast<u64>(
+      static_cast<double>(available_ram - unavailable_ram)
+      * get_args().get_cpu_memory_percentage()
+    );
   // 8 bits per character for string sequence batch when reading
   // 8 bits per character for invalid characters
   // 64 bits for the positions

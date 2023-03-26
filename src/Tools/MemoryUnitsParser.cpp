@@ -14,9 +14,9 @@ using std::toupper;
 
 const unordered_map<string, u64> MemoryUnitsParser::units_to_multiplier = {
   {"B", 8ULL},
-  {"KB", 8 * 1024ULL},
-  {"MB", 8 * 1024 * 1024ULL},
-  {"GB", 8 * 1024 * 1024 * 1024ULL}};
+  {"KB", 8ULL * 1024},
+  {"MB", 8ULL * 1024 * 1024},
+  {"GB", 8ULL * 1024 * 1024 * 1024}};
 
 auto MemoryUnitsParser::convert(const string &s) -> u64 {
   u64 str_size = s.size();

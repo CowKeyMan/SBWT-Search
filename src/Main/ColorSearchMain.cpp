@@ -23,6 +23,7 @@ using fmt::format;
 using gpu_utils::get_free_gpu_memory;
 using log_utils::Logger;
 using math_utils::bits_to_gB;
+using math_utils::divide_and_ceil;
 using math_utils::round_down;
 using memory_utils::get_total_system_memory;
 using std::cerr;
@@ -107,9 +108,7 @@ auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
   // 64 for each index found
   // The results take: num_colors * 64 / warp_size
   const u64 bits_required_per_character = static_cast<u64>(
-    64.0
-    + static_cast<double>(num_colors) * 64.0
-      / static_cast<double>(gpu_warp_size)
+    64 + divide_and_ceil<u64>(64 * num_colors, gpu_warp_size)
   );
   auto max_chars_per_batch = free / bits_required_per_character / streams;
   Logger::log(
@@ -130,30 +129,29 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     throw runtime_error("Not enough memory. Please specify a lower number of "
                         "unavailable-main-memory.");
   }
-  u64 free_bits = static_cast<u64>(
-    static_cast<double>(
-      min(
-        get_total_system_memory() * sizeof(u64), get_args().get_max_cpu_memory()
-      )
-      - get_args().get_unavailable_ram()
-    )
-    * get_args().get_cpu_memory_percentage()
+  u64 available_ram = min(
+    get_total_system_memory() * sizeof(u64), get_args().get_max_cpu_memory()
   );
+  u64 unavailable_ram = get_args().get_unavailable_ram();
+  u64 free_bits = (unavailable_ram > available_ram) ?
+    0 :
+    static_cast<u64>(
+      static_cast<double>(available_ram - unavailable_ram)
+      * get_args().get_cpu_memory_percentage()
+    );
   // 64 bits per index
   // 64 * num_colors / warp_size to store the results
-  // 20 * 8 bits for each printed character
-  // 1 * 8 bits for each space after the printed characters
+  // 20 * 8 bits for each printed result
+  // 1 * 8 bits for each space after the printed result
+  // 8 bits for each printed newline
   // 64 bits per read for each newline
   // 64 bits per read for each found result count
   // 64 bits per read for each not found result count
   // 64 bits per read for each invalid result count
   const u64 bits_required_per_character = static_cast<u64>(
-    64.0
-    + 64.0 * static_cast<double>(num_colors)
-      / static_cast<double>(gpu_warp_size)
-    + (20 + 1) * 8
-    + (1.0 / static_cast<double>(get_args().get_indexes_per_read()))
-      * (64.0 * 4)
+    64 + divide_and_ceil<u64>(64 * num_colors, gpu_warp_size)
+    + divide_and_ceil<u64>((20ULL + 1ULL) * 8ULL * num_colors, gpu_warp_size)
+    + divide_and_ceil<u64>(64 * 4 + 8, get_args().get_indexes_per_read())
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
     + static_cast<u64>(
       64.0
