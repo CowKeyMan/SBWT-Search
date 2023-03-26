@@ -176,8 +176,8 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
       "Batch {} in stream {} contains {} indexes in {} reads, of which {} are "
       "found indexes and {} is padding. {} indexes were skipped, of which {} "
       "is not found and {} is invalids.",
-      stream_id,
       batch_id,
+      stream_id,
       num_indexes,
       reads,
       num_found_idxs,
