@@ -1,25 +1,28 @@
-#ifndef ASCII_CONTINUOUS_RESULTS_PRINTER_H
-#define ASCII_CONTINUOUS_RESULTS_PRINTER_H
+#ifndef ASCII_CONTINUOUS_INDEX_RESULTS_PRINTER_H
+#define ASCII_CONTINUOUS_INDEX_RESULTS_PRINTER_H
 
 /**
- * @file AsciiContinuousResultsPrinter.h
- * @brief Inherits ContinuousResultsPrinter and prints out ascii values
+ * @file AsciiContinuousIndexResultsPrinter.h
+ * @brief Inherits ContinuousIndexResultsPrinter and prints out ascii values
  */
 
-#include "ResultsPrinter/ContinuousResultsPrinter.hpp"
+#include "IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp"
 
 namespace sbwt_search {
 
-class AsciiContinuousResultsPrinter:
-    public ContinuousResultsPrinter<AsciiContinuousResultsPrinter, char> {
-  using Base = ContinuousResultsPrinter<AsciiContinuousResultsPrinter, char>;
+class AsciiContinuousIndexResultsPrinter:
+    public ContinuousIndexResultsPrinter<
+      AsciiContinuousIndexResultsPrinter,
+      char> {
+  using Base
+    = ContinuousIndexResultsPrinter<AsciiContinuousIndexResultsPrinter, char>;
   friend Base;
 
 private:
   vector<vector<char>> tiny_buffers;
 
 public:
-  AsciiContinuousResultsPrinter(
+  AsciiContinuousIndexResultsPrinter(
     u64 stream_id,
     shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,

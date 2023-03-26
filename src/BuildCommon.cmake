@@ -142,31 +142,31 @@ target_link_libraries(
   positions_builder PRIVATE fmt::fmt logger OpenMP::OpenMP_CXX
 )
 add_library(
-  searcher_cpu
-  "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cpp"
+  index_searcher_cpu
+  "${PROJECT_SOURCE_DIR}/IndexSearcher/IndexSearcher.cpp"
 )
-target_link_libraries(searcher_cpu PRIVATE fmt::fmt)
+target_link_libraries(index_searcher_cpu PRIVATE fmt::fmt)
 add_library(
-  searcher_gpu
-  "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cu"
+  index_searcher_gpu
+  "${PROJECT_SOURCE_DIR}/IndexSearcher/IndexSearcher.cu"
 )
 set_source_files_properties(
-  "${PROJECT_SOURCE_DIR}/Searcher/Searcher.cu"
-  TARGET_DIRECTORY searcher_gpu
+  "${PROJECT_SOURCE_DIR}/IndexSearcher/IndexSearcher.cu"
+  TARGET_DIRECTORY index_searcher_gpu
   PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
 )
-target_link_libraries(searcher_gpu PRIVATE fmt::fmt gpu_utils)
+target_link_libraries(index_searcher_gpu PRIVATE fmt::fmt gpu_utils)
 add_library(
-  continuous_searcher
-  "${PROJECT_SOURCE_DIR}/Searcher/ContinuousSearcher.cpp"
+  index_searcher
+  "${PROJECT_SOURCE_DIR}/IndexSearcher/ContinuousIndexSearcher.cpp"
 )
-target_link_libraries(continuous_searcher PRIVATE fmt::fmt searcher_cpu searcher_gpu)
+target_link_libraries(index_searcher PRIVATE fmt::fmt index_searcher_cpu index_searcher_gpu)
 add_library(
-  results_printer
-  "${PROJECT_SOURCE_DIR}/ResultsPrinter/AsciiContinuousResultsPrinter.cpp"
-  "${PROJECT_SOURCE_DIR}/ResultsPrinter/BinaryContinuousResultsPrinter.cpp"
+  index_results_printer
+  "${PROJECT_SOURCE_DIR}/IndexResultsPrinter/AsciiContinuousIndexResultsPrinter.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexResultsPrinter/BinaryContinuousIndexResultsPrinter.cpp"
 )
-target_link_libraries(results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
+target_link_libraries(index_results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
 
 # Colors
 add_library(
@@ -278,8 +278,8 @@ target_link_libraries(
   sequence_file_parser
   seq_to_bits_converter
   positions_builder
-  continuous_searcher
-  results_printer
+  index_searcher
+  index_results_printer
 
   # Color search libraries
   color_index_builder

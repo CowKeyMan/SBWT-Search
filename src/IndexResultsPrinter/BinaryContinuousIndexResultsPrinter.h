@@ -1,19 +1,22 @@
-#ifndef BINARY_CONTINUOUS_RESULTS_PRINTER_H
-#define BINARY_CONTINUOUS_RESULTS_PRINTER_H
+#ifndef BINARY_CONTINUOUS_INDEX_RESULTS_PRINTER_H
+#define BINARY_CONTINUOUS_INDEX_RESULTS_PRINTER_H
 
 /**
- * @file BinaryContinuousResultsPrinter.h
- * @brief Inherits ContinuousResultsPrinter and prints out binary values
+ * @file BinaryContinuousIndexResultsPrinter.h
+ * @brief Inherits ContinuousIndexResultsPrinter and prints out binary values
  */
 
-#include "ResultsPrinter/ContinuousResultsPrinter.hpp"
+#include "IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
-class BinaryContinuousResultsPrinter:
-    public ContinuousResultsPrinter<BinaryContinuousResultsPrinter, u64> {
-  using Base = ContinuousResultsPrinter<BinaryContinuousResultsPrinter, u64>;
+class BinaryContinuousIndexResultsPrinter:
+    public ContinuousIndexResultsPrinter<
+      BinaryContinuousIndexResultsPrinter,
+      u64> {
+  using Base
+    = ContinuousIndexResultsPrinter<BinaryContinuousIndexResultsPrinter, u64>;
   friend Base;
 
 private:
@@ -21,7 +24,7 @@ private:
       minus3 = static_cast<u64>(-3);
 
 public:
-  BinaryContinuousResultsPrinter(
+  BinaryContinuousIndexResultsPrinter(
     u64 stream_id,
     shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,

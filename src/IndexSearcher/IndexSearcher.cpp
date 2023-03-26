@@ -1,5 +1,5 @@
 #include "Global/GlobalDefinitions.h"
-#include "Searcher/Searcher.h"
+#include "IndexSearcher/IndexSearcher.h"
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"
 #include "Tools/TypeDefinitions.h"
@@ -11,7 +11,7 @@ using fmt::format;
 using log_utils::Logger;
 using math_utils::round_up;
 
-Searcher::Searcher(
+IndexSearcher::IndexSearcher(
   u64 stream_id_,
   shared_ptr<GpuSbwtContainer> container,
   u64 max_chars_per_batch
@@ -21,7 +21,7 @@ Searcher::Searcher(
     d_kmer_positions(max_chars_per_batch),
     stream_id(stream_id_) {}
 
-auto Searcher::search(
+auto IndexSearcher::search(
   const vector<u64> &bit_seqs,
   const vector<u64> &kmer_positions,
   vector<u64> &results,
@@ -48,7 +48,7 @@ auto Searcher::search(
   }
 }
 
-auto Searcher::copy_to_gpu(
+auto IndexSearcher::copy_to_gpu(
   u64 batch_id,
   const vector<u64> &bit_seqs,
   const vector<u64> &kmer_positions,
@@ -74,7 +74,7 @@ auto Searcher::copy_to_gpu(
   results.resize(kmer_positions.size());
 }
 
-auto Searcher::copy_from_gpu(
+auto IndexSearcher::copy_from_gpu(
   vector<u64> &results, u64 batch_id, const vector<u64> &kmer_positions
 ) -> void {
   Logger::log_timed_event(

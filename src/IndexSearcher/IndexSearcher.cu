@@ -1,6 +1,6 @@
 #include "Global/GlobalDefinitions.h"
-#include "Searcher/Searcher.cuh"
-#include "Searcher/Searcher.h"
+#include "IndexSearcher/IndexSearcher.cuh"
+#include "IndexSearcher/IndexSearcher.h"
 #include "Tools/GpuUtils.h"
 #include "Tools/KernelUtils.cuh"
 #include "Tools/Logger.h"
@@ -15,7 +15,8 @@ using fmt::format;
 using log_utils::Logger;
 using math_utils::round_up;
 
-auto Searcher::launch_search_kernel(u64 num_queries, u64 batch_id) -> void {
+auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
+  -> void {
   u32 blocks_per_grid
     = round_up<u64>(num_queries, threads_per_block) / threads_per_block;
   start_timer.record(&gpu_stream);

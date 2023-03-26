@@ -1,8 +1,8 @@
-#ifndef SEARCHER_CUH
-#define SEARCHER_CUH
+#ifndef INDEX_SEARCHER_CUH
+#define INDEX_SEARCHER_CUH
 
 /**
- * @file Searcher.cuh
+ * @file IndexSearcher.cuh
  * @brief Search implementation
  */
 

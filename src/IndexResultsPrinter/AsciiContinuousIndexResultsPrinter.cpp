@@ -1,11 +1,11 @@
 #include <fmt/format.h>
 
-#include "ResultsPrinter/AsciiContinuousResultsPrinter.h"
+#include "IndexResultsPrinter/AsciiContinuousIndexResultsPrinter.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
-AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
+AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
   u64 stream_id,
   shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
   shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
@@ -34,7 +34,7 @@ AsciiContinuousResultsPrinter::AsciiContinuousResultsPrinter(
   }
 }
 
-auto AsciiContinuousResultsPrinter::do_with_result(
+auto AsciiContinuousIndexResultsPrinter::do_with_result(
   vector<char>::iterator buffer, u64 result
 ) -> u64 {
   u64 thread_idx = omp_get_thread_num();
@@ -47,7 +47,7 @@ auto AsciiContinuousResultsPrinter::do_with_result(
   return b - a;
 }
 
-auto AsciiContinuousResultsPrinter::do_with_not_found(
+auto AsciiContinuousIndexResultsPrinter::do_with_not_found(
   vector<char>::iterator buffer
 ) const -> u64 {
   *buffer = '-';
@@ -55,7 +55,7 @@ auto AsciiContinuousResultsPrinter::do_with_not_found(
   return 2;
 }
 
-auto AsciiContinuousResultsPrinter::do_with_invalid(
+auto AsciiContinuousIndexResultsPrinter::do_with_invalid(
   vector<char>::iterator buffer
 ) const -> u64 {
   *buffer = '-';
@@ -63,26 +63,27 @@ auto AsciiContinuousResultsPrinter::do_with_invalid(
   return 2;
 }
 
-auto AsciiContinuousResultsPrinter::do_with_space(vector<char>::iterator buffer
+auto AsciiContinuousIndexResultsPrinter::do_with_space(
+  vector<char>::iterator buffer
 ) const -> u64 {
   *buffer = ' ';
   return 1;
 }
 
-auto AsciiContinuousResultsPrinter::do_with_newline(
+auto AsciiContinuousIndexResultsPrinter::do_with_newline(
   vector<char>::iterator buffer
 ) const -> u64 {
   *buffer = '\n';
   return 1;
 }
 
-auto AsciiContinuousResultsPrinter::do_get_extension() -> string {
+auto AsciiContinuousIndexResultsPrinter::do_get_extension() -> string {
   return ".txt";
 }
-auto AsciiContinuousResultsPrinter::do_get_format() -> string {
+auto AsciiContinuousIndexResultsPrinter::do_get_format() -> string {
   return "ascii";
 }
-auto AsciiContinuousResultsPrinter::do_get_version() -> string {
+auto AsciiContinuousIndexResultsPrinter::do_get_version() -> string {
   return "v1.0";
 }
 

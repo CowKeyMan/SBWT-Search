@@ -1,8 +1,8 @@
-#ifndef CONTINUOUS_RESULTS_PRINTER_HPP
-#define CONTINUOUS_RESULTS_PRINTER_HPP
+#ifndef CONTINUOUS_INDEX_RESULTS_PRINTER_HPP
+#define CONTINUOUS_INDEX_RESULTS_PRINTER_HPP
 
 /**
- * @file ContinuousResultsPrinter.hpp
+ * @file ContinuousIndexResultsPrinter.hpp
  * @brief Gets results, intervals and list of invalid chars and prints
  * these out to disk based on the given data and filenames. This printing is
  * done in parallel. This class uses the Template Pattern, with CRTP. Honestly
@@ -54,7 +54,7 @@ using std_utils::copy_advance;
 using threading_utils::OmpLock;
 
 template <class TImplementation, class Buffer_t>
-class ContinuousResultsPrinter {
+class ContinuousIndexResultsPrinter {
 private:
   vector<u64> results_before_newline{};
   vector<OmpLock> write_locks{};
@@ -76,7 +76,7 @@ private:
   u64 stream_id;
 
 public:
-  ContinuousResultsPrinter(
+  ContinuousIndexResultsPrinter(
     u64 stream_id_,
     shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer_,
     shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer_,

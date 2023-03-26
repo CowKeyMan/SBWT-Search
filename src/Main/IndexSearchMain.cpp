@@ -204,7 +204,7 @@ auto IndexSearchMain::get_components(
     vector<shared_ptr<ContinuousSequenceFileParser>>,
     vector<shared_ptr<ContinuousSeqToBitsConverter>>,
     vector<shared_ptr<ContinuousPositionsBuilder>>,
-    vector<shared_ptr<ContinuousSearcher>>,
+    vector<shared_ptr<ContinuousIndexSearcher>>,
     vector<shared_ptr<IndexResultsPrinter>>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   vector<shared_ptr<ContinuousSequenceFileParser>> sequence_file_parsers(streams
@@ -213,7 +213,7 @@ auto IndexSearchMain::get_components(
     streams
   );
   vector<shared_ptr<ContinuousPositionsBuilder>> positions_builders(streams);
-  vector<shared_ptr<ContinuousSearcher>> searchers(streams);
+  vector<shared_ptr<ContinuousIndexSearcher>> searchers(streams);
   vector<shared_ptr<IndexResultsPrinter>> results_printers(streams);
 #pragma omp parallel for
   for (u64 i = 0; i < streams; ++i) {
@@ -264,7 +264,7 @@ auto IndexSearchMain::get_components(
     Logger::log_timed_event(
       format("SearcherAllocator_{}", i), Logger::EVENT_STATE::START
     );
-    searchers[i] = make_shared<ContinuousSearcher>(
+    searchers[i] = make_shared<ContinuousIndexSearcher>(
       i,
       gpu_container,
       seq_to_bits_converters[i]->get_bits_producer(),
@@ -302,13 +302,13 @@ auto IndexSearchMain::get_components(
 
 auto IndexSearchMain::get_results_printer(
   u64 stream_id,
-  const shared_ptr<ContinuousSearcher> &searcher,
+  const shared_ptr<ContinuousIndexSearcher> &searcher,
   const shared_ptr<IntervalBatchProducer> &interval_batch_producer,
   const shared_ptr<InvalidCharsProducer> &invalid_chars_producer,
   const vector<string> &output_filenames
 ) -> shared_ptr<IndexResultsPrinter> {
   if (get_args().get_print_mode() == "ascii") {
-    return make_shared<IndexResultsPrinter>(AsciiContinuousResultsPrinter(
+    return make_shared<IndexResultsPrinter>(AsciiContinuousIndexResultsPrinter(
       stream_id,
       searcher,
       interval_batch_producer,
@@ -321,7 +321,7 @@ auto IndexSearchMain::get_results_printer(
     ));
   }
   if (get_args().get_print_mode() == "binary") {
-    return make_shared<IndexResultsPrinter>(BinaryContinuousResultsPrinter(
+    return make_shared<IndexResultsPrinter>(BinaryContinuousIndexResultsPrinter(
       stream_id,
       searcher,
       interval_batch_producer,
@@ -356,7 +356,7 @@ auto IndexSearchMain::run_components(
   vector<shared_ptr<ContinuousSequenceFileParser>> &sequence_file_parsers,
   vector<shared_ptr<ContinuousSeqToBitsConverter>> &seq_to_bits_converters,
   vector<shared_ptr<ContinuousPositionsBuilder>> &positions_builders,
-  vector<shared_ptr<ContinuousSearcher>> &searchers,
+  vector<shared_ptr<ContinuousIndexSearcher>> &searchers,
   vector<shared_ptr<IndexResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);

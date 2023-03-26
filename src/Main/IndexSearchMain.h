@@ -14,12 +14,12 @@
 #include <vector>
 
 #include "ArgumentParser/IndexSearchArgumentParser.h"
+#include "IndexResultsPrinter/AsciiContinuousIndexResultsPrinter.h"
+#include "IndexResultsPrinter/BinaryContinuousIndexResultsPrinter.h"
+#include "IndexSearcher/ContinuousIndexSearcher.h"
 #include "Main/Main.h"
 #include "PositionsBuilder/ContinuousPositionsBuilder.h"
-#include "ResultsPrinter/AsciiContinuousResultsPrinter.h"
-#include "ResultsPrinter/BinaryContinuousResultsPrinter.h"
 #include "SbwtContainer/GpuSbwtContainer.h"
-#include "Searcher/ContinuousSearcher.h"
 #include "SeqToBitsConverter/ContinuousSeqToBitsConverter.h"
 #include "SequenceFileParser/ContinuousSequenceFileParser.h"
 
@@ -31,8 +31,9 @@ using std::tuple;
 using std::variant;
 using std::vector;
 
-using IndexResultsPrinter
-  = variant<AsciiContinuousResultsPrinter, BinaryContinuousResultsPrinter>;
+using IndexResultsPrinter = variant<
+  AsciiContinuousIndexResultsPrinter,
+  BinaryContinuousIndexResultsPrinter>;
 
 class IndexSearchMain: public Main {
 public:
@@ -60,7 +61,7 @@ private:
       vector<shared_ptr<ContinuousSequenceFileParser>>,
       vector<shared_ptr<ContinuousSeqToBitsConverter>>,
       vector<shared_ptr<ContinuousPositionsBuilder>>,
-      vector<shared_ptr<ContinuousSearcher>>,
+      vector<shared_ptr<ContinuousIndexSearcher>>,
       vector<shared_ptr<IndexResultsPrinter>>>;
   auto load_input_output_filenames(
     const string &input_file, const string &output_file
@@ -69,7 +70,7 @@ private:
     -> tuple<vector<vector<string>>, vector<vector<string>>>;
   auto get_results_printer(
     u64 stream_id,
-    const shared_ptr<ContinuousSearcher> &searcher,
+    const shared_ptr<ContinuousIndexSearcher> &searcher,
     const shared_ptr<IntervalBatchProducer> &interval_batch_producer,
     const shared_ptr<InvalidCharsProducer> &invalid_chars_producer,
     const vector<string> &split_output_filenames
@@ -78,7 +79,7 @@ private:
     vector<shared_ptr<ContinuousSequenceFileParser>> &sequence_file_parsers,
     vector<shared_ptr<ContinuousSeqToBitsConverter>> &seq_to_bits_converters,
     vector<shared_ptr<ContinuousPositionsBuilder>> &positions_builders,
-    vector<shared_ptr<ContinuousSearcher>> &searchers,
+    vector<shared_ptr<ContinuousIndexSearcher>> &searchers,
     vector<shared_ptr<IndexResultsPrinter>> &results_printers
   ) -> void;
 };

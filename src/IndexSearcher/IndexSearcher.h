@@ -1,8 +1,8 @@
-#ifndef SEARCHER_H
-#define SEARCHER_H
+#ifndef INDEX_SEARCHER_H
+#define INDEX_SEARCHER_H
 
 /**
- * @file Searcher.h
+ * @file IndexSearcher.h
  * @brief Class for searching the SBWT index
  */
 
@@ -18,7 +18,7 @@ using gpu_utils::GpuEvent;
 using gpu_utils::GpuStream;
 using std::shared_ptr;
 
-class Searcher {
+class IndexSearcher {
 private:
   shared_ptr<GpuSbwtContainer> container;
   GpuPointer<u64> d_bit_seqs;
@@ -28,7 +28,7 @@ private:
   u64 stream_id;
 
 public:
-  Searcher(
+  IndexSearcher(
     u64 stream_id_,
     shared_ptr<GpuSbwtContainer> container,
     u64 max_chars_per_batch

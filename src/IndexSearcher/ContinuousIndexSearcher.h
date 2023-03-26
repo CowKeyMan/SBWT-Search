@@ -1,8 +1,8 @@
-#ifndef CONTINUOUS_SEARCHER_H
-#define CONTINUOUS_SEARCHER_H
+#ifndef CONTINUOUS_INDEX_SEARCHER_H
+#define CONTINUOUS_INDEX_SEARCHER_H
 
 /**
- * @file ContinuousSearcher.h
+ * @file ContinuousIndexSearcher.h
  * @brief Search implementation with threads
  */
 
@@ -11,7 +11,7 @@
 #include "BatchObjects/BitSeqBatch.h"
 #include "BatchObjects/PositionsBatch.h"
 #include "BatchObjects/ResultsBatch.h"
-#include "Searcher/Searcher.h"
+#include "IndexSearcher/IndexSearcher.h"
 #include "Tools/SharedBatchesProducer.hpp"
 
 namespace sbwt_search {
@@ -19,8 +19,8 @@ namespace sbwt_search {
 using design_utils::SharedBatchesProducer;
 using std::shared_ptr;
 
-class ContinuousSearcher: public SharedBatchesProducer<ResultsBatch> {
-  Searcher searcher;
+class ContinuousIndexSearcher: public SharedBatchesProducer<ResultsBatch> {
+  IndexSearcher searcher;
   shared_ptr<SharedBatchesProducer<BitSeqBatch>> bit_seq_producer;
   shared_ptr<SharedBatchesProducer<PositionsBatch>> positions_producer;
   shared_ptr<BitSeqBatch> bit_seq_batch;
@@ -29,7 +29,7 @@ class ContinuousSearcher: public SharedBatchesProducer<ResultsBatch> {
   u64 stream_id;
 
 public:
-  ContinuousSearcher(
+  ContinuousIndexSearcher(
     u64 stream_id,
     shared_ptr<GpuSbwtContainer> container,
     shared_ptr<SharedBatchesProducer<BitSeqBatch>> bit_seq_producer_,
