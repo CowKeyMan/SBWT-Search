@@ -420,12 +420,13 @@ class IndividualAnalysis:
         print_mode: str
     ):
         fig, axs = plt.subplots(2, 1)
+        plt.subplots_adjust(wspace=0, hspace=0.05)
         title = (
             f"Individual Analysis for file {file} running\n"
             f"on {device} hardware with {streams_total} "
             f"streams and outputting in {print_mode} format"
         )
-        plt.title(title)
+        axs[0].set_title(title)
         print(title)
         self.generate_timeline(axs[0], df)
         self.generate_table(axs[1], df)
@@ -450,6 +451,7 @@ class IndividualAnalysis:
             ],
             ascending=False
         )
+        height = 0.1
         component_ticks = []
         for _, row in (
             components_df
@@ -466,6 +468,7 @@ class IndividualAnalysis:
                 filtered_df[filtered_df['batch'] == x]
                 for x in filtered_df['batch'].unique()
             ):
+                height += 0.03
                 start_time = (
                     batch_df[batch_df['state'] == 'start']['time'].iloc[0]
                 )
@@ -479,6 +482,7 @@ class IndividualAnalysis:
                     left=start_time,
                 )
             index += 1
+        ax.figure.set_size_inches(15, height)
         ax.yaxis.set_ticks(
             range(len(component_ticks)), component_ticks, fontsize=11
         )
@@ -523,7 +527,7 @@ class IndividualAnalysis:
         ax.table(
             result_df.values,
             colLabels=result_df.columns,
-            loc='bottom',
+            loc='best',
             fontsize=6
         )
         ax.axis('off')
