@@ -28,6 +28,7 @@ output_file="benchmark_objects/list_files/output/index_search_results.list"
 printing_modes=(
   "ascii"
   "binary"
+  "bool"
 )
 
 if [ $2 = "nvidia" ]; then

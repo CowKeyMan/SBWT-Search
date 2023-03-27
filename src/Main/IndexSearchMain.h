@@ -16,6 +16,7 @@
 #include "ArgumentParser/IndexSearchArgumentParser.h"
 #include "IndexResultsPrinter/AsciiContinuousIndexResultsPrinter.h"
 #include "IndexResultsPrinter/BinaryContinuousIndexResultsPrinter.h"
+#include "IndexResultsPrinter/BoolContinuousIndexResultsPrinter.h"
 #include "IndexSearcher/ContinuousIndexSearcher.h"
 #include "Main/Main.h"
 #include "PositionsBuilder/ContinuousPositionsBuilder.h"
@@ -33,7 +34,8 @@ using std::vector;
 
 using IndexResultsPrinter = variant<
   AsciiContinuousIndexResultsPrinter,
-  BinaryContinuousIndexResultsPrinter>;
+  BinaryContinuousIndexResultsPrinter,
+  BoolContinuousIndexResultsPrinter>;
 
 class IndexSearchMain: public Main {
 public:

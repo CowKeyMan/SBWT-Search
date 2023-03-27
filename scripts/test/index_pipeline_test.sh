@@ -19,10 +19,12 @@ cd -
 modes=(
   ascii
   binary
+  bool
 )
 extensions=(
   ".txt"
   ".bin"
+  ".bool"
 )
 
 bad_exits=0

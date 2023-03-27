@@ -120,62 +120,31 @@ class BinaryParser(FileParser):
         return ("result", next_item)
 
 
-# pylint: disable=abstract-method,too-many-instance-attributes
 class BoolParser(FileParser):
-    def __init__(self, values_f: io.BytesIO, seqsizes_f: io.BytesIO):
-        self.values_version = "v1.0"
-        self.seqsizes_version = "v1.0"
-        FileParser.__init__(self, values_f, self.values_version)
-        seqsizes_name = read_string_from_file(seqsizes_f)
-        if seqsizes_name != "seqsizes":
-            print(
-                f'{seqsizes_f.name} has wrong name,'
-                ' it should be seqsizes'
-            )
-            sys.exit(1)
-        seqsizes_version = read_string_from_file(seqsizes_f)
-        if seqsizes_version != self.seqsizes_version:
-            print(
-                f'{seqsizes_f.name} has wrong version number,'
-                f' it should be {self.seqsizes_version}'
-            )
-            sys.exit(1)
-        self.seqsizes_f = seqsizes_f
-        self.values_f = values_f
-        self.index = 0
-        self.working_bits = int.from_bytes(
-            f.read(u64_bytes), byteorder=byteorder, signed=False
-        )
-        self.shift = 63
-        self.next_newline = int.from_bytes(
-            seqsizes_f.read(u64_bytes), byteorder=byteorder, signed=False
-        )
-        self.eof = False
+    def __init__(self, f: io.BytesIO):
+        self.version = "v2.0"
+        FileParser.__init__(self, f, self.version)
+        self.is_at_newline = False
 
-    def get_next_as_bool(self) -> tuple[str, bool]:
-        if self.eof:
-            return ("EOF", )
-        if self.index == self.next_newline:
-            b = self.seqsizes_f.read(u64_bytes)
-            if len(b) == 0:
-                self.eof = True
-            self.next_newline = int.from_bytes(
-                b,
-                byteorder=byteorder,
-                signed=False
-            )
+    def get_next(self) -> tuple[str, int]:
+        if self.is_at_newline:
+            self.is_at_newline = False
             return ("newline", )
-        i = bool(self.working_bits & (1 << self.shift))
-        if self.shift == 0:
-            self.shift = 64
-            self.working_bits = int.from_bytes(
-                self.values_f.read(u64_bytes),
-                byteorder=byteorder,
-                signed=False
-            )
-        self.shift -= 1
-        self.index += 1
-        return ("result", i)
+        s = ""
+        next_char = self.f.read(1).decode()
+        if next_char == '':
+            return ("EOF",)
+        if next_char == '\n':
+            if s == "":
+                return ("newline", )
+            self.is_at_newline = True
+        if next_char == '0':
+            return ("result", 0)
+        if next_char == '1':
+            return ("not_found",)
+        if next_char == '2':
+            return ("invalid",)
+        raise RuntimeError("Invalid char in bool file")
 
 
 with ExitStack() as stack:
@@ -192,10 +161,7 @@ with ExitStack() as stack:
             file_parsers.append(BinaryParser(f))
         elif file_type == "bool":
             bool_comparison = True
-            seq_sizes_file = stack.enter_context(
-                open(f.name[:-5] + '.seqsizes', mode='rb')
-            )
-            file_parsers.append(BoolParser(f, seq_sizes_file))
+            file_parsers.append(BoolParser(f))
 
     line_count = 0
     position = 0
