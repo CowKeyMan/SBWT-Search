@@ -252,7 +252,7 @@ auto ColorSearchMain::get_results_printer(
   u64 stream_id,
   shared_ptr<ContinuousIndexFileParser> &index_file_parser,
   shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
-  vector<string> filenames,
+  const vector<string> &filenames,
   u64 num_colors
 ) -> shared_ptr<ColorResultsPrinter> {
   return make_shared<ColorResultsPrinter>(AsciiContinuousColorResultsPrinter(
@@ -260,7 +260,7 @@ auto ColorSearchMain::get_results_printer(
     index_file_parser->get_colors_interval_batch_producer(),
     index_file_parser->get_read_statistics_batch_producer(),
     std::move(post_processor),
-    std::move(filenames),
+    filenames,
     num_colors,
     max_indexes_per_batch,
     max_reads_per_batch,

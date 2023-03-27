@@ -120,8 +120,6 @@ public:
     }
   }
 
-  u64 reservation_size = 0;
-
   auto do_allocate_buffer(
     vector<Buffer_t> &buffer,
     u64 max_indexes_per_batch,

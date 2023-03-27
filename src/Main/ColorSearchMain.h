@@ -61,7 +61,7 @@ private:
     u64 stream_id,
     shared_ptr<ContinuousIndexFileParser> &index_file_parser,
     shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
-    vector<string> filenames,
+    const vector<string> &filenames,
     u64 num_colors
   ) -> shared_ptr<ColorResultsPrinter>;
   auto run_components(
