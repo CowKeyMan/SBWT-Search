@@ -71,6 +71,7 @@ private:
   u64 stream_id;
   vector<OmpLock> write_locks{};
   unique_ptr<ThrowingOfstream> out_stream;
+  u64 reads_to_buffer = 3;
 
 public:
   ContinuousColorResultsPrinter(
@@ -129,14 +130,9 @@ public:
     u64 element_size,
     u64 newline_element_size
   ) -> void {
-    const u64 read_insurance = 1;
-    const u64 newline_insurance = 10;
     buffer.reserve(
-      (divide_and_ceil<u64>(max_indexes_per_batch, threads * warp_size)
-       + read_insurance)
-        * element_size * num_colors
-      + (divide_and_ceil<u64>(max_reads_per_batch, threads) + newline_insurance)
-        * newline_element_size
+      reads_to_buffer * element_size * num_colors
+      + reads_to_buffer * newline_element_size
     );
   }
 
@@ -160,7 +156,7 @@ public:
     }
     if (!printed_last_read) {
       u64 buffer_idx = 0;
-      buffers[0].resize(num_colors);
+      buffers[0].resize(buffers[0].capacity());
       impl().do_print_read(
         previous_last_results.begin(),
         previous_last_found_idx,
@@ -193,7 +189,7 @@ protected:
   auto do_start_next_file() -> void {
     if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
     impl().do_open_next_file(*current_filename);
-    impl().do_write_file_header();
+    /* impl().do_write_file_header(); */
     current_filename = next(current_filename);
   }
   auto do_at_file_end() -> void {}
@@ -243,19 +239,24 @@ protected:
     }
     u64 start_wbnr_idx = printed_last_read ? 1 : 0;
     for (auto rbnf : rbnfs) {
-#pragma omp parallel num_threads(threads)
+      u64 num_threads = std::min(
+        threads,
+        divide_and_ceil<u64>(
+          std::min(wbnrs.size(), rbnf) - start_wbnr_idx, reads_to_buffer
+        )
+      );
+#pragma omp parallel num_threads(num_threads)
       {
         u64 thread_idx = omp_get_thread_num();
-        if (!write_locks.empty() && thread_idx < buffers.size() - 1) {
-          write_locks[thread_idx].set_lock();
-        }
-#pragma omp barrier
-
         auto &buffer = buffers[thread_idx];
         buffer.resize(buffer.capacity());
         u64 buffer_idx = 0;
-
-#pragma omp for schedule(static)
+        u64 buffered_reads = 0;
+        u64 prints_required = divide_and_ceil<u64>(
+          std::min(wbnrs.size(), rbnf) - start_wbnr_idx, reads_to_buffer
+        );
+        u64 prints_done = 0;
+#pragma omp for nowait schedule(static, reads_to_buffer)
         for (u64 wbnr_idx = start_wbnr_idx;
              wbnr_idx < std::min(wbnrs.size(), rbnf);
              ++wbnr_idx) {
@@ -285,9 +286,20 @@ protected:
               buffer_idx
             );
           }
+          ++buffered_reads;
+          if (buffered_reads == reads_to_buffer) {
+            buffer.resize(static_cast<std::streamsize>(buffer_idx));
+            write_buffers_parallel();
+            buffered_reads = 0;
+            buffer_idx = 0;
+            buffer.resize(buffer.capacity());
+            ++prints_done;
+          }
         }
-        buffer.resize(static_cast<std::streamsize>(buffer_idx));
-        write_buffers_parallel();
+        while (prints_done++ < prints_required) {
+          buffer.resize(static_cast<std::streamsize>(buffer_idx));
+          write_buffers_parallel();
+        }
       }
       start_wbnr_idx = std::min(wbnrs.size(), rbnf);
       if (rbnf == start_wbnr_idx) { impl().do_start_next_file(); }
@@ -325,18 +337,19 @@ protected:
   }
 
   auto do_with_newline(vector<Buffer_t>::iterator buffer) -> u64;
-  auto do_with_space(vector<Buffer_t>::iterator buffer) -> u64 { return 0; }
+  auto do_with_space(vector<Buffer_t>::iterator) -> u64 { return 0; }
   auto do_with_result(vector<Buffer_t>::iterator buffer, u64 result) -> u64;
 
   auto write_buffers_parallel() -> void {
+#pragma omp barrier
     u64 thread_idx = omp_get_thread_num();
+    if (thread_idx < threads - 1) { write_locks[thread_idx].set_lock(); }
+#pragma omp barrier
     auto &buffer = buffers[thread_idx];
     if (thread_idx > 0) { write_locks[thread_idx - 1].set_lock(); }
     impl().do_write_buffer(buffer, buffer.size());
     if (thread_idx > 0) { write_locks[thread_idx - 1].unset_lock(); }
-    if (thread_idx < write_locks.size()) {
-      write_locks[thread_idx].unset_lock();
-    }
+    if (thread_idx < threads - 1) { write_locks[thread_idx].unset_lock(); }
   }
 
   auto do_write_buffer(const vector<Buffer_t> &buffer, u64 amount) -> void {

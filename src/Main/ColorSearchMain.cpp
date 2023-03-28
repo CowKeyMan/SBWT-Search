@@ -150,7 +150,7 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
   // 64 bits per read for each invalid result count
   const u64 bits_required_per_character = static_cast<u64>(
     64 + divide_and_ceil<u64>(64 * num_colors, gpu_warp_size)
-    + divide_and_ceil<u64>((20ULL + 1ULL) * 8ULL * num_colors, gpu_warp_size)
+    /* + divide_and_ceil<u64>((20ULL + 1ULL) * 8ULL * num_colors, gpu_warp_size) */
     + divide_and_ceil<u64>(64 * 4 + 8, get_args().get_indexes_per_read())
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
     + static_cast<u64>(
