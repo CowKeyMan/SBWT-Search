@@ -64,8 +64,8 @@ auto IndexSearchArgumentParser::create_options() -> void {
      ("g,gpu-memory-percentage", "The percentage of gpu memory to use from the remaining free memory after the index has been loaded. This means that if we have 40GB of memory, and the index is 30GB, then we have 10GB left. If this value is set to 0.9, then 9GB will be used and the last 1GB of memory on the GPU will be left unused. The default value is 0.95, and unless you are running anything else on the machine which is also GPU heavy, it is recommended to leave it at this value.", value<double>()->default_value("0.95")
      )("s,streams",
       "The number of files to read and write in parallel. This implies dividing the available memory into <memory>/<streams> pieces, so each batch will process less items at a time, but there is instead more parallelism. This should not be too high nor too large, as the number of threads spawned per file is already large, and it also depends on your disk drive. The default is 4.",
-      value<u64>()->default_value("4")
-    )("p,print-mode",
+      value<u64>()->default_value("4"))
+     ("p,print-mode",
       "The mode used when printing the result to the output file. Options "
       "are 'ascii' (default), 'binary' or 'boolean'. In ascii mode the "
       "results will be printed in ASCII format so that the number viewed "
@@ -92,8 +92,9 @@ auto IndexSearchArgumentParser::create_options() -> void {
       "64-bit integer. Here, every 64 bit binary integer "
       "represents the amount of results for each string in the original "
       "input file. In terms of file extensions, ASCII format will add .txt, boolean format will add .bool and binary format will add .bin and .seqsizes for the separate sequence sizes",
-      value<string>()->default_value("ascii")
-    )("h,help", "Print usage", value<bool>()->default_value("false"));
+      value<string>()->default_value("ascii"))
+    ("colors-file", "The colors file produced by themisto v3.0, which contains the key_kmer_marks as one of its components within, used in this program. When this option is given, then the index search will move to the next key kmer.", value<string>()->default_value(""))
+  ("h,help", "Print usage", value<bool>()->default_value("false"));
   get_options().allow_unrecognised_options();
 }
 
@@ -142,6 +143,9 @@ auto IndexSearchArgumentParser::get_gpu_memory_percentage() const -> double {
 }
 auto IndexSearchArgumentParser::get_streams() const -> u64 {
   return get_args()["streams"].as<u64>();
+}
+auto IndexSearchArgumentParser::get_colors_file() const -> string {
+  return get_args()["colors-file"].as<string>();
 }
 auto IndexSearchArgumentParser::get_required_options() const -> vector<string> {
   return {

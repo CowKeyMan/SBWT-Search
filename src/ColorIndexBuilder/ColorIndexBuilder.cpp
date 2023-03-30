@@ -28,8 +28,8 @@ auto ColorIndexBuilder::get_cpu_color_index_container()
   sdsl::int_vector<> sparse_arrays_intervals;
   sdsl::bit_vector is_dense_marks;
   Poppy is_dense_marks_poppy;
-  sdsl::bit_vector core_kmer_marks;
-  Poppy core_kmer_marks_poppy;
+  sdsl::bit_vector key_kmer_marks;
+  Poppy key_kmer_marks_poppy;
   sdsl::int_vector<> color_set_idxs;
   u64 num_color_sets = static_cast<u64>(-1);
 
@@ -52,14 +52,14 @@ auto ColorIndexBuilder::get_cpu_color_index_container()
     )
         .get_poppy();
 
-  core_kmer_marks.load(in_stream);
+  key_kmer_marks.load(in_stream);
   discard.load(
-    in_stream, &core_kmer_marks
+    in_stream, &key_kmer_marks
   );  // skip is_dense_marks rank structure
-  core_kmer_marks_poppy
+  key_kmer_marks_poppy
     = PoppyBuilder(
-        {core_kmer_marks.data(), core_kmer_marks.capacity() / u64_bits},
-        core_kmer_marks.size()
+        {key_kmer_marks.data(), key_kmer_marks.capacity() / u64_bits},
+        key_kmer_marks.size()
     )
         .get_poppy();
 
@@ -78,8 +78,8 @@ auto ColorIndexBuilder::get_cpu_color_index_container()
     sparse_arrays_intervals,
     is_dense_marks,
     is_dense_marks_poppy,
-    core_kmer_marks,
-    core_kmer_marks_poppy,
+    key_kmer_marks,
+    key_kmer_marks_poppy,
     color_set_idxs,
     num_color_sets,
     num_colors};

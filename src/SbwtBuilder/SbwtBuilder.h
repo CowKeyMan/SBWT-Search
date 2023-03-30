@@ -15,6 +15,7 @@
 
 #include "SbwtContainer/CpuSbwtContainer.h"
 #include "Tools/TypeDefinitions.h"
+#include "sdsl/int_vector.hpp"
 
 namespace sbwt_search {
 
@@ -26,18 +27,26 @@ using std::vector;
 
 class SbwtBuilder {
 private:
-  string filename;
+  string dbg_filename;
+  string colors_filename;
 
 public:
-  explicit SbwtBuilder(string filename): filename(std::move(filename)) {}
+  explicit SbwtBuilder(string sbwt_filename, string colors_filename = "");
   auto get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer>;
 
 private:
-  auto get_container_components(
-    u64 num_bits, u64 bit_vector_bytes, u64 start_position
+  auto get_dbg_components()
+    -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>, u64, u64, u64>;
+  auto skip_unecessary_dbg_components(istream &in_stream) -> void;
+  auto read_k(istream &in_stream, u64 bit_vector_bytes) -> u64;
+  auto get_dbg_bitvectors(
+    u64 bit_vector_bytes, u64 vectors_start_position, u64 num_bits
   ) -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>>;
+  auto get_colors_components() -> vector<u64>;
   auto skip_bits_vector(istream &stream) -> void;
   auto skip_bytes_vector(istream &stream) -> void;
+  auto get_key_kmer_marks() -> sdsl::int_vector<>;
+  auto skip_unecessary_colors_components(istream &in_stream) -> void;
 };
 
 }  // namespace sbwt_search

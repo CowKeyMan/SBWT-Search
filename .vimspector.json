@@ -12,7 +12,7 @@
             "configuration": {
                 "request": "launch",
                 "program": "${workspaceRoot}/build/bin/sbwt_search",
-                "args": ["colors", "-i", "test_objects/themisto_example/GCA_combined_d1.tcolors", "-q", "test_objects/themisto_example/GCA_queries.txt", "-o", "GCA_colors_out", "-c", "ascii", "-b", "10", "-m", "80000000"],
+                "args": ["colors", "-i", "test_objects/themisto_example/GCA_combined_d1.tcolors", "-q", "test_objects/themisto_example/GCA_queries.txt", "-o", "GCA_colors_out", "-m", "80000000"],
                 "cwd": "${workspaceRoot}",
                 "environment": [],
                 "externalConsole": true,
@@ -32,7 +32,7 @@
             "configuration": {
                 "request": "launch",
                 "program": "${workspaceRoot}/build/bin/sbwt_search",
-                "args": ["index", "-i", "test_objects/search_test_index.sbwt", "-q", "test_objects/full_pipeline/index_search/combined_input.txt", "-o", "test_objects/full_pipeline/index_search/combined_output.txt", "-c", "ascii", "-b", "1", "-m", "80000000"],
+                "args": ["index", "-i", "test_objects/search_test_index.sbwt", "-q", "test_objects/full_pipeline/index_search/fasta1.fna", "-o", "debug_out.txt"],
                 "cwd": "${workspaceRoot}",
                 "environment": [],
                 "externalConsole": true,

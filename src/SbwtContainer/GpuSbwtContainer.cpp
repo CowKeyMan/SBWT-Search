@@ -19,7 +19,8 @@ GpuSbwtContainer::GpuSbwtContainer(
   const vector<u64> &cpu_c_map,
   u64 bits_total,
   u64 bit_vector_size,
-  u32 kmer_size
+  u32 kmer_size,
+  const sdsl::int_vector<> &cpu_key_kmer_marks
 ):
     SbwtContainer(bits_total, bit_vector_size, kmer_size) {
   acgt.reserve(4);
@@ -41,6 +42,9 @@ GpuSbwtContainer::GpuSbwtContainer(
      layer_1_2[2]->get(),
      layer_1_2[3]->get()}
   ));
+  key_kmer_marks = make_unique<GpuPointer<u64>>(
+    cpu_key_kmer_marks.data(), cpu_key_kmer_marks.capacity() / u64_bits
+  );
 }
 
 auto GpuSbwtContainer::get_c_map() const -> const GpuPointer<u64> & {
@@ -74,6 +78,10 @@ auto GpuSbwtContainer::get_presearch_left() const -> GpuPointer<u64> & {
 
 auto GpuSbwtContainer::get_presearch_right() const -> GpuPointer<u64> & {
   return *presearch_right;
+}
+
+auto GpuSbwtContainer::get_key_kmer_marks() const -> GpuPointer<u64> & {
+  return *key_kmer_marks;
 }
 
 }  // namespace sbwt_search

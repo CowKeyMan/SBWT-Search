@@ -35,7 +35,8 @@ public:
     shared_ptr<SharedBatchesProducer<BitSeqBatch>> bit_seq_producer_,
     shared_ptr<SharedBatchesProducer<PositionsBatch>> positions_producer_,
     u64 max_batches,
-    u64 max_positions_per_batch
+    u64 max_positions_per_batch,
+    bool move_to_key_kmer
   );
 
   auto get_default_value() -> shared_ptr<ResultsBatch> override;

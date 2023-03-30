@@ -14,12 +14,14 @@ using math_utils::round_up;
 IndexSearcher::IndexSearcher(
   u64 stream_id_,
   shared_ptr<GpuSbwtContainer> container,
-  u64 max_chars_per_batch
+  u64 max_chars_per_batch,
+  bool move_to_key_kmer_
 ):
     container(std::move(container)),
     d_bit_seqs(max_chars_per_batch / u64_bits * 2),
     d_kmer_positions(max_chars_per_batch),
-    stream_id(stream_id_) {}
+    stream_id(stream_id_),
+    move_to_key_kmer(move_to_key_kmer_) {}
 
 auto IndexSearcher::search(
   const vector<u64> &bit_seqs,

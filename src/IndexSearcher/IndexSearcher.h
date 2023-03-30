@@ -26,12 +26,14 @@ private:
   GpuEvent start_timer{}, end_timer{};
   GpuStream gpu_stream;
   u64 stream_id;
+  bool move_to_key_kmer;
 
 public:
   IndexSearcher(
     u64 stream_id_,
     shared_ptr<GpuSbwtContainer> container,
-    u64 max_chars_per_batch
+    u64 max_chars_per_batch,
+    bool move_to_key_kmer_
   );
 
   auto search(

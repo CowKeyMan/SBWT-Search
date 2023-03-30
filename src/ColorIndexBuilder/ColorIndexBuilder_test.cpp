@@ -34,15 +34,15 @@ TEST(ColorIndexBuilderTest, full) {
   EXPECT_EQ(temp.size(), 1);
   gpu_container->is_dense_marks_poppy_layer_1_2.copy_to(temp);
   EXPECT_EQ(temp.size(), 1);
-  // Assertions regarding core_kmer_marks
-  gpu_container->core_kmer_marks.copy_to(temp);
-  const u64 core_kmer_marks_bits = 19474194;
-  EXPECT_EQ(temp.size(), (core_kmer_marks_bits + u64_bits - 1) / u64_bits);
-  gpu_container->core_kmer_marks_poppy_layer_0.copy_to(temp);
+  // Assertions regarding key_kmer_marks
+  gpu_container->key_kmer_marks.copy_to(temp);
+  const u64 key_kmer_marks_bits = 19474194;
+  EXPECT_EQ(temp.size(), (key_kmer_marks_bits + u64_bits - 1) / u64_bits);
+  gpu_container->key_kmer_marks_poppy_layer_0.copy_to(temp);
   EXPECT_EQ(temp.size(), 1);
-  gpu_container->core_kmer_marks_poppy_layer_1_2.copy_to(temp);
+  gpu_container->key_kmer_marks_poppy_layer_1_2.copy_to(temp);
   EXPECT_EQ(
-    temp.size(), (core_kmer_marks_bits + superblock_bits - 1) / superblock_bits
+    temp.size(), (key_kmer_marks_bits + superblock_bits - 1) / superblock_bits
   );
   // Assertions regarding color_set_idxs
   gpu_container->color_set_idxs.copy_to(temp);

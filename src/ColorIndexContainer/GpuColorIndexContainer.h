@@ -30,9 +30,9 @@ public:
   GpuPointer<u64> is_dense_marks;
   GpuPointer<u64> is_dense_marks_poppy_layer_0;
   GpuPointer<u64> is_dense_marks_poppy_layer_1_2;
-  GpuPointer<u64> core_kmer_marks;
-  GpuPointer<u64> core_kmer_marks_poppy_layer_0;
-  GpuPointer<u64> core_kmer_marks_poppy_layer_1_2;
+  GpuPointer<u64> key_kmer_marks;
+  GpuPointer<u64> key_kmer_marks_poppy_layer_0;
+  GpuPointer<u64> key_kmer_marks_poppy_layer_1_2;
   GpuPointer<u64> color_set_idxs;
   u64 color_set_idxs_width;
   u64 num_color_sets;

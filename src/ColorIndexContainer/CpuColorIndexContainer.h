@@ -26,8 +26,8 @@ public:
   sdsl::int_vector<> sparse_arrays_intervals;
   sdsl::bit_vector is_dense_marks;
   Poppy is_dense_marks_poppy;
-  sdsl::bit_vector core_kmer_marks;
-  Poppy core_kmer_marks_poppy;
+  sdsl::bit_vector key_kmer_marks;
+  Poppy key_kmer_marks_poppy;
   sdsl::int_vector<> color_set_idxs;
   u64 num_color_sets;
   u64 num_colors;

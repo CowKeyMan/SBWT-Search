@@ -32,7 +32,6 @@ using std::cerr;
 using std::endl;
 using std::min;
 using std::runtime_error;
-using std_utils::split_vector;
 
 const u64 num_components = 5;
 
@@ -84,7 +83,8 @@ auto IndexSearchMain::get_args() const -> const IndexSearchArgumentParser & {
 auto IndexSearchMain::get_gpu_container() -> shared_ptr<GpuSbwtContainer> {
   Logger::log_timed_event("SBWTLoader", Logger::EVENT_STATE::START);
   Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::START);
-  auto builder = SbwtBuilder(get_args().get_index_file());
+  auto builder
+    = SbwtBuilder(get_args().get_index_file(), args->get_colors_file());
   auto cpu_container = builder.get_cpu_sbwt();
   Logger::log_timed_event("SBWTParserAndIndex", Logger::EVENT_STATE::STOP);
   Logger::log_timed_event("SbwtGpuTransfer", Logger::EVENT_STATE::START);
@@ -271,7 +271,8 @@ auto IndexSearchMain::get_components(
       seq_to_bits_converters[i]->get_bits_producer(),
       positions_builders[i],
       num_components,
-      max_chars_per_batch
+      max_chars_per_batch,
+      args->get_colors_file() != ""
     );
     Logger::log_timed_event(
       format("SearcherAllocator_{}", i), Logger::EVENT_STATE::STOP

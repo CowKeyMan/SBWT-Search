@@ -9,6 +9,7 @@
 #include "Tools/BitDefinitions.h"
 #include "Tools/KernelUtils.cuh"
 #include "Tools/TypeDefinitions.h"
+#include "UtilityKernels/GetBoolFromBitVector.cuh"
 #include "UtilityKernels/Rank.cuh"
 #include "hip/hip_runtime.h"
 
@@ -18,6 +19,7 @@ using bit_utils::two_1s;
 using gpu_utils::get_idx;
 
 // NOLINTBEGIN(cppcoreguidelines-pro-bounds-pointer-arithmetic)
+template <bool move_to_key_kmer>
 __global__ void d_search(
   const u32 kmer_size,
   const u64 *const c_map,
@@ -28,6 +30,7 @@ __global__ void d_search(
   const u64 *const presearch_right,
   const u64 *const kmer_positions,
   const u64 *const bit_seqs,
+  const u64 *const key_kmer_marks,
   u64 *out
 ) {
   const auto rank = d_rank;
@@ -50,6 +53,18 @@ __global__ void d_search(
       = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
   }
   if (node_left > node_right) { node_left = -1ULL; }
+  if (move_to_key_kmer) {
+    while (!d_get_bool_from_bit_vector(key_kmer_marks, node_left)) {
+#pragma unroll
+      for (u32 i = 0; i < 4; ++i) {
+        if (d_get_bool_from_bit_vector(acgt[i], node_left)) {
+          node_left
+            = c_map[i] + rank(acgt[i], layer_0[i], layer_1_2[i], node_left);
+        }
+        break;
+      }
+    }
+  }
   out[idx] = node_left;
 }
 // NOLINTEND(cppcoreguidelines-pro-bounds-pointer-arithmetic)

@@ -17,8 +17,8 @@ GpuColorIndexContainer::GpuColorIndexContainer(
   const sdsl::int_vector<> &cpu_sparse_arrays_intervals,
   const sdsl::bit_vector &cpu_is_dense_marks,
   const Poppy &cpu_is_dense_marks_poppy,
-  const sdsl::bit_vector &cpu_core_kmer_marks,
-  const Poppy &cpu_core_kmer_marks_poppy,
+  const sdsl::bit_vector &cpu_key_kmer_marks,
+  const Poppy &cpu_key_kmer_marks_poppy,
   const sdsl::int_vector<> &cpu_color_set_idxs,
   u64 num_color_sets_,
   u64 num_colors_
@@ -46,11 +46,11 @@ GpuColorIndexContainer::GpuColorIndexContainer(
     ),
     is_dense_marks_poppy_layer_0(cpu_is_dense_marks_poppy.layer_0),
     is_dense_marks_poppy_layer_1_2(cpu_is_dense_marks_poppy.layer_1_2),
-    core_kmer_marks(
-      cpu_core_kmer_marks.data(), cpu_core_kmer_marks.capacity() / u64_bits
+    key_kmer_marks(
+      cpu_key_kmer_marks.data(), cpu_key_kmer_marks.capacity() / u64_bits
     ),
-    core_kmer_marks_poppy_layer_0(cpu_core_kmer_marks_poppy.layer_0),
-    core_kmer_marks_poppy_layer_1_2(cpu_core_kmer_marks_poppy.layer_1_2),
+    key_kmer_marks_poppy_layer_0(cpu_key_kmer_marks_poppy.layer_0),
+    key_kmer_marks_poppy_layer_1_2(cpu_key_kmer_marks_poppy.layer_1_2),
     color_set_idxs(
       // we add + 1 element to make accessing easier in the kernel
       cpu_color_set_idxs.capacity() / u64_bits + 1

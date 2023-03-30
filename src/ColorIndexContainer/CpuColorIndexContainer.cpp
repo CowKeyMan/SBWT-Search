@@ -15,8 +15,8 @@ auto CpuColorIndexContainer::to_gpu() const
     sparse_arrays_intervals,
     is_dense_marks,
     is_dense_marks_poppy,
-    core_kmer_marks,
-    core_kmer_marks_poppy,
+    key_kmer_marks,
+    key_kmer_marks_poppy,
     color_set_idxs,
     num_color_sets,
     num_colors

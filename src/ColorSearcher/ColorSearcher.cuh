@@ -67,9 +67,9 @@ __device__ auto d_sparse_get_minimum(
 
 __global__ auto d_color_search(
   u64 *sbwt_index_idxs,
-  u64 *core_kmer_marks,
-  u64 *core_kmer_marks_poppy_layer_0,
-  u64 *core_kmer_marks_poppy_layer_1_2,
+  u64 *key_kmer_marks,
+  u64 *key_kmer_marks_poppy_layer_0,
+  u64 *key_kmer_marks_poppy_layer_1_2,
   u64 *color_set_idxs,
   u32 color_set_idxs_width,
   u64 color_set_idxs_width_set_bits,
@@ -97,9 +97,9 @@ __global__ auto d_color_search(
   u64 arrays_end = 0;
   if (sbwt_index_idx == static_cast<u64>(-1)) { return; }
   u64 color_set_idxs_idx = d_rank(
-    core_kmer_marks,
-    core_kmer_marks_poppy_layer_0,
-    core_kmer_marks_poppy_layer_1_2,
+    key_kmer_marks,
+    key_kmer_marks_poppy_layer_0,
+    key_kmer_marks_poppy_layer_1_2,
     sbwt_index_idx
   );
   u64 color_set_idx = d_variable_length_int_index(
