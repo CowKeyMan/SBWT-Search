@@ -16,13 +16,10 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
     results_batch_producer_,
   const vector<string> &filenames_,
   u64 num_colors_,
-  u64 max_indexes_per_batch,
-  u64 max_reads_per_batch,
   double threshold_,
   bool include_not_found_,
   bool include_invalid_,
-  u64 threads,
-  u64 warp_size
+  u64 threads
 ):
     Base(
       stream_id_,
@@ -31,13 +28,10 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
       std::move(results_batch_producer_),
       filenames_,
       num_colors_,
-      max_indexes_per_batch,
-      max_reads_per_batch,
       threshold_,
       include_not_found_,
       include_invalid_,
       threads,
-      warp_size,
       max_chars_in_u64 + 1
     ),
     tiny_buffers(threads) {

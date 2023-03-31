@@ -1,21 +1,3 @@
-#include <algorithm>
-#include <iostream>
-#include <limits>
-#include <span>
-#include <vector>
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::vector;
-template <class T>
-auto print_vec(
-  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
-) {
-  cout << "---------------------" << endl;
-  for (int i = 0; i < std::min(limit, v.size()); ++i) { cout << v[i] << " "; }
-  cout << endl << "---------------------" << endl;
-}
-
 #ifndef CONTINUOUS_COLOR_RESULTS_PRINTER_HPP
 #define CONTINUOUS_COLOR_RESULTS_PRINTER_HPP
 
@@ -102,13 +84,10 @@ public:
       results_batch_producer_,
     const vector<string> &filenames_,
     u64 num_colors_,
-    u64 max_indexes_per_batch,
-    u64 max_reads_per_batch,
     double threshold_,
     bool include_not_found_,
     bool include_invalid_,
     u64 threads_,
-    u64 warp_size,
     u64 element_size,
     u64 newline_element_size = 1
   ):
