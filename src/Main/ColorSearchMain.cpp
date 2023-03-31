@@ -142,7 +142,8 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     );
   u64 bits_reserved_for_results_printer = divide_and_round<u64>(free_bits, 3);
   results_printer_max_reads_in_buffer = bits_reserved_for_results_printer
-    / get_threads() / streams / (num_colors * (max_chars_in_u64 + 1) + 1);
+    / get_threads() / streams
+    / (num_colors * (max_chars_in_u64 + 1) * bits_in_byte + bits_in_byte);
   // 64 bits per index
   // 64 * num_colors / warp_size to store the results
   // 20 * 8 bits for each printed result
