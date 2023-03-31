@@ -24,6 +24,7 @@ using gpu_utils::get_free_gpu_memory;
 using log_utils::Logger;
 using math_utils::bits_to_gB;
 using math_utils::divide_and_ceil;
+using math_utils::divide_and_round;
 using math_utils::round_down;
 using memory_utils::get_total_system_memory;
 using std::cerr;
@@ -41,13 +42,13 @@ auto ColorSearchMain::main(int argc, char **argv) -> int {
   args = make_unique<ColorSearchArgumentParser>(
     program_name, program_description, argc, argv
   );
+  load_threads();
   Logger::log(Logger::LOG_LEVEL::INFO, "Loading components into memory");
   auto gpu_container = get_gpu_container();
   num_colors = gpu_container->num_colors;
   auto [input_filenames, output_filenames] = get_input_output_filenames();
   load_batch_info();
   omp_set_nested(1);
-  load_threads();
   Logger::log(
     Logger::LOG_LEVEL::INFO,
     format("Running OpenMP with {} threads", get_threads())
@@ -139,6 +140,9 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
       static_cast<double>(available_ram - unavailable_ram)
       * get_args().get_cpu_memory_percentage()
     );
+  u64 bits_reserved_for_results_printer = divide_and_round<u64>(free_bits, 3);
+  results_printer_max_reads_in_buffer = bits_reserved_for_results_printer
+    / get_threads() / streams / (num_colors * (max_chars_in_u64 + 1) + 1);
   // 64 bits per index
   // 64 * num_colors / warp_size to store the results
   // 20 * 8 bits for each printed result
@@ -159,6 +163,7 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     )
 #endif
   );
+  free_bits -= bits_reserved_for_results_printer;
   auto max_chars_per_batch
     = free_bits / bits_required_per_character / num_components / streams;
   Logger::log(
@@ -264,7 +269,8 @@ auto ColorSearchMain::get_results_printer(
     get_args().get_threshold(),
     get_args().get_include_not_found(),
     get_args().get_include_invalid(),
-    get_threads()
+    get_threads(),
+    results_printer_max_reads_in_buffer
   ));
 }
 

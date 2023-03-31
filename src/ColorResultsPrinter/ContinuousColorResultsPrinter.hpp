@@ -71,7 +71,7 @@ private:
   u64 stream_id;
   vector<OmpLock> write_locks{};
   unique_ptr<ThrowingOfstream> out_stream;
-  u64 max_reads_in_buffer = 4;
+  u64 max_reads_in_buffer = 0;
 
 public:
   ContinuousColorResultsPrinter(
@@ -89,7 +89,8 @@ public:
     bool include_invalid_,
     u64 threads_,
     u64 element_size,
-    u64 newline_element_size = 1
+    u64 newline_element_size,
+    u64 max_reads_in_buffer_
   ):
       interval_batch_producer(std::move(interval_batch_producer_)),
       read_statistics_batch_producer(std::move(read_statistics_batch_producer_)
@@ -104,7 +105,8 @@ public:
       threads(threads_),
       write_locks(threads_ - 1),
       stream_id(stream_id_),
-      buffers(threads_) {
+      buffers(threads_),
+      max_reads_in_buffer(max_reads_in_buffer_) {
     for (auto &b : buffers) {
       impl().do_allocate_buffer(b, element_size, newline_element_size);
     }

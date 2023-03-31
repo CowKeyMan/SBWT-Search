@@ -19,7 +19,8 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
   double threshold_,
   bool include_not_found_,
   bool include_invalid_,
-  u64 threads
+  u64 threads,
+  u64 max_reads_in_buffer
 ):
     Base(
       stream_id_,
@@ -32,7 +33,9 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
       include_not_found_,
       include_invalid_,
       threads,
-      max_chars_in_u64 + 1
+      max_chars_in_u64 + 1,
+      1,
+      max_reads_in_buffer
     ),
     tiny_buffers(threads) {
   for (u64 i = 0; i < threads; ++i) {

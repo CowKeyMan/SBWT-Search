@@ -33,6 +33,7 @@ private:
   u64 streams = 0;
   u64 max_indexes_per_batch = 0;
   u64 max_reads_per_batch = 0;
+  u64 results_printer_max_reads_in_buffer = 0;
   unique_ptr<ColorSearchArgumentParser> args;
 
 public:
