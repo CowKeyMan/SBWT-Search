@@ -42,7 +42,6 @@ auto SbwtBuilder::get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer> {
   Logger::log_timed_event("SBWTReadAndPopppy", Logger::EVENT_STATE::START);
   auto [acgt, poppys, c_map, num_bits, acgt_size, kmer_size]
     = get_dbg_components();
-  vector<u64> key_kmer_marks{};
   auto container = make_unique<CpuSbwtContainer>(
     std::move(acgt),
     std::move(poppys),
@@ -146,9 +145,9 @@ auto SbwtBuilder::skip_bytes_vector(istream &stream) -> void {
   stream.seekg(static_cast<std::ios::off_type>(bytes), ios::cur);
 }
 
-auto SbwtBuilder::get_key_kmer_marks() -> sdsl::int_vector<> {
-  if (colors_filename == "") { return sdsl::int_vector{}; }
-  sdsl::int_vector<> key_kmer_marks;
+auto SbwtBuilder::get_key_kmer_marks() -> sdsl::bit_vector {
+  if (colors_filename == "") { return sdsl::bit_vector{}; }
+  sdsl::bit_vector key_kmer_marks;
   ThrowingIfstream in_stream(colors_filename, ios::in | ios::binary);
   string filetype = in_stream.read_string_with_size();
   if (filetype != "sdsl-hybrid-v4") {

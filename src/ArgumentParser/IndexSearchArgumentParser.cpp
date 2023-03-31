@@ -93,7 +93,7 @@ auto IndexSearchArgumentParser::create_options() -> void {
       "represents the amount of results for each string in the original "
       "input file. In terms of file extensions, ASCII format will add .txt, boolean format will add .bool and binary format will add .bin and .seqsizes for the separate sequence sizes",
       value<string>()->default_value("ascii"))
-    ("colors-file", "The colors file produced by themisto v3.0, which contains the key_kmer_marks as one of its components within, used in this program. When this option is given, then the index search will move to the next key kmer.", value<string>()->default_value(""))
+    ("k,colors-file", "The colors file produced by themisto v3.0, which contains the key_kmer_marks as one of its components within, used in this program. When this option is given, then the index search will move to the next key kmer.", value<string>()->default_value(""))
   ("h,help", "Print usage", value<bool>()->default_value("false"));
   get_options().allow_unrecognised_options();
 }

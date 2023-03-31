@@ -20,7 +20,7 @@ GpuSbwtContainer::GpuSbwtContainer(
   u64 bits_total,
   u64 bit_vector_size,
   u32 kmer_size,
-  const sdsl::int_vector<> &cpu_key_kmer_marks
+  const sdsl::bit_vector &cpu_key_kmer_marks
 ):
     SbwtContainer(bits_total, bit_vector_size, kmer_size) {
   acgt.reserve(4);

@@ -31,7 +31,9 @@ ContinuousIndexSearcher::ContinuousIndexSearcher(
   u64 max_chars_per_batch_,
   bool move_to_key_kmer
 ):
-    searcher(stream_id_, std::move(container), max_chars_per_batch_, move_to_key_kmer),
+    searcher(
+      stream_id_, std::move(container), max_chars_per_batch_, move_to_key_kmer
+    ),
     bit_seq_producer(std::move(bit_seq_producer_)),
     positions_producer(std::move(positions_producer_)),
     max_chars_per_batch(max_chars_per_batch_),

@@ -33,7 +33,6 @@ __global__ void d_search(
   const u64 *const key_kmer_marks,
   u64 *out
 ) {
-  const auto rank = d_rank;
   const u32 idx = get_idx();
   const u64 kmer_index = kmer_positions[idx] * 2;
   const u64 first_part = (bit_seqs[kmer_index / 64] << (kmer_index % 64));
@@ -48,20 +47,22 @@ __global__ void d_search(
   u64 node_right = presearch_right[presearched];
   for (u32 i = presearch_letters * 2; i < kmer_size * 2; i += 2) {
     const u32 c = (kmer >> (62 - i)) & two_1s;
-    node_left = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_left);
-    node_right
-      = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
+    node_left = c_map[c] + d_rank(acgt[c], layer_0[c], layer_1_2[c], node_left);
+    node_right = c_map[c]
+      + d_rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
   }
-  if (node_left > node_right) { node_left = -1ULL; }
+  if (node_left > node_right) {
+    out[idx] = -1ULL;
+    return;
+  }
   if (move_to_key_kmer) {
     while (!d_get_bool_from_bit_vector(key_kmer_marks, node_left)) {
-#pragma unroll
       for (u32 i = 0; i < 4; ++i) {
         if (d_get_bool_from_bit_vector(acgt[i], node_left)) {
           node_left
-            = c_map[i] + rank(acgt[i], layer_0[i], layer_1_2[i], node_left);
+            = c_map[i] + d_rank(acgt[i], layer_0[i], layer_1_2[i], node_left);
+          break;
         }
-        break;
       }
     }
   }

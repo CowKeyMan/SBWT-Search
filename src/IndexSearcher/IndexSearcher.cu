@@ -36,7 +36,7 @@ auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
       container->get_presearch_right().get(),
       d_kmer_positions.get(),
       d_bit_seqs.get(),
-      nullptr,
+      container->get_key_kmer_marks().get(),
       d_kmer_positions.get()
     );
   } else {
@@ -55,7 +55,7 @@ auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
       container->get_presearch_right().get(),
       d_kmer_positions.get(),
       d_bit_seqs.get(),
-      container->get_key_kmer_marks().get(),
+      nullptr,
       d_kmer_positions.get()
     );
   }

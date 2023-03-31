@@ -36,7 +36,7 @@ public:
     u64 bits_total,
     u64 bit_vector_size,
     u32 kmer_size,
-    const sdsl::int_vector<> &cpu_key_kmer_marks
+    const sdsl::bit_vector &cpu_key_kmer_marks
   );
 
   [[nodiscard]] auto get_c_map() const -> const GpuPointer<u64> &;
