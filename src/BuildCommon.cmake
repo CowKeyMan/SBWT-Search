@@ -132,7 +132,10 @@ add_library(
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cpp"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cpp"
 )
-target_link_libraries(sbwt_container PRIVATE gpu_utils)
+target_link_libraries(sbwt_container PRIVATE gpu_utils libsdsl)
+if (NOT SDSL_FOUND)
+  add_dependencies(sbwt_container sdsl)
+endif()
 add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"
