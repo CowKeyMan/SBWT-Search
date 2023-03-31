@@ -50,7 +50,6 @@ for device in "${devices[@]}"; do
           -o "${output_file}" \
           -s "${streams}" \
           -p "${printing_mode}" \
-          -s "${streams}" \
           -u 10GB \
           -t 0.7 \
           >> "${benchmark_out}"
