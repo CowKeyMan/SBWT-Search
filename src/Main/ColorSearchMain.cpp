@@ -103,7 +103,7 @@ auto ColorSearchMain::get_max_chars_per_batch() -> u64 {
 
 auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
   u64 free = static_cast<u64>(
-    static_cast<double>(get_free_gpu_memory() * sizeof(u64))
+    static_cast<double>(get_free_gpu_memory() * bits_in_byte)
     * get_args().get_gpu_memory_percentage()
   );
   // 64 for each index found
@@ -126,12 +126,12 @@ auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
 }
 
 auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
-  if (get_args().get_unavailable_ram() > get_total_system_memory() * sizeof(u64)) {
+  if (get_args().get_unavailable_ram() > get_total_system_memory() * bits_in_byte) {
     throw runtime_error("Not enough memory. Please specify a lower number of "
                         "unavailable-main-memory.");
   }
   u64 available_ram = min(
-    get_total_system_memory() * sizeof(u64), get_args().get_max_cpu_memory()
+    get_total_system_memory() * bits_in_byte, get_args().get_max_cpu_memory()
   );
   u64 unavailable_ram = get_args().get_unavailable_ram();
   u64 free_bits = (unavailable_ram > available_ram) ?

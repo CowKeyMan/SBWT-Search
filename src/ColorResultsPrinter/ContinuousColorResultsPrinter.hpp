@@ -119,7 +119,6 @@ public:
       max_reads_in_buffer * element_size * num_colors
       + max_reads_in_buffer * newline_element_size
     );
-    buffer.resize(buffer.capacity());
   }
 
   auto read_and_generate() -> void {
@@ -142,6 +141,7 @@ public:
     }
     if (!printed_last_read) {
       u64 buffer_idx = 0;
+      buffers[0].resize(buffers[0].capacity());
       impl().do_print_read(
         previous_last_results.begin(),
         previous_last_found_idx,
@@ -196,6 +196,7 @@ protected:
     auto &rbnfs = interval_batch->reads_before_newfile;
     if (wbnrs[0] == 0) {
       u64 buffer_idx = 0;
+      buffers[0].resize(buffers[0].capacity());
       impl().do_print_read(
         previous_last_results.begin(),
         previous_last_found_idx,
@@ -233,6 +234,7 @@ protected:
       {
         u64 thread_idx = omp_get_thread_num();
         auto &buffer = buffers[thread_idx];
+        buffer.resize(buffer.capacity());
         u64 buffer_idx = 0;
         u64 reads_in_buffer = 0;
         u64 prints_done = 0;
