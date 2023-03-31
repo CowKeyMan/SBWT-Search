@@ -51,6 +51,7 @@ for device in "${devices[@]}"; do
           -s "${streams}" \
           -p "${printing_mode}" \
           -s "${streams}" \
+          -u 10GB \
           -t 0.7 \
           >> "${benchmark_out}"
         printf "Size of outputs: "
