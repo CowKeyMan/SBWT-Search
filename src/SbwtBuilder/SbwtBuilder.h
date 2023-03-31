@@ -15,7 +15,6 @@
 
 #include "SbwtContainer/CpuSbwtContainer.h"
 #include "Tools/TypeDefinitions.h"
-#include "sdsl/int_vector.hpp"
 
 namespace sbwt_search {
 
@@ -45,7 +44,7 @@ private:
   auto get_colors_components() -> vector<u64>;
   auto skip_bits_vector(istream &stream) -> void;
   auto skip_bytes_vector(istream &stream) -> void;
-  auto get_key_kmer_marks() -> sdsl::bit_vector;
+  auto get_key_kmer_marks() -> vector<u64>;
   auto skip_unecessary_colors_components(istream &in_stream) -> void;
 };
 

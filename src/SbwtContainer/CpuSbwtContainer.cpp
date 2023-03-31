@@ -15,7 +15,7 @@ CpuSbwtContainer::CpuSbwtContainer(
   u64 num_bits,
   u64 bit_vector_size,
   u64 kmer_size,
-  sdsl::bit_vector &&key_kmer_marks_
+  vector<u64> &&key_kmer_marks_
 ):
     SbwtContainer(num_bits, bit_vector_size, kmer_size),
     acgt(std::move(acgt_)),

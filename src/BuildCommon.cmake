@@ -125,17 +125,18 @@ target_link_libraries(
   OpenMP::OpenMP_CXX
   fmt::fmt
   gpu_utils
+  libsdsl
 )
+if (NOT SDSL_FOUND)
+  add_dependencies(sbwt_builder sdsl)
+endif()
 add_library(
   sbwt_container
   "${PROJECT_SOURCE_DIR}/SbwtContainer/SbwtContainer.cpp"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/CpuSbwtContainer.cpp"
   "${PROJECT_SOURCE_DIR}/SbwtContainer/GpuSbwtContainer.cpp"
 )
-target_link_libraries(sbwt_container PRIVATE gpu_utils libsdsl)
-if (NOT SDSL_FOUND)
-  add_dependencies(sbwt_container sdsl)
-endif()
+target_link_libraries(sbwt_container PRIVATE gpu_utils)
 add_library(
   positions_builder
   "${PROJECT_SOURCE_DIR}/PositionsBuilder/PositionsBuilder.cpp"

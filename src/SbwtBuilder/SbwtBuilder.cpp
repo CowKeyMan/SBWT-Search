@@ -66,8 +66,7 @@ auto SbwtBuilder::get_dbg_components()
     const string version = in_stream.read_string_with_size();
     if (version != "v0.1") { throw runtime_error("Error: wrong SBWT version"); }
   }
-  u64 num_bits = 0;
-  in_stream.read(bit_cast<char *>(&num_bits), sizeof(u64));
+  u64 num_bits = in_stream.read_real<u64>();
   const u64 vectors_start_position = in_stream.tellg();
   const u64 bit_vector_bytes = round_up<u64>(num_bits, u64_bits) / sizeof(u64);
   vector<vector<u64>> acgt(4);
@@ -145,9 +144,8 @@ auto SbwtBuilder::skip_bytes_vector(istream &stream) -> void {
   stream.seekg(static_cast<std::ios::off_type>(bytes), ios::cur);
 }
 
-auto SbwtBuilder::get_key_kmer_marks() -> sdsl::bit_vector {
-  if (colors_filename == "") { return sdsl::bit_vector{}; }
-  sdsl::bit_vector key_kmer_marks;
+auto SbwtBuilder::get_key_kmer_marks() -> vector<u64> {
+  if (colors_filename.empty()) { return {}; }
   ThrowingIfstream in_stream(colors_filename, ios::in | ios::binary);
   string filetype = in_stream.read_string_with_size();
   if (filetype != "sdsl-hybrid-v4") {
@@ -156,7 +154,13 @@ auto SbwtBuilder::get_key_kmer_marks() -> sdsl::bit_vector {
     );
   }
   skip_unecessary_colors_components(in_stream);
-  key_kmer_marks.load(in_stream);
+  u64 num_bits = in_stream.read_real<u64>();
+  const u64 bit_vector_bytes = round_up<u64>(num_bits, u64_bits) / sizeof(u64);
+  vector<u64> key_kmer_marks(bit_vector_bytes / sizeof(u64));
+  in_stream.read(
+    bit_cast<char *>(key_kmer_marks.data()),
+    static_cast<std::streamsize>(bit_vector_bytes)
+  );
   return key_kmer_marks;
 }
 

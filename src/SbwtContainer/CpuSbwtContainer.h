@@ -12,7 +12,6 @@
 #include "SbwtContainer/GpuSbwtContainer.h"
 #include "SbwtContainer/SbwtContainer.h"
 #include "Tools/TypeDefinitions.h"
-#include "sdsl/int_vector.hpp"
 
 namespace sbwt_search {
 
@@ -24,7 +23,7 @@ private:
   vector<vector<u64>> acgt;
   vector<Poppy> poppys;
   vector<u64> c_map;
-  sdsl::bit_vector key_kmer_marks;
+  vector<u64> key_kmer_marks;
 
 public:
   CpuSbwtContainer(
@@ -34,7 +33,7 @@ public:
     u64 num_bits,
     u64 bit_vector_size,
     u64 kmer_size,
-    sdsl::bit_vector &&key_kmer_marks
+    vector<u64> &&key_kmer_marks
   );
   [[nodiscard]] auto to_gpu() const -> shared_ptr<GpuSbwtContainer>;
 };

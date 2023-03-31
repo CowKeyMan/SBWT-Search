@@ -12,7 +12,6 @@
 #include "Poppy/Poppy.h"
 #include "SbwtContainer/SbwtContainer.h"
 #include "Tools/GpuPointer.h"
-#include "sdsl/int_vector.hpp"
 
 namespace sbwt_search {
 
@@ -36,7 +35,7 @@ public:
     u64 bits_total,
     u64 bit_vector_size,
     u32 kmer_size,
-    const sdsl::bit_vector &cpu_key_kmer_marks
+    const vector<u64> &cpu_key_kmer_marks
   );
 
   [[nodiscard]] auto get_c_map() const -> const GpuPointer<u64> &;
