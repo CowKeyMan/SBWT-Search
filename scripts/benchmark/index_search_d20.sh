@@ -5,7 +5,7 @@
 # benchmark_objects/index folder
 
 if [ $# -ne 2 ]; then
-  echo "Usage: ./scripts/benchmark/index_search_d1.sh <output_file> <nvidia|amd>"
+  echo "Usage: ./scripts/benchmark/index_search_d20.sh <output_file> <nvidia|amd>"
   exit 1
 fi
 
@@ -55,17 +55,10 @@ for device in "${devices[@]}"; do
           -p "${printing_mode}" \
           -s "${streams}" \
           -u 10GB \
+          -k "benchmark_objects/index/index_d20.tcolors" \
           >> "${benchmark_out}"
         printf "Size of outputs: "
         ls -lh "benchmark_objects/running" | head -1
-        if [ "${printing_mode}" = "ascii" ]; then
-          files=(`cd benchmark_objects/running/ && ls`)
-          for file in ${files[@]}; do
-            sed -i 's/-2/-1/g' "benchmark_objects/running/${file}" &
-          done
-          wait < <(jobs -p)
-          diff -qr "benchmark_objects/running" "benchmark_objects/index_search_results_d1_ascii"
-        fi
         rm benchmark_objects/running/*
       done
     done

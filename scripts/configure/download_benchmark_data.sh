@@ -31,8 +31,10 @@ download_files=(`head -20 scripts/configure/full_benchmark_data_list.txt`)
 
 mkdir -p "benchmark_objects/color_search_results_t0.7"
 mkdir -p "benchmark_objects/index"
-mkdir -p "benchmark_objects/index_search_results_d1"
-mkdir -p "benchmark_objects/index_search_results_d20"
+mkdir -p "benchmark_objects/index_search_results_d1_ascii"
+mkdir -p "benchmark_objects/index_search_results_d1_binary"
+mkdir -p "benchmark_objects/index_search_results_d20_ascii"
+mkdir -p "benchmark_objects/index_search_results_d20_binary"
 mkdir -p "benchmark_objects/list_files/input"
 mkdir -p "benchmark_objects/list_files/output"
 mkdir -p "benchmark_objects/running"
@@ -65,27 +67,27 @@ python3 scripts/modifiers/themisto_tdbg_to_sbwt.py -i benchmark_objects/index/in
 # run sbwt on the sequence files
 files=(`cd benchmark_objects/unzipped_seqs && ls`)
 for file in "${files[@]}"; do
-  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.indexes.txt" ]; then
-    ${sbwt_executable} search -i benchmark_objects/running/index.sbwt -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/index_search_results_d1/${file%.*}.indexes.sbwt_txt" > /dev/null 2>&1 &
+  if [ ! -f "benchmark_objects/index_search_results_d1_ascii/${file%.*}.indexes.txt" ]; then
+    ${sbwt_executable} search -i benchmark_objects/running/index.sbwt -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/index_search_results_d1_ascii/${file%.*}.indexes.sbwt_txt" > /dev/null 2>&1 &
   fi
 done
 wait < <(jobs -p)
 
 # convert the sbwt output
-files=(`cd benchmark_objects/index_search_results_d1 && ls *.sbwt_txt`)
+files=(`cd benchmark_objects/index_search_results_d1_ascii && ls *.sbwt_txt`)
 for file in "${files[@]}"; do
-  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.txt" ]; then
-    python3 scripts/modifiers/sbwt_index_results_to_ascii.py -i "benchmark_objects/index_search_results_d1/${file}" -o "benchmark_objects/index_search_results_d1/${file%.*}.txt" > /dev/null
+  if [ ! -f "benchmark_objects/index_search_results_d1_ascii/${file%.*}.txt" ]; then
+    python3 scripts/modifiers/sbwt_index_results_to_ascii.py -i "benchmark_objects/index_search_results_d1_ascii/${file}" -o "benchmark_objects/index_search_results_d1_ascii/${file%.*}.txt" > /dev/null
   fi
 done
 wait < <(jobs -p)
-rm -f benchmark_objects/index_search_results_d1/*.sbwt_txt
+rm -f benchmark_objects/index_search_results_d1_ascii/*.sbwt_txt
 
 # run themisto on sequence files
 files=(`cd benchmark_objects/unzipped_seqs && ls`)
 cp benchmark_objects/index/index_d1.tcolors benchmark_objects/index/index.tcolors
 for file in "${files[@]}"; do
-  if [ ! -f "benchmark_objects/index_search_results_d1/${file%.*}.colors.txt" ]; then
+  if [ ! -f "benchmark_objects/index_search_results_d1_ascii/${file%.*}.colors.txt" ]; then
     ${themisto_executable} pseudoalign -i benchmark_objects/index/index -q "benchmark_objects/unzipped_seqs/${file}" -o "benchmark_objects/color_search_results_t0.7/${file%.*}.colors.themisto_txt" --threshold 0.7 --temp-dir benchmark_objects/running -t 10 --sort-output
   fi
 done
@@ -103,20 +105,30 @@ wait < <(jobs -p)
 rm benchmark_objects/color_search_results_t0.7/*.themisto_txt
 
 # populate input list files
-find benchmark_objects/color_search_results_t0.7/* > benchmark_objects/list_files/input/color_search_results.list
-find benchmark_objects/index_search_results_d1/* > benchmark_objects/list_files/input/index_search_results_d1.list
-cp benchmark_objects/list_files/input/index_search_results_d1.list benchmark_objects/list_files/input/index_search_results_d20.list
-sed -i "s/_d1\//_d20\//g" benchmark_objects/list_files/input/index_search_results_d20.list
 find benchmark_objects/zipped_seqs/* > benchmark_objects/list_files/input/zipped_seqs.list
 find benchmark_objects/unzipped_seqs/* > benchmark_objects/list_files/input/unzipped_seqs.list
+find benchmark_objects/index_search_results_d1_ascii/* > benchmark_objects/list_files/input/index_search_results_d1_ascii.list
+cp benchmark_objects/list_files/input/index_search_results_d1_ascii.list benchmark_objects/list_files/input/index_search_results_d1_binary.list
+sed -i "s/ascii/binary/g" benchmark_objects/list_files/input/index_search_results_d1_binary.list
+sed -i "s/\.txt/\.bin/g" benchmark_objects/list_files/input/index_search_results_d1_binary.list
+cp benchmark_objects/list_files/input/index_search_results_d1_ascii.list benchmark_objects/list_files/input/index_search_results_d20_ascii.list
+sed -i "s/d1/d20/g" benchmark_objects/list_files/input/index_search_results_d20_ascii.list
+cp benchmark_objects/list_files/input/index_search_results_d1_ascii.list benchmark_objects/list_files/input/index_search_results_d20_binary.list
+sed -i "s/ascii/binary/g" benchmark_objects/list_files/input/index_search_results_d20_binary.list
+sed -i "s/\.txt/\.bin/g" benchmark_objects/list_files/input/index_search_results_d20_binary.list
+sed -i "s/d1/d20/g" benchmark_objects/list_files/input/index_search_results_d20_binary.list
 
 # populate output list files
 files=(`cd benchmark_objects/unzipped_seqs && ls`)
-printf "" > benchmark_objects/list_files/output/color_search_results.list
-printf "" > benchmark_objects/list_files/output/index_search_results.list
+printf "" > benchmark_objects/list_files/output/color_search_results_running.list
+printf "" > benchmark_objects/list_files/output/index_search_results_running.list
 for file in "${files[@]}"; do
-  echo benchmark_objects/running/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results.list
-  echo benchmark_objects/running/${file%.*}.colors >> benchmark_objects/list_files/output/color_search_results.list
+  echo benchmark_objects/running/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results_running.list
+  echo benchmark_objects/running/${file%.*}.colors >> benchmark_objects/list_files/output/color_search_results_running.list
+  echo benchmark_objects/index_search_results_d1_ascii/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results_d1_ascii.list
+  echo benchmark_objects/index_search_results_d20_ascii/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results_d20_ascii.list
+  echo benchmark_objects/index_search_results_d1_binary/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results_d1_binary.list
+  echo benchmark_objects/index_search_results_d20_binary/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results_d20_binary.list
 done
 
 rm benchmark_objects/running/*

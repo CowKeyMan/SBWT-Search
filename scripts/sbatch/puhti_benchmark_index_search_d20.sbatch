@@ -4,10 +4,10 @@
 # through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti
 # supercomputer by CSC: https://research.csc.fi/-/mahti
 
-#SBATCH --job-name=SBWT_indexes_d1
+#SBATCH --job-name=SBWT_indexes_d20
 #SBATCH --account=dongelr1
-#SBATCH --error indexes_d1_err.txt
-#SBATCH --output indexes_d1_out.txt
+#SBATCH --error indexes_d20_err.txt
+#SBATCH --output indexes_d20_out.txt
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=10
@@ -28,7 +28,7 @@ unset OMP_NUM_THREADS
 
 chmod +777 scripts/**/*
 export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
-export OUTPUT_FOLDER="index_d1_${DATETIME}"
+export OUTPUT_FOLDER="index_d20_${DATETIME}"
 ## We want to perform our work in LOCAL_SCRATCH
 export OLD_PWD="${PWD}"
 mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/"
@@ -50,5 +50,5 @@ t2=$(date +%s%3N)
 mkdir -p "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}"
 echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
 
-bash -x scripts/benchmark/index_search_d1.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt" "nvidia"
+bash -x scripts/benchmark/index_search_d20.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt" "nvidia"
 cd "${OLD_PWD}"
