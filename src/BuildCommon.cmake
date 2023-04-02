@@ -242,6 +242,8 @@ target_link_libraries(color_results_post_processor PRIVATE fmt::fmt OpenMP::Open
 add_library(
   color_results_printer
   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/AsciiContinuousColorResultsPrinter.cpp"
+  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/BinaryContinuousColorResultsPrinter.cpp"
+  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/CsvContinuousColorResultsPrinter.cpp"
 )
 target_link_libraries(color_results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
 

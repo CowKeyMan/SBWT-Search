@@ -13,6 +13,7 @@
 #include <iterator>
 #include <limits>
 #include <memory>
+#include <ostream>
 
 #include "BatchObjects/ColorSearchResultsBatch.h"
 #include "BatchObjects/ColorsIntervalBatch.h"
@@ -35,6 +36,7 @@ using math_utils::divide_and_ceil;
 using std::bit_cast;
 using std::ios;
 using std::numeric_limits;
+using std::ostream;
 using std::shared_ptr;
 using std::unique_ptr;
 using std_utils::copy_advance;
@@ -173,7 +175,7 @@ protected:
   auto do_start_next_file() -> void {
     if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
     impl().do_open_next_file(*current_filename);
-    impl().do_write_file_header();
+    impl().do_write_file_header(*out_stream);
     current_filename = next(current_filename);
   }
   auto do_at_file_end() -> void {}
@@ -182,9 +184,9 @@ protected:
       filename + impl().do_get_extension(), ios::binary | ios::out
     );
   }
-  auto do_write_file_header() -> void {
-    out_stream->write_string_with_size(impl().do_get_format());
-    out_stream->write_string_with_size(impl().do_get_version());
+  auto do_write_file_header(ThrowingOfstream &out_stream) -> void {
+    out_stream.write_string_with_size(impl().do_get_format());
+    out_stream.write_string_with_size(impl().do_get_version());
   }
 
   auto process_batch() -> void {
@@ -314,7 +316,7 @@ protected:
   }
 
   auto do_with_newline(vector<Buffer_t>::iterator buffer) -> u64;
-  // NOLINENEXTLINE (misc-unused-parameters)
+  // NOLINTNEXTLINE (misc-unused-parameters)
   auto do_with_space(vector<Buffer_t>::iterator buffer) -> u64 { return 0; }
   auto do_with_result(vector<Buffer_t>::iterator buffer, u64 result) -> u64;
 

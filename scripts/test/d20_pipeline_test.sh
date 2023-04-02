@@ -24,13 +24,13 @@ index_extensions=(
 )
 colors_modes=(
   "ascii"
-  # "binary"
-  # "csv"
+  "binary"
+  "csv"
 )
 colors_extensions=(
   ".txt"
-  # ".bin"
-  # ".csv"
+  ".bin"
+  ".csv"
 )
 
 bad_exits=0
@@ -107,7 +107,10 @@ for streams in {1..5}; do
   done
 done
 
-# TODO: run individual
-
-
 rm -r tmp/d20_pipeline_test
+
+if [[ ${bad_exits} -gt 0 ]]; then
+  exit 1
+else
+  echo "d20 pipeline test passed!"
+fi

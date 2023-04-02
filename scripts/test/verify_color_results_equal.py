@@ -28,6 +28,7 @@ parser.add_argument(
 )
 args = vars(parser.parse_args())
 
+max_u64 = 18446744073709551615
 u64_bytes = 8
 byteorder = 'little'
 
@@ -40,8 +41,10 @@ def read_string_from_file(f: io.BytesIO):
 
 
 class FileParser:
-    def __init__(self, f: io.BytesIO, version: str):
+    def __init__(self, f: io.BytesIO, version: str | None):
         self.f = f
+        if version is None:
+            return
         file_version = read_string_from_file(f)
         if file_version != version:
             print(
@@ -80,12 +83,45 @@ class AsciiParser(FileParser):
                     )
                 break
             s += next_char
-        next_item = int(s)
-        if next_item == -1:
-            return ("not_found",)
-        if next_item == -2:
-            return ("invalid",)
         return ("result", int(s))
+
+
+class BinaryParser(FileParser):
+    def __init__(self, f: io.BytesIO):
+        self.version = "v1.0"
+        FileParser.__init__(self, f, self.version)
+
+    def get_next(self) -> tuple[str, int]:
+        b = self.f.read(u64_bytes)
+        if len(b) == 0:
+            return ("EOF", )
+        next_item = int.from_bytes(
+            b, byteorder=byteorder, signed=False
+        )
+        if next_item == max_u64:
+            return ("newline",)
+        return ("result", next_item)
+
+
+class CsvParser(FileParser):
+    def __init__(self, f: io.BytesIO):
+        self.values = None
+        FileParser.__init__(self, f, None)
+        f.readline()  # skip header
+
+    def get_next(self) -> tuple[str, int]:
+        if self.values is None:
+            line = f.readline().decode()
+            if line == '':
+                return ("EOF", )
+            self.values = line.strip().split(',')
+        try:
+            next_index = self.values.index('1')
+        except ValueError:
+            self.values = None
+            return ("newline", )
+        self.values[next_index] = 0
+        return ("result", next_index)
 
 
 with ExitStack() as stack:
@@ -95,11 +131,14 @@ with ExitStack() as stack:
         for filename in [args['file1'], args['file2']]
     ]
     for f in files:
+        if f.name.endswith('.csv'):
+            file_parsers.append(CsvParser(f))
+            continue
         file_type = read_string_from_file(f)
         if file_type == "ascii":
             file_parsers.append(AsciiParser(f))
-        # elif file_type == "binary":
-        #     file_parsers.append(BinaryParser(f))
+        elif file_type == "binary":
+            file_parsers.append(BinaryParser(f))
 
     line_count = 0
     position = 0

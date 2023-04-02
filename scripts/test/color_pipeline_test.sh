@@ -17,13 +17,13 @@ files=`cd test_objects/full_pipeline/color_search && ls *.fna`
 
 modes=(
   "ascii"
-  # "binary"
-  # "csv"
+  "binary"
+  "csv"
 )
 extensions=(
   ".txt"
-  # ".bin"
-  # ".csv"
+  ".bin"
+  ".csv"
 )
 
 bad_exits=0

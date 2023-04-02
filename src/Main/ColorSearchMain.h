@@ -15,6 +15,8 @@
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
 #include "ColorResultsPostProcessor/ContinuousColorResultsPostProcessor.h"
 #include "ColorResultsPrinter/AsciiContinuousColorResultsPrinter.h"
+#include "ColorResultsPrinter/BinaryContinuousColorResultsPrinter.h"
+#include "ColorResultsPrinter/CsvContinuousColorResultsPrinter.h"
 #include "ColorSearcher/ContinuousColorSearcher.h"
 #include "IndexFileParser/ContinuousIndexFileParser.h"
 #include "Main/Main.h"
@@ -25,7 +27,10 @@ using std::shared_ptr;
 using std::string;
 using std::variant;
 
-using ColorResultsPrinter = variant<AsciiContinuousColorResultsPrinter>;
+using ColorResultsPrinter = variant<
+  AsciiContinuousColorResultsPrinter,
+  BinaryContinuousColorResultsPrinter,
+  CsvContinuousColorResultsPrinter>;
 
 class ColorSearchMain: public Main {
 private:

@@ -350,7 +350,7 @@ auto IndexSearchMain::get_results_printer(
       max_reads_per_batch
     ));
   }
-  throw runtime_error("Invalid value passed by user for print_mode");
+  throw runtime_error("Invalid value passed by user for argument print_mode");
 }
 
 auto IndexSearchMain::get_input_output_filenames()

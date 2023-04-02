@@ -260,19 +260,52 @@ auto ColorSearchMain::get_results_printer(
   const vector<string> &filenames,
   u64 num_colors
 ) -> shared_ptr<ColorResultsPrinter> {
-  return make_shared<ColorResultsPrinter>(AsciiContinuousColorResultsPrinter(
-    stream_id,
-    index_file_parser->get_colors_interval_batch_producer(),
-    index_file_parser->get_read_statistics_batch_producer(),
-    std::move(post_processor),
-    filenames,
-    num_colors,
-    get_args().get_threshold(),
-    get_args().get_include_not_found(),
-    get_args().get_include_invalid(),
-    get_threads(),
-    results_printer_max_reads_in_buffer
-  ));
+  if (get_args().get_print_mode() == "ascii") {
+    return make_shared<ColorResultsPrinter>(AsciiContinuousColorResultsPrinter(
+      stream_id,
+      index_file_parser->get_colors_interval_batch_producer(),
+      index_file_parser->get_read_statistics_batch_producer(),
+      std::move(post_processor),
+      filenames,
+      num_colors,
+      get_args().get_threshold(),
+      get_args().get_include_not_found(),
+      get_args().get_include_invalid(),
+      get_threads(),
+      results_printer_max_reads_in_buffer
+    ));
+  }
+  if (get_args().get_print_mode() == "binary") {
+    return make_shared<ColorResultsPrinter>(BinaryContinuousColorResultsPrinter(
+      stream_id,
+      index_file_parser->get_colors_interval_batch_producer(),
+      index_file_parser->get_read_statistics_batch_producer(),
+      std::move(post_processor),
+      filenames,
+      num_colors,
+      get_args().get_threshold(),
+      get_args().get_include_not_found(),
+      get_args().get_include_invalid(),
+      get_threads(),
+      results_printer_max_reads_in_buffer
+    ));
+  }
+  if (get_args().get_print_mode() == "csv") {
+    return make_shared<ColorResultsPrinter>(CsvContinuousColorResultsPrinter(
+      stream_id,
+      index_file_parser->get_colors_interval_batch_producer(),
+      index_file_parser->get_read_statistics_batch_producer(),
+      std::move(post_processor),
+      filenames,
+      num_colors,
+      get_args().get_threshold(),
+      get_args().get_include_not_found(),
+      get_args().get_include_invalid(),
+      get_threads(),
+      results_printer_max_reads_in_buffer
+    ));
+  }
+  throw runtime_error("Invalid value passed by user for argument print_mode");
 }
 
 auto ColorSearchMain::run_components(

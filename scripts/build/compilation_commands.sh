@@ -12,7 +12,7 @@ cmake \
   -DBUILD_DOCS=OFF \
   -DENABLE_PROFILING=ON \
   -DENABLE_MARCH_NATIVE=OFF \
-  -DHIP_TARGET_DEVICE=CPU \
+  -DHIP_TARGET_DEVICE=NVIDIA \
   -DROCM_BRANCH="rocm-5.4.x" \
   ..
 if [ $? -ne 0 ]; then >&2echo "Cmake generation failed" && cd .. && exit 1; fi
