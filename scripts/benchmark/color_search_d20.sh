@@ -33,7 +33,7 @@ output_file="benchmark_objects/list_files/output/color_search_results_running.li
 printing_modes=(
   "ascii"
   "binary"
-  "csv"
+  # "csv"
 )
 if [ $2 = "nvidia" ]; then
   devices=("nvidia")
