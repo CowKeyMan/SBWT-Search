@@ -70,7 +70,7 @@ for streams in {1..5}; do
   for mode in ${modes[@]}; do
     ./build/bin/sbwt_search colors \
       -o ${output_file} \
-      -i test_objects/themisto_example/GCA_combined_d1.tcolors \
+      -k test_objects/themisto_example/GCA_combined_d1.tcolors \
       -q ${input_file} \
       -p ${mode} \
       -t 0.7 \
@@ -85,7 +85,7 @@ for mode in ${modes[@]}; do
   for file in ${files[@]}; do
     ./build/bin/sbwt_search colors \
       -q "test_objects/full_pipeline/color_search/${file%.*}.indexes.txt" \
-      -i test_objects/themisto_example/GCA_combined_d1.tcolors \
+      -k test_objects/themisto_example/GCA_combined_d1.tcolors \
       -o "tmp/color_pipeline_test/actual/${file%.*}.colors"  \
       -p ${mode} \
       -t 0.7 \

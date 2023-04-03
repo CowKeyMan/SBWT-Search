@@ -42,6 +42,7 @@ public:
   auto get_include_not_found() const -> bool;
   auto get_include_invalid() const -> bool;
   auto get_streams() const -> u64;
+  auto get_write_headers() const -> bool;
 
 private:
   auto create_options() -> void;

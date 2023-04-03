@@ -62,9 +62,9 @@ for device in "${devices[@]}"; do
     for input_file_idx in "${!input_files[@]}"; do
       for printing_mode in "${printing_modes[@]}"; do
         echo "Now running: File ${input_files_aliases[input_file_idx]} with ${streams} streams in ${printing_mode} format on ${device} device"
-        echo "Now running: File ${input_file_aliases[input_file_idx]} with ${streams} streams in ${printing_mode} format on ${device} device" >> "${benchmark_out}"
+        echo "Now running: File ${input_files_aliases[input_file_idx]} with ${streams} streams in ${printing_mode} format on ${device} device" >> "${benchmark_out}"
         ./build/bin/sbwt_search colors \
-          -i "${colors_file}" \
+          -k "${colors_file}" \
           -q "${input_files[input_file_idx]}" \
           -o "${output_file}" \
           -s "${streams}" \

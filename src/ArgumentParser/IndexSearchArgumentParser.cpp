@@ -92,6 +92,7 @@ auto IndexSearchArgumentParser::create_options() -> void {
       "input file. In terms of file extensions, ASCII format will add .txt, boolean format will add .bool and binary format will add .bin and .seqsizes for the separate sequence sizes",
       value<string>()->default_value("ascii"))
     ("k,colors-file", "The colors file produced by themisto v3.0, which contains the key_kmer_marks as one of its components within, used in this program. When this option is given, then the index search will move to the next key kmer.", value<string>()->default_value(""))
+    ("no-headers", "Do not write the headers to the outut files. The headers are the format name and version number written at the start of the file. For the csv version, this header is the comma separated list of color ids at the first line of the file, By default this option is false (meaning that the headers WILL be printed by default). Please note that if you wish to use the ascii or binary format for pseudoalignment later, this header is mandatory.")
   ("h,help", "Print usage", value<bool>()->default_value("false"));
   get_options().allow_unrecognised_options();
 }
@@ -144,6 +145,9 @@ auto IndexSearchArgumentParser::get_streams() const -> u64 {
 }
 auto IndexSearchArgumentParser::get_colors_file() const -> string {
   return get_args()["colors-file"].as<string>();
+}
+auto IndexSearchArgumentParser::get_write_headers() const -> bool {
+  return !get_args()["no-headers"].as<bool>();
 }
 auto IndexSearchArgumentParser::get_required_options() const -> vector<string> {
   return {
