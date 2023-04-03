@@ -96,7 +96,7 @@ for streams in {1..5}; do
     for colors_mode in ${colors_modes[@]}; do
       ./build/bin/sbwt_search colors \
         -o ${colors_output_file} \
-        -k test_objects/themisto_example/GCA_combined_d1.tcolors \
+        -k test_objects/themisto_example/GCA_combined_d20.tcolors \
         -q ${colors_input_file} \
         -p ${colors_mode} \
         -t 0.7 \

@@ -27,7 +27,7 @@ if [ ! -d "benchmark_objects/index" ] || [ ! -f "benchmark_objects/index/index.t
   exit 1
 fi
 
-download_files=(`head -20 scripts/configure/full_benchmark_data_list.txt`)
+download_files=(`head -22 scripts/configure/full_benchmark_data_list.txt | tail -20`)
 
 mkdir -p "benchmark_objects/color_search_results_t0.7"
 mkdir -p "benchmark_objects/index"
