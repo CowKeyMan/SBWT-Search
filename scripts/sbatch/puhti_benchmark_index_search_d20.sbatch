@@ -12,12 +12,12 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=10
 #SBATCH --mem-per-cpu=30G
-#SBATCH --gres=gpu:v100:1,nvme:300
+#SBATCH --gres=gpu:v100:1,nvme:600
 
 ##SBATCH --partition=gputest
 ##SBATCH --time=00:15:00
 
-#SBATCH --time=10:00:00
+#SBATCH --time=5:00:00
 #SBATCH --partition=gpu
 
 ## Load in modules

@@ -4,15 +4,15 @@
 # through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti
 # supercomputer by CSC: https://research.csc.fi/-/mahti
 
-#SBATCH --job-name=SBWT_colors_d1
+#SBATCH --job-name=SBWT_colors_d20
 #SBATCH --account=dongelr1
-#SBATCH --error colors_d1_err.txt
-#SBATCH --output colors_d1_out.txt
+#SBATCH --error colors_d20_err.txt
+#SBATCH --output colors_d20_out.txt
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem-per-cpu=14G
-#SBATCH --gres=gpu:a100:1,nvme:350
+#SBATCH --gres=gpu:a100:1,nvme:600
 
 ##SBATCH --partition=gputest
 ##SBATCH --time=00:15:00
@@ -28,7 +28,7 @@ unset OMP_NUM_THREADS
 
 chmod +777 scripts/**/*
 export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
-export OUTPUT_FOLDER="$colors_d20_{DATETIME}"
+export OUTPUT_FOLDER="colors_d20_${DATETIME}"
 ## We want to perform our work in LOCAL_SCRATCH
 export OLD_PWD="${PWD}"
 mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/"

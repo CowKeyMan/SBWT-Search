@@ -4,15 +4,15 @@
 # through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti
 # supercomputer by CSC: https://research.csc.fi/-/mahti
 
-#SBATCH --job-name=SBWT_indexes_d1
+#SBATCH --job-name=SBWT_indexes_d20
 #SBATCH --account=dongelr1
-#SBATCH --error indexes_d1_err.txt
-#SBATCH --output indexes_d1_out.txt
+#SBATCH --error indexes_d20_err.txt
+#SBATCH --output indexes_d20_out.txt
 #SBATCH --nodes 1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem-per-cpu=14G
-#SBATCH --gres=gpu:a100:1,nvme:350
+#SBATCH --gres=gpu:a100:1,nvme:600
 
 ##SBATCH --partition=gputest
 ##SBATCH --time=00:15:00

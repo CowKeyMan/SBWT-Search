@@ -28,7 +28,7 @@ unset OMP_NUM_THREADS
 
 chmod +777 scripts/**/*
 export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
-export OUTPUT_FOLDER="${DATETIME}"
+export OUTPUT_FOLDER="index_d1_${DATETIME}"
 ## We want to perform our work in LOCAL_SCRATCH
 export OLD_PWD="${PWD}"
 mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/"

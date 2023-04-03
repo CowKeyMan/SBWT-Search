@@ -5,7 +5,7 @@
 # supercomputer by CSC: https://research.csc.fi/-/mahti
 
 #SBATCH --job-name=SBWT_colors_d1
-#SBATCH --account=dongelr1
+#SBATCH --account=project_462000116
 #SBATCH --error colors_d1_err.txt
 #SBATCH --output colors_d1_out.txt
 #SBATCH --nodes 1
@@ -14,14 +14,14 @@
 #SBATCH --mem-per-cpu=14G
 #SBATCH --gres=gpu:a100:1,nvme:350
 
-##SBATCH --partition=gputest
-##SBATCH --time=00:15:00
-
+## Maximum time
 #SBATCH --time=5:00:00
-#SBATCH --partition=gpusmall
+#SBATCH --partition=standard-g
 
 ## Load in modules
-module load cmake gcc cuda python-data bzip2 git
+## Note: on lumi, you will need to download and install your own cmake
+module swap craype-x86-rome craype-x86-trento
+module load gcc rocm craype-accel-amd-gfx90a cray-python
 
 ## By default this is 1, which would halt our program
 unset OMP_NUM_THREADS
