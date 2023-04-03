@@ -14,7 +14,8 @@ BoolContinuousIndexResultsPrinter::BoolContinuousIndexResultsPrinter(
   u64 kmer_size,
   u64 threads,
   u64 max_chars_per_batch,
-  u64 max_reads_per_batch
+  u64 max_reads_per_batch,
+  bool write_headers
 ):
     Base(
       stream_id,
@@ -26,7 +27,9 @@ BoolContinuousIndexResultsPrinter::BoolContinuousIndexResultsPrinter(
       threads,
       max_chars_per_batch,
       max_reads_per_batch,
-      1
+      1,
+      1,
+      write_headers
     ) {}
 
 auto BoolContinuousIndexResultsPrinter::do_with_result(

@@ -14,7 +14,8 @@ AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
   u64 kmer_size,
   u64 threads,
   u64 max_chars_per_batch,
-  u64 max_reads_per_batch
+  u64 max_reads_per_batch,
+  bool write_headers
 ):
     Base(
       stream_id,
@@ -26,7 +27,9 @@ AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
       threads,
       max_chars_per_batch,
       max_reads_per_batch,
-      max_chars_in_u64 + 1
+      max_chars_in_u64 + 1,
+      1,
+      write_headers
     ) {
   tiny_buffers.resize(threads);
   for (u64 i = 0; i < threads; ++i) {

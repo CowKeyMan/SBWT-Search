@@ -38,7 +38,8 @@ public:
     bool include_not_found_,
     bool include_invalid_,
     u64 threads,
-    u64 max_reads_in_buffer
+    u64 max_reads_in_buffer,
+    bool write_headers
   );
 
 protected:

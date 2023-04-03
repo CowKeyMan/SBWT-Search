@@ -321,7 +321,8 @@ auto IndexSearchMain::get_results_printer(
       kmer_size,
       get_threads(),
       max_chars_per_batch,
-      max_reads_per_batch
+      max_reads_per_batch,
+      get_args().get_write_headers()
     ));
   }
   if (get_args().get_print_mode() == "binary") {
@@ -334,7 +335,8 @@ auto IndexSearchMain::get_results_printer(
       kmer_size,
       get_threads(),
       max_chars_per_batch,
-      max_reads_per_batch
+      max_reads_per_batch,
+      get_args().get_write_headers()
     ));
   }
   if (get_args().get_print_mode() == "bool") {
@@ -347,7 +349,8 @@ auto IndexSearchMain::get_results_printer(
       kmer_size,
       get_threads(),
       max_chars_per_batch,
-      max_reads_per_batch
+      max_reads_per_batch,
+      get_args().get_write_headers()
     ));
   }
   throw runtime_error("Invalid value passed by user for argument print_mode");

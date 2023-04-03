@@ -13,7 +13,8 @@ BinaryContinuousIndexResultsPrinter::BinaryContinuousIndexResultsPrinter(
   u64 kmer_size,
   u64 threads,
   u64 max_chars_per_batch,
-  u64 max_reads_per_batch
+  u64 max_reads_per_batch,
+  bool write_headers
 ):
     Base(
       stream_id,
@@ -25,7 +26,9 @@ BinaryContinuousIndexResultsPrinter::BinaryContinuousIndexResultsPrinter(
       threads,
       max_chars_per_batch,
       max_reads_per_batch,
-      1
+      1,
+      1,
+      write_headers
     ) {}
 
 auto BinaryContinuousIndexResultsPrinter::do_get_extension() -> string {

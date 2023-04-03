@@ -74,6 +74,7 @@ private:
   vector<OmpLock> write_locks{};
   unique_ptr<ThrowingOfstream> out_stream;
   u64 max_reads_in_buffer = 0;
+  bool write_headers;
 
 public:
   ContinuousColorResultsPrinter(
@@ -92,7 +93,8 @@ public:
     u64 threads_,
     u64 element_size,
     u64 newline_element_size,
-    u64 max_reads_in_buffer_
+    u64 max_reads_in_buffer_,
+    bool write_headers_
   ):
       interval_batch_producer(std::move(interval_batch_producer_)),
       read_statistics_batch_producer(std::move(read_statistics_batch_producer_)
@@ -108,7 +110,8 @@ public:
       write_locks(threads_ - 1),
       stream_id(stream_id_),
       buffers(threads_),
-      max_reads_in_buffer(max_reads_in_buffer_) {
+      max_reads_in_buffer(max_reads_in_buffer_),
+      write_headers(write_headers_) {
     for (auto &b : buffers) {
       impl().do_allocate_buffer(b, element_size, newline_element_size);
     }
@@ -175,7 +178,7 @@ protected:
   auto do_start_next_file() -> void {
     if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
     impl().do_open_next_file(*current_filename);
-    impl().do_write_file_header(*out_stream);
+    if (write_headers) { impl().do_write_file_header(*out_stream); }
     current_filename = next(current_filename);
   }
   auto do_at_file_end() -> void {}

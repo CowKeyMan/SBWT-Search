@@ -74,6 +74,7 @@ private:
   u64 kmer_size;
   u64 threads;
   u64 stream_id;
+  bool write_headers;
 
 public:
   ContinuousIndexResultsPrinter(
@@ -88,7 +89,8 @@ public:
     u64 max_chars_per_batch,
     u64 max_reads_per_batch,
     u64 element_size,
-    u64 newline_element_size = 1
+    u64 newline_element_size,
+    bool write_headers_
   ):
       results_producer(std::move(results_producer_)),
       interval_producer(std::move(interval_producer_)),
@@ -98,7 +100,8 @@ public:
       kmer_size(kmer_size),
       write_locks(threads_ - 1),
       stream_id(stream_id_),
-      buffers(threads_) {
+      buffers(threads_),
+      write_headers(write_headers_) {
     for (auto &b : buffers) {
       impl().do_allocate_buffer(
         b,
@@ -342,7 +345,7 @@ protected:
   auto do_start_next_file() -> void {
     if (current_filename != filenames.begin()) { impl().do_at_file_end(); }
     impl().do_open_next_file(*current_filename);
-    impl().do_write_file_header();
+    if (this->write_headers) { impl().do_write_file_header(); }
     current_filename = next(current_filename);
   }
 
@@ -356,7 +359,7 @@ protected:
   auto do_with_invalid(vector<Buffer_t>::iterator buffer) -> u64;
   auto do_with_not_found(vector<Buffer_t>::iterator buffer) -> u64;
   auto do_with_newline(vector<Buffer_t>::iterator buffer) -> u64;
-  auto do_with_space(vector<Buffer_t>::iterator) -> u64 { return 0; }
+  auto do_with_space(vector<Buffer_t>::iterator buffer) -> u64 { return 0; }
 
   auto do_at_file_end() -> void{};
 };

@@ -272,7 +272,8 @@ auto ColorSearchMain::get_results_printer(
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      results_printer_max_reads_in_buffer
+      results_printer_max_reads_in_buffer,
+      get_args().get_write_headers()
     ));
   }
   if (get_args().get_print_mode() == "binary") {
@@ -287,7 +288,8 @@ auto ColorSearchMain::get_results_printer(
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      results_printer_max_reads_in_buffer
+      results_printer_max_reads_in_buffer,
+      get_args().get_write_headers()
     ));
   }
   if (get_args().get_print_mode() == "csv") {
@@ -302,7 +304,8 @@ auto ColorSearchMain::get_results_printer(
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      results_printer_max_reads_in_buffer
+      results_printer_max_reads_in_buffer,
+      get_args().get_write_headers()
     ));
   }
   throw runtime_error("Invalid value passed by user for argument print_mode");
