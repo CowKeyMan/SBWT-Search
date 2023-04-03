@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # This will configure items for benchmarking and then run the benchmarks
-# through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti
-# supercomputer by CSC: https://research.csc.fi/-/mahti
+# through the scripts/standalone/benchmark.sh script. Meant to be run on LUMI
+# supercomputer by CSC: https://www.csc.fi/lumi
 
 #SBATCH --job-name=SBWT_colors_d1
 #SBATCH --account=project_462000116
@@ -12,7 +12,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=32
 #SBATCH --mem-per-cpu=14G
-#SBATCH --gres=gpu:a100:1,nvme:350
+#SBATCH --gres=gpu:a100:1,nvme:1000
 
 ## Maximum time
 #SBATCH --time=5:00:00
