@@ -37,8 +37,8 @@ CsvContinuousColorResultsPrinter::CsvContinuousColorResultsPrinter(
       include_not_found_,
       include_invalid_,
       threads,
-      1,
-      1,
+      2,
+      0,
       max_reads_in_buffer,
       write_headers
     ),
