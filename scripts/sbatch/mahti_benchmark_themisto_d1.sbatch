@@ -4,7 +4,7 @@
 # through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti
 # supercomputer by CSC: https://research.csc.fi/-/mahti
 
-#SBATCH --job-name=themisto_pseudoalign
+#SBATCH --job-name=themisto_d1
 #SBATCH --account=dongelr1
 #SBATCH --error themisto_d1_err.txt
 #SBATCH --output themisto_d1_out.txt
@@ -17,7 +17,7 @@
 ##SBATCH --partition=gputest
 ##SBATCH --time=00:15:00
 
-#SBATCH --time=10:00:00
+#SBATCH --time=5:00:00
 #SBATCH --partition=gpusmall
 
 ## Load in modules

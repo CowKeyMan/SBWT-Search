@@ -15,7 +15,7 @@
 #SBATCH --gres=gpu:a100:1,nvme:350
 
 ## Maximum time
-#SBATCH --time=5:00:00
+#SBATCH --time=10:00:00
 #SBATCH --partition=standard-g
 
 ## Load in modules
