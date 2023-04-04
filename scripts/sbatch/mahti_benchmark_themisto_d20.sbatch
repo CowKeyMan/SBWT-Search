@@ -62,7 +62,7 @@ cp benchmark_objects/index/index_d20.tcolors benchmark_objects/index/index.tcolo
   --n-threads 32 \
   --sort-output \
   --temp-dir themisto_temp \
-  --out-file-list benchmark_objects/list_files/output/color_search_results.list \
+  --out-file-list benchmark_objects/list_files/output/color_search_results_running.list \
   --query-file-list benchmark_objects/list_files/input/unzipped_seqs.list \
   --index-prefix benchmark_objects/index/index \
   --verbose \
