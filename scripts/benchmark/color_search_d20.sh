@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run the benchmark_main several times and save the results to a file. Called by
-# scipts/sbatch/benchmark.sbatch It is expected that the *.tdbg file is within
+# scipts/sbatch/benchmark.sbatch It is expected that the \*.tdbg file is within
 # benchmark_objects/colors folder
 
 if [ $# -ne 2 ]; then

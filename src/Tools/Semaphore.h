@@ -4,11 +4,9 @@
 /**
  * @file Semaphore.h
  * @brief A C++ implementation for counted semaphores using standard library
- * mutex and condition variables
+ * mutex and condition variables. Credit for class base:
+ * http://www.cs.umd.edu/~shankar/412-Notes/10x-countingSemUsingBinarySem.pdf
  */
-
-// Credit for class base:
-// http://www.cs.umd.edu/~shankar/412-Notes/10x-countingSemUsingBinarySem.pdf
 
 #include "Tools/OmpLock.h"
 #include "Tools/TypeDefinitions.h"

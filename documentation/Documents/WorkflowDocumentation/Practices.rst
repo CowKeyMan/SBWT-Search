@@ -32,7 +32,7 @@ When naming files, we name the related header, source and test files with the sa
 Function and variable names
 ---------------------------
 
-This repository uses snake_case for all variables and function names. For example, these are valid function and variable names: variable, my_variable, and_this_is_a_function, my2_variable. Device functions are prefixed with 'd_'
+This repository uses snake_case for all variables and function names. For example, these are valid function and variable names: variable, my_variable, and_this_is_a_function, my2_variable. Device functions are prefixed with 'd\_'
 
 Namespaces
 ----------

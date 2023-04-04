@@ -61,7 +61,10 @@ def get_python_comment_lines(filename: str) -> list[str]:
     comment = []
     assert lines[0] == "#!/bin/python3", "First line should be #!/bin/python3"
     assert lines[1] == "", "2nd line should be blank"
-    assert lines[2] == '"""', "3rd line should be start of docstring"
+    assert (
+        (lines[2] == '"""', "3rd line should be start of docstring")
+        or (lines[2] == 'r"""', "3rd line should be start of docstring")
+    )
     for line in lines[3:]:
         if line == '"""':
             break
@@ -143,7 +146,7 @@ file_regex_and_comment_function = [
         get_hash_commented_comment_lines
     ),
     ([".dir_docstring"], get_all_lines),
-    (["*.bat"], get_all_lines),
+    (["*.bat"], get_bat_comment_lines),
 ]
 
 

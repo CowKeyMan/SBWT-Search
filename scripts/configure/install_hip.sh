@@ -14,7 +14,7 @@ ROCM_BRANCH=$2
 mkdir -p hip
 cd hip
 
-if [ "${TARGET_DEVICE}" = "nvidia" ]; then
+if [ "${TARGET_DEVICE,,}" = "nvidia" ]; then
   mkdir -p hip_nvidia
   cd hip_nvidia
   if [ ! -d "hip" ]; then

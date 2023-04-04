@@ -110,7 +110,7 @@ for file_name in python_files:
     if len(lines) < 3 or not (
         lines[0] == "#!/bin/python3"
         and lines[1] == ""
-        and lines[2] == '"""'
+        and lines[2] == '"""' or lines[2] == 'r"""'
     ):
         print_if_first_time()
         exit_code = 1

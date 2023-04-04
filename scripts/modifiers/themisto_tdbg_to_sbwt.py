@@ -1,7 +1,8 @@
 #!/bin/python3
 
-"""
-Converts *.tdbg files to *.sbwt files by adding 'plain-matrix' at the beginning
+r"""
+Converts \*.tdbg files to \*.sbwt files by adding 'plain-matrix' at the
+beginning
 """
 
 import argparse
