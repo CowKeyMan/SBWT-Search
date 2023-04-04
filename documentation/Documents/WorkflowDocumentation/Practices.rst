@@ -32,15 +32,15 @@ When naming files, we name the related header, source and test files with the sa
 Function and variable names
 ---------------------------
 
-This repository uses snake_case for all variables and function names. For example, these are valid function and variable names: variable, my_variable, and_this_is_a_function, my2_variable.
+This repository uses snake_case for all variables and function names. For example, these are valid function and variable names: variable, my_variable, and_this_is_a_function, my2_variable. Device functions are prefixed with 'd_'
 
 Namespaces
 ----------
 
 With regards to namespaces, snake_case is also used.
 
-Header Guards
-+++++++++++++
+C++ files
++++++++++
 
 Each header file should be in the following format:
 
@@ -48,20 +48,45 @@ Each header file should be in the following format:
 
     #ifndef FILE_NAME_H
     #define FILE_NAME_H
-    // everything else here
+
+    /**
+     * @file FileName.h
+     * @brief Descrioption goes here
+     */
+
+    #include <includes>
+
+    namespace <namespace> {
+
+      // code goes here
+
+    }
+
     #endif
 
-Above, *FILE_NAME* will be the name of the file but we switch from SnakeCase to ALL_CAPS_SNAKE_CASE and we add the *_H* at the end. So a file named 'HelloWorld_test.' should have a header guard defining 'HELLO_WORLD_TEST_H'
+Above, *FILE_NAME* will be the name of the file but we switch from SnakeCase to ALL_CAPS_SNAKE_CASE and we add the *_H* at the end. So a file named 'HelloWorld_test.' should have a header guard defining 'HELLO_WORLD_TEST_H', and a file called 'HelloWorld.cuh' will have a header guard defining 'HELLO_WORLD_CUH'.
+
+\*.cpp or other non-header (implementation) files will have the same format without the header guards and comment at the start of the file, so they will be as follows:
+
+.. code-block:: cpp
+
+    #include <includes>
+
+    namespace <namespace> {
+
+      // code goes here
+
+    }
 
 In-code comments
 ++++++++++++++++
 
-To keep the codebase clean of redundant comments, we try to use clear naming conventions to beging with. When something needs to be non-clean, only then do we put a comment next to it.
+To keep the codebase clean of redundant comments, we try to use clear naming conventions to begin with. When something needs to be non-clean or it is complex, only then do we put a comment next to it.
 
 Furthermore, every header file should have a comment after the header guards, defining what it does. Look at an existing header file for the correct format, as they all should follow that structure to be recognised by doxygen.
 
 Testing
 +++++++
 
-* Executables with main functions are not tested
+* Executables with main functions are tested using the scripts in the `scripts/test/full_pipeline` folder.
 * Prefer constructors and destructors over `virtual void SetUp()` and `virtual void TearDown()`. The latter may be necessary in some cases such as when inheritance is needed or when the destructor code can throw exceptions.

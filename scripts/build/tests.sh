@@ -1,11 +1,18 @@
 #!/bin/bash
 
-# Build the main test executable.
-# If any argument at all is passed to this script, it will skip the cmake step and just execute the build step only
+# Build the tests for the target platform. It takes a single argument which is
+# one of NVIDIA, AMD or CPU. If any other argument (any sequence of characters
+# is accepted) is given besides these 3, it will skip the cmake step and run
+# the build step only.
+
+if [ $# -ne 1 ]; then
+  echo "Usage: ./scripts/build/tests.sh <NVIDIA|AMD|CPU|[other]>"
+  exit 1
+fi
 
 mkdir -p build
 cd build
-if [[ $# == 0 ]];
+if [ "${1,,}" = nvidia ] || [ "${1,,}" = amd ] || [ "${1,,}" = cpu ];
 then
   cmake \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=OFF \
@@ -15,7 +22,7 @@ then
     -DBUILD_DOCS=OFF \
     -DENABLE_PROFILING=ON \
     -DENABLE_MARCH_NATIVE=OFF \
-    -DHIP_TARGET_DEVICE=CPU \
+    -DHIP_TARGET_DEVICE="$1" \
     -DROCM_BRANCH="rocm-5.4.x" \
     ..
   if [ $? -ne 0 ]; then >&2echo "Cmake generation failed" && cd .. && exit 1; fi

@@ -20,7 +20,8 @@ lcov --directory . --capture -q --output-file build/code_coverage.info \
     --exclude "*main.cpp" \
     --exclude "/tmp/*" \
     --exclude "build/*" \
-    --exclude "*/external/*"
+    --exclude "*/external/*" \
+    --exclude "*.cuh"
 printf "\nRunning genhtml..."
 genhtml -q build/code_coverage.info --output-directory ./docs/code_coverage/ --demangle-cpp
 printf "\n"

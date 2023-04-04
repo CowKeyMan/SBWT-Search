@@ -3,10 +3,34 @@ Tools
 
 The project was setup in a way to use good C++ practices. Here is discussed the tools which enforce those practices. Some of the tools use python, as such it is recommended to create a new python 3 environment for this workflow template.
 
+Git Hooks
++++++++++
+
+We make use of git hooks which are in the `hooks` directory. These will be executed if you set git hooks directory to this directory by issuing this command:
+
+.. code-block:: bash
+
+  git config core.hooksPath hooks
+
+GCC
++++
+
+Any C++20 compliant compiler will do, however the choice for this repository is C++20.
+
+
+Installation
+------------
+
+Please note that you will need a modern Linux operating system to use the below command, as older versions might not have a modern enough (C++20 compliant) version of GCC. We will need at least GCC 11.
+
+.. code-block:: bash
+
+  sudo apt install build-essential
+
 CMake
 +++++
 
-This is the tool used for compiling the project and documentation. However, besides just building, it also runs check scripts for formatting, etc. Each *CmakeLists.txt* or *.cmake* file has a description at the top as its description as documentation, thus we will not be going through each script here.
+This is the tool used for compiling the project and documentation.
 
 Installation
 ------------
@@ -15,16 +39,18 @@ Installation
 
   sudo apt install build-essential
 
-We also use ccache as a tool with cmake, to cache results of previous compilations and make future compilations run faster, so it is probably worth installing that as well.
+We also use ccache as a (non essential) tool with cmake, to cache results of previous compilations and make future compilations run faster, so it is probably worth installing that as well.
 
 .. code-block:: bash
 
   sudo apt install ccache
 
+In case you cannot run apt, you can download cmake from the official website here: https://cmake.org/download/.
+
 Doxygen
 +++++++
 
-This is the tool used to generate automated documentation from the source files.
+This is the tool used to generate automated documentation from the C++ files, to allow navigation of the codebase by users without needing to go through the source files.
 
 Installation
 ------------
@@ -37,7 +63,7 @@ The easy way is to install using:
 
   sudo apt install doxygen
 
-However, to install the very latest doxygen, you may need to go through the (simple) installation here: https://www.doxygen.nl/download.html. Here are the installation commands:
+However, to install the very latest doxygen, you may need to go through the (simple) installation steps here: https://www.doxygen.nl/download.html. Here are the installation commands:
 
 
 .. code-block:: bash
@@ -60,7 +86,7 @@ Sphinx
 
 Sphinx is a layer over Doxygen to generate more beautiful documentation. It reads the doxygen outputs and incorporates them into its own documentation. It also allows us to easily add more pages to the documentation, such as this page itself! We can use latex easily as well within our documentation with this tool. Traditionally it is used for Python documentation.
 
-We use the some extensions with Sphinx:
+We use the extensions with Sphinx:
   * sphinx-rtd-theme: read the docs theme is used since it is great for documentation.
   * sphinx-rtd-dark-mode: dark mode for users which prefer this. It is easily togglable in the webpage
   * breathe: For reading doxygen output and parsing it
@@ -80,8 +106,7 @@ Installation
 Mermaid
 +++++++
 
-For diagrams in the docentation we use Mermaid, which is a text based graph creator. This needs to be installed separately.
-
+For diagrams in the docentation we use Mermaid, which is a text based graph creator and needs to be installed separately.
 
 Installation
 ------------
@@ -114,23 +139,25 @@ Then you can install mermaid using the following:
 clang-format
 ++++++++++++
 
-This tool is used for ensuring a consistent language format across developers. This includes using spaces vs tabs, how many tabs or spaces, if a line should be skipped after or before an opening curly brackets, etc.
+This tool is used for ensuring a consistent language format for c++ across developers. This includes using spaces vs tabs, how many tabs or spaces, if a line should be skipped after or before an opening curly brackets, etc.
 
 **Official Documentation for Options**: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 
-At the time of writing, this repository is using version 14 of clang-format
+At the time of writing, this repository is using version 16 of clang-format
 
 Installation
 ------------
 
-Go to https://github.com/llvm/llvm-project/releases and download the latest version for your system. Note, the latest version might not have a build for your system, so go look for ones which do have a version for your system.
+Go to https://github.com/llvm/llvm-project/releases and download the latest version for your system. Note, the latest version might not have a build for your system, so go look for ones which do have a version for your system. Below you will find instructions for downloads for Ubuntu.
 
 .. code-block:: bash
 
   cd /opt # This is the folder where we will put the executables
-  sudo wget https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.0/clang+llvm-14.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz -O clang+llvm.tar.xz # download your version (make sure to change the link!) and save it as a file named clang+llvm.tar.xz
-  sudo tar xf clang+llvm.tar.xz # extract it
-  sudo printf "\n#add clang to path\nexport PATH=\"/opt/clang+llvm-14.0.0-x86_64-linux-gnu-ubuntu-18.04/bin:\${PATH}\"" >> ~/.bashrc # Add to PATH (make sure to change the folder name version!)
+  sudo wget https://github.com/llvm/llvm-project/releases/download/llvmorg-16.0.0/clang+llvm-16.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz -O clang+llvm.tar.xz # download your version (make sure to change the link!) and save it as a file named clang+llvm.tar.xz
+  sudo tar xvf clang+llvm.tar.xz # extract it
+  sudo rm clang+llvm.tar.xz
+  sudo mv clang+llvm* clang+llvm
+  sudo printf "\n#add clang to path\nexport PATH=\"/opt/clang+llvm/bin:\${PATH}\"" >> ~/.bashrc # Add to PATH (make sure to change the folder name version!)
 
 googletest
 ++++++++++
@@ -145,7 +172,7 @@ Installation will be automatic when you run cmake as it will be done using Fetch
 lcov
 ++++
 
-This is the tool to display code coverage after running googletest. This tool was very difficult to set up on native Windows, hence for any Windows users, it is recommended to use WSL for code coverage, or else remove the parts of the scripts which use it (found in `scripts/standalone/run_tests.sh`)
+This is the tool to display code coverage after running googletest. This tool was very difficult to set up on native Windows, hence for any Windows users, it is recommended to use WSL for code coverage, or else remove the parts of the scripts which use it (found in `scripts/test/test.sh`)
 
 Unfortunately lcov does not capture CUDA `__device__` functions, hence we put these functions in separate *.cuh* files.
 
@@ -164,12 +191,12 @@ We use github pages to publish the documentation and code coverage. To set this 
 HIP
 +++
 
-The kernels and kernel calls are HIP-ified so that we call CUDA or ROCm (or CPU as well!) from a single codebase. This however instead requires multiple compilations if we want to compile for different target devices. This switch is a simple cmake option switch, which can be seen in `cmake/SetHipTargetDevice.cmake`. An example of this switch is in `scripts/build/release.sh`: "HIP_TARGET_DEVICE".
+The kernels and kernel calls are HIP-ified so that we call CUDA (NVIDIA gpus) or ROCm (AMD gpus) (or CPU as well!) from a single codebase. This however instead requires multiple compilations if we want to compile for different target devices. This switch is a simple cmake option switch, which can be seen in `cmake/SetHipTargetDevice.cmake`. The target platform is chosen when we run `./scripts/build/release.sh` or any other build script.
 
 CUDA
 ----
 
-For CUDA installation, check the official installation guides for more info on this topic, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can switch the cmake option to CPU. For more information look at the **build** folder section in :ref:`File Documentation`.
+For CUDA installation, check the official installation guides, which can be found here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html. Note: WSL and Windows have their own guides. If you do not wish to use CUDA, you can switch the cmake option to CPU. For more information look at the **build** folder section in :ref:`File Documentation`.
 
 ROCm
 --------
@@ -178,7 +205,7 @@ To install ROCm, follow the instructions at: https://docs.amd.com/bundle/ROCm-In
 
 The instructions on the site may be slightly complicated to follow, but TLDR, first navigate to 'Download and install the installer', where you will find commands to download a file wget and install it with apt. This will install a new command in your system called 'amdgpu-install'. If you then run `amdgpu-install --usecase=hiplibsdk`, you *SHOULD* have hip installed.
 
-Unfortunately I do not have much experience with this as I was using a server to test AMD products and do not have access to a fresh AMD machine to test this out with, so you will have to figure out the rest yourself if the above fails. I could not get HIP to compile locally.
+Unfortunately I do not have much experience with this as I was using a pre-configured system to test AMD products and do not have access to a fresh AMD machine to test this out with, so you will have to figure out the rest yourself if the above fails. I could not get HIP to compile locally. If you, the reader, have any insight on how one can install a ROCm installer on an AMD (or non-amd) platform, then please submit a pull request to this section of the documentation. Thank you ^-^.
 
 CPU
 ---
@@ -204,4 +231,16 @@ This is our logging tool. It is installed automatically by CMake. To see the log
 
 .. code-block:: bash
 
- export SPDLOG_LEVEL=TRACE
+  export SPDLOG_LEVEL=TRACE
+
+OpenMP
+++++++
+
+OpenMP allows us to use threading in C++ more easily.
+
+Installation
+------------
+
+.. code-block:: bash
+
+  sudo apt-get install libomp-de

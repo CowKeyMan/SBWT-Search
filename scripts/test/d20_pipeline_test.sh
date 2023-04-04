@@ -6,13 +6,13 @@
 # folder). The temporary files are kept in tmp/d20_pipeline_test and are
 # subsequently delted after the test is finished.
 
-if [ "$1" != "nvidia" ] && [ "$1" != "cpu" ] && [ "$1" != "amd" ]; then
-  echo "Invalid platform as first argument, must be nvidia, cpu or amd"
+if [ $# -ne 1 ] || ( [ "${1,,}" != "nvidia" ] && [ "${1,,}" != "amd" ] && [ "${1,,}" != "cpu" ]); then
+  echo "Usage: ./scripts/test/d20_pipeline_test.sh <NVIDIA|AMD|CPU>"
   exit 1
 fi
 
 # build
-./scripts/build/release_$1.sh
+./scripts/build/release.sh $1
 
 index_modes=(
   "ascii"

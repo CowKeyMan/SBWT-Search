@@ -15,12 +15,14 @@ option(
   "rocm-5.4.x"
 )
 
+STRING(TOLOWER "${HIP_TARGET_DEVICE}" HIP_TARGET_DEVICE)
+
 if(
-    ${HIP_TARGET_DEVICE} STREQUAL "NVIDIA"
+    ${HIP_TARGET_DEVICE} STREQUAL "nvidia"
     OR
-    ${HIP_TARGET_DEVICE} STREQUAL "AMD"
+    ${HIP_TARGET_DEVICE} STREQUAL "amd"
     OR
-    ${HIP_TARGET_DEVICE} STREQUAL "CPU"
+    ${HIP_TARGET_DEVICE} STREQUAL "cpu"
 )
   find_program (BASH_EXECUTABLE bash REQUIRED)
   execute_process(
@@ -37,7 +39,7 @@ endif()
 
 add_library(hip_rt INTERFACE)
 
-if(${HIP_TARGET_DEVICE} STREQUAL "NVIDIA")
+if(${HIP_TARGET_DEVICE} STREQUAL "nvidia")
   include(CheckLanguage)
   check_language(CUDA)
   if (NOT CMAKE_CUDA_COMPILER)
@@ -52,7 +54,7 @@ if(${HIP_TARGET_DEVICE} STREQUAL "NVIDIA")
   set(GPU_WARP_SIZE 32 CACHE STRING "The warp size of the target device" FORCE)
 endif()
 
-if(${HIP_TARGET_DEVICE} STREQUAL "CPU")
+if(${HIP_TARGET_DEVICE} STREQUAL "cpu")
   include(ExternalProject)
   include(FetchContent)
     FetchContent_Declare(
@@ -70,7 +72,7 @@ if(${HIP_TARGET_DEVICE} STREQUAL "CPU")
   set(GPU_WARP_SIZE 64 CACHE STRING "The warp size of the target device" FORCE)
 endif()
 
-if(${HIP_TARGET_DEVICE} STREQUAL "AMD")
+if(${HIP_TARGET_DEVICE} STREQUAL "amd")
   enable_language(HIP)
   set(CMAKE_HIP_COMPILER "/opt/rocm/llvm/bin/clang++")
   set(HIP_TARGET_LANGUAGE HIP)

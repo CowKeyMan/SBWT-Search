@@ -43,7 +43,7 @@ cp -r "${OLD_PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts" &
 cp "${OLD_PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt" &
 wait < <(jobs -p) # wait for jobs to finish
 cp -r "${OLD_PWD}/benchmark_objects/" "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects" &
-bash ./scripts/build/release_amd.sh >&2
+bash ./scripts/build/release.sh amd >&2
 wait < <(jobs -p) # wait for jobs to finish
 t2=$(date +%s%3N)
 

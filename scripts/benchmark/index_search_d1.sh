@@ -42,7 +42,7 @@ fi
 streams_options=(1 2 3 4 5 6 7 8)
 
 for device in "${devices[@]}"; do
-  ./scripts/build/release_${device}.sh >&2
+  ./scripts/build/release.sh ${device} >&2
   for streams in "${streams_options[@]}"; do
     for input_file in "${input_files[@]}"; do
       for printing_mode in "${printing_modes[@]}"; do
