@@ -11,9 +11,6 @@ fi
 
 ./scripts/build/compilation_commands.sh "$1"
 
-mkdir -p build
-cd build
-
 ./scripts/build/release.sh "$1"
 if [ $? -ne 0 ]; then >&2echo "Building release failed" && cd .. && exit 1; fi
 ./scripts/build/docs.sh
