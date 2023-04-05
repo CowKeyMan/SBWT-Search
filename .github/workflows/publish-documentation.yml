@@ -45,7 +45,7 @@ jobs:
       - name: Build all main, tests and documentation
         run: |
           chmod +777 scripts/**/*
-          ./scripts/build/all.sh
+          ./scripts/build/all.sh nvidia
 
       - name: Run tests
         run: sh ./scripts/standalone/test.sh
