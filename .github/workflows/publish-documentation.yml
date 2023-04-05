@@ -48,7 +48,7 @@ jobs:
           ./scripts/build/all.sh nvidia
 
       - name: Run tests
-        run: sh ./scripts/standalone/test.sh
+        run: sh ./scripts/test/test.sh
 
       # The website is put inside the docs folder, which is why
       # the .gitignore within that folder is removed when we push to github pages
