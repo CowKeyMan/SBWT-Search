@@ -6,8 +6,8 @@
 
 #SBATCH --job-name=SBWT_themisto_d1
 #SBATCH --account=project_462000116
-#SBATCH --error themisto_err_d20.txt
-#SBATCH --output themisto_out_d20.txt
+#SBATCH --error themisto_err_d1.txt
+#SBATCH --output themisto_out_d1.txt
 #SBATCH --nodes 1
 #SBATCH --gres=gpu:1
 
@@ -28,8 +28,8 @@ export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
 export OUTPUT_FOLDER="themisto{DATETIME}"
 ## We want to perform our work in LOCAL_SCRATCH
 ### We want to perform our work in LOCAL_SCRATCH
-mkdir -p "/flash/project_462000116/cauchida/themisto_d20"
-export LOCAL_SCRATCH="/flash/project_462000116/cauchida/themisto_d20"
+mkdir -p "/flash/project_462000116/cauchida/themisto_d1"
+export LOCAL_SCRATCH="/flash/project_462000116/cauchida/themisto_d1"
 export OLD_PWD="${PWD}"
 mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
