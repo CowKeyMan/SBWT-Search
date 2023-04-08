@@ -28,6 +28,7 @@ target_link_libraries(
   PRIVATE
   main_lib
   common_libraries
+  -static-libgcc -static-libstdc++
 )
 
 endif()
