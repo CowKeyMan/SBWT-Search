@@ -37,14 +37,7 @@ rm -rf build
 
 # time the copy and build
 t1=$(date +%s%3N)
-cp -r "${OLD_PWD}/src/" "${LOCAL_SCRATCH}/SBWT-Search/src" &
-cp -r "${OLD_PWD}/cmake/" "${LOCAL_SCRATCH}/SBWT-Search/cmake" &
-cp -r "${OLD_PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts" &
-cp "${OLD_PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt" &
-wait < <(jobs -p) # wait for jobs to finish
-cp -r "${OLD_PWD}/benchmark_objects/" "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects" &
-bash ./scripts/build/release.sh nvidia >&2
-wait < <(jobs -p) # wait for jobs to finish
+cp -r "${OLD_PWD}/benchmark_objects/" "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects"
 t2=$(date +%s%3N)
 
 echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms"
