@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # This will configure items for benchmarking and then run the benchmarks
-# through the scripts/standalone/benchmark.sh script. Meant to be run on LUMI
-# supercomputer by CSC: https://www.csc.fi/lumi
+# through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti
+# supercomputer by CSC: https://research.csc.fi/-/mahti
 
-#SBATCH --job-name=SBWT_indexes_d20
+#SBATCH --job-name=SBWT_themisto_d20
 #SBATCH --account=project_462000116
-#SBATCH --error indexes_d20_err.txt
-#SBATCH --output indexes_d20_out.txt
+#SBATCH --error themisto_err.txt
+#SBATCH --output themisto_out.txt
 #SBATCH --nodes 1
 #SBATCH --gres=gpu:1
 
 ## Maximum time
-#SBATCH --time=10:00:00
+#SBATCH --time=03:00:00
 #SBATCH --partition=standard-g
 
 ## Load in modules
@@ -25,23 +25,15 @@ unset OMP_NUM_THREADS
 
 chmod +777 scripts/**/*
 export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
-export OUTPUT_FOLDER="index_d20_${DATETIME}"
+export OUTPUT_FOLDER="themisto{DATETIME}"
 ## We want to perform our work in LOCAL_SCRATCH
 ### We want to perform our work in LOCAL_SCRATCH
-mkdir -p "/flash/project_462000116/cauchida/index_search_d20"
-export LOCAL_SCRATCH="/flash/project_462000116/cauchida/index_search_d20"
+mkdir -p "/flash/project_462000116/cauchida/themisto_d20"
+export LOCAL_SCRATCH="/flash/project_462000116/cauchida/themisto_d20"
 export OLD_PWD="${PWD}"
 mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
 rm -rf build
-
-# Install new cmake on lumi
-curl -O -L https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.tar.gz
-mv cmake-* cmake.tar.gz
-tar -xvf cmake.tar.gz
-rm cmake.tar.gz
-mv cmake-* cmake_dir
-export PATH="${PWD}/cmake_dir/bin:${PATH}"
 
 # time the copy and build
 t1=$(date +%s%3N)
@@ -51,14 +43,31 @@ cp -r "${OLD_PWD}/scripts/" "${LOCAL_SCRATCH}/SBWT-Search/scripts" &
 cp "${OLD_PWD}/CMakeLists.txt" "${LOCAL_SCRATCH}/SBWT-Search/CMakeLists.txt" &
 wait < <(jobs -p) # wait for jobs to finish
 cp -r "${OLD_PWD}/benchmark_objects/" "${LOCAL_SCRATCH}/SBWT-Search/benchmark_objects" &
-bash ./scripts/build/release.sh amd >&2
+bash ./scripts/build/release.sh nvidia >&2
 wait < <(jobs -p) # wait for jobs to finish
 t2=$(date +%s%3N)
 
-mkdir -p "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}"
-echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt"
+echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms"
 
-bash -x scripts/benchmark/index_search_d20.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt" "amd"
+# get themisto executable
+cd benchmark_objects
+wget -nc https://github.com/algbio/themisto/releases/download/3.0.0/themisto_linux-v3.0.0.tar.gz
+tar -xvzf themisto_linux-v3.0.0.tar.gz
+cd ..
+mkdir -p themisto_temp
+
+cp benchmark_objects/index/index_d20.tcolors benchmark_objects/index/index.tcolors
+
+./benchmark_objects/themisto_linux-v3.0.0/themisto pseudoalign \
+  --n-threads 128 \
+  --sort-output \
+  --temp-dir themisto_temp \
+  --out-file-list benchmark_objects/list_files/output/color_search_results_running.list \
+  --query-file-list benchmark_objects/list_files/input/unzipped_seqs.list \
+  --index-prefix benchmark_objects/index/index \
+  --verbose \
+  --threshold 0.7
+
 cd "${OLD_PWD}"
 
 rm -rf ${LOCAL_SCRATCH}
