@@ -6,8 +6,8 @@
 
 #SBATCH --job-name=SBWT_themisto_d20
 #SBATCH --account=project_462000116
-#SBATCH --error themisto_err.txt
-#SBATCH --output themisto_out.txt
+#SBATCH --error themisto_err_d1.txt
+#SBATCH --output themisto_out_d1.txt
 #SBATCH --nodes 1
 #SBATCH --gres=gpu:1
 
