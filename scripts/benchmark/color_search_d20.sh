@@ -45,7 +45,7 @@ fi
 
 streams_options=(1 2 3 4 5 6 7 8)
 
-./scripts/build/release.sh ${devices[0]} >&2
+. scripts/build/release.sh ${devices[0]} >&2
 
 ./build/bin/sbwt_search index \
   -i "benchmark_objects/index/index.tdbg" \
@@ -68,7 +68,7 @@ streams_options=(1 2 3 4 5 6 7 8)
   >> /dev/null
 
 for device in "${devices[@]}"; do
-  ./scripts/build/release.sh ${device} >&2
+  . scripts/build/release.sh ${device} >&2
   for streams in "${streams_options[@]}"; do
     for input_file_idx in "${!input_files[@]}"; do
       for printing_mode in "${printing_modes[@]}"; do

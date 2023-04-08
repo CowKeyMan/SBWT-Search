@@ -30,10 +30,21 @@ chmod +777 scripts/**/*
 export DATETIME="$(date +"%Y-%m-%d_%H-%M-%S_%z")"
 export OUTPUT_FOLDER="index_d20_${DATETIME}"
 ## We want to perform our work in LOCAL_SCRATCH
+### We want to perform our work in LOCAL_SCRATCH
+mkdir -p "/flash/project_462000116/cauchida/index_search_d20"
+export LOCAL_SCRATCH="/flash/project_462000116/cauchida/index_search_d20"
 export OLD_PWD="${PWD}"
 mkdir -p "${LOCAL_SCRATCH}/SBWT-Search/"
 cd "${LOCAL_SCRATCH}/SBWT-Search"
 rm -rf build
+
+# Install new cmake on lumi
+curl -O -L https://github.com/Kitware/CMake/releases/download/v3.26.3/cmake-3.26.3-linux-x86_64.tar.gz
+mv cmake-* cmake.tar.gz
+tar -xvf cmake.tar.gz
+rm cmake.tar.gz
+mv cmake-* cmake_dir
+export PATH="${PWD}/cmake_dir/bin:${PATH}"
 
 # time the copy and build
 t1=$(date +%s%3N)
@@ -52,3 +63,5 @@ echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms" >> "${OLD_PW
 
 bash -x scripts/benchmark/index_search_d20.sh "${OLD_PWD}/benchmark_results/${OUTPUT_FOLDER}/benchmark_out.txt" "amd"
 cd "${OLD_PWD}"
+
+rm -rf ${LOCAL_SCRATCH}
