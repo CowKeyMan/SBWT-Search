@@ -1,57 +1,71 @@
 flowchart TD
-    IndexesBatch(["
-        IndexesBatch
-        <i>
-        indexes (max_indexes * 64)
+    subgraph "Main Memory (RAM)"
+        IndexesBatch(["
+            IndexesBatch
+            <i>
+            indexes (max_idxs * 64)
+            </i>
+        "])
+        ColorsIntervalBatch(["
+            ColorsIntervalBatch
+            <i>
+            warps_before_new_read (max_reads * 64)
+            reads_before_newfile (max_reads * 64)
+            </i>
+        "])
+        WarpsBeforeNewReadBatch(["
+            WarpsBeforeNewReadBatch
+            <i>
+            warps_before_new_read (shared with ColorsIntervalBatch)
+            </i>
+        "])
+        ReadStatisticsBatch(["
+            ReadStatisticsBatch
+            <i>
+            found_indexes (max_reads * 64)
+            invalid (max_reads * 64)
+            not_found (max_reads * 64)
+            </i>
+        "])
+        ColorSearchResultsBatch(["
+            ColorSearchResultsBatch
+            <i>
+            results (max_idxs / warp_size * colors * 64)
+            </i>
+        "])
+        ColorSearchResultsPostProcessedBatch(["
+            ColorSearchResultsBatch
+            <i>
+            results (shared with ColorSearchResultsBath)
+            </i>
+        "])
+        ColorsPrintBatch(["
+            ColorsPrintBatch
+            <i>
+            results ((20 + 1) * 8 * max_reads * num_colors)
+            </i>
+        "])
+        ColorSearchResultsPostProcessor
+        ColorResultsPrinter
 
-        </i>
-    "])
-    ColorsIntervalBatch(["
-    ColorsIntervalBatch
-        <i>
-        warps_before_new_read ((reads + 1) * 64)
-        reads_before_newfile ((files + 1) * 64)
-
-        </i>
-    "])
-    WarpsBeforeNewReadBatch(["
-        WarpsBeforeNewReadBatch
-        <i>
-        warps_before_new_read (pointer to warps_before_new_read)
-
-        </i>
-    "])
-    ReadStatisticsBatch(["
-        ReadStatisticsBatch
-        <i>
-        found_indexes (reads * 64)
-        invalid (reads * 64)
-        not_found (reads * 64)
-
-        </i>
-    "])
-    ColorSearchResultsBatch(["
-        ColorSearchResultsBatch
-        <i>
-        results (max_indexes / warp_size * colors * 64)
-
-        </i>
-    "])
-    ColorSearchResultsPostProcessedBatch(["
-        ColorSearchResultsBatch
-        <i>
-        squeezed_results (pointer to results)
-
-        </i>
-    "])
-
-    IndexFile{Index File}-->ContinuousIndexFileParser
-    subgraph ContinuousIndexFileParser
-        IndexesBatchProducer
-        ColorsIntervalBatchProducer
-        WarpsBeforeNewReadBatchProducer
-        ReadStatisticsBatchProducer
+        subgraph IndexFileParser
+            IndexesBatchProducer
+            ColorsIntervalBatchProducer
+            WarpsBeforeNewReadBatchProducer
+            ReadStatisticsBatchProducer
+        end
     end
+
+    subgraph "Gpu Memory (VRAM)"
+        ColorSearcher
+    end
+
+    subgraph Disk
+        Indexes{Indexes}
+        Colors{Colors}
+    end
+
+    Indexes --> IndexFileParser
 
     IndexesBatchProducer --- IndexesBatch
     ColorsIntervalBatchProducer --- ColorsIntervalBatch
@@ -60,12 +74,13 @@ flowchart TD
     ColorSearchResultsPostProcessor --- ColorSearchResultsPostProcessedBatch
     ColorSearcher --- ColorSearchResultsBatch
 
-    IndexesBatch-->ColorSearcher
-    ColorsIntervalBatch-->ContinuousColorResultsPrinter
-    WarpsBeforeNewReadBatch-->ColorSearchResultsPostProcessor
-    ColorSearchResultsBatch-->ColorSearchResultsPostProcessor
+    IndexesBatch --> ColorSearcher
+    ColorsIntervalBatch --> ColorResultsPrinter
+    WarpsBeforeNewReadBatch --> ColorSearchResultsPostProcessor
+    ColorSearchResultsBatch --> ColorSearchResultsPostProcessor
 
-    ReadStatisticsBatch-->ContinuousColorResultsPrinter
-    ColorSearchResultsPostProcessedBatch-->ContinuousColorResultsPrinter
+    ReadStatisticsBatch --> ColorResultsPrinter
+    ColorSearchResultsPostProcessedBatch --> ColorResultsPrinter
 
-    ContinuousColorResultsPrinter--> ResultFiles{Results}
+    ColorResultsPrinter --- ColorsPrintBatch
+    ColorsPrintBatch --> Colors
