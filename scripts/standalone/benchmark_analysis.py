@@ -10,6 +10,7 @@ try:
 except ImportError:
     import json
 import re
+import sys
 from collections import defaultdict
 from pathlib import Path
 import pandas as pd
@@ -156,6 +157,8 @@ class DataFrameGenerator:
         return df
 
     def parse_line(self, line: str):
+        if len(line) == 0:
+            return
         for (pattern, parser) in self.line_pattern_to_parser.items():
             match = re.match(pattern, line)
             if match is not None:
@@ -297,25 +300,32 @@ class StreamsVsTime:
             self.df['print_mode streams_total'.split()]
         ).drop_duplicates()
         for _, ugc in unique_graph_cols.iterrows():
-            filtered_df = filter_df_by_series(df, ugc)
-            graph_dict['print_mode'].append(ugc['print_mode'])
-            graph_dict['streams_total'].append(ugc['streams_total'])
-            graph_dict['query_time'].append(
-                get_time_for_component(filtered_df, 'Querier')
-            )
-            graph_dict['memory_alloc_time'].append(
-                get_time_for_component(filtered_df, 'MemoryAllocator')
-            )
-            if 'SBWTLoader' in filtered_df['component'].values:
-                graph_dict['loading_time'].append(
-                    get_time_for_component(filtered_df, 'SBWTLoader')
+            try:
+                filtered_df = filter_df_by_series(df, ugc)
+                graph_dict['print_mode'].append(ugc['print_mode'])
+                graph_dict['streams_total'].append(ugc['streams_total'])
+                graph_dict['query_time'].append(
+                    get_time_for_component(filtered_df, 'Querier')
                 )
-            elif 'ColorsLoader' in filtered_df['component'].values:
-                graph_dict['loading_time'].append(
-                    get_time_for_component(filtered_df, 'ColorsLoader')
+                graph_dict['memory_alloc_time'].append(
+                    get_time_for_component(filtered_df, 'MemoryAllocator')
                 )
-            else:
-                raise RuntimeError("No Loader found")
+                if 'SBWTLoader' in filtered_df['component'].values:
+                    graph_dict['loading_time'].append(
+                        get_time_for_component(filtered_df, 'SBWTLoader')
+                    )
+                elif 'ColorsLoader' in filtered_df['component'].values:
+                    graph_dict['loading_time'].append(
+                        get_time_for_component(filtered_df, 'ColorsLoader')
+                    )
+                else:
+                    raise RuntimeError("No Loader found")
+            except IndexError:
+                print(
+                    f"Error at {output_filename}"
+                    f", {ugc['print_mode']}, {ugc['streams_total']} streams"
+                )
+                sys.exit(1)
         df = pd.DataFrame(graph_dict)
         print(title)
         print(df)
