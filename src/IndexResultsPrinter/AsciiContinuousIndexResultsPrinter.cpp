@@ -28,8 +28,8 @@ AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
       threads,
       max_chars_per_batch,
       max_reads_per_batch,
-      get_bits_per_element(max_index),
-      1,
+      get_bits_per_element(max_index) / bits_in_byte,
+      0,
       write_headers
     ) {
   tiny_buffers.resize(threads);
@@ -40,13 +40,14 @@ AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
 
 auto AsciiContinuousIndexResultsPrinter::get_bits_per_element(u64 max_index)
   -> u64 {
-  const u64 bits_required_per_whitespace = 1;
+  const u64 bits_required_per_whitespace = bits_in_byte;
   u64 bits_required_per_character = 0;
   const u64 base_10 = 10;
   while (max_index > 0) {
     max_index /= base_10;
     ++bits_required_per_character;
   }
+  bits_required_per_character *= bits_in_byte;
   return bits_required_per_character + bits_required_per_whitespace;
 }
 

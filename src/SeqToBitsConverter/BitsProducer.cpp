@@ -1,8 +1,11 @@
 #include <cmath>
 
 #include "SeqToBitsConverter/BitsProducer.h"
+#include "Tools/MathUtils.hpp"
 
 namespace sbwt_search {
+
+using math_utils::divide_and_ceil;
 
 const u64 chars_per_u64 = 32;
 
@@ -27,8 +30,7 @@ auto BitsProducer::get_default_value() -> shared_ptr<BitSeqBatch> {
 
 auto BitsProducer::start_new_batch(u64 num_chars) -> void {
   SharedBatchesProducer<BitSeqBatch>::do_at_batch_start();
-  current_write()->bit_seq.resize(
-    ceil(static_cast<double>(num_chars) / chars_per_u64)
+  current_write()->bit_seq.resize(divide_and_ceil<u64>(num_chars, chars_per_u64)
   );
 }
 

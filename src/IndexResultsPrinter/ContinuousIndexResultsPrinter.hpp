@@ -320,12 +320,9 @@ protected:
     u64 element_size,
     u64 newline_element_size
   ) -> void {
-    const u64 element_insurance = 1;
-    const u64 newline_insurance = 10;
     buffer.reserve(
-      (divide_and_ceil<u64>(max_chars_per_batch, threads) + element_insurance)
-        * element_size
-      + (divide_and_ceil<u64>(max_reads_per_batch, threads) + newline_insurance)
+      divide_and_ceil<u64>(max_chars_per_batch, threads) * element_size
+      + divide_and_ceil<u64>(max_reads_per_batch, threads)
         * newline_element_size
     );
   }

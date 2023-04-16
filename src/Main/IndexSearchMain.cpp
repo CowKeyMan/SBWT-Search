@@ -1,8 +1,4 @@
-#include <cstdlib>
-#include <iostream>
 #include <omp.h>
-#include <stdexcept>
-#include <string>
 
 #include "ArgumentParser/IndexSearchArgumentParser.h"
 #include "FilenamesParser/FilenamesParser.h"
@@ -38,8 +34,8 @@ const u64 string_break_batch_producer_max_batches = 4;
 const u64 interval_batch_producer_max_batches = 4;
 const u64 sequence_file_parser_max_batches = 4;
 const u64 invalid_chars_producer_max_batches = 2;
-const u64 bits_producer_max_batches = 3;
-const u64 positions_builder_max_batches = 3;
+const u64 bits_producer_max_batches = 2;
+const u64 positions_builder_max_batches = 2;
 const u64 searcher_max_batches = 2;
 
 auto IndexSearchMain::main(int argc, char **argv) -> int {
@@ -428,37 +424,25 @@ auto IndexSearchMain::run_components(
 #pragma omp parallel sections num_threads(num_components)
   {
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : sequence_file_parsers) {
-        element->read_and_generate();
-      }
+    for (auto &element : sequence_file_parsers) {
+      element->read_and_generate();
     }
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : seq_to_bits_converters) {
-        element->read_and_generate();
-      }
+    for (auto &element : seq_to_bits_converters) {
+      element->read_and_generate();
     }
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : positions_builders) { element->read_and_generate(); }
-    }
+    for (auto &element : positions_builders) { element->read_and_generate(); }
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : searchers) { element->read_and_generate(); }
-    }
+    for (auto &element : searchers) { element->read_and_generate(); }
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : results_printers) {
-        std::visit(
-          [](auto &arg) -> void { arg.read_and_generate(); }, *element
-        );
-      }
+    for (auto &element : results_printers) {
+      std::visit([](auto &arg) -> void { arg.read_and_generate(); }, *element);
     }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);
