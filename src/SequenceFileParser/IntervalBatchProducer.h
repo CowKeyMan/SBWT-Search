@@ -25,6 +25,8 @@ class IntervalBatchProducer: public SharedBatchesProducer<IntervalBatch> {
 public:
   explicit IntervalBatchProducer(u64 max_batches);
 
+  auto static get_bits_per_read() -> u64;
+
 private:
   auto add_file_start(size_t newlines) -> void;
   auto do_at_batch_start() -> void override;

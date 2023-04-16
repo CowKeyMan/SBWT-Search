@@ -42,6 +42,17 @@ ContinuousIndexSearcher::ContinuousIndexSearcher(
   initialise_batches();
 }
 
+auto ContinuousIndexSearcher::get_bits_per_element_cpu() -> u64 {
+  const u64 bits_required_per_result = 64;
+  return bits_required_per_result;
+}
+
+auto ContinuousIndexSearcher::get_bits_per_element_gpu() -> u64 {
+  const u64 bits_required_per_position = 64;
+  const u64 bits_required_per_bit_packed_entry = 2;
+  return bits_required_per_position + bits_required_per_bit_packed_entry;
+}
+
 auto ContinuousIndexSearcher::get_default_value() -> shared_ptr<ResultsBatch> {
   auto batch = make_shared<ResultsBatch>();
   batch->results.reserve(max_chars_per_batch);

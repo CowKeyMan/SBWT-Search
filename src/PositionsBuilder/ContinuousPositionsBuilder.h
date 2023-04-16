@@ -36,6 +36,7 @@ public:
     u64 _max_chars_per_batch,
     u64 max_batches
   );
+  auto static get_bits_per_element() -> u64;
 
 protected:
   auto get_default_value() -> shared_ptr<PositionsBatch> override;

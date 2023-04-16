@@ -25,6 +25,11 @@ ContinuousPositionsBuilder::ContinuousPositionsBuilder(
   initialise_batches();
 }
 
+auto ContinuousPositionsBuilder::get_bits_per_element() -> u64 {
+  const u64 bits_required_per_position = 64;
+  return bits_required_per_position;
+}
+
 auto ContinuousPositionsBuilder::get_default_value()
   -> shared_ptr<PositionsBatch> {
   auto batch = make_shared<PositionsBatch>();

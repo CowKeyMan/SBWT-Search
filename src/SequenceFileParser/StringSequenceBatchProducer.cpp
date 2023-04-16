@@ -15,6 +15,11 @@ StringSequenceBatchProducer::StringSequenceBatchProducer(u64 max_batches):
   initialise_batches();
 }
 
+auto StringSequenceBatchProducer::get_bits_per_element() -> u64 {
+  const u64 bits_required_per_character = 8;
+  return bits_required_per_character;
+}
+
 auto StringSequenceBatchProducer::get_default_value()
   -> shared_ptr<StringSequenceBatch> {
   return make_shared<StringSequenceBatch>();

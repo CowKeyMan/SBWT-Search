@@ -24,7 +24,6 @@ __global__ void d_presearch(
   u64 *presearch_left,
   u64 *presearch_right
 ) {
-  const auto rank = d_rank;
   const u32 kmer = get_idx();
   u32 c = (kmer >> (presearch_letters * 2 - 2)) & two_1s;
   u64 node_left = c_map[c];
@@ -32,9 +31,9 @@ __global__ void d_presearch(
 #pragma unroll
   for (u32 i = presearch_letters * 2 - 4;; i -= 2) {
     c = (kmer >> i) & two_1s;
-    node_left = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_left);
-    node_right
-      = c_map[c] + rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
+    node_left = c_map[c] + d_rank(acgt[c], layer_0[c], layer_1_2[c], node_left);
+    node_right = c_map[c]
+      + d_rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
     if (i == 0) { break; }
   }
   presearch_left[kmer] = node_left;

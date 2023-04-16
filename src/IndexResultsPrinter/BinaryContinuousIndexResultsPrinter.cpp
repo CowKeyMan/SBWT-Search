@@ -31,6 +31,14 @@ BinaryContinuousIndexResultsPrinter::BinaryContinuousIndexResultsPrinter(
       write_headers
     ) {}
 
+auto BinaryContinuousIndexResultsPrinter::get_bits_per_element() -> u64 {
+  return u64_bits;
+}
+
+auto BinaryContinuousIndexResultsPrinter::get_bits_per_read() -> u64 {
+  return u64_bits;
+}
+
 auto BinaryContinuousIndexResultsPrinter::do_get_extension() -> string {
   return ".bin";
 }

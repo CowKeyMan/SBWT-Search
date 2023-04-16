@@ -26,6 +26,7 @@ private:
   unique_ptr<GpuPointer<u64 *>> acgt_pointers, layer_0_pointers,
     layer_1_2_pointers;
   unique_ptr<GpuPointer<u64>> key_kmer_marks;
+  u64 max_index;
 
 public:
   GpuSbwtContainer(
@@ -38,6 +39,7 @@ public:
     const vector<u64> &cpu_key_kmer_marks
   );
 
+  [[nodiscard]] auto get_max_index() const -> const u64;
   [[nodiscard]] auto get_c_map() const -> const GpuPointer<u64> &;
   [[nodiscard]] auto get_acgt_pointers() const -> const GpuPointer<u64 *> &;
   [[nodiscard]] auto get_layer_0_pointers() const -> const GpuPointer<u64 *> &;

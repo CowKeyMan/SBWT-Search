@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <ios>
 #include <iterator>
 #include <limits>
@@ -39,20 +40,28 @@ ContinuousSequenceFileParser::ContinuousSequenceFileParser(
   u64 kmer_size_,
   u64 max_chars_per_batch_,
   u64 max_reads_per_batch_,
-  u64 max_batches
+  u64 string_sequence_batch_producer_max_batches,
+  u64 string_break_batch_producer_max_batches,
+  u64 interval_batch_producer_max_batches
 ):
     filenames(filenames_),
     kmer_size(kmer_size_),
-    batches(max_batches),
+    batches(std::max(
+      {string_sequence_batch_producer_max_batches,
+       string_break_batch_producer_max_batches,
+       interval_batch_producer_max_batches}
+    )),
     max_chars_per_batch(max_chars_per_batch_),
     max_reads_per_batch(max_reads_per_batch_),
-    string_sequence_batch_producer(
-      make_shared<StringSequenceBatchProducer>(max_batches)
+    string_sequence_batch_producer(make_shared<StringSequenceBatchProducer>(
+      string_sequence_batch_producer_max_batches
+    )),
+    string_break_batch_producer(make_shared<StringBreakBatchProducer>(
+      string_break_batch_producer_max_batches
+    )),
+    interval_batch_producer(
+      make_shared<IntervalBatchProducer>(interval_batch_producer_max_batches)
     ),
-    string_break_batch_producer(
-      make_shared<StringBreakBatchProducer>(max_batches)
-    ),
-    interval_batch_producer(make_shared<IntervalBatchProducer>(max_batches)),
     stream_id(stream_id_) {
   filename_iterator = filenames.begin();
   for (unsigned int i = 0; i < batches.capacity(); ++i) {

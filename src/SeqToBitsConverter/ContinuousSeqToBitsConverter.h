@@ -37,7 +37,8 @@ public:
     u64 threads,
     u64 kmer_size,
     u64 max_chars_per_batch,
-    u64 max_batches
+    u64 invalid_chars_producer_max_batches,
+    u64 bits_producer_max_batches
   );
 
   [[nodiscard]] auto get_invalid_chars_producer() const

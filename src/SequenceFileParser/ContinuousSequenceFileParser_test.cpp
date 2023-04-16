@@ -48,6 +48,8 @@ protected:
       kmer_size,
       max_chars_per_batch,
       max_reads_per_batch,
+      max_batches,
+      max_batches,
       max_batches
     );
     u64 expected_batches = seq.size();

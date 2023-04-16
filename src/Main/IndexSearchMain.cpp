@@ -33,7 +33,14 @@ using std::endl;
 using std::min;
 using std::runtime_error;
 
-const u64 num_components = 5;
+const u64 string_sequence_batch_producer_max_batches = 4;
+const u64 string_break_batch_producer_max_batches = 4;
+const u64 interval_batch_producer_max_batches = 4;
+const u64 sequence_file_parser_max_batches = 4;
+const u64 invalid_chars_producer_max_batches = 2;
+const u64 bits_producer_max_batches = 3;
+const u64 positions_builder_max_batches = 3;
+const u64 searcher_max_batches = 2;
 
 auto IndexSearchMain::main(int argc, char **argv) -> int {
   const string program_name = "index";
@@ -45,6 +52,7 @@ auto IndexSearchMain::main(int argc, char **argv) -> int {
   Logger::log(Logger::LOG_LEVEL::INFO, "Loading components into memory");
   auto gpu_container = get_gpu_container();
   kmer_size = gpu_container->get_kmer_size();
+  max_index = gpu_container->get_max_index();
   auto [split_input_filenames, split_output_filenames]
     = get_input_output_filenames();
   load_batch_info();
@@ -164,27 +172,35 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
       static_cast<double>(available_ram - unavailable_ram)
       * get_args().get_cpu_memory_percentage()
     );
-  // 8 bits per character for string sequence batch when reading
-  // 8 bits per character for invalid characters
-  // 64 bits for the positions
-  // 64 bits for the results
-  // 2 bits for the bit packed sequences
-  // 20 * 8 bits for each printed character
-  // 1 * 8 bits for each space after the printed characters
-  // 64 bits per read for the chars_before_newline
-  // 8 bits per read for each newline
-  const u64 bits_required_per_character = static_cast<u64>(
-    8 + 8 + 64 + 64 + 2 + (20 + 1) * 8
-      + static_cast<u64>(std::ceil(
-        (1.0 / static_cast<double>(get_args().get_base_pairs_per_read()))
-        * (64.0 + 8.0)
-      ))
+  const double bits_required_per_character
+    = static_cast<double>(
+        // bits per element
+        StringSequenceBatchProducer::get_bits_per_element()
+          * string_sequence_batch_producer_max_batches
+        + InvalidCharsProducer::get_bits_per_element()
+          * invalid_chars_producer_max_batches
+        + BitsProducer::get_bits_per_element() * bits_producer_max_batches
+        + ContinuousPositionsBuilder::get_bits_per_element()
+          * positions_builder_max_batches
+        + ContinuousIndexSearcher::get_bits_per_element_cpu()
+          * searcher_max_batches
+        + get_results_printer_bits_per_element()
+      )
+    // bits per read
+    + static_cast<double>(
+        IntervalBatchProducer::get_bits_per_read()
+          * string_break_batch_producer_max_batches
+        + get_results_printer_bits_per_read()
+      )
+      / static_cast<double>(get_args().get_base_pairs_per_read())
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
-      + 64 + 2;
+    + static_cast<double>(ContinuousIndexSearcher::get_bits_per_element_gpu())
 #endif
-  );
-  auto max_chars_per_batch
-    = free_bits / bits_required_per_character / num_components / streams;
+    ;
+  u64 max_chars_per_batch = static_cast<u64>(std::floor(
+    static_cast<double>(free_bits) / bits_required_per_character
+    / static_cast<double>(streams)
+  ));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -196,6 +212,30 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     )
   );
   return max_chars_per_batch;
+}
+
+auto IndexSearchMain::get_results_printer_bits_per_element() -> u64 {
+  if (get_args().get_print_mode() == "ascii") {
+    return AsciiContinuousIndexResultsPrinter::get_bits_per_element(max_index);
+  }
+  if (get_args().get_print_mode() == "binary") {
+    return BinaryContinuousIndexResultsPrinter::get_bits_per_element();
+  }
+  if (get_args().get_print_mode() == "bool") {
+    return BoolContinuousIndexResultsPrinter::get_bits_per_element();
+  }
+  throw runtime_error("Invalid value passed by user for argument print_mode");
+}
+
+auto IndexSearchMain::get_results_printer_bits_per_read() -> u64 {
+  if (get_args().get_print_mode() == "ascii") { return 0; }
+  if (get_args().get_print_mode() == "binary") {
+    return BinaryContinuousIndexResultsPrinter::get_bits_per_read();
+  }
+  if (get_args().get_print_mode() == "bool") {
+    return BinaryContinuousIndexResultsPrinter::get_bits_per_read();
+  }
+  throw runtime_error("Invalid value passed by user for argument print_mode");
 }
 
 auto IndexSearchMain::get_components(
@@ -229,7 +269,9 @@ auto IndexSearchMain::get_components(
       kmer_size,
       max_chars_per_batch,
       max_reads_per_batch,
-      num_components
+      string_sequence_batch_producer_max_batches,
+      string_break_batch_producer_max_batches,
+      interval_batch_producer_max_batches
     );
     Logger::log_timed_event(
       format("SequenceFileParserAllocator_{}", i), Logger::EVENT_STATE::STOP
@@ -244,7 +286,8 @@ auto IndexSearchMain::get_components(
       get_threads(),
       kmer_size,
       max_chars_per_batch,
-      num_components
+      invalid_chars_producer_max_batches,
+      bits_producer_max_batches
     );
     Logger::log_timed_event(
       format("SeqToBitsConverterAllocator_{}", i), Logger::EVENT_STATE::STOP
@@ -258,7 +301,7 @@ auto IndexSearchMain::get_components(
       sequence_file_parsers[i]->get_string_break_batch_producer(),
       kmer_size,
       max_chars_per_batch,
-      num_components
+      positions_builder_max_batches
     );
     Logger::log_timed_event(
       format("PositionsBuilderAllocator_{}", i), Logger::EVENT_STATE::STOP
@@ -272,9 +315,9 @@ auto IndexSearchMain::get_components(
       gpu_container,
       seq_to_bits_converters[i]->get_bits_producer(),
       positions_builders[i],
-      num_components,
+      searcher_max_batches,
       max_chars_per_batch,
-      args->get_colors_file() != ""
+      !args->get_colors_file().empty()
     );
     Logger::log_timed_event(
       format("SearcherAllocator_{}", i), Logger::EVENT_STATE::STOP
@@ -322,7 +365,8 @@ auto IndexSearchMain::get_results_printer(
       get_threads(),
       max_chars_per_batch,
       max_reads_per_batch,
-      get_args().get_write_headers()
+      get_args().get_write_headers(),
+      max_index
     ));
   }
   if (get_args().get_print_mode() == "binary") {
@@ -380,6 +424,7 @@ auto IndexSearchMain::run_components(
   vector<shared_ptr<IndexResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
+  const u64 num_components = 5;
 #pragma omp parallel sections num_threads(num_components)
   {
 #pragma omp section

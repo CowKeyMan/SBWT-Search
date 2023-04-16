@@ -39,6 +39,9 @@ public:
     bool move_to_key_kmer
   );
 
+  auto static get_bits_per_element_cpu() -> u64;
+  auto static get_bits_per_element_gpu() -> u64;
+
   auto get_default_value() -> shared_ptr<ResultsBatch> override;
   auto continue_read_condition() -> bool override;
   auto generate() -> void override;

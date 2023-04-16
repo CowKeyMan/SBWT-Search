@@ -15,7 +15,8 @@ AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
   u64 threads,
   u64 max_chars_per_batch,
   u64 max_reads_per_batch,
-  bool write_headers
+  bool write_headers,
+  u64 max_index
 ):
     Base(
       stream_id,
@@ -27,7 +28,7 @@ AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
       threads,
       max_chars_per_batch,
       max_reads_per_batch,
-      max_chars_in_u64 + 1,
+      get_bits_per_element(max_index),
       1,
       write_headers
     ) {
@@ -35,6 +36,18 @@ AsciiContinuousIndexResultsPrinter::AsciiContinuousIndexResultsPrinter(
   for (u64 i = 0; i < threads; ++i) {
     tiny_buffers[i].resize(max_chars_in_u64 + 3);
   }
+}
+
+auto AsciiContinuousIndexResultsPrinter::get_bits_per_element(u64 max_index)
+  -> u64 {
+  const u64 bits_required_per_whitespace = 1;
+  u64 bits_required_per_character = 0;
+  const u64 base_10 = 10;
+  while (max_index > 0) {
+    max_index /= base_10;
+    ++bits_required_per_character;
+  }
+  return bits_required_per_character + bits_required_per_whitespace;
 }
 
 auto AsciiContinuousIndexResultsPrinter::do_with_result(

@@ -22,7 +22,8 @@ GpuSbwtContainer::GpuSbwtContainer(
   u32 kmer_size,
   const vector<u64> &cpu_key_kmer_marks
 ):
-    SbwtContainer(bits_total, bit_vector_size, kmer_size) {
+    SbwtContainer(bits_total, bit_vector_size, kmer_size),
+    max_index(bits_total) {
   acgt.reserve(4);
   for (u64 i = 0; i < 4; ++i) {
     acgt.push_back(make_unique<GpuPointer<u64>>(cpu_acgt[i]));
@@ -46,6 +47,8 @@ GpuSbwtContainer::GpuSbwtContainer(
     cpu_key_kmer_marks.data(), cpu_key_kmer_marks.size()
   );
 }
+
+auto GpuSbwtContainer::get_max_index() const -> const u64 { return max_index; }
 
 auto GpuSbwtContainer::get_c_map() const -> const GpuPointer<u64> & {
   return *c_map;

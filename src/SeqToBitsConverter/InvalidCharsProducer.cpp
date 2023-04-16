@@ -18,6 +18,11 @@ InvalidCharsProducer::InvalidCharsProducer(
   initialise_batches();
 }
 
+auto InvalidCharsProducer::get_bits_per_element() -> u64 {
+  u64 bits_required_per_entry = 8;
+  return 8;
+}
+
 auto InvalidCharsProducer::get_default_value()
   -> shared_ptr<InvalidCharsBatch> {
   auto batch = make_shared<InvalidCharsBatch>();

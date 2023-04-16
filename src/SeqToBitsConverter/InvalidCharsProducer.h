@@ -30,6 +30,8 @@ public:
     u64 kmer_size_, u64 max_chars_per_batch_, u64 max_batches
   );
 
+  auto static get_bits_per_element() -> u64;
+
 private:
   auto get_default_value() -> shared_ptr<InvalidCharsBatch> override;
   auto start_new_batch(u64 num_chars) -> void;

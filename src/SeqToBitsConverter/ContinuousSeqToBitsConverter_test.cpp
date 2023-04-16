@@ -54,7 +54,13 @@ protected:
     }
     auto producer = make_shared<DummyStringSequenceBatchProducer>(shared_seqs);
     auto host = make_shared<ContinuousSeqToBitsConverter>(
-      0, producer, threads, kmer_size, max_chars_per_batch, max_batches
+      0,
+      producer,
+      threads,
+      kmer_size,
+      max_chars_per_batch,
+      max_batches,
+      max_batches
     );
     auto bits_producer = host->get_bits_producer();
     auto invalid_chars_producer = host->get_invalid_chars_producer();
@@ -149,7 +155,7 @@ TEST_F(ContinuousSeqToBitsConverterTest, TestAll) {
       return ret_val;
     }();
     auto seqs = to_char_vec(str_seqs);
-    for (auto max_batches : {1}) {
+    for (auto max_batches : {1, 2, 3, 4, 5, 6, 7}) {
       run_test(
         kmer_size,
         seqs,

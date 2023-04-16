@@ -37,6 +37,9 @@ public:
     bool write_headers
   );
 
+  auto static get_bits_per_element() -> u64;
+  auto static get_bits_per_read() -> u64;
+
 protected:
   auto do_get_extension() -> string;
   auto do_get_format() -> string;

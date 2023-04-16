@@ -32,8 +32,11 @@ public:
     u64 threads,
     u64 max_chars_per_batch,
     u64 max_reads_per_batch,
-    bool write_headers
+    bool write_headers,
+    u64 max_index
   );
+
+  static auto get_bits_per_element(u64 max_index) -> u64;
 
 protected:
   auto do_get_extension() -> string;

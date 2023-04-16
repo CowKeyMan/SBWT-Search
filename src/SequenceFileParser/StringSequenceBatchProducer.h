@@ -29,6 +29,8 @@ class StringSequenceBatchProducer:
 public:
   explicit StringSequenceBatchProducer(u64 max_batches);
 
+  auto static get_bits_per_element() -> u64;
+
 private:
   void set_string(const vector<char> &s);
   auto get_default_value() -> shared_ptr<StringSequenceBatch> override;
