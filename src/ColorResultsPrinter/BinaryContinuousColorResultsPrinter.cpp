@@ -18,7 +18,7 @@ BinaryContinuousColorResultsPrinter::BinaryContinuousColorResultsPrinter(
   bool include_not_found_,
   bool include_invalid_,
   u64 threads,
-  u64 max_reads_in_buffer,
+  u64 max_reads_per_batch,
   bool write_headers
 ):
     Base(
@@ -32,11 +32,15 @@ BinaryContinuousColorResultsPrinter::BinaryContinuousColorResultsPrinter(
       include_not_found_,
       include_invalid_,
       threads,
-      1,
-      1,
-      max_reads_in_buffer,
+      num_colors_ + 1,
+      max_reads_per_batch,
       write_headers
     ) {}
+
+auto BinaryContinuousColorResultsPrinter::get_bits_per_read(u64 num_colors)
+  -> u64 {
+  return (num_colors + 1) * 64;
+}
 
 auto BinaryContinuousColorResultsPrinter::do_get_extension() -> string {
   return ".bin";

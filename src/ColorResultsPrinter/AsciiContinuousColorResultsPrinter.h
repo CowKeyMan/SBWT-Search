@@ -38,9 +38,11 @@ public:
     bool include_not_found_,
     bool include_invalid_,
     u64 threads,
-    u64 max_reads_in_buffer,
+    u64 max_reads_per_batch,
     bool write_headers
   );
+
+  auto static get_bits_per_read(u64 num_colors) -> u64;
 
 protected:
   auto do_get_extension() -> string;

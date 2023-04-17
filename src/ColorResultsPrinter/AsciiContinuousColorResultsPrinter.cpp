@@ -20,7 +20,7 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
   bool include_not_found_,
   bool include_invalid_,
   u64 threads,
-  u64 max_reads_in_buffer,
+  u64 max_reads_per_batch,
   bool write_headers
 ):
     Base(
@@ -34,15 +34,29 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
       include_not_found_,
       include_invalid_,
       threads,
-      max_chars_in_u64 + 1,
-      1,
-      max_reads_in_buffer,
+      get_bits_per_read(num_colors_) / bits_in_byte,
+      max_reads_per_batch,
       write_headers
     ),
     tiny_buffers(threads) {
   for (u64 i = 0; i < threads; ++i) {
     tiny_buffers[i].resize(max_chars_in_u64 + 3);
   }
+}
+
+auto AsciiContinuousColorResultsPrinter::get_bits_per_read(u64 num_colors)
+  -> u64 {
+  u64 num_colors_copy = num_colors;
+  const u64 bits_required_per_whitespace = bits_in_byte;
+  u64 bits_required_per_character = 0;
+  const u64 base_10 = 10;
+  while (num_colors_copy > 0) {
+    num_colors_copy /= base_10;
+    ++bits_required_per_character;
+  }
+  bits_required_per_character *= bits_in_byte;
+  return bits_required_per_character * num_colors
+    + bits_required_per_whitespace;
 }
 
 auto AsciiContinuousColorResultsPrinter::do_get_extension() -> string {

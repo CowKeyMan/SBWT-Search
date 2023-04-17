@@ -23,7 +23,6 @@ using fmt::format;
 using gpu_utils::get_free_gpu_memory;
 using log_utils::Logger;
 using math_utils::bits_to_gB;
-using math_utils::divide_and_ceil;
 using math_utils::divide_and_round;
 using math_utils::round_down;
 using memory_utils::get_total_system_memory;
@@ -157,11 +156,6 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
       static_cast<double>(available_ram - unavailable_ram)
       * get_args().get_cpu_memory_percentage()
     );
-  u64 bits_reserved_for_results_printer = divide_and_round<u64>(free_bits, 3);
-  results_printer_max_reads_in_buffer = bits_reserved_for_results_printer
-    / get_threads() / streams
-    / (num_colors * (max_chars_in_u64 + 1) * bits_in_byte + bits_in_byte);
-
   const double bits_required_per_character = (
     // bits per element
     static_cast<double>(
@@ -174,7 +168,7 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
           * interval_batch_producer_max_batches
         + ReadStatisticsBatchProducer::get_bits_per_read()
           * read_statistics_batch_producer_max_batches
-        // TODO: HERE PUT RESULTS
+        + get_results_printer_bits_per_read()
       )
       / static_cast<double>(get_args().get_indexes_per_read())
     // bits per warp
@@ -198,8 +192,8 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
 #endif
   );
   u64 max_chars_per_batch = static_cast<u64>(std::floor(
-    static_cast<double>(free_bits - bits_reserved_for_results_printer)
-    / bits_required_per_character / static_cast<double>(streams)
+    static_cast<double>(free_bits) / bits_required_per_character
+    / static_cast<double>(streams)
   ));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
@@ -212,6 +206,19 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     )
   );
   return max_chars_per_batch;
+}
+
+auto ColorSearchMain::get_results_printer_bits_per_read() -> u64 {
+  if (get_args().get_print_mode() == "ascii") {
+    return AsciiContinuousColorResultsPrinter::get_bits_per_read(num_colors);
+  }
+  if (get_args().get_print_mode() == "binary") {
+    return BinaryContinuousColorResultsPrinter::get_bits_per_read(num_colors);
+  }
+  if (get_args().get_print_mode() == "csv") {
+    return CsvContinuousColorResultsPrinter::get_bits_per_read(num_colors);
+  }
+  throw runtime_error("Invalid value passed by user for argument print_mode");
 }
 
 auto ColorSearchMain::get_input_output_filenames()
@@ -309,7 +316,7 @@ auto ColorSearchMain::get_results_printer(
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      results_printer_max_reads_in_buffer,
+      max_reads_per_batch,
       get_args().get_write_headers()
     ));
   }
@@ -325,7 +332,7 @@ auto ColorSearchMain::get_results_printer(
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      results_printer_max_reads_in_buffer,
+      max_reads_per_batch,
       get_args().get_write_headers()
     ));
   }
@@ -341,7 +348,7 @@ auto ColorSearchMain::get_results_printer(
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      results_printer_max_reads_in_buffer,
+      max_reads_per_batch,
       get_args().get_write_headers()
     ));
   }

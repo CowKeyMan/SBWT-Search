@@ -23,7 +23,7 @@ CsvContinuousColorResultsPrinter::CsvContinuousColorResultsPrinter(
   bool include_not_found_,
   bool include_invalid_,
   u64 threads,
-  u64 max_reads_in_buffer,
+  u64 max_reads_per_batch,
   bool write_headers
 ):
     Base(
@@ -37,9 +37,8 @@ CsvContinuousColorResultsPrinter::CsvContinuousColorResultsPrinter(
       include_not_found_,
       include_invalid_,
       threads,
-      2,
-      0,
-      max_reads_in_buffer,
+      num_colors_ * 2,
+      max_reads_per_batch,
       write_headers
     ),
     num_colors(num_colors_) {
@@ -52,6 +51,11 @@ CsvContinuousColorResultsPrinter::CsvContinuousColorResultsPrinter(
       row_template[i * 2 + 1] = ',';
     }
   }
+}
+
+auto CsvContinuousColorResultsPrinter::get_bits_per_read(u64 num_colors)
+  -> u64 {
+  return num_colors * 2 * bits_in_byte;
 }
 
 auto CsvContinuousColorResultsPrinter::do_get_extension() -> string {
