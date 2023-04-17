@@ -22,30 +22,36 @@ using std::numeric_limits;
 
 ContinuousIndexFileParser::ContinuousIndexFileParser(
   u64 stream_id_,
-  u64 max_batches,
   u64 max_indexes_per_batch_,
   u64 max_reads_per_batch_,
   u64 warp_size_,
-  vector<string> filenames_
+  vector<string> filenames_,
+  u64 interval_batch_producer_max_batches,
+  u64 read_statistics_batch_producer_max_batches,
+  u64 get_warps_before_new_read_batch_producer_max_batches,
+  u64 indexes_batch_producer_max_batches
 ):
-    warps_before_new_read(create_warps_before_new_read(max_batches)),
+    warps_before_new_read(create_warps_before_new_read(
+      get_warps_before_new_read_batch_producer_max_batches
+    )),
     max_indexes_per_batch(max_indexes_per_batch_),
     max_reads_per_batch(max_reads_per_batch_),
     warp_size(warp_size_),
     colors_interval_batch_producer(make_shared<ColorsIntervalBatchProducer>(
-      max_batches, warps_before_new_read
+      interval_batch_producer_max_batches, warps_before_new_read
     )),
-    read_statistics_batch_producer(
-      make_shared<ReadStatisticsBatchProducer>(max_batches)
-    ),
+    read_statistics_batch_producer(make_shared<ReadStatisticsBatchProducer>(
+      read_statistics_batch_producer_max_batches
+    )),
     warps_before_new_read_batch_producer(
       make_shared<WarpsBeforeNewReadBatchProducer>(
-        max_batches, warps_before_new_read
+        get_warps_before_new_read_batch_producer_max_batches,
+        warps_before_new_read
       )
     ),
-    indexes_batch_producer(
-      make_shared<IndexesBatchProducer>(max_indexes_per_batch_, max_batches)
-    ),
+    indexes_batch_producer(make_shared<IndexesBatchProducer>(
+      max_indexes_per_batch_, indexes_batch_producer_max_batches
+    )),
     filenames(std::move(filenames_)),
     stream_id(stream_id_) {
   filename_iterator = filenames.begin();

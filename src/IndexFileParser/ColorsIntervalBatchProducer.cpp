@@ -20,6 +20,13 @@ ColorsIntervalBatchProducer::ColorsIntervalBatchProducer(
   }
 }
 
+auto ColorsIntervalBatchProducer::get_bits_per_read() -> u64 {
+  const u64 bits_required_per_warp_before_new_read = 64;
+  const u64 bits_required_reads_before_newfile = 64;
+  return bits_required_per_warp_before_new_read
+    + bits_required_reads_before_newfile;
+}
+
 auto ColorsIntervalBatchProducer::get_default_value()
   -> shared_ptr<ColorsIntervalBatch> {
   auto batch = make_shared<ColorsIntervalBatch>();

@@ -27,6 +27,8 @@ class ReadStatisticsBatchProducer:
 public:
   explicit ReadStatisticsBatchProducer(u64 max_batches);
 
+  auto static get_bits_per_read() -> u64;
+
 protected:
   auto get_default_value() -> shared_ptr<ReadStatisticsBatch> override;
 };

@@ -27,6 +27,8 @@ public:
     const vector<shared_ptr<vector<u64>>> &warps_before_new_read
   );
 
+  auto static get_bits_per_read() -> u64;
+
 private:
   auto get_default_value() -> shared_ptr<ColorsIntervalBatch> override;
   auto do_at_batch_finish() -> void override;

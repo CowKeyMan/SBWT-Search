@@ -43,11 +43,14 @@ private:
 public:
   ContinuousIndexFileParser(
     u64 stream_id_,
-    u64 max_batches,
     u64 max_indexes_per_batch_,
     u64 max_reads_per_batch_,
     u64 warp_size_,
-    vector<string> filenames_
+    vector<string> filenames_,
+    u64 interval_batch_producer_max_batches,
+    u64 read_statistics_batch_producer_max_batches,
+    u64 get_warps_before_new_read_batch_producer_max_batches,
+    u64 indexes_batch_producer_max_batches
   );
 
   [[nodiscard]] auto get_colors_interval_batch_producer() const

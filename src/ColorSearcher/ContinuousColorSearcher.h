@@ -41,6 +41,10 @@ public:
     u64 num_colors_
   );
 
+  auto static get_bits_per_warp_cpu(u64 num_colors) -> u64;
+  auto static get_bits_per_element_gpu() -> u64;
+  auto static get_bits_per_warp_gpu(u64 num_colors) -> u64;
+
 private:
   auto get_default_value() -> shared_ptr<ColorSearchResultsBatch> override;
   auto start_new_batch() -> void;

@@ -30,6 +30,21 @@ ContinuousColorSearcher::ContinuousColorSearcher(
   initialise_batches();
 }
 
+auto ContinuousColorSearcher::get_bits_per_warp_cpu(u64 num_colors) -> u64 {
+  const u64 bits_required_per_result = 64;
+  return num_colors * bits_required_per_result;
+}
+
+auto ContinuousColorSearcher::get_bits_per_element_gpu() -> u64 {
+  const u64 bits_required_per_index = 64;
+  return bits_required_per_index;
+}
+
+auto ContinuousColorSearcher::get_bits_per_warp_gpu(u64 num_colors) -> u64 {
+  const u64 bits_required_per_result = 64;
+  return num_colors * bits_required_per_result;
+}
+
 auto ContinuousColorSearcher::get_default_value()
   -> shared_ptr<ColorSearchResultsBatch> {
   auto batch = make_shared<ColorSearchResultsBatch>();

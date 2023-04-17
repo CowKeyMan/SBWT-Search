@@ -14,6 +14,11 @@ IndexesBatchProducer::IndexesBatchProducer(
   initialise_batches();
 }
 
+auto IndexesBatchProducer::get_bits_per_element() -> u64 {
+  const u64 bits_required_per_index = 64;
+  return bits_required_per_index;
+}
+
 auto IndexesBatchProducer::get_default_value() -> shared_ptr<IndexesBatch> {
   auto batch = make_shared<IndexesBatch>();
   batch->indexes.reserve(max_indexes_per_batch);

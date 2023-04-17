@@ -29,6 +29,8 @@ private:
 public:
   IndexesBatchProducer(u64 max_indexes_per_batch_, u64 max_batches);
 
+  auto static get_bits_per_element() -> u64;
+
 private:
   auto get_default_value() -> shared_ptr<IndexesBatch> override;
 };

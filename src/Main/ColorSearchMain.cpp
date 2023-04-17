@@ -33,7 +33,12 @@ using std::make_shared;
 using std::min;
 using std::runtime_error;
 
-const u64 num_components = 4;
+const u64 interval_batch_producer_max_batches = 2;
+const u64 read_statistics_batch_producer_max_batches = 2;
+const u64 get_warps_before_new_read_batch_producer_max_batches = 2;
+const u64 indexes_batch_producer_max_batches = 2;
+const u64 color_searcher_max_batches = 3;
+const u64 post_processor_max_batches = 2;
 
 auto ColorSearchMain::main(int argc, char **argv) -> int {
   const string program_name = "colors";
@@ -46,6 +51,9 @@ auto ColorSearchMain::main(int argc, char **argv) -> int {
   Logger::log(Logger::LOG_LEVEL::INFO, "Loading components into memory");
   auto gpu_container = get_gpu_container();
   num_colors = gpu_container->num_colors;
+  Logger::log(
+    Logger::LOG_LEVEL::INFO, format("Found {} total colors", num_colors)
+  );
   auto [input_filenames, output_filenames] = get_input_output_filenames();
   load_batch_info();
   omp_set_nested(1);
@@ -102,23 +110,32 @@ auto ColorSearchMain::get_max_chars_per_batch() -> u64 {
 }
 
 auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
-  u64 free = static_cast<u64>(
+  u64 free_bits = static_cast<u64>(
     static_cast<double>(get_free_gpu_memory() * bits_in_byte)
     * get_args().get_gpu_memory_percentage()
   );
+  /* const u64 bits_required_per_character = static_cast<double>( */
   // 64 for each index found
   // The results take: num_colors * 64 / warp_size
-  const u64 bits_required_per_character = static_cast<u64>(
-    64 + divide_and_ceil<u64>(64 * num_colors, gpu_warp_size)
-  );
-  auto max_chars_per_batch = free / bits_required_per_character / streams;
+  const double bits_required_per_character =
+    // bits per element
+    static_cast<double>(ContinuousColorSearcher::get_bits_per_element_gpu())
+    // bits per warp
+    + static_cast<double>(
+        ContinuousColorSearcher::get_bits_per_warp_gpu(num_colors)
+      )
+      / static_cast<double>(gpu_warp_size);
+  u64 max_chars_per_batch = static_cast<u64>(std::floor(
+    static_cast<double>(free_bits) / bits_required_per_character
+    / static_cast<double>(streams)
+  ));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
       "Free gpu memory: {} bits ({:.2f}GB). This allows for {} characters per "
       "batch",
-      free,
-      bits_to_gB(free),
+      free_bits,
+      bits_to_gB(free_bits),
       max_chars_per_batch
     )
   );
@@ -144,29 +161,46 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
   results_printer_max_reads_in_buffer = bits_reserved_for_results_printer
     / get_threads() / streams
     / (num_colors * (max_chars_in_u64 + 1) * bits_in_byte + bits_in_byte);
-  // 64 bits per index
-  // 64 * num_colors / warp_size to store the results
-  // 20 * 8 bits for each printed result
-  // 1 * 8 bits for each space after the printed result
-  // 8 bits for each printed newline
-  // 64 bits per read for each newline
-  // 64 bits per read for each found result count
-  // 64 bits per read for each not found result count
-  // 64 bits per read for each invalid result count
-  const u64 bits_required_per_character = static_cast<u64>(
-    64 + divide_and_ceil<u64>(64 * num_colors, gpu_warp_size)
-    + divide_and_ceil<u64>(64 * 4 + 8, get_args().get_indexes_per_read())
-#if defined(__HIP_CPU_RT__)  // include gpu required memory as well
-    + static_cast<u64>(
-      64.0
-      + static_cast<double>(num_colors) * 64.0
-        / static_cast<double>(gpu_warp_size)
+
+  const double bits_required_per_character = (
+    // bits per element
+    static_cast<double>(
+      IndexesBatchProducer::get_bits_per_element()
+      * indexes_batch_producer_max_batches
     )
+    // bits per read
+    + static_cast<double>(
+        ColorsIntervalBatchProducer::get_bits_per_read()
+          * interval_batch_producer_max_batches
+        + ReadStatisticsBatchProducer::get_bits_per_read()
+          * read_statistics_batch_producer_max_batches
+        // TODO: HERE PUT RESULTS
+      )
+      / static_cast<double>(get_args().get_indexes_per_read())
+    // bits per warp
+    + static_cast<double>(
+        ContinuousColorSearcher::get_bits_per_warp_cpu(num_colors)
+        * color_searcher_max_batches
+      )
+      / static_cast<double>(gpu_warp_size)
+#if defined(__HIP_CPU_RT__)  // include gpu required memory as well
+    // bits per element
+    + static_cast<double>(
+      ContinuousColorSearcher::get_bits_per_element_gpu()
+      * color_searcher_max_batches
+    )
+    // bits per warp
+    + static_cast<double>(
+        ContinuousColorSearcher::get_bits_per_warp_cpu(num_colors)
+        * color_searcher_max_batches
+      )
+      / static_cast<double>(gpu_warp_size)
 #endif
   );
-  free_bits -= bits_reserved_for_results_printer;
-  auto max_chars_per_batch
-    = free_bits / bits_required_per_character / num_components / streams;
+  u64 max_chars_per_batch = static_cast<u64>(std::floor(
+    static_cast<double>(free_bits - bits_reserved_for_results_printer)
+    / bits_required_per_character / static_cast<double>(streams)
+  ));
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
@@ -220,25 +254,28 @@ auto ColorSearchMain::get_components(
   for (u64 i = 0; i < streams; ++i) {
     index_file_parsers[i] = make_shared<ContinuousIndexFileParser>(
       i,
-      num_components,
       max_indexes_per_batch,
       max_reads_per_batch,
       gpu_warp_size,
-      split_input_filenames[i]
+      split_input_filenames[i],
+      interval_batch_producer_max_batches,
+      read_statistics_batch_producer_max_batches,
+      get_warps_before_new_read_batch_producer_max_batches,
+      indexes_batch_producer_max_batches
     );
     searchers[i] = make_shared<ContinuousColorSearcher>(
       i,
       gpu_container,
       index_file_parsers[i]->get_indexes_batch_producer(),
       max_indexes_per_batch,
-      num_components,
+      color_searcher_max_batches,
       gpu_container->num_colors
     );
     post_processors[i] = make_shared<ContinuousColorResultsPostProcessor>(
       i,
       searchers[i],
       index_file_parsers[i]->get_warps_before_new_read_batch_producer(),
-      num_components,
+      post_processor_max_batches,
       gpu_container->num_colors
     );
     results_printers[i] = get_results_printer(
@@ -318,31 +355,22 @@ auto ColorSearchMain::run_components(
   vector<shared_ptr<ColorResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
+  const u64 num_components = 4;
 #pragma omp parallel sections num_threads(num_components)
   {
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : index_file_parsers) { element->read_and_generate(); }
-    }
+    for (auto &element : index_file_parsers) { element->read_and_generate(); }
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : color_searchers) { element->read_and_generate(); }
-    }
+    for (auto &element : color_searchers) { element->read_and_generate(); }
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : post_processors) { element->read_and_generate(); }
-    }
+    for (auto &element : post_processors) { element->read_and_generate(); }
 #pragma omp section
-    {
 #pragma omp parallel for num_threads(streams)
-      for (auto &element : results_printers) {
-        std::visit(
-          [](auto &arg) -> void { arg.read_and_generate(); }, *element
-        );
-      }
+    for (auto &element : results_printers) {
+      std::visit([](auto &arg) -> void { arg.read_and_generate(); }, *element);
     }
   }
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::STOP);

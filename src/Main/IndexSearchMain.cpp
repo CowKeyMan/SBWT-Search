@@ -29,10 +29,10 @@ using std::endl;
 using std::min;
 using std::runtime_error;
 
-const u64 string_sequence_batch_producer_max_batches = 4;
-const u64 string_break_batch_producer_max_batches = 4;
-const u64 interval_batch_producer_max_batches = 4;
-const u64 sequence_file_parser_max_batches = 4;
+const u64 string_sequence_batch_producer_max_batches = 2;
+const u64 string_break_batch_producer_max_batches = 2;
+const u64 interval_batch_producer_max_batches = 2;
+const u64 sequence_file_parser_max_batches = 2;
 const u64 invalid_chars_producer_max_batches = 2;
 const u64 bits_producer_max_batches = 2;
 const u64 positions_builder_max_batches = 2;
@@ -136,9 +136,8 @@ auto IndexSearchMain::get_max_chars_per_batch_gpu() -> u64 {
     static_cast<double>(get_free_gpu_memory() * bits_in_byte)
     * get_args().get_gpu_memory_percentage()
   );
-  // 64 for each position where each result is also stored
-  // 2 for each base pair since these are bit packed
-  const u64 bits_required_per_character = 64 + 2;
+  const u64 bits_required_per_character
+    = ContinuousIndexSearcher::get_bits_per_element_gpu();
   auto max_chars_per_batch = free / bits_required_per_character / streams;
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
