@@ -5,9 +5,11 @@
  * @file IntervalBatch.h
  * @brief Data class for the intervals. The chars_before_newline is a vector
  * which gives the number of characters that a string contains, before the new
- * one ends. This is cumulative. characters_before_newfile is a vector which
- * tells us how many characters we need before we need to insert a linefeed
- * symbol. Note: the last character will always be the max value (ULLONG_MAX)
+ * one ends. newlines_before_newfile is a vector which
+ * tells us how many newlines we need before we need to start considering the
+ * next lines or sequences as originating from a new file. Note: the last
+ * character of both vectores will always be the max value (ULLONG_MAX), and
+ * both vectors are cumulative
  */
 
 #include <vector>

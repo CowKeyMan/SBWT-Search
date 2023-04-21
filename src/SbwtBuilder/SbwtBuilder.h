@@ -3,8 +3,10 @@
 
 /**
  * @file SbwtBuilder.h
- * @brief Loads SBWT from disk and can also build the index using other
- * components. CPU only
+ * @brief Loads SBWT from disk and also builds the other components such as
+ * their Poppy data structure and the c-map. If prompted, it will also load the
+ * key-kmer marks from disk from the colors file. These components are stored in
+ * the CpuSbwtContainer.
  */
 
 #include <istream>

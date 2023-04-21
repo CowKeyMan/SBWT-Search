@@ -3,8 +3,9 @@
 
 /**
  * @file Presearcher.h
- * @brief The presearcher will search for k-mers of a certain size and cache
- * them, so that future searches can continue from this checkpoint
+ * @brief The presearcher will search for all permutations of k-mers of a
+ * certain size and cache them, so that future searches can continue from this
+ * checkpoint
  */
 
 #include <memory>

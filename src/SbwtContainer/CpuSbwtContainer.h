@@ -3,7 +3,8 @@
 
 /**
  * @file CpuSbwtContainer.h
- * @brief SbwtContainer for that on the cpu side
+ * @brief SbwtContainer for that on the cpu side. Contains the acgt bitvectors,
+ * their Poppys, the c-map and also possibly the key-kmer marks, if loaded.
  */
 
 #include <memory>

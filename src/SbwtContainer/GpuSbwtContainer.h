@@ -3,7 +3,8 @@
 
 /**
  * @file GpuSbwtContainer.h
- * @brief Contains data class for SBWT index which reside on GPU
+ * @brief Contains the same items as the CpuSbwtContainer but as pointers on the
+ * GPU
  */
 
 #include <memory>

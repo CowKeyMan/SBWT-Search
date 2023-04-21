@@ -3,8 +3,8 @@
 
 /**
  * @file StringBreakBatchProducer.h
- * @brief In charge of storing and handing out the locations where one string
- * ends and another begins
+ * @brief In charge of storing and handing out the locations where one sequence
+ * ends and another begins, stored in the StringBreakBatch
  */
 
 #include <algorithm>

@@ -3,7 +3,8 @@
 
 /**
  * @file BitsProducer.h
- * @brief Produces a list of u64 bit vectors
+ * @brief Transforms a list of ACTG characters into their 2-bit equivalent and
+ * packs them into a u64 bitvector
  */
 
 #include <algorithm>

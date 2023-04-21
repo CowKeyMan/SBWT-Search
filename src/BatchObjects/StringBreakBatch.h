@@ -4,7 +4,9 @@
 /**
  * @file StringBreakBatch.h
  * @brief Data which contains data about the points where strings end and
- * another starts
+ * another starts, as well as the string size which is how long the current
+ * character vector associated with this batch is. Note that
+ * chars_before_newline is cumulative
  */
 
 #include <vector>

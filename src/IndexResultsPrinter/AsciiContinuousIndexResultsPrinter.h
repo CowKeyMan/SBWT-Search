@@ -3,7 +3,13 @@
 
 /**
  * @file AsciiContinuousIndexResultsPrinter.h
- * @brief Inherits ContinuousIndexResultsPrinter and prints out ascii values
+ * @brief Inherits ContinuousIndexResultsPrinter and prints out ascii values.
+ * Indexes are printed as their space separated ASCII values, with a newline
+ * character separating the reads. Not-found values are printed as '-1' and
+ * invalid values are printed as '-2'. When calculating memory reservations for
+ * this class, we use the max_index to see how many characters we really need
+ * per index, rather than the maximum needed for the maximum u64. This saves us
+ * a lot of space.
  */
 
 #include "IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp"

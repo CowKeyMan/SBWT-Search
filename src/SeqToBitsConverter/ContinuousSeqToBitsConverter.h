@@ -4,7 +4,7 @@
 /**
  * @file ContinuousSeqToBitsConverter.h
  * @brief Class for converting char sequences continuously, with parallel
- * capabilities
+ * capabilities. Also builds the invalid characters list in the same pass
  */
 
 #include <string>

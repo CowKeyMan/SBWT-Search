@@ -3,7 +3,9 @@
 
 /**
  * @file BinaryContinuousIndexResultsPrinter.h
- * @brief Inherits ContinuousIndexResultsPrinter and prints out binary values
+ * @brief Inherits ContinuousIndexResultsPrinter and prints out binary values.
+ * Not-found characters are reprented with a max_u64, invalids with a max_u64-1
+ * and newlines with a max_u64-2.
  */
 
 #include "IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp"

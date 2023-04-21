@@ -3,7 +3,9 @@
 
 /**
  * @file StringSequenceBatchProducer.h
- * @brief takes care of building and sending the stringsequencebatch
+ * @brief Takes care of building and producing the stringsequencebatch. This is
+ * handed over as a pointer from the ContinuousSequenceFileParser, to be shared
+ * with the next consumer component
  */
 
 #include <memory>

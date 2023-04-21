@@ -4,7 +4,10 @@
 /**
  * @file ContinuousSequenceFileParser.h
  * @brief Continuously reads sequences from a file or multiple files into a
- * buffer. Then it can serve these sequences to its consumers
+ * buffer. Then it can serve these sequences to its consumers. The reading is
+ * done in such a way that a single batch can contain characters from multiple
+ * lines. kseqpp_REad is used for parsing the files and getting the list of
+ * where each line break is.
  */
 
 #include <algorithm>

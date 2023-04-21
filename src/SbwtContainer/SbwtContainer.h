@@ -3,7 +3,9 @@
 
 /**
  * @file SbwtContainer.h
- * @brief Contains data class for SBWT index
+ * @brief Contains data class for SBWT index. Contains the more generic items
+ * from the SBWT items such as the bit vector sizes, and the kmer size. Cpu and
+ * Gpu specific items are in the subclasses.
  */
 
 #include <cstddef>

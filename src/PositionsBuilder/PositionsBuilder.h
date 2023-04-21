@@ -3,7 +3,8 @@
 
 /**
  * @file PositionsBuilder.h
- * @brief Builds the positions of the valid bit sequences
+ * @brief Builds a vector of the positions of the starting chracter of each kmer
+ * in our sequence
  */
 
 #include <cstddef>

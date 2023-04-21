@@ -243,10 +243,10 @@ TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
   const u64 max_chars_per_batch = 30;
   const u64 max_reads_per_batch = 999;
   const vector<string> str_seq = {
-    {"1ACTGCAATGGGCAATATGTCTCTGTGTGG"},
-    {"GGATTAC23TCTAGCTACTACTACTGATGG"},
-    {"GGATGGAATGTGATG45TGAGTGAGATGAG"},
-    {"AGGTGATAGTGACGTAGTGAGGA6"}};
+    "1ACTGCAATGGGCAATATGTCTCTGTGTGG",
+    "GGATTAC23TCTAGCTACTACTACTGATGG",
+    "GGATGGAATGTGATG45TGAGTGAGATGAG",
+    "AGGTGATAGTGACGTAGTGAGGA6"};
   auto seq = to_char_vec(str_seq);
   const vector<vector<u64>> chars_before_newline
     = {{max}, {8, max}, {16, max}, {24, max}};
@@ -255,6 +255,37 @@ TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
   for (auto max_batches : {1, 2, 3, 7}) {
     run_test(
       {"test_objects/small_fasta.fna", "garbage_filename"},
+      kmer_size,
+      max_chars_per_batch,
+      max_reads_per_batch,
+      seq,
+      chars_before_newline,
+      newlines_before_newfile,
+      max_batches
+    );
+  }
+}
+
+TEST_F(ContinuousSequenceFileParserTest, SameMAxCharsAsLine) {
+  u64 kmer_size = 3;
+  const u64 max_chars_per_batch = 36;
+  const u64 max_reads_per_batch = 999;
+  const vector<string> str_seq = {
+    "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC2",
+    "3TCTAGCTACTACTACTGATGGATGGAATGTGATG4",
+    "5TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6",
+    "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC2",
+    "3TCTAGCTACTACTACTGATGGATGGAATGTGATG4",
+    "5TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA6",
+    ""};
+  auto seq = to_char_vec(str_seq);
+  const vector<vector<u64>> chars_before_newline
+    = {{36, max}, {36, max}, {36, max}, {36, max}, {36, max}, {36, max}, {max}};
+  const vector<vector<u64>> newlines_before_newfile
+    = {{max}, {max}, {max}, {0, max}, {max}, {max}, {max}};
+  for (auto max_batches : {1, 2, 3, 7}) {
+    run_test(
+      {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
       max_reads_per_batch,

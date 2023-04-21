@@ -4,7 +4,8 @@
 /**
  * @file InvalidCharsProducer.h
  * @brief Produces a list of booleans which tell wether a character is valid or
- * not
+ * not. Instead of bool we use a 1 or 0 character since it is faster to process,
+ * even though the memory footprint is higher
  */
 
 #include <memory>

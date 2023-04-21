@@ -3,7 +3,9 @@
 
 /**
  * @file IntervalBatchProducer.h
- * @brief Builds the IntervalBatch
+ * @brief Builds the IntervalBatch, which tells where one sequence ends and
+ * another begins, and how many sequences are there before we need to start a
+ * new file.
  */
 
 #include <memory>

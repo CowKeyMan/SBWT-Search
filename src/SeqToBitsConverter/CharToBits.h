@@ -4,7 +4,7 @@
 /**
  * @file CharToBits.h
  * @brief Contains mapping functions which map the characters ACGT to their
- *        corresponding bit value
+ * corresponding bit value
  */
 
 #include <array>

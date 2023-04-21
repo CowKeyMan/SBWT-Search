@@ -4,7 +4,10 @@
 /**
  * @file AsciiContinuousColorResultsPrinter.h
  * @brief Outputs ascii results. Color indexes are ordered and space separated,
- * and each read is placed on a new line
+ * and each read is placed on a new line. When calculating memory reservations
+ * for this class, we use the max_index to see how many characters we really
+ * need per index, rather than the maximum needed for the maximum u64. This
+ * saves us a lot of space.
  */
 
 #include "ColorResultsPrinter/ContinuousColorResultsPrinter.hpp"

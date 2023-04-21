@@ -3,8 +3,8 @@
 
 /**
  * @file ContinuousPositionsBuilder.h
- * @brief Builds the positions of the valid bit sequences in a buffer and then
- * passes them on
+ * @brief Builds the positions of the indexes of the first characters of the
+ * kmers in our sequences in the batch
  */
 
 #include <memory>

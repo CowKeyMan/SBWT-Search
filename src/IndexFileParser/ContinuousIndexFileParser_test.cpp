@@ -42,11 +42,14 @@ protected:
     write_fake_binary_results_to_file();
     auto host = ContinuousIndexFileParser(
       0,
-      max_batches,
       max_indexes_per_batch,
       max_reads_per_batch,
       read_padding,
-      filenames
+      filenames,
+      max_batches,
+      max_batches,
+      max_batches,
+      max_batches
     );
     const auto num_sections = 5;
 #pragma omp parallel sections num_threads(num_sections)
