@@ -1,8 +1,7 @@
 #include <string>
 
-#include <fmt/format.h>
-
 #include "ColorResultsPrinter/AsciiContinuousColorResultsPrinter.h"
+#include "itoa/jeaiii_to_text.h"
 
 namespace sbwt_search {
 
@@ -37,12 +36,7 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
       get_bits_per_read(num_colors_) / bits_in_byte,
       max_reads_per_batch,
       write_headers
-    ),
-    tiny_buffers(threads) {
-  for (u64 i = 0; i < threads; ++i) {
-    tiny_buffers[i].resize(max_chars_in_u64 + 3);
-  }
-}
+    ) {}
 
 auto AsciiContinuousColorResultsPrinter::get_bits_per_read(u64 num_colors)
   -> u64 {
@@ -84,14 +78,8 @@ auto AsciiContinuousColorResultsPrinter::do_with_space(
 auto AsciiContinuousColorResultsPrinter::do_with_result(
   vector<char>::iterator buffer, u64 result
 ) -> u64 {
-  u64 thread_idx = omp_get_thread_num();
-  auto [a, b] = fmt::detail::format_decimal(
-    tiny_buffers[thread_idx].data(),
-    result,
-    static_cast<int>(tiny_buffers[thread_idx].size())
-  );
-  std::move(a, b, buffer);
-  return b - a;
+  auto buffer_end = jeaiii::to_text_from_integer(buffer.base(), result);
+  return buffer_end - buffer.base();
 }
 
 }  // namespace sbwt_search

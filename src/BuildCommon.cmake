@@ -32,7 +32,7 @@ set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
-include_directories("${CMAKE_BINARY_DIR}/deps/cxxopts-src/include")
+include_directories("${CMAKE_BINARY_DIR}/_deps/cxxopts-src/include")
 FetchContent_MakeAvailable(cxxopts)
 
 # Fetch OpenMP
@@ -45,6 +45,7 @@ if (NOT SDSL_FOUND)
     sdsl
     GIT_REPOSITORY  https://github.com/simongog/sdsl-lite/
     GIT_TAG         v2.1.1
+    GIT_SHALLOW     TRUE
     PREFIX          "${CMAKE_BINARY_DIR}/external/sdsl"
     CMAKE_ARGS
       -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
@@ -53,6 +54,15 @@ endif()
 add_library(libsdsl SHARED IMPORTED)
 set_target_properties(libsdsl PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/external/sdsl/lib/libsdsl.a")
 include_directories(SYSTEM "${CMAKE_BINARY_DIR}/external/sdsl/include")
+
+FetchContent_Declare(
+  jeaiii_itoa
+  GIT_REPOSITORY  https://github.com/jeaiii/itoa
+  GIT_TAG         69308f65e87a9954f11f952ed04d551eabeee0ae
+  GIT_SHALLOW     TRUE
+)
+FetchContent_MakeAvailable(jeaiii_itoa)
+include_directories(libjeaiii_itoa INTERFACE "${CMAKE_BINARY_DIR}/_deps/jeaii_itoa-src/include/")
 
 # Index
 add_library(

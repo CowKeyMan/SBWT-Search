@@ -18,9 +18,6 @@ class AsciiContinuousIndexResultsPrinter:
     = ContinuousIndexResultsPrinter<AsciiContinuousIndexResultsPrinter, char>;
   friend Base;
 
-private:
-  vector<vector<char>> tiny_buffers;
-
 public:
   AsciiContinuousIndexResultsPrinter(
     u64 stream_id,

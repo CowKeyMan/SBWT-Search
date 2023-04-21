@@ -20,9 +20,6 @@ class AsciiContinuousColorResultsPrinter:
     = ContinuousColorResultsPrinter<AsciiContinuousColorResultsPrinter, char>;
   friend Base;
 
-private:
-  vector<vector<char>> tiny_buffers;
-
 public:
   AsciiContinuousColorResultsPrinter(
     u64 stream_id_,

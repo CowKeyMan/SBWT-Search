@@ -4,12 +4,13 @@
 /**
  * @file ContinuousIndexResultsPrinter.hpp
  * @brief Gets results, intervals and list of invalid chars and prints
- * these out to disk based on the given data and filenames. This printing is
- * done in parallel. This class uses the Template Pattern, with CRTP. Honestly
- * its a disgusting class, mosly due to all the variables it needs to manage in
- * order to be efficient and highly parallel. All the variable names are also
- * super long, and then I tried to give them some short name but it still ended
- * up seeming obscure. I tried my best to make it as easy to understand as
+ * the results out to disk based on the given data and filenames. This printing
+ * is done in parallel by first printing to a memory buffer and then outputting
+ * this to disk. This class uses the Template Pattern, with CRTP. Honestly its a
+ * disgusting class, mosly due to all the variables it needs to manage in order
+ * to be efficient and highly parallel. All the variable names are also super
+ * long, and then I tried to give them some short name but it still ended up
+ * seeming obscure. I tried my best to make it as easy to understand as
  * possible, but good luck!
  */
 
@@ -23,7 +24,6 @@
 #include "BatchObjects/IntervalBatch.h"
 #include "BatchObjects/InvalidCharsBatch.h"
 #include "BatchObjects/ResultsBatch.h"
-#include "BatchObjects/StringSequenceBatch.h"
 #include "Tools/IOUtils.h"
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"
@@ -356,6 +356,7 @@ protected:
   auto do_with_invalid(vector<Buffer_t>::iterator buffer) -> u64;
   auto do_with_not_found(vector<Buffer_t>::iterator buffer) -> u64;
   auto do_with_newline(vector<Buffer_t>::iterator buffer) -> u64;
+  // NOLINTNEXTLINE (misc-unused-parameters)
   auto do_with_space(vector<Buffer_t>::iterator buffer) -> u64 { return 0; }
 
   auto do_at_file_end() -> void{};
