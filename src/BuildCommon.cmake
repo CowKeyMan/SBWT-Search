@@ -62,7 +62,7 @@ FetchContent_Declare(
   GIT_SHALLOW     TRUE
 )
 FetchContent_MakeAvailable(jeaiii_itoa)
-include_directories(libjeaiii_itoa INTERFACE "${CMAKE_BINARY_DIR}/_deps/jeaii_itoa-src/include/")
+include_directories("${CMAKE_BINARY_DIR}/_deps/jeaiii_itoa-src/include/")
 
 # Index
 add_library(
