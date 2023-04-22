@@ -181,8 +181,10 @@ protected:
     );
   }
   auto do_write_file_header(ThrowingOfstream &out_stream) -> void {
-    out_stream.write_string_with_size(impl().do_get_format());
-    out_stream.write_string_with_size(impl().do_get_version());
+    if (write_headers) {
+      out_stream.write_string_with_size(impl().do_get_format());
+      out_stream.write_string_with_size(impl().do_get_version());
+    }
   }
 
   auto process_batch() -> void {
