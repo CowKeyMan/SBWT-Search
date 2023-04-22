@@ -3,13 +3,13 @@
 if (BUILD_TESTS)
 
 include(FetchContent)
-FetchContent_Declare(
-  googletest
-  QUIET
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG        release-1.12.1
-)
-FetchContent_MakeAvailable(googletest)
+# FetchContent_Declare(
+#   googletest
+#   QUIET
+#   GIT_REPOSITORY https://github.com/google/googletest.git
+#   GIT_TAG        release-1.12.1
+# )
+# FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
@@ -71,8 +71,6 @@ add_executable(
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser_test.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser_test.cpp"
-  "${PROJECT_SOURCE_DIR}/ColorResultsPostProcessor/ContinuousColorResultsPostProcessor_test.cpp"
-
 
   "${PROJECT_SOURCE_DIR}/UtilityKernels/Rank_test.cpp"
   "${PROJECT_SOURCE_DIR}/UtilityKernels/GetBoolFromBitVector_test.cpp"

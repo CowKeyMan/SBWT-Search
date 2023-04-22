@@ -26,81 +26,74 @@ using std::numeric_limits;
 const unsigned full_mask = 0xFFFFFFFF;
 
 __device__ auto d_dense_get_arrays_start_end(
-  u64 color_set_idx,
-  u64 *is_dense_marks,
-  u64 *is_dense_marks_poppy_layer_0,
-  u64 *is_dense_marks_poppy_layer_1_2,
-  u64 *dense_arrays_intervals,
-  u64 dense_arrays_intervals_width,
-  u64 dense_arrays_intervals_width_set_bits,
+  const u64 color_set_idx,
+  const u64 *is_dense_marks,
+  const u64 *is_dense_marks_poppy_layer_0,
+  const u64 *is_dense_marks_poppy_layer_1_2,
+  const u64 *dense_arrays_intervals,
+  const u64 dense_arrays_intervals_width,
+  const u64 dense_arrays_intervals_width_set_bits,
   u64 &arrays_start,
   u64 &arrays_end
 ) -> void;
 __device__ auto
-d_dense_get_next_color_present(u64 &array_idx, u64 *dense_arrays) -> bool;
-__device__ auto d_dense_get_minimum(u64 array_idx, u64 *dense_arrays) -> u64;
+d_dense_get_next_color_present(u64 &array_idx, const u64 *dense_arrays) -> bool;
 
 __device__ auto d_sparse_get_arrays_start_end(
-  u64 color_set_idx,
-  u64 *is_dense_marks,
-  u64 *is_dense_marks_poppy_layer_0,
-  u64 *is_dense_marks_poppy_layer_1_2,
-  u64 *sparse_arrays_intervals,
-  u64 sparse_arrays_intervals_width,
-  u64 sparse_arrays_intervals_width_set_bits,
+  const u64 color_set_idx,
+  const u64 *is_dense_marks,
+  const u64 *is_dense_marks_poppy_layer_0,
+  const u64 *is_dense_marks_poppy_layer_1_2,
+  const u64 *sparse_arrays_intervals,
+  const u64 sparse_arrays_intervals_width,
+  const u64 sparse_arrays_intervals_width_set_bits,
   u64 &arrays_start,
   u64 &arrays_end
 ) -> void;
 __device__ auto d_sparse_get_next_color_present(
   const u64 color_idx,
   u64 &array_idx,
-  u64 *sparse_arrays,
-  u64 sparse_arrays_width,
-  u64 sparse_arrays_width_set_bits
+  const u64 *sparse_arrays,
+  const u64 sparse_arrays_width,
+  const u64 sparse_arrays_width_set_bits
 ) -> bool;
-__device__ auto d_sparse_get_minimum(
-  const u64 first_array_index,
-  u64 *sparse_arrays,
-  u64 sparse_arrays_width,
-  u64 sparse_arrays_width_set_bits
-) -> u64;
 
 __global__ auto d_color_search(
-  u64 *sbwt_index_idxs,
-  u64 *key_kmer_marks,
-  u64 *key_kmer_marks_poppy_layer_0,
-  u64 *key_kmer_marks_poppy_layer_1_2,
-  u64 *color_set_idxs,
-  u32 color_set_idxs_width,
-  u64 color_set_idxs_width_set_bits,
-  u64 *is_dense_marks,
-  u64 *is_dense_marks_poppy_layer_0,
-  u64 *is_dense_marks_poppy_layer_1_2,
-  u64 *dense_arrays,
-  u64 *dense_arrays_intervals,
-  u32 dense_arrays_intervals_width,
-  u64 dense_arrays_intervals_width_set_bits,
-  u64 *sparse_arrays,
-  u32 sparse_arrays_width,
-  u64 sparse_arrays_width_set_bits,
-  u64 *sparse_arrays_intervals,
-  u32 sparse_arrays_intervals_width,
-  u64 sparse_arrays_intervals_width_set_bits,
-  u64 num_colors,
-  u64 *results
+  const u64 *sbwt_idxs,
+  const u64 *key_kmer_marks,
+  const u64 *key_kmer_marks_poppy_layer_0,
+  const u64 *key_kmer_marks_poppy_layer_1_2,
+  const u64 *color_set_idxs,
+  const u32 color_set_idxs_width,
+  const u64 color_set_idxs_width_set_bits,
+  const u64 *is_dense_marks,
+  const u64 *is_dense_marks_poppy_layer_0,
+  const u64 *is_dense_marks_poppy_layer_1_2,
+  const u64 *dense_arrays,
+  const u64 *dense_arrays_intervals,
+  const u32 dense_arrays_intervals_width,
+  const u64 dense_arrays_intervals_width_set_bits,
+  const u64 *sparse_arrays,
+  const u32 sparse_arrays_width,
+  const u64 sparse_arrays_width_set_bits,
+  const u64 *sparse_arrays_intervals,
+  const u32 sparse_arrays_intervals_width,
+  const u64 sparse_arrays_intervals_width_set_bits,
+  const u64 num_colors,
+  u8 *results
 ) -> void {
   u64 thread_idx = get_idx();
-  u64 sbwt_index_idx = sbwt_index_idxs[thread_idx];
+  u64 sbwt_idx = sbwt_idxs[thread_idx];
   u64 array_idx = 0;
   bool is_dense = false;
   u64 arrays_start = 0;
   u64 arrays_end = 0;
-  if (sbwt_index_idx == static_cast<u64>(-1)) { return; }
+  if (sbwt_idx == static_cast<u64>(-1)) { return; }
   u64 color_set_idxs_idx = d_rank(
     key_kmer_marks,
     key_kmer_marks_poppy_layer_0,
     key_kmer_marks_poppy_layer_1_2,
-    sbwt_index_idx
+    sbwt_idx
   );
   u64 color_set_idx = d_variable_length_int_index(
     color_set_idxs,
@@ -154,13 +147,13 @@ __global__ auto d_color_search(
     u64 ballot_result = __ballot(color_present);
     if (thread_idx % gpu_warp_size == 0) {
       results[num_colors * thread_idx / gpu_warp_size + color_idx]
-        = __popcll(ballot_result);
+        = static_cast<u8>(__popcll(ballot_result));
     }
 #elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
     int ballot_result = __ballot_sync(full_mask, color_present);
     if (thread_idx % gpu_warp_size == 0) {
       results[num_colors * thread_idx / gpu_warp_size + color_idx]
-        = __popc(ballot_result);
+        = static_cast<u8>(__popc(ballot_result));
     }
 #else
 #error("No runtime defined");
@@ -169,13 +162,13 @@ __global__ auto d_color_search(
 }
 
 __device__ auto d_dense_get_arrays_start_end(
-  u64 color_set_idx,
-  u64 *is_dense_marks,
-  u64 *is_dense_marks_poppy_layer_0,
-  u64 *is_dense_marks_poppy_layer_1_2,
-  u64 *dense_arrays_intervals,
-  u64 dense_arrays_intervals_width,
-  u64 dense_arrays_intervals_width_set_bits,
+  const u64 color_set_idx,
+  const u64 *is_dense_marks,
+  const u64 *is_dense_marks_poppy_layer_0,
+  const u64 *is_dense_marks_poppy_layer_1_2,
+  const u64 *dense_arrays_intervals,
+  const u64 dense_arrays_intervals_width,
+  const u64 dense_arrays_intervals_width_set_bits,
   u64 &arrays_start,
   u64 &arrays_end
 ) -> void {
@@ -200,25 +193,19 @@ __device__ auto d_dense_get_arrays_start_end(
 }
 
 __device__ auto
-d_dense_get_next_color_present(u64 &array_idx, u64 *dense_arrays) -> bool {
+d_dense_get_next_color_present(u64 &array_idx, const u64 *dense_arrays)
+  -> bool {
   return d_get_bool_from_bit_vector(dense_arrays, array_idx++);
 }
 
-__device__ auto d_dense_get_minimum(u64 array_idx, u64 *dense_arrays) -> u64 {
-  u64 color_idx = 0;
-  for (; !d_dense_get_next_color_present(array_idx, dense_arrays);
-       ++color_idx) {}
-  return color_idx;
-}
-
 __device__ auto d_sparse_get_arrays_start_end(
-  u64 color_set_idx,
-  u64 *is_dense_marks,
-  u64 *is_dense_marks_poppy_layer_0,
-  u64 *is_dense_marks_poppy_layer_1_2,
-  u64 *sparse_arrays_intervals,
-  u64 sparse_arrays_intervals_width,
-  u64 sparse_arrays_intervals_width_set_bits,
+  const u64 color_set_idx,
+  const u64 *is_dense_marks,
+  const u64 *is_dense_marks_poppy_layer_0,
+  const u64 *is_dense_marks_poppy_layer_1_2,
+  const u64 *sparse_arrays_intervals,
+  const u64 sparse_arrays_intervals_width,
+  const u64 sparse_arrays_intervals_width_set_bits,
   u64 &arrays_start,
   u64 &arrays_end
 ) -> void {
@@ -244,9 +231,9 @@ __device__ auto d_sparse_get_arrays_start_end(
 __device__ auto d_sparse_get_next_color_present(
   const u64 color_idx,
   u64 &array_idx,
-  u64 *sparse_arrays,
-  u64 sparse_arrays_width,
-  u64 sparse_arrays_width_set_bits
+  const u64 *sparse_arrays,
+  const u64 sparse_arrays_width,
+  const u64 sparse_arrays_width_set_bits
 ) -> bool {
   u64 next_color = d_variable_length_int_index(
     sparse_arrays, sparse_arrays_width, sparse_arrays_width_set_bits, array_idx
@@ -256,20 +243,6 @@ __device__ auto d_sparse_get_next_color_present(
     return true;
   }
   return false;
-}
-
-__device__ auto d_sparse_get_minimum(
-  const u64 first_array_index,
-  u64 *sparse_arrays,
-  u64 sparse_arrays_width,
-  u64 sparse_arrays_width_set_bits
-) -> u64 {
-  return d_variable_length_int_index(
-    sparse_arrays,
-    sparse_arrays_width,
-    sparse_arrays_width_set_bits,
-    first_array_index
-  );
 }
 
 }  // namespace sbwt_search

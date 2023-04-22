@@ -133,18 +133,24 @@ GpuPointer<T>::~GpuPointer() {
 
 // We set these here because we need the class to be instantiated since we are
 // using templates
+template class GpuPointer<char>;
 template class GpuPointer<float>;
 template class GpuPointer<double>;
 template class GpuPointer<uint64_t>;
 template class GpuPointer<int64_t>;
 template class GpuPointer<uint32_t>;
 template class GpuPointer<int32_t>;
+template class GpuPointer<uint16_t>;
+template class GpuPointer<uint8_t>;
 
+template class GpuPointer<char *>;
 template class GpuPointer<float *>;
 template class GpuPointer<double *>;
 template class GpuPointer<uint64_t *>;
 template class GpuPointer<int64_t *>;
 template class GpuPointer<uint32_t *>;
 template class GpuPointer<int32_t *>;
+template class GpuPointer<uint8_t *>;
+template class GpuPointer<uint16_t *>;
 
 }  // namespace gpu_utils

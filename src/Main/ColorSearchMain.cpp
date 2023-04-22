@@ -36,8 +36,7 @@ const u64 interval_batch_producer_max_batches = 2;
 const u64 read_statistics_batch_producer_max_batches = 2;
 const u64 get_warps_before_new_read_batch_producer_max_batches = 2;
 const u64 indexes_batch_producer_max_batches = 2;
-const u64 color_searcher_max_batches = 3;
-const u64 post_processor_max_batches = 2;
+const u64 color_searcher_max_batches = 2;
 
 auto ColorSearchMain::main(int argc, char **argv) -> int {
   const string program_name = "colors";
@@ -60,10 +59,10 @@ auto ColorSearchMain::main(int argc, char **argv) -> int {
     Logger::LOG_LEVEL::INFO,
     format("Running OpenMP with {} threads", get_threads())
   );
-  auto [index_file_parser, searcher, post_processor, results_printer]
+  auto [index_file_parser, searcher, results_printer]
     = get_components(gpu_container, input_filenames, output_filenames);
   Logger::log(Logger::LOG_LEVEL::INFO, "Running queries");
-  run_components(index_file_parser, searcher, post_processor, results_printer);
+  run_components(index_file_parser, searcher, results_printer);
   Logger::log(Logger::LOG_LEVEL::INFO, "Finished");
   Logger::log_timed_event("main", Logger::EVENT_STATE::STOP);
   return 0;
@@ -249,14 +248,10 @@ auto ColorSearchMain::get_components(
   -> std::tuple<
     vector<shared_ptr<ContinuousIndexFileParser>>,
     vector<shared_ptr<ContinuousColorSearcher>>,
-    vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
     vector<shared_ptr<ColorResultsPrinter>>> {
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::START);
   vector<shared_ptr<ContinuousIndexFileParser>> index_file_parsers(streams);
   vector<shared_ptr<ContinuousColorSearcher>> searchers(streams);
-  vector<shared_ptr<ContinuousColorResultsPostProcessor>> post_processors(
-    streams
-  );
   vector<shared_ptr<ColorResultsPrinter>> results_printers(streams);
   for (u64 i = 0; i < streams; ++i) {
     index_file_parsers[i] = make_shared<ContinuousIndexFileParser>(
@@ -274,33 +269,28 @@ auto ColorSearchMain::get_components(
       i,
       gpu_container,
       index_file_parsers[i]->get_indexes_batch_producer(),
+      index_file_parsers[i]->get_warps_before_new_read_batch_producer(),
       max_indexes_per_batch,
       color_searcher_max_batches,
-      gpu_container->num_colors
-    );
-    post_processors[i] = make_shared<ContinuousColorResultsPostProcessor>(
-      i,
-      searchers[i],
-      index_file_parsers[i]->get_warps_before_new_read_batch_producer(),
-      post_processor_max_batches,
       gpu_container->num_colors
     );
     results_printers[i] = get_results_printer(
       i,
       index_file_parsers[i],
-      post_processors[i],
+      searchers[i],
       split_output_filenames[i],
       num_colors
     );
   }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
-  return {index_file_parsers, searchers, post_processors, results_printers};
+  return {index_file_parsers, searchers, results_printers};
 }
 
 auto ColorSearchMain::get_results_printer(
   u64 stream_id,
   shared_ptr<ContinuousIndexFileParser> &index_file_parser,
-  shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
+  shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
+    results_batch_producer,
   const vector<string> &filenames,
   u64 num_colors
 ) -> shared_ptr<ColorResultsPrinter> {
@@ -309,7 +299,7 @@ auto ColorSearchMain::get_results_printer(
       stream_id,
       index_file_parser->get_colors_interval_batch_producer(),
       index_file_parser->get_read_statistics_batch_producer(),
-      std::move(post_processor),
+      std::move(results_batch_producer),
       filenames,
       num_colors,
       get_args().get_threshold(),
@@ -325,7 +315,7 @@ auto ColorSearchMain::get_results_printer(
       stream_id,
       index_file_parser->get_colors_interval_batch_producer(),
       index_file_parser->get_read_statistics_batch_producer(),
-      std::move(post_processor),
+      std::move(results_batch_producer),
       filenames,
       num_colors,
       get_args().get_threshold(),
@@ -341,7 +331,7 @@ auto ColorSearchMain::get_results_printer(
       stream_id,
       index_file_parser->get_colors_interval_batch_producer(),
       index_file_parser->get_read_statistics_batch_producer(),
-      std::move(post_processor),
+      std::move(results_batch_producer),
       filenames,
       num_colors,
       get_args().get_threshold(),
@@ -358,7 +348,6 @@ auto ColorSearchMain::get_results_printer(
 auto ColorSearchMain::run_components(
   vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
   vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
-  vector<shared_ptr<ContinuousColorResultsPostProcessor>> &post_processors,
   vector<shared_ptr<ColorResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
@@ -371,9 +360,6 @@ auto ColorSearchMain::run_components(
 #pragma omp section
 #pragma omp parallel for num_threads(streams)
     for (auto &element : color_searchers) { element->read_and_generate(); }
-#pragma omp section
-#pragma omp parallel for num_threads(streams)
-    for (auto &element : post_processors) { element->read_and_generate(); }
 #pragma omp section
 #pragma omp parallel for num_threads(streams)
     for (auto &element : results_printers) {

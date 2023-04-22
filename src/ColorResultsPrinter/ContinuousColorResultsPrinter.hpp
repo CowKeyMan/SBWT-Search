@@ -235,7 +235,6 @@ protected:
              wbnr_idx < std::min(wbnrs.size(), rbnf);
              ++wbnr_idx) {
           const u64 read_idx = wbnr_idx;
-          const u64 wbnr = (wbnr_idx == 0) ? 0 : wbnrs[wbnr_idx - 1];
           if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
             previous_last_found_idx = found_idxs[read_idx];
             previous_last_not_found_idxs = not_found_idxs[read_idx];
@@ -243,16 +242,16 @@ protected:
             previous_last_results.insert(
               previous_last_results.begin(),
               std::make_move_iterator(
-                copy_advance(results.begin(), wbnr * num_colors)
+                copy_advance(results.begin(), read_idx * num_colors)
               ),
               std::make_move_iterator(
-                copy_advance(results.begin(), (wbnr + 1) * num_colors)
+                copy_advance(results.begin(), (read_idx + 1) * num_colors)
               )
             );
             printed_last_read = false;
           } else {
             impl().do_print_read(
-              copy_advance(results.begin(), wbnr * num_colors),
+              copy_advance(results.begin(), read_idx * num_colors),
               found_idxs[read_idx],
               not_found_idxs[read_idx],
               invalid_idxs[read_idx],

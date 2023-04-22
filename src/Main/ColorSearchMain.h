@@ -13,7 +13,6 @@
 
 #include "ArgumentParser/ColorSearchArgumentParser.h"
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
-#include "ColorResultsPostProcessor/ContinuousColorResultsPostProcessor.h"
 #include "ColorResultsPrinter/AsciiContinuousColorResultsPrinter.h"
 #include "ColorResultsPrinter/BinaryContinuousColorResultsPrinter.h"
 #include "ColorResultsPrinter/CsvContinuousColorResultsPrinter.h"
@@ -62,19 +61,18 @@ private:
     -> std::tuple<
       vector<shared_ptr<ContinuousIndexFileParser>>,
       vector<shared_ptr<ContinuousColorSearcher>>,
-      vector<shared_ptr<ContinuousColorResultsPostProcessor>>,
       vector<shared_ptr<ColorResultsPrinter>>>;
   auto get_results_printer(
     u64 stream_id,
     shared_ptr<ContinuousIndexFileParser> &index_file_parser,
-    shared_ptr<ContinuousColorResultsPostProcessor> post_processor,
+    shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
+      results_batch_producer,
     const vector<string> &filenames,
     u64 num_colors
   ) -> shared_ptr<ColorResultsPrinter>;
   auto run_components(
     vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
     vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
-    vector<shared_ptr<ContinuousColorResultsPostProcessor>> &post_processors,
     vector<shared_ptr<ColorResultsPrinter>> &results_processors
   ) -> void;
 };

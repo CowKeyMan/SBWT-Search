@@ -3,7 +3,12 @@
 
 /**
  * @file BoolContinuousIndexResultsPrinter.h
- * @brief Inherits ContinuousIndexResultsPrinter and prints out values in ASCII format. If a result is found, we print out a 0, if it is not found, we print out a 1 and if it is invalid, we print 2. Different sequences are split with a newline character. This output format is not suitable for pseudoalignment since we lose the index value but it is the fastest and has the least memory footprint.
+ * @brief Inherits ContinuousIndexResultsPrinter and prints out values in ASCII
+ * format. If a result is found, we print out a 0, if it is not found, we print
+ * out a 1 and if it is invalid, we print 2. Different sequences are split with
+ * a newline character. This output format is not suitable for pseudoalignment
+ * since we lose the index value but it is the fastest and has the least memory
+ * footprint.
  */
 
 #include "IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp"

@@ -20,38 +20,43 @@ ColorSearcher::ColorSearcher(
 ):
     container(std::move(container_)),
     d_sbwt_index_idxs(max_indexes_per_batch),
+    d_fat_results(
+      max_indexes_per_batch / gpu_warp_size * container->num_colors
+    ),
     d_results(max_indexes_per_batch / gpu_warp_size * container->num_colors),
     stream_id(stream_id_) {}
 
 auto ColorSearcher::search(
-  const vector<u64> &sbwt_index_idxs, vector<u64> &results, u64 batch_id
+  const vector<u64> &sbwt_index_idxs,
+  const vector<u64> &warps_before_new_read,
+  vector<u64> &results,
+  u64 batch_id
 ) -> void {
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format("Batch {} consists of {} queries", batch_id, sbwt_index_idxs.size())
   );
-  copy_to_gpu(batch_id, sbwt_index_idxs, results);
   if (!sbwt_index_idxs.empty()) {
-    Logger::log_timed_event(
-      format("SearcherSearch_{}", stream_id),
-      Logger::EVENT_STATE::START,
-      format("batch {}", batch_id)
-    );
+    searcher_copy_to_gpu(batch_id, sbwt_index_idxs, results);
+    u64 results_size = warps_before_new_read.size() * container->num_colors;
+    results.resize(results_size);
     launch_search_kernel(sbwt_index_idxs.size(), batch_id);
-    Logger::log_timed_event(
-      format("SearcherSearch_{}", stream_id),
-      Logger::EVENT_STATE::STOP,
-      format("batch {}", batch_id)
+    combine_copy_to_gpu(batch_id, warps_before_new_read);
+    launch_combine_kernel(
+      sbwt_index_idxs.size() / gpu_warp_size,
+      warps_before_new_read.size(),
+      container->num_colors,
+      batch_id
     );
     copy_from_gpu(results, batch_id);
   }
 }
 
-auto ColorSearcher::copy_to_gpu(
+auto ColorSearcher::searcher_copy_to_gpu(
   u64 batch_id, const vector<u64> &sbwt_index_idxs, vector<u64> &results
 ) -> void {
   Logger::log_timed_event(
-    format("SearcherCopyToGpu_{}", stream_id),
+    format("SearcherCopyToGpu1_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
@@ -64,12 +69,28 @@ auto ColorSearcher::copy_to_gpu(
     numeric_limits<u8>::max()
   );
   Logger::log_timed_event(
-    format("SearcherCopyToGpu_{}", stream_id),
+    format("SearcherCopyToGpu1_{}", stream_id),
     Logger::EVENT_STATE::STOP,
     format("batch {}", batch_id)
   );
-  results.resize(
-    sbwt_index_idxs.size() / gpu_warp_size * container->num_colors
+}
+
+auto ColorSearcher::combine_copy_to_gpu(
+  u64 batch_id, const vector<u64> &warps_before_new_read
+) -> void {
+  Logger::log_timed_event(
+    format("SearcherCopyToGpu2_{}", stream_id),
+    Logger::EVENT_STATE::START,
+    format("batch {}", batch_id)
+  );
+  auto &d_warps_before_new_read = d_sbwt_index_idxs;
+  d_warps_before_new_read.set(
+    warps_before_new_read.data(), warps_before_new_read.size()
+  );
+  Logger::log_timed_event(
+    format("SearcherCopyToGpu2_{}", stream_id),
+    Logger::EVENT_STATE::STOP,
+    format("batch {}", batch_id)
   );
 }
 

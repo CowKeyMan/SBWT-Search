@@ -1,3 +1,4 @@
+#include "ColorSearcher/ColorPostProcessor.cuh"
 #include "ColorSearcher/ColorSearcher.cuh"
 #include "ColorSearcher/ColorSearcher.h"
 #include "Tools/BitDefinitions.h"
@@ -12,12 +13,16 @@ namespace sbwt_search {
 using bit_utils::set_bits;
 using fmt::format;
 using log_utils::Logger;
-using math_utils::round_up;
+using math_utils::divide_and_ceil;
 
 auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   -> void {
-  u32 blocks_per_grid
-    = round_up<u64>(num_queries, threads_per_block) / threads_per_block;
+  Logger::log_timed_event(
+    format("SearcherSearch_{}", stream_id),
+    Logger::EVENT_STATE::START,
+    format("batch {}", batch_id)
+  );
+  u64 blocks_per_grid = divide_and_ceil<u64>(num_queries, threads_per_block);
   start_timer.record(&gpu_stream);
   hipLaunchKernelGGL(
     d_color_search,
@@ -46,7 +51,7 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
     container->sparse_arrays_intervals_width,
     set_bits.at(container->sparse_arrays_intervals_width),
     container->num_colors,
-    d_results.get()
+    d_fat_results.get()
   );
   end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());
@@ -56,6 +61,42 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format("Batch {} took {} ms to search in the GPU", batch_id, millis)
+  );
+  Logger::log_timed_event(
+    format("SearcherSearch_{}", stream_id),
+    Logger::EVENT_STATE::STOP,
+    format("batch {}", batch_id)
+  );
+}
+
+auto ColorSearcher::launch_combine_kernel(
+  u64 num_warps, u64 num_reads, u64 num_colors, u64 batch_id
+) -> void {
+  Logger::log_timed_event(
+    format("SearcherPostProcess_{}", stream_id),
+    Logger::EVENT_STATE::START,
+    format("batch {}", batch_id)
+  );
+  u64 blocks_per_grid
+    = divide_and_ceil<u64>(num_reads * num_colors, threads_per_block);
+  auto &d_warps_before_new_read = d_sbwt_index_idxs;
+  hipLaunchKernelGGL(
+    d_post_process,
+    blocks_per_grid,
+    threads_per_block,
+    0,
+    *static_cast<hipStream_t *>(gpu_stream.get()),
+    d_fat_results.get(),
+    d_warps_before_new_read.get(),
+    num_warps,
+    num_reads,
+    num_colors,
+    d_results.get()
+  );
+  Logger::log_timed_event(
+    format("SearcherPostProcess_{}", stream_id),
+    Logger::EVENT_STATE::STOP,
+    format("batch {}", batch_id)
   );
 }
 

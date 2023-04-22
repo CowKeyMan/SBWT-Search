@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "BatchObjects/ColorSearchResultsBatch.h"
+#include "BatchObjects/WarpsBeforeNewReadBatch.h"
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
 #include "ColorSearcher/ColorSearcher.h"
 #include "IndexFileParser/IndexesBatchProducer.h"
@@ -25,7 +26,10 @@ class ContinuousColorSearcher:
     public SharedBatchesProducer<ColorSearchResultsBatch> {
 private:
   shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer;
+  shared_ptr<SharedBatchesProducer<WarpsBeforeNewReadBatch>>
+    warps_before_new_read_batch_producer;
   shared_ptr<IndexesBatch> indexes_batch;
+  shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch;
   ColorSearcher searcher;
   u64 max_indexes_per_batch;
   u64 num_colors;
@@ -36,6 +40,8 @@ public:
     u64 stream_id_,
     shared_ptr<GpuColorIndexContainer> color_index_container_,
     shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer_,
+    shared_ptr<SharedBatchesProducer<WarpsBeforeNewReadBatch>>
+      warps_before_new_read_batch_producer_,
     u64 max_indexes_per_batch_,
     u64 max_batches,
     u64 num_colors_
