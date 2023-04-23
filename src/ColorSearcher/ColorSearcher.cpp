@@ -21,9 +21,11 @@ ColorSearcher::ColorSearcher(
     container(std::move(container_)),
     d_sbwt_index_idxs(max_indexes_per_batch),
     d_fat_results(
-      max_indexes_per_batch / gpu_warp_size * container->num_colors
+      max_indexes_per_batch / gpu_warp_size * container->num_colors, gpu_stream
     ),
-    d_results(max_indexes_per_batch / gpu_warp_size * container->num_colors),
+    d_results(
+      max_indexes_per_batch / gpu_warp_size * container->num_colors, gpu_stream
+    ),
     stream_id(stream_id_) {}
 
 auto ColorSearcher::search(

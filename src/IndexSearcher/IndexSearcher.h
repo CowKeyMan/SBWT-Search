@@ -20,11 +20,11 @@ using std::shared_ptr;
 
 class IndexSearcher {
 private:
+  GpuStream gpu_stream{};
   shared_ptr<GpuSbwtContainer> container;
   GpuPointer<u64> d_bit_seqs;
   GpuPointer<u64> d_kmer_positions;
   GpuEvent start_timer{}, end_timer{};
-  GpuStream gpu_stream;
   u64 stream_id;
   bool move_to_key_kmer;
 

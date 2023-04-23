@@ -28,6 +28,10 @@ public:
   explicit GpuPointer(const vector<T> &v);
   GpuPointer(const T *cpu_ptr, u64 size);
 
+  GpuPointer(u64 size, GpuStream &gpu_stream);
+  GpuPointer(const vector<T> &v, GpuStream &gpu_stream);
+  GpuPointer(const T *cpu_ptr, u64 size, GpuStream &gpu_stream);
+
   GpuPointer(GpuPointer &) = delete;
   GpuPointer(GpuPointer &&) = delete;
   auto operator=(GpuPointer &) = delete;

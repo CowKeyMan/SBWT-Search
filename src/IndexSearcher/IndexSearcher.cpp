@@ -18,8 +18,8 @@ IndexSearcher::IndexSearcher(
   bool move_to_key_kmer_
 ):
     container(std::move(container)),
-    d_bit_seqs(max_chars_per_batch / u64_bits * 2),
-    d_kmer_positions(max_chars_per_batch),
+    d_bit_seqs(max_chars_per_batch / u64_bits * 2, gpu_stream),
+    d_kmer_positions(max_chars_per_batch, gpu_stream),
     stream_id(stream_id_),
     move_to_key_kmer(move_to_key_kmer_) {}
 
@@ -64,7 +64,9 @@ auto IndexSearcher::copy_to_gpu(
   d_bit_seqs.set_async(bit_seqs, bit_seqs.size(), gpu_stream);
   auto padded_query_size
     = round_up<u64>(kmer_positions.size(), superblock_bits);
-  d_kmer_positions.set(kmer_positions.data(), kmer_positions.size());
+  d_kmer_positions.set_async(
+    kmer_positions.data(), kmer_positions.size(), gpu_stream
+  );
   d_kmer_positions.memset_async(
     kmer_positions.size(),
     padded_query_size - kmer_positions.size(),

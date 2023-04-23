@@ -23,6 +23,28 @@ GpuPointer<T>::GpuPointer(const vector<T> &v):
     GpuPointer<T>(v.data(), v.size()) {}
 
 template <class T>
+GpuPointer<T>::GpuPointer(u64 size, GpuStream &gpu_stream):
+    bytes(size * sizeof(T)) {
+  GPU_CHECK(hipMallocAsync(
+    (void **)(&ptr), bytes, *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+  ));
+}
+template <class T>
+GpuPointer<T>::GpuPointer(const T *cpu_ptr, u64 size, GpuStream &gpu_stream):
+    GpuPointer(size) {
+  GPU_CHECK(hipMemcpyAsync(
+    ptr,
+    cpu_ptr,
+    bytes,
+    hipMemcpyHostToDevice,
+    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+  ));
+}
+template <class T>
+GpuPointer<T>::GpuPointer(const vector<T> &v, GpuStream &gpu_stream):
+    GpuPointer<T>(v.data(), v.size(), gpu_stream) {}
+
+template <class T>
 auto GpuPointer<T>::get() const -> T * {
   return ptr;
 }

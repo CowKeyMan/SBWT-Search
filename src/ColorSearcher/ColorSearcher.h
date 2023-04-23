@@ -20,12 +20,12 @@ using std::shared_ptr;
 
 class ColorSearcher {
 private:
+  GpuStream gpu_stream{};
   shared_ptr<GpuColorIndexContainer> container;
   GpuPointer<u64> d_sbwt_index_idxs;
   GpuPointer<u8> d_fat_results;
   GpuPointer<u64> d_results;
   GpuEvent start_timer{}, end_timer{};
-  GpuStream gpu_stream{};
   u64 stream_id;
 
 public:
