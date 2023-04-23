@@ -178,14 +178,10 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
       / static_cast<double>(gpu_warp_size)
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
     // bits per element
-    + static_cast<double>(
-      ContinuousColorSearcher::get_bits_per_element_gpu()
-      * color_searcher_max_batches
-    )
+    + static_cast<double>(ContinuousColorSearcher::get_bits_per_element_gpu())
     // bits per warp
     + static_cast<double>(
         ContinuousColorSearcher::get_bits_per_warp_cpu(num_colors)
-        * color_searcher_max_batches
       )
       / static_cast<double>(gpu_warp_size)
 #endif

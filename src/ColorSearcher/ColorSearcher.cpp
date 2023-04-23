@@ -40,8 +40,7 @@ auto ColorSearcher::search(
   );
   if (!sbwt_index_idxs.empty()) {
     searcher_copy_to_gpu(batch_id, sbwt_index_idxs);
-    u64 results_size = warps_before_new_read.size() * container->num_colors;
-    results.resize(results_size);
+    results.resize(warps_before_new_read.size() * container->num_colors);
     launch_search_kernel(sbwt_index_idxs.size(), batch_id);
     combine_copy_to_gpu(batch_id, warps_before_new_read);
     launch_combine_kernel(

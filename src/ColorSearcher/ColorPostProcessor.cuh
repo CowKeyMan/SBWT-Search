@@ -39,11 +39,12 @@ __global__ auto d_post_process(
   if (warps_before_new_read[stop_warp_idx] == ULLONG_MAX) {
     fat_results_stop_idx = num_warps * num_colors + color_idx;
   }
-  results[tidx] = fat_results[fat_results_start_idx];
+  u64 total = fat_results[fat_results_start_idx];
   for (u64 i = fat_results_start_idx + num_colors; i < fat_results_stop_idx;
        i += num_colors) {
-    results[tidx] += fat_results[i];
+    total += fat_results[i];
   }
+  results[tidx] = total;
 }
 
 }  // namespace sbwt_search
