@@ -30,12 +30,10 @@ __global__ auto d_post_process(
   u64 color_idx = tidx % num_colors;
   u64 start_warp_idx = tidx / num_colors - 1;
   u64 stop_warp_idx = tidx / num_colors;
+  if (tidx / num_colors == 0) { start_warp_idx = 0; }
   u64 fat_results_start_idx
     = warps_before_new_read[start_warp_idx] * num_colors + color_idx;
-  if (tidx / num_colors == 0) {
-    start_warp_idx = 0;
-    fat_results_start_idx = color_idx;
-  }
+  if (tidx / num_colors == 0) { fat_results_start_idx = color_idx; }
   u64 fat_results_stop_idx
     = warps_before_new_read[stop_warp_idx] * num_colors + color_idx;
   if (warps_before_new_read[stop_warp_idx] == ULLONG_MAX) {

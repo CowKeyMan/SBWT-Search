@@ -60,7 +60,12 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   float millis = start_timer.time_elapsed_ms(end_timer);
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
-    format("Batch {} took {} ms to search in the GPU", batch_id, millis)
+    format(
+      "Batch {} from stream {} took {} ms to search in the GPU",
+      batch_id,
+      stream_id,
+      millis
+    )
   );
   Logger::log_timed_event(
     format("SearcherSearch_{}", stream_id),
@@ -80,6 +85,7 @@ auto ColorSearcher::launch_combine_kernel(
   u64 blocks_per_grid
     = divide_and_ceil<u64>(num_reads * num_colors, threads_per_block);
   auto &d_warps_before_new_read = d_sbwt_index_idxs;
+  start_timer.record(&gpu_stream);
   hipLaunchKernelGGL(
     d_post_process,
     blocks_per_grid,
@@ -92,6 +98,20 @@ auto ColorSearcher::launch_combine_kernel(
     num_reads,
     num_colors,
     d_results.get()
+  );
+  end_timer.record(&gpu_stream);
+  GPU_CHECK(hipPeekAtLastError());
+  GPU_CHECK(hipStreamSynchronize(*static_cast<hipStream_t *>(gpu_stream.get()))
+  );
+  float millis = start_timer.time_elapsed_ms(end_timer);
+  Logger::log(
+    Logger::LOG_LEVEL::DEBUG,
+    format(
+      "Batch {} from stream {} took {} ms to post_process in the GPU",
+      batch_id,
+      stream_id,
+      millis
+    )
   );
   Logger::log_timed_event(
     format("SearcherPostProcess_{}", stream_id),
