@@ -122,6 +122,10 @@ sed -i "s/d1/d20/g" benchmark_objects/list_files/input/index_search_results_d20_
 files=(`cd benchmark_objects/unzipped_seqs && ls`)
 printf "" > benchmark_objects/list_files/output/color_search_results_running.list
 printf "" > benchmark_objects/list_files/output/index_search_results_running.list
+printf "" > benchmark_objects/list_files/output/index_search_results_d1_ascii.list
+printf "" > benchmark_objects/list_files/output/index_search_results_d20_ascii.list
+printf "" > benchmark_objects/list_files/output/index_search_results_d1_binary.list
+printf "" > benchmark_objects/list_files/output/index_search_results_d20_binary.list
 for file in "${files[@]}"; do
   echo benchmark_objects/running/${file%.*}.indexes >> benchmark_objects/list_files/output/index_search_results_running.list
   echo benchmark_objects/running/${file%.*}.colors >> benchmark_objects/list_files/output/color_search_results_running.list

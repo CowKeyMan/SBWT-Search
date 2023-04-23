@@ -42,14 +42,15 @@ function run_tests() {
     for extension in ${colors_extensions[@]}
     do
       expected="test_objects/full_pipeline/color_search/expected/${file%.*}.colors.txt"
-      actual="tmp/d20_pipeline_test/actual/${file%.*}.colors.txt"
+      actual="tmp/d20_pipeline_test/actual/${file%.*}.colors${extension}"
       python3 scripts/test/verify_color_results_equal.py \
         -x ${expected} \
         -y ${actual} \
         --quiet
       last_exit=$?
       if [ ${last_exit} -ne 0 ]; then
-        echo ${file} and ${actual} do not match
+        echo ${expected} and ${actual} do not match
+        cat ${actual}
         echo ""
       fi
       ((bad_exits+=${last_exit}))

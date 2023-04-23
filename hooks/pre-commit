@@ -8,17 +8,17 @@ bad_exits=0
 
 # Easily add more commands here
 hook_commands=(
-  "./hooks/ascii_and_whitespace.sh"
-  "./scripts/static_analysers/clang_format.py"
-  "./scripts/static_analysers/headers.py"
-  "./scripts/standalone/generate_file_documentation.py --no-print"
+  "bash hooks/ascii_and_whitespace.sh"
+  "python3 scripts/static_analysers/clang_format.py"
+  "python3 scripts/static_analysers/headers.py"
+  "python3 scripts/standalone/generate_file_documentation.py --no-print"
   "flake8"
   "pylint ."
   # "./scripts/test/index_pipeline_test.sh cpu"
-  "./scripts/test/index_pipeline_test.sh nvidia"
+  "bash scripts/test/index_pipeline_test.sh nvidia"
   # "./scripts/test/color_pipeline_test.sh cpu"
-  "./scripts/test/color_pipeline_test.sh nvidia"
-  "./scripts/test/d20_pipeline_test.sh nvidia"
+  "bash scripts/test/color_pipeline_test.sh nvidia"
+  "bash scripts/test/d20_pipeline_test.sh nvidia"
   # "python scripts/static_analysers/clang_tidy.py"
 )
 
