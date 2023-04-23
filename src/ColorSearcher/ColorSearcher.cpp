@@ -37,7 +37,7 @@ auto ColorSearcher::search(
     format("Batch {} consists of {} queries", batch_id, sbwt_index_idxs.size())
   );
   if (!sbwt_index_idxs.empty()) {
-    searcher_copy_to_gpu(batch_id, sbwt_index_idxs, results);
+    searcher_copy_to_gpu(batch_id, sbwt_index_idxs);
     u64 results_size = warps_before_new_read.size() * container->num_colors;
     results.resize(results_size);
     launch_search_kernel(sbwt_index_idxs.size(), batch_id);
@@ -53,7 +53,7 @@ auto ColorSearcher::search(
 }
 
 auto ColorSearcher::searcher_copy_to_gpu(
-  u64 batch_id, const vector<u64> &sbwt_index_idxs, vector<u64> &results
+  u64 batch_id, const vector<u64> &sbwt_index_idxs
 ) -> void {
   Logger::log_timed_event(
     format("SearcherCopyToGpu1_{}", stream_id),
@@ -62,11 +62,14 @@ auto ColorSearcher::searcher_copy_to_gpu(
   );
   auto padded_query_size
     = round_up<u64>(sbwt_index_idxs.size(), superblock_bits);
-  d_sbwt_index_idxs.set(sbwt_index_idxs, sbwt_index_idxs.size());
-  d_sbwt_index_idxs.memset(
+  d_sbwt_index_idxs.set_async(
+    sbwt_index_idxs, sbwt_index_idxs.size(), gpu_stream
+  );
+  d_sbwt_index_idxs.memset_async(
     sbwt_index_idxs.size(),
     padded_query_size - sbwt_index_idxs.size(),
-    numeric_limits<u8>::max()
+    numeric_limits<u8>::max(),
+    gpu_stream
   );
   Logger::log_timed_event(
     format("SearcherCopyToGpu1_{}", stream_id),
@@ -84,8 +87,8 @@ auto ColorSearcher::combine_copy_to_gpu(
     format("batch {}", batch_id)
   );
   auto &d_warps_before_new_read = d_sbwt_index_idxs;
-  d_warps_before_new_read.set(
-    warps_before_new_read.data(), warps_before_new_read.size()
+  d_warps_before_new_read.set_async(
+    warps_before_new_read.data(), warps_before_new_read.size(), gpu_stream
   );
   Logger::log_timed_event(
     format("SearcherCopyToGpu2_{}", stream_id),
@@ -100,7 +103,7 @@ auto ColorSearcher::copy_from_gpu(vector<u64> &results, u64 batch_id) -> void {
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  d_results.copy_to(results, results.size());
+  d_results.copy_to_async(results, results.size(), gpu_stream);
   Logger::log_timed_event(
     format("SearcherCopyFromGpu_{}", stream_id),
     Logger::EVENT_STATE::STOP,

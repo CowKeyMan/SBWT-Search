@@ -43,9 +43,8 @@ public:
   ) -> void;
 
 private:
-  auto searcher_copy_to_gpu(
-    u64 batch_id, const vector<u64> &sbwt_index_ids, vector<u64> &results
-  ) -> void;
+  auto searcher_copy_to_gpu(u64 batch_id, const vector<u64> &sbwt_index_ids)
+    -> void;
   auto launch_search_kernel(u64 num_queries, u64 batch_id) -> void;
 
   auto

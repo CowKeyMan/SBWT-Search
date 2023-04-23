@@ -65,8 +65,11 @@ auto IndexSearcher::copy_to_gpu(
   auto padded_query_size
     = round_up<u64>(kmer_positions.size(), superblock_bits);
   d_kmer_positions.set(kmer_positions.data(), kmer_positions.size());
-  d_kmer_positions.memset(
-    kmer_positions.size(), padded_query_size - kmer_positions.size(), 0
+  d_kmer_positions.memset_async(
+    kmer_positions.size(),
+    padded_query_size - kmer_positions.size(),
+    0,
+    gpu_stream
   );
   Logger::log_timed_event(
     format("SearcherCopyToGpu_{}", stream_id),

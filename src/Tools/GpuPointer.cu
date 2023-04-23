@@ -34,6 +34,19 @@ auto GpuPointer<T>::memset(u64 index, u64 amount, uint8_t value) -> void {
 }
 
 template <class T>
+auto GpuPointer<T>::memset_async(
+  u64 index, u64 amount, uint8_t value, GpuStream &gpu_stream
+) -> void {
+  // NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
+  GPU_CHECK(hipMemsetAsync(
+    ptr + index,
+    value,
+    amount * sizeof(T),
+    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+  ));
+}
+
+template <class T>
 auto GpuPointer<T>::set(const T *source, u64 amount, u64 destination_index)
   -> void {
   GPU_CHECK(hipMemcpy(

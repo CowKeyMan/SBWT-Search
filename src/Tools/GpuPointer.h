@@ -34,6 +34,8 @@ public:
   auto operator=(GpuPointer &&) = delete;
 
   auto memset(u64 index, u64 amount, uint8_t value) -> void;
+  auto memset_async(u64 index, u64 amount, uint8_t value, GpuStream &gpu_stream)
+    -> void;
 
   auto get() const -> T *;
 
