@@ -9,7 +9,6 @@
 
 #include <memory>
 
-#include "IndexFileParser/ColorsIntervalBatchProducer.h"
 #include "IndexFileParser/IndexFileParser.h"
 #include "IndexFileParser/IndexesBatchProducer.h"
 #include "IndexFileParser/SeqStatisticsBatchProducer.h"
