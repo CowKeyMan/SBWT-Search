@@ -36,7 +36,7 @@ private:
   u64 num_colors = 0;
   u64 streams = 0;
   u64 max_indexes_per_batch = 0;
-  u64 max_reads_per_batch = 0;
+  u64 max_seqs_per_batch = 0;
   u64 results_printer_max_reads_in_buffer = 0;
   unique_ptr<ColorSearchArgumentParser> args;
 
@@ -65,15 +65,14 @@ private:
   auto get_results_printer(
     u64 stream_id,
     shared_ptr<ContinuousIndexFileParser> &index_file_parser,
-    shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
-      results_batch_producer,
+    shared_ptr<SharedBatchesProducer<ColorsBatch>> colors_batch_producer,
     const vector<string> &filenames,
     u64 num_colors
   ) -> shared_ptr<ColorResultsPrinter>;
   auto run_components(
     vector<shared_ptr<ContinuousIndexFileParser>> &index_file_parsers,
     vector<shared_ptr<ContinuousColorSearcher>> &color_searchers,
-    vector<shared_ptr<ColorResultsPrinter>> &results_processors
+    vector<shared_ptr<ColorResultsPrinter>> &results_printers
   ) -> void;
 };
 

@@ -234,13 +234,13 @@ add_library(
   "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
 )
 target_link_libraries(color_searcher PRIVATE fmt::fmt color_searcher_cpu color_searcher_gpu libsdsl)
-# add_library(
-#   color_results_printer
-#   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/AsciiContinuousColorResultsPrinter.cpp"
-#   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/BinaryContinuousColorResultsPrinter.cpp"
-#   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/CsvContinuousColorResultsPrinter.cpp"
-# )
-# target_link_libraries(color_results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX libjeaiii_itoa)
+add_library(
+  color_results_printer
+  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/AsciiContinuousColorResultsPrinter.cpp"
+  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/BinaryContinuousColorResultsPrinter.cpp"
+  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/CsvContinuousColorResultsPrinter.cpp"
+)
+target_link_libraries(color_results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX libjeaiii_itoa)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -288,7 +288,7 @@ target_link_libraries(
   color_index_container
   index_file_parser
   color_searcher
-  # color_results_printer
+  color_results_printer
 )
 
 # Link gpu items

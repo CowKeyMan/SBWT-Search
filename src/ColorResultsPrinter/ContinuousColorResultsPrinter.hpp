@@ -15,9 +15,8 @@
 #include <memory>
 #include <ostream>
 
-#include "BatchObjects/ColorSearchResultsBatch.h"
-#include "BatchObjects/ColorsIntervalBatch.h"
-#include "BatchObjects/ReadStatisticsBatch.h"
+#include "BatchObjects/ColorsBatch.h"
+#include "BatchObjects/SeqStatisticsBatch.h"
 #include "Tools/IOUtils.h"
 #include "Tools/Logger.h"
 #include "Tools/MathUtils.hpp"
@@ -48,15 +47,11 @@ private:
   auto impl() -> TImplementation & {
     return static_cast<TImplementation &>(*this);
   }
-  shared_ptr<SharedBatchesProducer<ColorsIntervalBatch>>
-    interval_batch_producer;
-  shared_ptr<SharedBatchesProducer<ReadStatisticsBatch>>
-    read_statistics_batch_producer;
-  shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
-    results_batch_producer;
-  shared_ptr<ColorsIntervalBatch> interval_batch;
-  shared_ptr<ReadStatisticsBatch> read_statistics_batch;
-  shared_ptr<ColorSearchResultsBatch> results_batch;
+  shared_ptr<SharedBatchesProducer<SeqStatisticsBatch>>
+    seq_statistics_batch_producer;
+  shared_ptr<SharedBatchesProducer<ColorsBatch>> colors_batch_producer;
+  shared_ptr<SeqStatisticsBatch> seq_statistics_batch;
+  shared_ptr<ColorsBatch> colors_batch;
   vector<string> filenames;
   vector<string>::iterator current_filename;
   u64 num_colors;
@@ -65,7 +60,6 @@ private:
   u64 previous_last_found_idx = numeric_limits<u64>::max();
   u64 previous_last_not_found_idxs = numeric_limits<u64>::max();
   u64 previous_last_invalid_idxs = numeric_limits<u64>::max();
-  bool printed_last_read = false;
   u64 include_not_found;
   u64 include_invalid;
   vector<vector<Buffer_t>> buffers;
@@ -78,12 +72,9 @@ private:
 public:
   ContinuousColorResultsPrinter(
     u64 stream_id_,
-    shared_ptr<SharedBatchesProducer<ColorsIntervalBatch>>
-      interval_batch_producer_,
-    shared_ptr<SharedBatchesProducer<ReadStatisticsBatch>>
-      read_statistics_batch_producer_,
-    shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
-      results_batch_producer_,
+    shared_ptr<SharedBatchesProducer<SeqStatisticsBatch>>
+      seq_statistics_batch_producer_,
+    shared_ptr<SharedBatchesProducer<ColorsBatch>> colors_batch_producer_,
     const vector<string> &filenames_,
     u64 num_colors_,
     double threshold_,
@@ -94,10 +85,8 @@ public:
     u64 max_reads_per_batch,
     bool write_headers_
   ):
-      interval_batch_producer(std::move(interval_batch_producer_)),
-      read_statistics_batch_producer(std::move(read_statistics_batch_producer_)
-      ),
-      results_batch_producer(std::move(results_batch_producer_)),
+      seq_statistics_batch_producer(std::move(seq_statistics_batch_producer_)),
+      colors_batch_producer(std::move(colors_batch_producer_)),
       filenames(filenames_),
       num_colors(num_colors_),
       threshold(threshold_),
@@ -130,7 +119,6 @@ public:
         Logger::EVENT_STATE::START,
         format("batch {}", batch_id)
       );
-      printed_last_read = false;
       process_batch();
       Logger::log_timed_event(
         format("ResultsPrinter_{}", stream_id),
@@ -138,28 +126,15 @@ public:
         format("batch {}", batch_id)
       );
     }
-    if (!printed_last_read) {
-      u64 buffer_idx = 0;
-      impl().do_print_read(
-        previous_last_results.begin(),
-        previous_last_found_idx,
-        previous_last_not_found_idxs,
-        previous_last_invalid_idxs,
-        buffers[0],
-        buffer_idx
-      );
-      do_write_buffer(buffers[0], buffer_idx);
-    }
     impl().do_at_file_end();
   }
 
 private:
   auto get_batch() -> bool {
-    return (static_cast<u64>(*interval_batch_producer >> interval_batch)
-            & static_cast<u64>(
-              *read_statistics_batch_producer >> read_statistics_batch
+    return (static_cast<u64>(
+              *seq_statistics_batch_producer >> seq_statistics_batch
             )
-            & static_cast<u64>(*results_batch_producer >> results_batch))
+            & static_cast<u64>(*colors_batch_producer >> colors_batch))
       > 0;
   }
 
@@ -188,39 +163,27 @@ protected:
   }
 
   auto process_batch() -> void {
-    auto &results = *results_batch->results;
-    auto &found_idxs = read_statistics_batch->found_idxs;
-    auto &not_found_idxs = read_statistics_batch->not_found_idxs;
-    auto &invalid_idxs = read_statistics_batch->invalid_idxs;
-    auto &wbnrs = *interval_batch->warps_before_new_read;
-    auto &rbnfs = interval_batch->reads_before_newfile;
-    if (wbnrs[0] == 0) {
-      u64 buffer_idx = 0;
-      impl().do_print_read(
-        previous_last_results.begin(),
-        previous_last_found_idx,
-        previous_last_not_found_idxs,
-        previous_last_invalid_idxs,
-        buffers[0],
-        buffer_idx
-      );
-      do_write_buffer(buffers[0], buffer_idx);
-      printed_last_read = true;
-    } else {
-      // Fill in from previous batch (read is continued)
-      found_idxs[0] += previous_last_found_idx;
-      not_found_idxs[0] += previous_last_not_found_idxs;
-      invalid_idxs[0] += previous_last_invalid_idxs;
-      std::transform(
-        results.begin(),
-        copy_advance(results.begin(), num_colors),
-        previous_last_results.begin(),
-        results.data(),
-        std::plus<>()
-      );
-    }
-    u64 start_wbnr_idx = printed_last_read ? 1 : 0;
-    for (auto rbnf : rbnfs) {
+    auto &colors = colors_batch->colors;
+    auto &found_idxs = seq_statistics_batch->found_idxs;
+    auto &not_found_idxs = seq_statistics_batch->not_found_idxs;
+    auto &invalid_idxs = seq_statistics_batch->invalid_idxs;
+    auto &colored_seq_id = seq_statistics_batch->colored_seq_id;
+    auto &sbnfs = seq_statistics_batch->seqs_before_new_file;
+
+    // Fill in from previous batch (read is continued)
+    found_idxs[0] += previous_last_found_idx;
+    not_found_idxs[0] += previous_last_not_found_idxs;
+    invalid_idxs[0] += previous_last_invalid_idxs;
+    std::transform(
+      colors.begin(),
+      copy_advance(colors.begin(), num_colors),
+      previous_last_results.begin(),
+      colors.data(),
+      std::plus<>()
+    );
+    u64 start_seq = 0;
+    for (u64 sbnf_idx = 0; sbnf_idx < sbnfs.size(); ++sbnf_idx) {
+      u64 end_seq = std::min(sbnfs[sbnf_idx], colored_seq_id.size() - 1);
 #pragma omp parallel num_threads(threads)
       {
         u64 thread_idx = omp_get_thread_num();
@@ -233,39 +196,37 @@ protected:
         u64 buffer_idx = 0;
 
 #pragma omp for schedule(static)
-        for (u64 wbnr_idx = start_wbnr_idx;
-             wbnr_idx < std::min(wbnrs.size(), rbnf);
-             ++wbnr_idx) {
-          const u64 read_idx = wbnr_idx;
-          if (wbnrs[wbnr_idx] == numeric_limits<u64>::max()) {
-            previous_last_found_idx = found_idxs[read_idx];
-            previous_last_not_found_idxs = not_found_idxs[read_idx];
-            previous_last_invalid_idxs = invalid_idxs[read_idx];
-            previous_last_results.insert(
-              previous_last_results.begin(),
-              std::make_move_iterator(
-                copy_advance(results.begin(), read_idx * num_colors)
-              ),
-              std::make_move_iterator(
-                copy_advance(results.begin(), (read_idx + 1) * num_colors)
-              )
-            );
-            printed_last_read = false;
-          } else {
-            impl().do_print_read(
-              copy_advance(results.begin(), read_idx * num_colors),
-              found_idxs[read_idx],
-              not_found_idxs[read_idx],
-              invalid_idxs[read_idx],
-              buffer,
-              buffer_idx
-            );
-          }
+        for (u64 seq_idx = start_seq; seq_idx < end_seq; ++seq_idx) {
+          impl().do_print_read(
+            copy_advance(colors.begin(), colored_seq_id[seq_idx] * num_colors),
+            found_idxs[seq_idx],
+            not_found_idxs[seq_idx],
+            invalid_idxs[seq_idx],
+            buffer,
+            buffer_idx
+          );
         }
         write_buffers_parallel(buffer_idx);
       }
-      start_wbnr_idx = std::min(wbnrs.size(), rbnf);
-      if (rbnf == start_wbnr_idx) { impl().do_start_next_file(); }
+      if (end_seq == sbnfs[sbnf_idx]) { impl().do_start_next_file(); }
+      start_seq = end_seq;
+    }
+
+    previous_last_found_idx = found_idxs.back();
+    previous_last_not_found_idxs = not_found_idxs.back();
+    previous_last_invalid_idxs = invalid_idxs.back();
+    if (previous_last_found_idx > 0) {
+      previous_last_results.insert(
+        previous_last_results.begin(),
+        std::make_move_iterator(
+          copy_advance(colors.begin(), colored_seq_id.back() * num_colors)
+        ),
+        std::make_move_iterator(
+          copy_advance(colors.begin(), (colored_seq_id.back() + 1) * num_colors)
+        )
+      );
+    } else {
+      previous_last_results.assign(previous_last_results.size(), 0);
     }
   }
 

@@ -6,12 +6,9 @@ namespace sbwt_search {
 
 BinaryContinuousColorResultsPrinter::BinaryContinuousColorResultsPrinter(
   u64 stream_id_,
-  shared_ptr<SharedBatchesProducer<ColorsIntervalBatch>>
-    interval_batch_producer_,
-  shared_ptr<SharedBatchesProducer<ReadStatisticsBatch>>
-    read_statistics_batch_producer_,
-  shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
-    results_batch_producer_,
+  shared_ptr<SharedBatchesProducer<SeqStatisticsBatch>>
+    seq_statistics_batch_producer_,
+  shared_ptr<SharedBatchesProducer<ColorsBatch>> colors_batch_producer_,
   const vector<string> &filenames_,
   u64 num_colors_,
   double threshold_,
@@ -23,9 +20,8 @@ BinaryContinuousColorResultsPrinter::BinaryContinuousColorResultsPrinter(
 ):
     Base(
       stream_id_,
-      std::move(interval_batch_producer_),
-      std::move(read_statistics_batch_producer_),
-      std::move(results_batch_producer_),
+      std::move(seq_statistics_batch_producer_),
+      std::move(colors_batch_producer_),
       filenames_,
       num_colors_,
       threshold_,

@@ -1,23 +1,3 @@
-#include <algorithm>
-#include <iostream>
-#include <limits>
-#include <span>
-#include <vector>
-using std::cerr;
-using std::cout;
-using std::endl;
-using std::vector;
-template <class T>
-auto print_vec(
-  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
-) {
-  cout << "---------------------" << endl;
-  for (int i = 0; i < std::min(limit, v.size()); ++i) {
-    cout << static_cast<uint64_t>(v[i]) << " ";
-  }
-  cout << endl << "---------------------" << endl;
-}
-
 #include <limits>
 
 #include "ColorSearcher/ColorSearcher.h"
@@ -67,14 +47,6 @@ auto ColorSearcher::search(
       warps_intervals.size() - 1, container->num_colors, batch_id
     );
     copy_from_gpu(results, batch_id);
-
-    vector<u8> fat(
-      sbwt_index_idxs.size() / gpu_warp_size * container->num_colors
-    );
-    d_fat_results.copy_to_async(fat, fat.size(), gpu_stream);
-    print_vec(warps_intervals);
-    print_vec(fat);
-    print_vec(results);
   }
 }
 

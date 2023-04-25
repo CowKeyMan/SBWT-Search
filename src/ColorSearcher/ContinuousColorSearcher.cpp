@@ -30,7 +30,7 @@ ContinuousColorSearcher::ContinuousColorSearcher(
   initialise_batches();
 }
 
-auto ContinuousColorSearcher::get_bits_per_read_cpu(u64 num_colors) -> u64 {
+auto ContinuousColorSearcher::get_bits_per_seq_cpu(u64 num_colors) -> u64 {
   const u64 bits_required_per_result = 64;
   const u64 bits_required_per_unique_warps_before_new_read = 64;
   return num_colors * bits_required_per_result
@@ -47,7 +47,7 @@ auto ContinuousColorSearcher::get_bits_per_warp_gpu(u64 num_colors) -> u64 {
   return num_colors * bits_required_per_fat_result;
 }
 
-auto ContinuousColorSearcher::get_bits_per_read_gpu(u64 num_colors) -> u64 {
+auto ContinuousColorSearcher::get_bits_per_seq_gpu(u64 num_colors) -> u64 {
   const u64 bits_required_per_result = 64;
   return num_colors * bits_required_per_result;
 }

@@ -33,7 +33,7 @@ using std::min;
 using std::runtime_error;
 
 const u64 interval_batch_producer_max_batches = 2;
-const u64 read_statistics_batch_producer_max_batches = 2;
+const u64 seq_statistics_batch_producer_max_batches = 2;
 const u64 get_warps_before_new_read_batch_producer_max_batches = 2;
 const u64 indexes_batch_producer_max_batches = 2;
 const u64 color_searcher_max_batches = 2;
@@ -80,7 +80,7 @@ inline auto ColorSearchMain::get_gpu_container()
 
 auto ColorSearchMain::load_batch_info() -> void {
   max_indexes_per_batch = get_max_chars_per_batch();
-  max_reads_per_batch
+  max_seqs_per_batch
     = max_indexes_per_batch / get_args().get_indexes_per_read();
   if (max_indexes_per_batch == 0) { throw runtime_error("Not enough memory"); }
   Logger::log(
@@ -88,7 +88,7 @@ auto ColorSearchMain::load_batch_info() -> void {
     format(
       "Using {} max indexes per batch and {} max reads per batch",
       max_indexes_per_batch,
-      max_reads_per_batch
+      max_seqs_per_batch
     )
   );
 }
@@ -122,7 +122,12 @@ auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
     + static_cast<double>(
         ContinuousColorSearcher::get_bits_per_warp_gpu(num_colors)
       )
-      / static_cast<double>(gpu_warp_size);
+      / static_cast<double>(gpu_warp_size)
+    // bits per read
+    + (static_cast<double>(
+        ContinuousColorSearcher::get_bits_per_seq_gpu(num_colors)
+      ))
+      / static_cast<double>(get_args().get_indexes_per_read());
   u64 max_chars_per_batch = static_cast<u64>(std::floor(
     static_cast<double>(free_bits) / bits_required_per_character
     / static_cast<double>(streams)
@@ -163,19 +168,13 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     )
     // bits per read
     + static_cast<double>(
-        ColorsIntervalBatchProducer::get_bits_per_read()
-          * interval_batch_producer_max_batches
-        + ReadStatisticsBatchProducer::get_bits_per_read()
-          * read_statistics_batch_producer_max_batches
+        +SeqStatisticsBatchProducer::get_bits_per_seq()
+          * seq_statistics_batch_producer_max_batches
+        + ContinuousColorSearcher::get_bits_per_seq_cpu(num_colors)
+          * color_searcher_max_batches
         + get_results_printer_bits_per_read()
       )
       / static_cast<double>(get_args().get_indexes_per_read())
-    // bits per warp
-    + static_cast<double>(
-        ContinuousColorSearcher::get_bits_per_warp_cpu(num_colors)
-        * color_searcher_max_batches
-      )
-      / static_cast<double>(gpu_warp_size)
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
     // bits per element
     + static_cast<double>(ContinuousColorSearcher::get_bits_per_element_gpu())
@@ -253,19 +252,16 @@ auto ColorSearchMain::get_components(
     index_file_parsers[i] = make_shared<ContinuousIndexFileParser>(
       i,
       max_indexes_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       gpu_warp_size,
       split_input_filenames[i],
-      interval_batch_producer_max_batches,
-      read_statistics_batch_producer_max_batches,
-      get_warps_before_new_read_batch_producer_max_batches,
+      seq_statistics_batch_producer_max_batches,
       indexes_batch_producer_max_batches
     );
     searchers[i] = make_shared<ContinuousColorSearcher>(
       i,
       gpu_container,
       index_file_parsers[i]->get_indexes_batch_producer(),
-      index_file_parsers[i]->get_warps_before_new_read_batch_producer(),
       max_indexes_per_batch,
       color_searcher_max_batches,
       gpu_container->num_colors
@@ -285,56 +281,52 @@ auto ColorSearchMain::get_components(
 auto ColorSearchMain::get_results_printer(
   u64 stream_id,
   shared_ptr<ContinuousIndexFileParser> &index_file_parser,
-  shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
-    results_batch_producer,
+  shared_ptr<SharedBatchesProducer<ColorsBatch>> colors_batch_producer,
   const vector<string> &filenames,
   u64 num_colors
 ) -> shared_ptr<ColorResultsPrinter> {
   if (get_args().get_print_mode() == "ascii") {
     return make_shared<ColorResultsPrinter>(AsciiContinuousColorResultsPrinter(
       stream_id,
-      index_file_parser->get_colors_interval_batch_producer(),
-      index_file_parser->get_read_statistics_batch_producer(),
-      std::move(results_batch_producer),
+      index_file_parser->get_seq_statistics_batch_producer(),
+      std::move(colors_batch_producer),
       filenames,
       num_colors,
       get_args().get_threshold(),
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      max_reads_per_batch,
+      max_seqs_per_batch,
       get_args().get_write_headers()
     ));
   }
   if (get_args().get_print_mode() == "binary") {
     return make_shared<ColorResultsPrinter>(BinaryContinuousColorResultsPrinter(
       stream_id,
-      index_file_parser->get_colors_interval_batch_producer(),
-      index_file_parser->get_read_statistics_batch_producer(),
-      std::move(results_batch_producer),
+      index_file_parser->get_seq_statistics_batch_producer(),
+      std::move(colors_batch_producer),
       filenames,
       num_colors,
       get_args().get_threshold(),
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      max_reads_per_batch,
+      max_seqs_per_batch,
       get_args().get_write_headers()
     ));
   }
   if (get_args().get_print_mode() == "csv") {
     return make_shared<ColorResultsPrinter>(CsvContinuousColorResultsPrinter(
       stream_id,
-      index_file_parser->get_colors_interval_batch_producer(),
-      index_file_parser->get_read_statistics_batch_producer(),
-      std::move(results_batch_producer),
+      index_file_parser->get_seq_statistics_batch_producer(),
+      std::move(colors_batch_producer),
       filenames,
       num_colors,
       get_args().get_threshold(),
       get_args().get_include_not_found(),
       get_args().get_include_invalid(),
       get_threads(),
-      max_reads_per_batch,
+      max_seqs_per_batch,
       get_args().get_write_headers()
     ));
   }
@@ -347,7 +339,7 @@ auto ColorSearchMain::run_components(
   vector<shared_ptr<ColorResultsPrinter>> &results_printers
 ) -> void {
   Logger::log_timed_event("Querier", Logger::EVENT_STATE::START);
-  const u64 num_components = 4;
+  const u64 num_components = 3;
 #pragma omp parallel sections num_threads(num_components)
   {
 #pragma omp section

@@ -26,12 +26,9 @@ class AsciiContinuousColorResultsPrinter:
 public:
   AsciiContinuousColorResultsPrinter(
     u64 stream_id_,
-    shared_ptr<SharedBatchesProducer<ColorsIntervalBatch>>
-      interval_batch_producer_,
-    shared_ptr<SharedBatchesProducer<ReadStatisticsBatch>>
-      read_statistics_batch_producer_,
-    shared_ptr<SharedBatchesProducer<ColorSearchResultsBatch>>
-      results_batch_producer_,
+    shared_ptr<SharedBatchesProducer<SeqStatisticsBatch>>
+      seq_statistics_batch_producer_,
+    shared_ptr<SharedBatchesProducer<ColorsBatch>> colors_batch_producer_,
     const vector<string> &filenames_,
     u64 num_colors_,
     double threshold_,
