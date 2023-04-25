@@ -35,12 +35,12 @@ public:
     u64 kmer_size,
     u64 threads,
     u64 max_chars_per_batch,
-    u64 max_reads_per_batch,
+    u64 max_seqs_per_batch,
     bool write_headers
   );
 
   auto static get_bits_per_element() -> u64;
-  auto static get_bits_per_read() -> u64;
+  auto static get_bits_per_seq() -> u64;
 
 protected:
   auto do_get_extension() -> string;

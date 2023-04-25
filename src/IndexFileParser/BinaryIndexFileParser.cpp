@@ -12,13 +12,11 @@ using std::runtime_error;
 BinaryIndexFileParser::BinaryIndexFileParser(
   shared_ptr<ThrowingIfstream> in_stream_,
   u64 max_indexes_,
-  u64 max_reads_,
+  u64 max_seqs_,
   u64 warp_size_,
   u64 buffer_size_
 ):
-    IndexFileParser(
-      std::move(in_stream_), max_indexes_, max_reads_, warp_size_
-    ),
+    IndexFileParser(std::move(in_stream_), max_indexes_, max_seqs_, warp_size_),
     buffer_size(buffer_size_ * sizeof(u64)) {
   assert_version();
   buffer.resize(buffer_size);
@@ -33,12 +31,12 @@ auto BinaryIndexFileParser::assert_version() -> void {
 }
 
 auto BinaryIndexFileParser::generate_batch(
-  shared_ptr<SeqStatisticsBatch> read_statistics_batch_,
+  shared_ptr<SeqStatisticsBatch> seq_statistics_batch_,
   shared_ptr<IndexesBatch> indexes_batch_
 ) -> bool {
   u64 i = 0;
   IndexFileParser::generate_batch(
-    std::move(read_statistics_batch_), std::move(indexes_batch_)
+    std::move(seq_statistics_batch_), std::move(indexes_batch_)
   );
   const u64 initial_size = get_indexes_batch()->warped_indexes.size()
     + get_seq_statistics_batch()->colored_seq_id.size();

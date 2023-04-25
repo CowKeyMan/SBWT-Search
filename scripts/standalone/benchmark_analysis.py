@@ -87,7 +87,7 @@ args = vars(parser.parse_args())
 
 class DataFrameGenerator:
     def __init__(self):
-        self.batch_stream_to_chars_reads = {}
+        self.batch_stream_to_chars_seqs = {}
         self.line_pattern_to_parser = {
             r'Time taken to copy and build in LOCAL_SCRATCH: \d* ms':
                 self.pass_parser,
@@ -111,14 +111,14 @@ class DataFrameGenerator:
             ): self.cpu_memory_parser,
             (
                 r'Using (\d*) max characters per batch '
-                r'and (\d*) max reads per batch'
-            ): self.max_chars_and_reads_parser,
+                r'and (\d*) max seqs per batch'
+            ): self.max_chars_and_seqs_parser,
             r'Running OpenMP with (\d*) threads': self.threads_parser,
             r'Running queries': self.pass_parser,
             r'Now reading file .*$': self.pass_parser,
             (
                 r'Batch (\d*) stream (\d*) contains '
-                r'(\d*) indexes in (\d*) reads'
+                r'(\d*) indexes in (\d*) seqs'
             ):
                 self.batch_size_parser,
         }
@@ -204,15 +204,15 @@ class DataFrameGenerator:
         self.cpu_memory = memory
         self.cpu_max_chars_per_batch = chars_per_batch
 
-    def max_chars_and_reads_parser(self, max_chars: int, max_reads: int):
+    def max_chars_and_seqs_parser(self, max_chars: int, max_seqs: int):
         self.max_chars_per_batch = max_chars
-        self.max_reads_per_batch = max_reads
+        self.max_seqs_per_batch = max_seqs
 
     def threads_parser(self, threads):
         self.threads = threads
 
-    def batch_size_parser(self, batch, stream, chars, reads):
-        self.batch_stream_to_chars_reads[(batch, stream)] = (chars, reads)
+    def batch_size_parser(self, batch, stream, chars, seqs):
+        self.batch_stream_to_chars_seqs[(batch, stream)] = (chars, seqs)
 
     def timed_event_parser(self, d: dict):
         if '_' in d['log']['component']:

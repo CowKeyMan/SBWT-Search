@@ -48,7 +48,7 @@ public:
   auto read_and_generate() -> void;
 
 private:
-  auto parallel_generate(StringSequenceBatch &read_batch) -> void;
+  auto parallel_generate(StringSequenceBatch &seq_batch) -> void;
   auto convert_int(const vector<char> &str, u64 start_index, u64 end_index)
     -> u64;
 };

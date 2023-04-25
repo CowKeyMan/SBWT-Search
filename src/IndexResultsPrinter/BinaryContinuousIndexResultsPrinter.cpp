@@ -13,7 +13,7 @@ BinaryContinuousIndexResultsPrinter::BinaryContinuousIndexResultsPrinter(
   u64 kmer_size,
   u64 threads,
   u64 max_chars_per_batch,
-  u64 max_reads_per_batch,
+  u64 max_seqs_per_batch,
   bool write_headers
 ):
     Base(
@@ -25,7 +25,7 @@ BinaryContinuousIndexResultsPrinter::BinaryContinuousIndexResultsPrinter(
       kmer_size,
       threads,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       1,
       1,
       write_headers
@@ -35,7 +35,7 @@ auto BinaryContinuousIndexResultsPrinter::get_bits_per_element() -> u64 {
   return u64_bits;
 }
 
-auto BinaryContinuousIndexResultsPrinter::get_bits_per_read() -> u64 {
+auto BinaryContinuousIndexResultsPrinter::get_bits_per_seq() -> u64 {
   return u64_bits;
 }
 

@@ -20,7 +20,7 @@ IntervalBatchProducer::IntervalBatchProducer(u64 max_batches):
   initialise_batches();
 }
 
-auto IntervalBatchProducer::get_bits_per_read() -> u64 {
+auto IntervalBatchProducer::get_bits_per_seq() -> u64 {
   const u64 bits_required_per_string_break = 64;
   const u64 bits_required_per_newfile = 64;
   return bits_required_per_string_break + bits_required_per_newfile;

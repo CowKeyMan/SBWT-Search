@@ -43,8 +43,8 @@ protected:
   auto run_test(
     u64 max_batches,
     u64 max_indexes_per_batch,
-    u64 max_reads_per_batch,
-    u64 read_padding,
+    u64 max_seqs_per_batch,
+    u64 warp_padding,
     const vector<string> &filenames,
     const vector<vector<u64>> &expected_indexes,
     const vector<vector<u64>> &expected_warps_intervals,
@@ -60,8 +60,8 @@ protected:
     auto host = ContinuousIndexFileParser(
       0,
       max_indexes_per_batch,
-      max_reads_per_batch,
-      read_padding,
+      max_seqs_per_batch,
+      warp_padding,
       filenames,
       max_batches,
       max_batches
@@ -150,24 +150,24 @@ protected:
 
 TEST_F(ContinuousIndexFileParserTest, TestAll) {
   const u64 max_indexes_per_batch = 4;
-  const u64 max_reads_per_batch = 4;
+  const u64 max_seqs_per_batch = 4;
   const vector<string> filenames
     = {"test_objects/example_index_search_result.txt", get_binary_filename()};
-  const u64 read_padding = 4;
+  const u64 warp_padding = 4;
   int pad = -1;
   const vector<vector<int>> expected_indexes = {
-    {39, 164, 216, 59},  // end of 1st read
-                         // 2nd read is empty
-    {1, 2, 3, 4},        // end of 3rd read
+    {39, 164, 216, 59},  // end of 1st seq
+                         // 2nd seq is empty
+    {1, 2, 3, 4},        // end of 3rd seq
                          // empty line
     {0, 1, 2, 4},
-    {5, 6, pad, pad},    // end of 4th read
-    {39, 164, 216, 59},  // end of 1st read
-                         // 2nd read is empty
-    {1, 2, 3, 4},        // end of 3rd read
+    {5, 6, pad, pad},    // end of 4th seq
+    {39, 164, 216, 59},  // end of 1st seq
+                         // 2nd seq is empty
+    {1, 2, 3, 4},        // end of 3rd seq
                          // empty line
     {0, 1, 2, 4},
-    {5, 6, pad, pad},    // end of 4th read
+    {5, 6, pad, pad},    // end of 4th seq
     {}};
   u64 max = numeric_limits<u64>::max();
   const vector<vector<u64>> expected_warps_intervals
@@ -186,8 +186,8 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
     run_test(
       max_batches,
       max_indexes_per_batch,
-      max_reads_per_batch,
-      read_padding,
+      max_seqs_per_batch,
+      warp_padding,
       filenames,
       to_u64s(expected_indexes),
       expected_warps_intervals,
@@ -202,21 +202,21 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
 
 TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
   const u64 max_indexes_per_batch = 999;
-  const u64 max_reads_per_batch = 999;
+  const u64 max_seqs_per_batch = 999;
   const vector<string> filenames
     = {"test_objects/example_index_search_result.txt", get_binary_filename()};
-  const u64 read_padding = 4;
+  const u64 warp_padding = 4;
   int pad = -1;
   const vector<vector<int>> expected_indexes = {{
     39,
     164,
     216,
-    59,  // end of 1st read
-         // 2nd read is empty
+    59,  // end of 1st seq
+         // 2nd seq is empty
     1,
     2,
     3,
-    4,  // end of 3rd read
+    4,  // end of 3rd seq
         // empty line
     0,
     1,
@@ -225,17 +225,17 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
     5,
     6,
     pad,
-    pad,  // end of 4th read
+    pad,  // end of 4th seq
           // end of first file
     39,
     164,
     216,
-    59,  // end of 1st read
-         // 2nd read is empty
+    59,  // end of 1st seq
+         // 2nd seq is empty
     1,
     2,
     3,
-    4,  // end of 3rd read
+    4,  // end of 3rd seq
         // empty line
     0,
     1,
@@ -244,7 +244,7 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
     5,
     6,
     pad,
-    pad  // end of 4th read
+    pad  // end of 4th seq
   }};
   u64 max = numeric_limits<u64>::max();
   const vector<vector<u64>> expected_warps_intervals = {{0, 1, 2, 4, 5, 6, 8}};
@@ -261,8 +261,8 @@ TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
     run_test(
       max_batches,
       max_indexes_per_batch,
-      max_reads_per_batch,
-      read_padding,
+      max_seqs_per_batch,
+      warp_padding,
       filenames,
       to_u64s(expected_indexes),
       expected_warps_intervals,

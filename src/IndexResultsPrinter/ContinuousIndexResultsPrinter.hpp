@@ -87,7 +87,7 @@ public:
     u64 kmer_size,
     u64 threads_,
     u64 max_chars_per_batch,
-    u64 max_reads_per_batch,
+    u64 max_seqs_per_batch,
     u64 element_size,
     u64 newline_element_size,
     bool write_headers_
@@ -106,7 +106,7 @@ public:
       impl().do_allocate_buffer(
         b,
         max_chars_per_batch,
-        max_reads_per_batch,
+        max_seqs_per_batch,
         threads,
         element_size,
         newline_element_size
@@ -315,15 +315,14 @@ protected:
   auto do_allocate_buffer(
     vector<Buffer_t> &buffer,
     u64 max_chars_per_batch,
-    u64 max_reads_per_batch,
+    u64 max_seqs_per_batch,
     u64 threads,
     u64 element_size,
     u64 newline_element_size
   ) -> void {
     buffer.reserve(
       divide_and_ceil<u64>(max_chars_per_batch, threads) * element_size
-      + divide_and_ceil<u64>(max_reads_per_batch, threads)
-        * newline_element_size
+      + divide_and_ceil<u64>(max_seqs_per_batch, threads) * newline_element_size
     );
   }
 

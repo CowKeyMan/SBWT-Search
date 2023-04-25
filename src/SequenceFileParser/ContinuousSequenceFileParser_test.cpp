@@ -36,7 +36,7 @@ protected:
     const vector<string> &filenames,
     u64 kmer_size,
     u64 max_chars_per_batch,
-    u64 max_reads_per_batch,
+    u64 max_seqs_per_batch,
     const vector<vector<char>> &seq,
     const vector<vector<u64>> &chars_before_newline,
     const vector<vector<u64>> &newlines_before_newfile,
@@ -47,7 +47,7 @@ protected:
       filenames,
       kmer_size,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       max_batches,
       max_batches,
       max_batches
@@ -158,7 +158,7 @@ private:
 TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
   const u64 kmer_size = 10;
   const u64 max_chars_per_batch = 999;
-  const u64 max_reads_per_batch = 999;
+  const u64 max_seqs_per_batch = 999;
   const vector<string> str_seq
     = {"1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGA"
        "TGGATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACGTAGTGAGGA61A"
@@ -173,7 +173,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,
@@ -185,7 +185,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetAllInOneBatch) {
 TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
   const u64 kmer_size = 15;
   const u64 max_chars_per_batch = 36 * 3 + 10;
-  const u64 max_reads_per_batch = 999;
+  const u64 max_seqs_per_batch = 999;
   const vector<string> str_seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACTGATGGATGGAATGTGATG45T"
     "GAGTGAGATGAGGTGATAGTGACGTAGTGAGGA61ACTGCAATG",
@@ -201,7 +201,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,
@@ -213,7 +213,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesBigMaxChar) {
 TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
   u64 kmer_size = 3;
   const u64 max_chars_per_batch = 36 * 3 - 10;
-  const u64 max_reads_per_batch = 999;
+  const u64 max_seqs_per_batch = 999;
   const vector<string> str_seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC23TCTAGCTACTACTACT"
     "GATGGATGGAATGTGATG45TGAGTGAGATGAGGTGATAGTGACG",
@@ -229,7 +229,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,
@@ -241,7 +241,7 @@ TEST_F(ContinuousSequenceFileParserTest, GetSplitBatchesSmallMaxChar) {
 TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
   const u64 kmer_size = 3;
   const u64 max_chars_per_batch = 30;
-  const u64 max_reads_per_batch = 999;
+  const u64 max_seqs_per_batch = 999;
   const vector<string> str_seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGG",
     "GGATTAC23TCTAGCTACTACTACTGATGG",
@@ -257,7 +257,7 @@ TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
       {"test_objects/small_fasta.fna", "garbage_filename"},
       kmer_size,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,
@@ -269,7 +269,7 @@ TEST_F(ContinuousSequenceFileParserTest, IncorrectFileAndVerySmallMaxChar) {
 TEST_F(ContinuousSequenceFileParserTest, SameMAxCharsAsLine) {
   u64 kmer_size = 3;
   const u64 max_chars_per_batch = 36;
-  const u64 max_reads_per_batch = 999;
+  const u64 max_seqs_per_batch = 999;
   const vector<string> str_seq = {
     "1ACTGCAATGGGCAATATGTCTCTGTGTGGATTAC2",
     "3TCTAGCTACTACTACTGATGGATGGAATGTGATG4",
@@ -288,7 +288,7 @@ TEST_F(ContinuousSequenceFileParserTest, SameMAxCharsAsLine) {
       {"test_objects/small_fasta.fna", "test_objects/small_fastq.fnq"},
       kmer_size,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       seq,
       chars_before_newline,
       newlines_before_newfile,

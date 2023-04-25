@@ -86,13 +86,13 @@ auto IndexSearchArgumentParser::create_options() -> void {
     value<double>()->default_value("0.8")
   );
   get_options().add_options()(
-    "r,base-pairs-per-read",
-    "The approximate number of base pairs in every read. This is necessary "
-    "because we need to keep track of the breaks where each read starts and "
+    "r,base-pairs-per-seq",
+    "The approximate number of base pairs in every seq. This is necessary "
+    "because we need to keep track of the breaks where each seq starts and "
     "ends in our list of base pairs. As such we must allocate memory for it. "
     "By defalt, this value is 100, meaning that we would then allocate enough "
     "memory for 1 break per 100 base pairs. This option is available in case "
-    "your reads vary a lot more than that and you wish to optimise for space.",
+    "your seqs vary a lot more than that and you wish to optimise for space.",
     value<u64>()->default_value("100")
   );
   get_options().add_options()(
@@ -123,8 +123,8 @@ auto IndexSearchArgumentParser::create_options() -> void {
     "The mode used when printing the result to the output file. Options "
     "are 'ascii' (default), 'binary' or 'bool'. In ascii mode the "
     "results will be printed in ASCII format so that the number viewed "
-    "represents the position in the SBWT index. The indexes within a read are "
-    "separated by spaces and each read is separated by a newline. Strings "
+    "represents the position in the SBWT index. The indexes within a seq are "
+    "separated by spaces and each seq is separated by a newline. Strings "
     "which are not found are represented by -1 and strings which are invalid "
     "(they contain characters other than ACGT) are represented by a -2. For "
     "binary format, the output is in binary, that is, each index takes 8 bits. "
@@ -132,13 +132,13 @@ auto IndexSearchArgumentParser::create_options() -> void {
     "represents an unsigned 64-bit number. Similarly to ASCII, strings which "
     "are not found are represented by a -1 (which loops around to become the "
     "maximum 64-bit integer (ULLONG_MAX=18446744073709551615)), strings which "
-    "are invalid are represented by -2 (ULLONG_MAX-1) and reads are separeted "
+    "are invalid are represented by -2 (ULLONG_MAX-1) and seqs are separeted "
     "by a -3 (ULLONG_MAX-2). This version turns out to be slower and uses more "
     "space, it is only recommended if your indexes are huge (mostly larger "
     "than 8 bits). 'bool' is the fastest mode however it is also the least "
     "desriptive. In this mode, each index results in a single ASCII byte, "
     "which contains the value 0 if found, 1 if not found and 2 if the value is "
-    "invalid. Similarly to the ascii format, each read is separated by a "
+    "invalid. Similarly to the ascii format, each seq is separated by a "
     "newline. This is the fastest and most condensed way of printing the "
     "results, but we lose the position in the index, and therefore we cannot "
     "use this format for pseudoalignment. In terms of file extensions, ASCII "
@@ -197,8 +197,8 @@ auto IndexSearchArgumentParser::get_max_cpu_memory() const -> u64 {
 auto IndexSearchArgumentParser::get_print_mode() const -> string {
   return get_args()["print-mode"].as<string>();
 }
-auto IndexSearchArgumentParser::get_base_pairs_per_read() const -> u64 {
-  return get_args()["base-pairs-per-read"].as<u64>();
+auto IndexSearchArgumentParser::get_base_pairs_per_seq() const -> u64 {
+  return get_args()["base-pairs-per-seq"].as<u64>();
 }
 auto IndexSearchArgumentParser::get_cpu_memory_percentage() const -> double {
   auto result = get_args()["cpu-memory-percentage"].as<double>();

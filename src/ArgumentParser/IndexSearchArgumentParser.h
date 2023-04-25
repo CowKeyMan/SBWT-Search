@@ -35,7 +35,7 @@ public:
   auto get_unavailable_ram() const -> u64;
   auto get_max_cpu_memory() const -> u64;
   auto get_print_mode() const -> string;
-  auto get_base_pairs_per_read() const -> u64;
+  auto get_base_pairs_per_seq() const -> u64;
   auto get_cpu_memory_percentage() const -> double;
   auto get_gpu_memory_percentage() const -> double;
   auto get_streams() const -> u64;

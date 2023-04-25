@@ -127,34 +127,34 @@ auto ContinuousIndexFileParser::read_next() -> void {
 auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
   auto num_indexes
     = indexes_batch_producer->current_write()->warped_indexes.size();
-  auto read_statistics_batch
+  auto seq_statistics_batch
     = get_seq_statistics_batch_producer()->current_write();
-  auto reads = read_statistics_batch->found_idxs.size();
+  auto seqs = seq_statistics_batch->found_idxs.size();
   auto num_found_idxs = std::accumulate(
     get_seq_statistics_batch_producer()->current_write()->found_idxs.begin(),
     get_seq_statistics_batch_producer()->current_write()->found_idxs.end(),
     0UL
   );
   auto num_invalid_idxs = std::accumulate(
-    read_statistics_batch->invalid_idxs.begin(),
-    read_statistics_batch->invalid_idxs.end(),
+    seq_statistics_batch->invalid_idxs.begin(),
+    seq_statistics_batch->invalid_idxs.end(),
     0UL
   );
   auto num_not_found_idxs = std::accumulate(
-    read_statistics_batch->not_found_idxs.begin(),
-    read_statistics_batch->not_found_idxs.end(),
+    seq_statistics_batch->not_found_idxs.begin(),
+    seq_statistics_batch->not_found_idxs.end(),
     0UL
   );
   Logger::log(
     Logger::LOG_LEVEL::DEBUG,
     format(
-      "Batch {} in stream {} contains {} indexes in {} reads, of which {} are "
+      "Batch {} in stream {} contains {} indexes in {} seqs, of which {} are "
       "found indexes and {} is padding. {} indexes were skipped, of which {} "
       "is not found and {} is invalids.",
       batch_id,
       stream_id,
       num_indexes,
-      reads,
+      seqs,
       num_found_idxs,
       num_indexes - num_found_idxs,
       num_not_found_idxs + num_invalid_idxs,

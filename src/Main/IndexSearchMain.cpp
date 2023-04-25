@@ -104,15 +104,15 @@ auto IndexSearchMain::get_gpu_container() -> shared_ptr<GpuSbwtContainer> {
 
 auto IndexSearchMain::load_batch_info() -> void {
   max_chars_per_batch = get_max_chars_per_batch();
-  max_reads_per_batch
-    = max_chars_per_batch / get_args().get_base_pairs_per_read();
+  max_seqs_per_batch
+    = max_chars_per_batch / get_args().get_base_pairs_per_seq();
   if (max_chars_per_batch == 0) { throw runtime_error("Not enough memory"); }
   Logger::log(
     Logger::LOG_LEVEL::INFO,
     format(
-      "Using {} max characters per batch and {} max reads per batch",
+      "Using {} max characters per batch and {} max seqs per batch",
       max_chars_per_batch,
-      max_reads_per_batch
+      max_seqs_per_batch
     )
   );
 }
@@ -181,13 +181,13 @@ auto IndexSearchMain::get_max_chars_per_batch_cpu() -> u64 {
           * searcher_max_batches
         + get_results_printer_bits_per_element()
       )
-    // bits per read
+    // bits per seq
     + static_cast<double>(
-        IntervalBatchProducer::get_bits_per_read()
+        IntervalBatchProducer::get_bits_per_seq()
           * string_break_batch_producer_max_batches
-        + get_results_printer_bits_per_read()
+        + get_results_printer_bits_per_seq()
       )
-      / static_cast<double>(get_args().get_base_pairs_per_read())
+      / static_cast<double>(get_args().get_base_pairs_per_seq())
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
     + static_cast<double>(ContinuousIndexSearcher::get_bits_per_element_gpu())
 #endif
@@ -222,13 +222,13 @@ auto IndexSearchMain::get_results_printer_bits_per_element() -> u64 {
   throw runtime_error("Invalid value passed by user for argument print_mode");
 }
 
-auto IndexSearchMain::get_results_printer_bits_per_read() -> u64 {
+auto IndexSearchMain::get_results_printer_bits_per_seq() -> u64 {
   if (get_args().get_print_mode() == "ascii") { return 0; }
   if (get_args().get_print_mode() == "binary") {
-    return BinaryContinuousIndexResultsPrinter::get_bits_per_read();
+    return BinaryContinuousIndexResultsPrinter::get_bits_per_seq();
   }
   if (get_args().get_print_mode() == "bool") {
-    return BinaryContinuousIndexResultsPrinter::get_bits_per_read();
+    return BinaryContinuousIndexResultsPrinter::get_bits_per_seq();
   }
   throw runtime_error("Invalid value passed by user for argument print_mode");
 }
@@ -263,7 +263,7 @@ auto IndexSearchMain::get_components(
       input_filenames[i],
       kmer_size,
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       string_sequence_batch_producer_max_batches,
       string_break_batch_producer_max_batches,
       interval_batch_producer_max_batches
@@ -359,7 +359,7 @@ auto IndexSearchMain::get_results_printer(
       kmer_size,
       get_threads(),
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       get_args().get_write_headers(),
       max_index
     ));
@@ -374,7 +374,7 @@ auto IndexSearchMain::get_results_printer(
       kmer_size,
       get_threads(),
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       get_args().get_write_headers()
     ));
   }
@@ -388,7 +388,7 @@ auto IndexSearchMain::get_results_printer(
       kmer_size,
       get_threads(),
       max_chars_per_batch,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       get_args().get_write_headers()
     ));
   }

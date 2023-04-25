@@ -4,8 +4,8 @@
 /**
  * @file BinaryIndexFileParser.h
  * @brief Reads the input binary file integer by integer, and pads each
- * line/read to the given parameter. It also takes note of the starting index of
- * where each read starts in our vector of integers.
+ * line/seq to the given parameter. It also takes note of the starting index of
+ * where each seq starts in our vector of integers.
  */
 
 #include <memory>
@@ -31,12 +31,12 @@ public:
   BinaryIndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
     u64 max_indexes_,
-    u64 max_reads_,
+    u64 max_seqs_,
     u64 warp_size_,
     u64 buffer_size = sixteen_kB / sizeof(u64)
   );
   auto generate_batch(
-    shared_ptr<SeqStatisticsBatch> read_statistics_batch_,
+    shared_ptr<SeqStatisticsBatch> seq_statistics_batch_,
     shared_ptr<IndexesBatch> indexes_batch_
   ) -> bool override;
 

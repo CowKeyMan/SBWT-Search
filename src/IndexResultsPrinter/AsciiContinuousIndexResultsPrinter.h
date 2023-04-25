@@ -34,7 +34,7 @@ public:
     u64 kmer_size,
     u64 threads,
     u64 max_chars_per_batch,
-    u64 max_reads_per_batch,
+    u64 max_seqs_per_batch,
     bool write_headers,
     u64 max_index
   );
