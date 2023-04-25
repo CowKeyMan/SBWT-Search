@@ -5,7 +5,7 @@
  * @file IndexesBatchProducer.h
  * @brief Simple class used by the IndexFileParser which stores the index batch
  * and serves it to its consumers. The current_write batch can be obtained and
- * written to
+ * written to.
  */
 
 #include <memory>
@@ -25,9 +25,12 @@ class IndexesBatchProducer: public SharedBatchesProducer<IndexesBatch> {
 
 private:
   u64 max_indexes_per_batch;
+  u64 max_seqs_per_batch;
 
 public:
-  IndexesBatchProducer(u64 max_indexes_per_batch_, u64 max_batches);
+  IndexesBatchProducer(
+    u64 max_seqs_per_batch_, u64 max_indexes_per_batch_, u64 max_batches
+  );
 
   auto static get_bits_per_element() -> u64;
 

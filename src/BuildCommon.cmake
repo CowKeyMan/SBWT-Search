@@ -39,18 +39,25 @@ FetchContent_MakeAvailable(cxxopts)
 find_package(OpenMP REQUIRED)
 
 # Fetch sdsl
-FetchContent_Declare(
+ExternalProject_Add(
   sdsl
   GIT_REPOSITORY  https://github.com/simongog/sdsl-lite/
   GIT_TAG         c32874cb2d8524119f25f3b501526fe692df29f4
   GIT_SHALLOW     TRUE
+  PREFIX          "${CMAKE_BINARY_DIR}/_deps/sdsl"
+  CMAKE_ARGS
+    -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  STEP_TARGETS build
+  EXCLUDE_FROM_ALL TRUE
+  LOG_CONFIGURE ON
+  LOG_INSTALL ON
+  LOG_BUILD ON
 )
-FetchContent_MakeAvailable(sdsl)
-FetchContent_GetProperties(sdsl)
-add_library(libsdsl SHARED IMPORTED)
-set_target_properties(libsdsl PROPERTIES IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/lib/libsdsl.a")
+ExternalProject_Get_Property(sdsl SOURCE_DIR BINARY_DIR)
+add_library(libsdsl STATIC IMPORTED GLOBAL)
 add_dependencies(libsdsl sdsl)
-target_include_directories(libsdsl INTERFACE "${sdsl_SOURCE_DIR}/include")
+set_target_properties(libsdsl PROPERTIES IMPORTED_LOCATION "${BINARY_DIR}/lib/libsdsl.a")
+include_directories("${SOURCE_DIR}/include")
 
 FetchContent_Declare(
   jeaiii_itoa
@@ -183,15 +190,13 @@ target_link_libraries(index_results_printer PRIVATE io_utils fmt::fmt OpenMP::Op
 # Colors
 add_library(
   index_file_parser
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
+  # "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
 
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser.cpp"
+  # "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser.cpp"
 
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/ColorsIntervalBatchProducer.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/ReadStatisticsBatchProducer.cpp"
-  "${PROJECT_SOURCE_DIR}/IndexFileParser/WarpsBeforeNewReadBatchProducer.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/SeqStatisticsBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexesBatchProducer.cpp"
 )
 target_link_libraries(index_file_parser PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
@@ -209,33 +214,33 @@ add_library(
 )
 target_link_libraries(color_index_builder PRIVATE libsdsl poppy_builder)
 
-add_library(
-  color_searcher_cpu
-  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cpp"
-)
-target_link_libraries(color_searcher_cpu PRIVATE gpu_utils fmt::fmt libsdsl)
-add_library(
-  color_searcher_gpu
-  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
-)
-set_source_files_properties(
-  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
-  TARGET_DIRECTORY color_searcher_gpu
-  PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
-)
-target_link_libraries(color_searcher_gpu PRIVATE gpu_utils fmt::fmt libsdsl)
-add_library(
-  color_searcher
-  "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
-)
-target_link_libraries(color_searcher PRIVATE fmt::fmt color_searcher_cpu color_searcher_gpu libsdsl)
-add_library(
-  color_results_printer
-  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/AsciiContinuousColorResultsPrinter.cpp"
-  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/BinaryContinuousColorResultsPrinter.cpp"
-  "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/CsvContinuousColorResultsPrinter.cpp"
-)
-target_link_libraries(color_results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX libjeaiii_itoa)
+# add_library(
+#   color_searcher_cpu
+#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cpp"
+# )
+# target_link_libraries(color_searcher_cpu PRIVATE gpu_utils fmt::fmt libsdsl)
+# add_library(
+#   color_searcher_gpu
+#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
+# )
+# set_source_files_properties(
+#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
+#   TARGET_DIRECTORY color_searcher_gpu
+#   PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
+# )
+# target_link_libraries(color_searcher_gpu PRIVATE gpu_utils fmt::fmt libsdsl)
+# add_library(
+#   color_searcher
+#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
+# )
+# target_link_libraries(color_searcher PRIVATE fmt::fmt color_searcher_cpu color_searcher_gpu libsdsl)
+# add_library(
+#   color_results_printer
+#   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/AsciiContinuousColorResultsPrinter.cpp"
+#   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/BinaryContinuousColorResultsPrinter.cpp"
+#   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/CsvContinuousColorResultsPrinter.cpp"
+# )
+# target_link_libraries(color_results_printer PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX libjeaiii_itoa)
 
 # Common libraries
 add_library(common_libraries INTERFACE)
@@ -282,8 +287,8 @@ target_link_libraries(
   color_index_builder
   color_index_container
   index_file_parser
-  color_searcher
-  color_results_printer
+  # color_searcher
+  # color_results_printer
 )
 
 # Link gpu items

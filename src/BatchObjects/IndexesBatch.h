@@ -17,9 +17,14 @@ using std::vector;
 
 class IndexesBatch {
 public:
-  vector<u64> indexes;
+  vector<u64> warped_indexes;
+  vector<u64> warps_intervals;
 
-  auto reset() -> void { indexes.resize(0); }
+  auto reset() -> void {
+    warped_indexes.resize(0);
+    warps_intervals.resize(1);
+    warps_intervals[0] = 0;
+  }
 };
 
 }  // namespace sbwt_search

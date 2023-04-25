@@ -5,7 +5,6 @@
 add_compile_options(
   # only in debug mode
   "$<$<CONFIG:Debug>:--coverage>"
-  "$<$<CONFIG:Debug>:-fno-elide-constructors>"
   "$<$<CONFIG:Debug>:-fno-default-inline>"
   "$<$<CONFIG:Debug>:-O0>"
 )

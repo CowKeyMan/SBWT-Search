@@ -5,18 +5,17 @@
  * @file IndexFileParser.h
  * @brief Parent template class for reading the list of integers
  * provided by the indexing function. Provides a padded list of integers per
- * read and another list of indexes to indicate where each read starts in our
+ * seq and another list of indexes to indicate where each seq starts in our
  * list of integers. Note: these classes expect the input to have the version
- * number as the first item, and then the contents later. The format encoded in
- * the file's header is read by another part of the code
+ * number as the first item, and then the contents later. The format encoded
+ * in the file's header is read by another part of the code
  */
 
 #include <fstream>
 #include <memory>
 
 #include "BatchObjects/IndexesBatch.h"
-#include "BatchObjects/ReadStatisticsBatch.h"
-#include "BatchObjects/WarpsBeforeNewReadBatch.h"
+#include "BatchObjects/SeqStatisticsBatch.h"
 #include "Tools/IOUtils.h"
 #include "Tools/SharedBatchesProducer.hpp"
 
@@ -32,31 +31,29 @@ using std::shared_ptr;
 class IndexFileParser {
 private:
   shared_ptr<ThrowingIfstream> in_stream;
-  shared_ptr<ReadStatisticsBatch> read_statistics_batch;
-  shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch;
+  shared_ptr<SeqStatisticsBatch> seq_statistics_batch;
   shared_ptr<IndexesBatch> indexes_batch;
   u64 max_indexes;
-  u64 max_reads;
+  u64 max_seqs;
   u64 warp_size;
+  u64 colored_seq_id;
 
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
   [[nodiscard]] auto get_indexes() const -> vector<u64> &;
   [[nodiscard]] auto get_max_indexes() const -> u64;
-  [[nodiscard]] auto get_max_reads() const -> u64;
-  [[nodiscard]] auto get_read_padding() const -> u64;
+  [[nodiscard]] auto get_max_seqs() const -> u64;
   IndexFileParser(
     shared_ptr<ThrowingIfstream> in_stream_,
     u64 max_indexes_,
-    u64 max_reads_,
-    u64 read_padding_
+    u64 max_seqs_,
+    u64 warp_size
   );
 
 public:
-  // return true if we manage to read from the file
+  // return true if we manage to seq from the file
   virtual auto generate_batch(
-    shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
-    shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch_,
+    shared_ptr<SeqStatisticsBatch> seq_statistics_batch_,
     shared_ptr<IndexesBatch> indexes_batch_
   ) -> bool;
   virtual ~IndexFileParser() = default;
@@ -64,17 +61,20 @@ public:
   IndexFileParser(IndexFileParser &&) = delete;
   auto operator=(IndexFileParser &) = delete;
   auto operator=(IndexFileParser &&) = delete;
-  auto pad_read() -> void;
 
 protected:
-  [[nodiscard]] auto get_read_statistics_batch() const
-    -> const shared_ptr<ReadStatisticsBatch> &;
-  [[nodiscard]] auto get_warps_before_new_read_batch() const
-    -> const shared_ptr<WarpsBeforeNewReadBatch> &;
+  [[nodiscard]] auto get_seq_statistics_batch() const
+    -> const shared_ptr<SeqStatisticsBatch> &;
   [[nodiscard]] auto get_indexes_batch() const
     -> const shared_ptr<IndexesBatch> &;
 
-  auto begin_new_read() -> void;
+  auto end_seq() -> void;
+  auto get_num_seqs() -> u64;
+  auto add_warp_interval() -> void;
+
+private:
+  auto pad_warp() -> void;
+  auto begin_new_seq() -> void;
 };
 
 }  // namespace sbwt_search

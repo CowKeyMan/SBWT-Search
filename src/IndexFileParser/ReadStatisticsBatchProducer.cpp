@@ -12,7 +12,7 @@ ReadStatisticsBatchProducer::ReadStatisticsBatchProducer(u64 max_batches):
 }
 
 auto ReadStatisticsBatchProducer::get_bits_per_read() -> u64 {
-  const u64 bits_required_per_result = 64ULL * 3;
+  const u64 bits_required_per_result = 64ULL * 5;
   return bits_required_per_result;
 }
 
