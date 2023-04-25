@@ -65,7 +65,7 @@ if(${HIP_TARGET_DEVICE} STREQUAL "cpu")
     GIT_SHALLOW          TRUE
   )
   FetchContent_MakeAvailable(hipcpu)
-  target_include_directories(hip_cpu_rt INTERFACE "${CMAKE_BINARY_DIR}/_deps/hipcpu-src/include/")
+  target_include_directories(hip_cpu_rt SYSTEM INTERFACE "${CMAKE_BINARY_DIR}/_deps/hipcpu-src/include/")
   target_compile_options(hip_rt INTERFACE -x c++)
   target_link_libraries(hip_rt INTERFACE hip_cpu_rt)
   set(HIP_TARGET_LANGUAGE CXX)
