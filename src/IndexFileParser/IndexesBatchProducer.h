@@ -33,6 +33,7 @@ public:
   );
 
   auto static get_bits_per_element() -> u64;
+  auto static get_bits_per_seq() -> u64;
 
 private:
   auto get_default_value() -> shared_ptr<IndexesBatch> override;

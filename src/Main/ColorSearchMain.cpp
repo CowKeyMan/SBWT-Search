@@ -34,7 +34,6 @@ using std::runtime_error;
 
 const u64 interval_batch_producer_max_batches = 2;
 const u64 seq_statistics_batch_producer_max_batches = 2;
-const u64 get_warps_before_new_read_batch_producer_max_batches = 2;
 const u64 indexes_batch_producer_max_batches = 2;
 const u64 color_searcher_max_batches = 2;
 
@@ -80,13 +79,12 @@ inline auto ColorSearchMain::get_gpu_container()
 
 auto ColorSearchMain::load_batch_info() -> void {
   max_indexes_per_batch = get_max_chars_per_batch();
-  max_seqs_per_batch
-    = max_indexes_per_batch / get_args().get_indexes_per_read();
+  max_seqs_per_batch = max_indexes_per_batch / get_args().get_indexes_per_seq();
   if (max_indexes_per_batch == 0) { throw runtime_error("Not enough memory"); }
   Logger::log(
     Logger::LOG_LEVEL::INFO,
     format(
-      "Using {} max indexes per batch and {} max reads per batch",
+      "Using {} max indexes per batch and {} max seqs per batch",
       max_indexes_per_batch,
       max_seqs_per_batch
     )
@@ -123,11 +121,11 @@ auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
         ContinuousColorSearcher::get_bits_per_warp_gpu(num_colors)
       )
       / static_cast<double>(gpu_warp_size)
-    // bits per read
-    + (static_cast<double>(
+    // bits per seq
+    + static_cast<double>(
         ContinuousColorSearcher::get_bits_per_seq_gpu(num_colors)
-      ))
-      / static_cast<double>(get_args().get_indexes_per_read());
+      )
+      / static_cast<double>(get_args().get_indexes_per_seq());
   u64 max_chars_per_batch = static_cast<u64>(std::floor(
     static_cast<double>(free_bits) / bits_required_per_character
     / static_cast<double>(streams)
@@ -166,23 +164,30 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
       IndexesBatchProducer::get_bits_per_element()
       * indexes_batch_producer_max_batches
     )
-    // bits per read
+    // bits per seq
     + static_cast<double>(
         +SeqStatisticsBatchProducer::get_bits_per_seq()
           * seq_statistics_batch_producer_max_batches
+        + IndexesBatchProducer::get_bits_per_seq()
+          * indexes_batch_producer_max_batches
         + ContinuousColorSearcher::get_bits_per_seq_cpu(num_colors)
           * color_searcher_max_batches
-        + get_results_printer_bits_per_read()
+        + get_results_printer_bits_per_seq()
       )
-      / static_cast<double>(get_args().get_indexes_per_read())
+      / static_cast<double>(get_args().get_indexes_per_seq())
 #if defined(__HIP_CPU_RT__)  // include gpu required memory as well
     // bits per element
     + static_cast<double>(ContinuousColorSearcher::get_bits_per_element_gpu())
     // bits per warp
     + static_cast<double>(
-        ContinuousColorSearcher::get_bits_per_warp_cpu(num_colors)
+        ContinuousColorSearcher::get_bits_per_warp_gpu(num_colors)
       )
       / static_cast<double>(gpu_warp_size)
+    // bits per seq
+    + static_cast<double>(
+        ContinuousColorSearcher::get_bits_per_seq_gpu(num_colors)
+      )
+      / static_cast<double>(get_args().get_indexes_per_seq())
 #endif
   );
   u64 max_chars_per_batch = static_cast<u64>(std::floor(
@@ -202,15 +207,15 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
   return max_chars_per_batch;
 }
 
-auto ColorSearchMain::get_results_printer_bits_per_read() -> u64 {
+auto ColorSearchMain::get_results_printer_bits_per_seq() -> u64 {
   if (get_args().get_print_mode() == "ascii") {
-    return AsciiContinuousColorResultsPrinter::get_bits_per_read(num_colors);
+    return AsciiContinuousColorResultsPrinter::get_bits_per_seq(num_colors);
   }
   if (get_args().get_print_mode() == "binary") {
-    return BinaryContinuousColorResultsPrinter::get_bits_per_read(num_colors);
+    return BinaryContinuousColorResultsPrinter::get_bits_per_seq(num_colors);
   }
   if (get_args().get_print_mode() == "csv") {
-    return CsvContinuousColorResultsPrinter::get_bits_per_read(num_colors);
+    return CsvContinuousColorResultsPrinter::get_bits_per_seq(num_colors);
   }
   throw runtime_error("Invalid value passed by user for argument print_mode");
 }

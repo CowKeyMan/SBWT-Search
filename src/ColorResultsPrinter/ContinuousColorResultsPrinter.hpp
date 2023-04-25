@@ -81,8 +81,8 @@ public:
     bool include_not_found_,
     bool include_invalid_,
     u64 threads_,
-    u64 read_size,
-    u64 max_reads_per_batch,
+    u64 seq_size,
+    u64 max_seqs_per_batch,
     bool write_headers_
   ):
       seq_statistics_batch_producer(std::move(seq_statistics_batch_producer_)),
@@ -100,7 +100,7 @@ public:
       write_headers(write_headers_) {
     for (auto &b : buffers) {
       impl().do_allocate_buffer(
-        b, divide_and_ceil<u64>(max_reads_per_batch, threads_) * read_size
+        b, divide_and_ceil<u64>(max_seqs_per_batch, threads_) * seq_size
       );
     }
   }
@@ -170,7 +170,7 @@ protected:
     auto &colored_seq_id = seq_statistics_batch->colored_seq_id;
     auto &sbnfs = seq_statistics_batch->seqs_before_new_file;
 
-    // Fill in from previous batch (read is continued)
+    // Fill in from previous batch (seq is continued)
     found_idxs[0] += previous_last_found_idx;
     not_found_idxs[0] += previous_last_not_found_idxs;
     invalid_idxs[0] += previous_last_invalid_idxs;
@@ -197,7 +197,7 @@ protected:
 
 #pragma omp for schedule(static)
         for (u64 seq_idx = start_seq; seq_idx < end_seq; ++seq_idx) {
-          impl().do_print_read(
+          impl().do_print_seq(
             copy_advance(colors.begin(), colored_seq_id[seq_idx] * num_colors),
             found_idxs[seq_idx],
             not_found_idxs[seq_idx],
@@ -230,7 +230,7 @@ protected:
     }
   }
 
-  auto do_print_read(
+  auto do_print_seq(
     vector<u64>::iterator results,
     u64 found_idxs,
     u64 not_found_idxs,
@@ -238,10 +238,10 @@ protected:
     vector<Buffer_t> &buffer,
     u64 &buffer_idx
   ) -> void {
-    u64 read_size = found_idxs + include_not_found * not_found_idxs
+    u64 seq_size = found_idxs + include_not_found * not_found_idxs
       + include_invalid * invalid_idxs;
     const u64 minimum_found
-      = static_cast<u64>(std::ceil(static_cast<double>(read_size) * threshold));
+      = static_cast<u64>(std::ceil(static_cast<double>(seq_size) * threshold));
     bool first_print = true;
     for (u64 color_idx = 0; minimum_found > 0 && color_idx < num_colors;
          ++color_idx, ++results) {

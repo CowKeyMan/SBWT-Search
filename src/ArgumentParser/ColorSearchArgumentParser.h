@@ -36,7 +36,7 @@ public:
   auto get_max_cpu_memory() const -> u64;
   auto get_print_mode() const -> string;
   auto get_threshold() const -> double;
-  auto get_indexes_per_read() const -> u64;
+  auto get_indexes_per_seq() const -> u64;
   auto get_cpu_memory_percentage() const -> double;
   auto get_gpu_memory_percentage() const -> double;
   auto get_include_not_found() const -> bool;

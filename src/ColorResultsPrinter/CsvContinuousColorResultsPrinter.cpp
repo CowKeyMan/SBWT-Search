@@ -20,7 +20,7 @@ CsvContinuousColorResultsPrinter::CsvContinuousColorResultsPrinter(
   bool include_not_found_,
   bool include_invalid_,
   u64 threads,
-  u64 max_reads_per_batch,
+  u64 max_seqs_per_batch,
   bool write_headers
 ):
     Base(
@@ -34,7 +34,7 @@ CsvContinuousColorResultsPrinter::CsvContinuousColorResultsPrinter(
       include_invalid_,
       threads,
       num_colors_ * 2,
-      max_reads_per_batch,
+      max_seqs_per_batch,
       write_headers
     ),
     num_colors(num_colors_) {
@@ -49,8 +49,7 @@ CsvContinuousColorResultsPrinter::CsvContinuousColorResultsPrinter(
   }
 }
 
-auto CsvContinuousColorResultsPrinter::get_bits_per_read(u64 num_colors)
-  -> u64 {
+auto CsvContinuousColorResultsPrinter::get_bits_per_seq(u64 num_colors) -> u64 {
   return num_colors * 2 * bits_in_byte;
 }
 
@@ -75,7 +74,7 @@ auto CsvContinuousColorResultsPrinter::do_write_file_header(
   }
 }
 
-auto CsvContinuousColorResultsPrinter::do_print_read(
+auto CsvContinuousColorResultsPrinter::do_print_seq(
   vector<u64>::iterator results,
   u64 found_idxs,
   u64 not_found_idxs,
@@ -88,7 +87,7 @@ auto CsvContinuousColorResultsPrinter::do_print_read(
     row_template.end(),
     copy_advance(buffer.begin(), buffer_idx)
   );
-  Base::do_print_read(
+  Base::do_print_seq(
     results, found_idxs, not_found_idxs, invalid_idxs, buffer, buffer_idx
   );
   buffer_idx += row_template.size();

@@ -16,7 +16,7 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
   bool include_not_found_,
   bool include_invalid_,
   u64 threads,
-  u64 max_reads_per_batch,
+  u64 max_seqs_per_batch,
   bool write_headers
 ):
     Base(
@@ -29,12 +29,12 @@ AsciiContinuousColorResultsPrinter::AsciiContinuousColorResultsPrinter(
       include_not_found_,
       include_invalid_,
       threads,
-      get_bits_per_read(num_colors_) / bits_in_byte,
-      max_reads_per_batch,
+      get_bits_per_seq(num_colors_) / bits_in_byte,
+      max_seqs_per_batch,
       write_headers
     ) {}
 
-auto AsciiContinuousColorResultsPrinter::get_bits_per_read(u64 num_colors)
+auto AsciiContinuousColorResultsPrinter::get_bits_per_seq(u64 num_colors)
   -> u64 {
   u64 num_colors_copy = num_colors;
   const u64 bits_required_per_whitespace = bits_in_byte;

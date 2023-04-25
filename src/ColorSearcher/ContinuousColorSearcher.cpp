@@ -32,9 +32,7 @@ ContinuousColorSearcher::ContinuousColorSearcher(
 
 auto ContinuousColorSearcher::get_bits_per_seq_cpu(u64 num_colors) -> u64 {
   const u64 bits_required_per_result = 64;
-  const u64 bits_required_per_unique_warps_before_new_read = 64;
-  return num_colors * bits_required_per_result
-    + bits_required_per_unique_warps_before_new_read;
+  return num_colors * bits_required_per_result;
 }
 
 auto ContinuousColorSearcher::get_bits_per_element_gpu() -> u64 {

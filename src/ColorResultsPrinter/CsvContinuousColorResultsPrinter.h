@@ -4,7 +4,7 @@
 /**
  * @file CsvContinuousColorResultsPrinter.h
  * @brief Outputs csv results. Color indexes are ordered and space separated,
- * and each read is placed on a new line
+ * and each seq is placed on a new line
  */
 
 #include "ColorResultsPrinter/ContinuousColorResultsPrinter.hpp"
@@ -35,16 +35,16 @@ public:
     bool include_not_found_,
     bool include_invalid_,
     u64 threads,
-    u64 max_reads_per_batch,
+    u64 max_seqs_per_batch,
     bool write_headers
   );
 
-  auto static get_bits_per_read(u64 num_colors) -> u64;
+  auto static get_bits_per_seq(u64 num_colors) -> u64;
 
 protected:
   auto do_get_extension() -> string;
 
-  auto do_print_read(
+  auto do_print_seq(
     vector<u64>::iterator results,
     u64 found_idxs,
     u64 not_found_idxs,

@@ -99,10 +99,10 @@ auto ColorSearchArgumentParser::create_options() -> void {
     "The mode used when printing the result to the output file. Options are "
     "'ascii' (default), 'binary' or 'csv'. In ascii omde, the results are "
     "printed in ASCII format so that the numbers viewed in each line represent "
-    "the colors found. The reads are separated by newline characters. The "
+    "the colors found. The seqs are separated by newline characters. The "
     "binary format   will be similar to the index search in that each color "
     "found will be represented instead by an 8 byte (64-bit) integer, and the "
-    "start of a new read is indicated by a -1 (ULLONG_MAX). This can result in "
+    "start of a new seq is indicated by a -1 (ULLONG_MAX). This can result in "
     "larger files due to the characters taken by the colors usually being "
     "quite small, so the ascii format does not take as many characters. The "
     "csv format is the densest format and results in VERY huge files. As such "
@@ -125,7 +125,7 @@ auto ColorSearchArgumentParser::create_options() -> void {
   );
   get_options().add_options()(
     "t,threshold",
-    "The percentage of kmers within a read which need to be attributed to a "
+    "The percentage of kmers within a seq which need to be attributed to a "
     "color in order for us to accept that color as being part of our output. "
     "Must be a value between 1 and 0 (both included)",
     value<double>()->default_value("1")
@@ -134,7 +134,7 @@ auto ColorSearchArgumentParser::create_options() -> void {
     "include-not-found",
     "By default, indexes which have not been found in the index search "
     "(represented by -1s) are not considered by the algorithm, and they are "
-    "simply skipped over and considered to not be part of the read. If this "
+    "simply skipped over and considered to not be part of the seq. If this "
     "option is set, then they will be considered as indexes which have had no "
     "colors found."
   );
@@ -143,7 +143,7 @@ auto ColorSearchArgumentParser::create_options() -> void {
     "By default, indexes which are invalid, that is, the kmers to which they "
     "correspond to contain characters other than acgt/ACGT (represented by "
     "-2s) are not considered by the algorithm, and they are simply skipped "
-    "over and considered to not be part of the read. If this option is set, "
+    "over and considered to not be part of the seq. If this option is set, "
     "then they will be considered as indexes which have had no colors found."
   );
   get_options().add_options()(
@@ -162,13 +162,13 @@ auto ColorSearchArgumentParser::create_options() -> void {
     "for pseudoalignment later, this header is mandatory."
   );
   get_options().add_options()(
-    "r,indexes-per-read",
-    "The approximate number of indexes in every read. This is necessary "
-    "because we need to keep track of the breaks where each read starts and "
+    "r,indexes-per-seq",
+    "The approximate number of indexes in every seq. This is necessary "
+    "because we need to keep track of the breaks where each seq starts and "
     "ends in our list of base pairs. As such we must allocate memory for it. "
     "By defalt, this value is 70, meaning that we would then allocate enough "
     "memory for 1 break per 70 indexes. This option is available in case "
-    "your reads vary a lot more than that and you wish to optimise for space.",
+    "your seqs vary a lot more than that and you wish to optimise for space.",
     value<u64>()->default_value("70")
   );
   get_options().add_options()(
@@ -209,8 +209,8 @@ auto ColorSearchArgumentParser::get_threshold() const -> double {
   }
   return threshold;
 }
-auto ColorSearchArgumentParser::get_indexes_per_read() const -> u64 {
-  return get_args()["indexes-per-read"].as<u64>();
+auto ColorSearchArgumentParser::get_indexes_per_seq() const -> u64 {
+  return get_args()["indexes-per-seq"].as<u64>();
 }
 auto ColorSearchArgumentParser::get_cpu_memory_percentage() const -> double {
   auto result = get_args()["cpu-memory-percentage"].as<double>();

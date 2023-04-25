@@ -37,7 +37,6 @@ private:
   u64 streams = 0;
   u64 max_indexes_per_batch = 0;
   u64 max_seqs_per_batch = 0;
-  u64 results_printer_max_reads_in_buffer = 0;
   unique_ptr<ColorSearchArgumentParser> args;
 
 public:
@@ -49,7 +48,7 @@ private:
   auto load_batch_info() -> void;
   auto get_max_chars_per_batch_cpu() -> u64;
   auto get_max_chars_per_batch_gpu() -> u64;
-  auto get_results_printer_bits_per_read() -> u64;
+  auto get_results_printer_bits_per_seq() -> u64;
   auto get_max_chars_per_batch() -> u64;
   auto get_input_output_filenames()
     -> std::tuple<vector<vector<string>>, vector<vector<string>>>;
