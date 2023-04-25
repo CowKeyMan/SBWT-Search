@@ -8,8 +8,7 @@
 
 #include <memory>
 
-#include "BatchObjects/ColorSearchResultsBatch.h"
-#include "BatchObjects/WarpsBeforeNewReadBatch.h"
+#include "BatchObjects/ColorsBatch.h"
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
 #include "ColorSearcher/ColorSearcher.h"
 #include "IndexFileParser/IndexesBatchProducer.h"
@@ -18,18 +17,13 @@
 namespace sbwt_search {
 
 using std::shared_ptr;
-using std::unique_ptr;
 
 using design_utils::SharedBatchesProducer;
 
-class ContinuousColorSearcher:
-    public SharedBatchesProducer<ColorSearchResultsBatch> {
+class ContinuousColorSearcher: public SharedBatchesProducer<ColorsBatch> {
 private:
   shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer;
-  shared_ptr<SharedBatchesProducer<WarpsBeforeNewReadBatch>>
-    warps_before_new_read_batch_producer;
   shared_ptr<IndexesBatch> indexes_batch;
-  shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch;
   ColorSearcher searcher;
   u64 max_indexes_per_batch;
   u64 num_colors;
@@ -40,19 +34,18 @@ public:
     u64 stream_id_,
     shared_ptr<GpuColorIndexContainer> color_index_container_,
     shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer_,
-    shared_ptr<SharedBatchesProducer<WarpsBeforeNewReadBatch>>
-      warps_before_new_read_batch_producer_,
     u64 max_indexes_per_batch_,
     u64 max_batches,
     u64 num_colors_
   );
 
-  auto static get_bits_per_warp_cpu(u64 num_colors) -> u64;
+  auto static get_bits_per_read_cpu(u64 num_colors) -> u64;
   auto static get_bits_per_element_gpu() -> u64;
   auto static get_bits_per_warp_gpu(u64 num_colors) -> u64;
+  auto static get_bits_per_read_gpu(u64 num_colors) -> u64;
 
 private:
-  auto get_default_value() -> shared_ptr<ColorSearchResultsBatch> override;
+  auto get_default_value() -> shared_ptr<ColorsBatch> override;
   auto start_new_batch() -> void;
   auto continue_read_condition() -> bool override;
   auto generate() -> void override;

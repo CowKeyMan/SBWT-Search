@@ -1,3 +1,23 @@
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <span>
+#include <vector>
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::vector;
+template <class T>
+auto print_vec(
+  const vector<T> &v, uint64_t limit = std::numeric_limits<uint64_t>::max()
+) {
+  cout << "---------------------" << endl;
+  for (int i = 0; i < std::min(limit, v.size()); ++i) {
+    cout << static_cast<uint64_t>(v[i]) << " ";
+  }
+  cout << endl << "---------------------" << endl;
+}
+
 #include <limits>
 
 #include "ColorSearcher/ColorSearcher.h"
@@ -30,7 +50,7 @@ ColorSearcher::ColorSearcher(
 
 auto ColorSearcher::search(
   const vector<u64> &sbwt_index_idxs,
-  const vector<u64> &warps_before_new_read,
+  const vector<u64> &warps_intervals,
   vector<u64> &results,
   u64 batch_id
 ) -> void {
@@ -40,16 +60,21 @@ auto ColorSearcher::search(
   );
   if (!sbwt_index_idxs.empty()) {
     searcher_copy_to_gpu(batch_id, sbwt_index_idxs);
-    results.resize(warps_before_new_read.size() * container->num_colors);
     launch_search_kernel(sbwt_index_idxs.size(), batch_id);
-    combine_copy_to_gpu(batch_id, warps_before_new_read);
+    results.resize((warps_intervals.size() - 1) * container->num_colors);
+    combine_copy_to_gpu(batch_id, warps_intervals);
     launch_combine_kernel(
-      sbwt_index_idxs.size() / gpu_warp_size,
-      warps_before_new_read.size(),
-      container->num_colors,
-      batch_id
+      warps_intervals.size() - 1, container->num_colors, batch_id
     );
     copy_from_gpu(results, batch_id);
+
+    vector<u8> fat(
+      sbwt_index_idxs.size() / gpu_warp_size * container->num_colors
+    );
+    d_fat_results.copy_to_async(fat, fat.size(), gpu_stream);
+    print_vec(warps_intervals);
+    print_vec(fat);
+    print_vec(results);
   }
 }
 
@@ -80,16 +105,16 @@ auto ColorSearcher::searcher_copy_to_gpu(
 }
 
 auto ColorSearcher::combine_copy_to_gpu(
-  u64 batch_id, const vector<u64> &warps_before_new_read
+  u64 batch_id, const vector<u64> &warps_intervals
 ) -> void {
   Logger::log_timed_event(
     format("SearcherCopyToGpu2_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  auto &d_warps_before_new_read = d_sbwt_index_idxs;
-  d_warps_before_new_read.set_async(
-    warps_before_new_read.data(), warps_before_new_read.size(), gpu_stream
+  auto &d_warps_intervals = d_sbwt_index_idxs;
+  d_warps_intervals.set_async(
+    warps_intervals.data(), warps_intervals.size(), gpu_stream
   );
   Logger::log_timed_event(
     format("SearcherCopyToGpu2_{}", stream_id),

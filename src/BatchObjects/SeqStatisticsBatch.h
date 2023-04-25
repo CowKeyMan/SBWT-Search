@@ -34,9 +34,13 @@ public:
 
   auto reset() -> void {
     found_idxs.resize(0);
+    found_idxs.push_back(0);
     invalid_idxs.resize(0);
+    invalid_idxs.push_back(0);
     not_found_idxs.resize(0);
+    not_found_idxs.push_back(0);
     colored_seq_id.resize(0);
+    colored_seq_id.push_back(0);
     seqs_before_new_file.resize(0);
   }
 };

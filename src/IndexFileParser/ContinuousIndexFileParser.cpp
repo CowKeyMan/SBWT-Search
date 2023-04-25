@@ -69,12 +69,8 @@ auto ContinuousIndexFileParser::start_next_file() -> bool {
     );
     auto seqs_statistics_batch = seq_statistics_batch_producer->current_write();
     seqs_statistics_batch->seqs_before_new_file.push_back(
-      seqs_statistics_batch->colored_seq_id.size()
+      seqs_statistics_batch->colored_seq_id.size() - 1
     );
-    seq_statistics_batch_producer->current_write()->found_idxs.push_back(0);
-    seq_statistics_batch_producer->current_write()->invalid_idxs.push_back(0);
-    seq_statistics_batch_producer->current_write()->not_found_idxs.push_back(0);
-    seq_statistics_batch_producer->current_write()->colored_seq_id.push_back(0);
     try {
       start_new_file(filename);
       return true;

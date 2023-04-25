@@ -214,26 +214,26 @@ add_library(
 )
 target_link_libraries(color_index_builder PRIVATE libsdsl poppy_builder)
 
-# add_library(
-#   color_searcher_cpu
-#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cpp"
-# )
-# target_link_libraries(color_searcher_cpu PRIVATE gpu_utils fmt::fmt libsdsl)
-# add_library(
-#   color_searcher_gpu
-#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
-# )
-# set_source_files_properties(
-#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
-#   TARGET_DIRECTORY color_searcher_gpu
-#   PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
-# )
-# target_link_libraries(color_searcher_gpu PRIVATE gpu_utils fmt::fmt libsdsl)
-# add_library(
-#   color_searcher
-#   "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
-# )
-# target_link_libraries(color_searcher PRIVATE fmt::fmt color_searcher_cpu color_searcher_gpu libsdsl)
+add_library(
+  color_searcher_cpu
+  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cpp"
+)
+target_link_libraries(color_searcher_cpu PRIVATE gpu_utils fmt::fmt libsdsl)
+add_library(
+  color_searcher_gpu
+  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
+)
+set_source_files_properties(
+  "${PROJECT_SOURCE_DIR}/ColorSearcher/ColorSearcher.cu"
+  TARGET_DIRECTORY color_searcher_gpu
+  PROPERTIES LANGUAGE ${HIP_TARGET_LANGUAGE}
+)
+target_link_libraries(color_searcher_gpu PRIVATE gpu_utils fmt::fmt libsdsl)
+add_library(
+  color_searcher
+  "${PROJECT_SOURCE_DIR}/ColorSearcher/ContinuousColorSearcher.cpp"
+)
+target_link_libraries(color_searcher PRIVATE fmt::fmt color_searcher_cpu color_searcher_gpu libsdsl)
 # add_library(
 #   color_results_printer
 #   "${PROJECT_SOURCE_DIR}/ColorResultsPrinter/AsciiContinuousColorResultsPrinter.cpp"
@@ -287,7 +287,7 @@ target_link_libraries(
   color_index_builder
   color_index_container
   index_file_parser
-  # color_searcher
+  color_searcher
   # color_results_printer
 )
 

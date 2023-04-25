@@ -75,7 +75,7 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
 }
 
 auto ColorSearcher::launch_combine_kernel(
-  u64 num_warps, u64 num_reads, u64 num_colors, u64 batch_id
+  u64 num_warps, u64 num_colors, u64 batch_id
 ) -> void {
   Logger::log_timed_event(
     format("SearcherPostProcess_{}", stream_id),
@@ -83,8 +83,8 @@ auto ColorSearcher::launch_combine_kernel(
     format("batch {}", batch_id)
   );
   u64 blocks_per_grid
-    = divide_and_ceil<u64>(num_reads * num_colors, threads_per_block);
-  auto &d_warps_before_new_read = d_sbwt_index_idxs;
+    = divide_and_ceil<u64>(num_warps * num_colors, threads_per_block);
+  auto &d_warps_intervals = d_sbwt_index_idxs;
   start_timer.record(&gpu_stream);
   hipLaunchKernelGGL(
     d_post_process,
@@ -93,9 +93,8 @@ auto ColorSearcher::launch_combine_kernel(
     0,
     *static_cast<hipStream_t *>(gpu_stream.get()),
     d_fat_results.get(),
-    d_warps_before_new_read.get(),
+    d_warps_intervals.get(),
     num_warps,
-    num_reads,
     num_colors,
     d_results.get()
   );

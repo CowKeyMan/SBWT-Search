@@ -172,52 +172,17 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
   u64 max = numeric_limits<u64>::max();
   const vector<vector<u64>> expected_warps_intervals
     = {{0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0, 1}, {0}};
-
   const vector<vector<u64>> expected_seqs_before_newfile
-    = {{max}, {max}, {max}, {max}, {1, max}, {max}, {max}, {max}, {max}};
-
+    = {{max}, {max}, {max}, {max}, {0, max}, {max}, {max}, {max}, {max}};
   const vector<vector<u64>> expected_found_idxs = {
-    {4},
-    {0, 0, 4},
-    {0, 0, 4},
-    {2, 0},
-    {0, 0, 4},
-    {0, 0, 4},
-    {0, 0, 4},
-    {2, 0},
-    {0}};
+    {4}, {0, 0, 4}, {0, 0, 4}, {2, 0}, {4}, {0, 0, 4}, {0, 0, 4}, {2, 0}, {0}};
   const vector<vector<u64>> expected_not_found_idxs = {
-    {0},
-    {1, 5, 0},
-    {0, 0, 0},
-    {0, 0},
-    {0, 0, 0},
-    {1, 5, 0},
-    {0, 0, 0},
-    {0, 0},
-    {0}};
+    {0}, {1, 5, 0}, {0, 0, 0}, {0, 0}, {0}, {1, 5, 0}, {0, 0, 0}, {0, 0}, {0}};
   const vector<vector<u64>> expected_invalid_idxs = {
-    {1},
-    {1, 2, 0},
-    {0, 0, 0},
-    {0, 0},
-    {0, 0, 1},
-    {1, 2, 0},
-    {0, 0, 0},
-    {0, 0},
-    {0}};
+    {1}, {1, 2, 0}, {0, 0, 0}, {0, 0}, {1}, {1, 2, 0}, {0, 0, 0}, {0, 0}, {0}};
   const vector<vector<u64>> expected_colored_seq_id = {
-    {0},
-    {0, 0, 0},
-    {0, 0, 0},
-    {0, 1},
-    {0, 0, 0},
-    {0, 0, 0},
-    {0, 0, 0},
-    {0, 1},
-    {0}};
-  /* for (auto max_batches : {1, 2, 3, 4, 5, 7, 99}) { */
-  for (auto max_batches : {7}) {
+    {0}, {0, 0, 0}, {0, 0, 0}, {0, 1}, {0}, {0, 0, 0}, {0, 0, 0}, {0, 1}, {0}};
+  for (auto max_batches : {1, 2, 3, 4, 5, 7, 99}) {
     run_test(
       max_batches,
       max_indexes_per_batch,
@@ -235,77 +200,79 @@ TEST_F(ContinuousIndexFileParserTest, TestAll) {
   }
 }
 
-/* TEST_F(ContinuousIndexFileParserTest, TestOneBatch) { */
-/*   const u64 max_indexes_per_batch = 999; */
-/*   const u64 max_reads_per_batch = 999; */
-/*   const vector<string> filenames = { */
-/*     "test_objects/example_index_search_result.txt", */
-/*     get_binary_index_output_filename()}; */
-/*   const u64 read_padding = 4; */
-/*   int pad = -1; */
-/*   const vector<vector<int>> expected_indexes = {{ */
-/*     39, */
-/*     164, */
-/*     216, */
-/*     59,  // end of 1st read */
-/*          // 2nd read is empty */
-/*     1, */
-/*     2, */
-/*     3, */
-/*     4,  // end of 3rd read */
-/*         // empty line */
-/*     0, */
-/*     1, */
-/*     2, */
-/*     4, */
-/*     5, */
-/*     6, */
-/*     pad, */
-/*     pad,  // end of 4th read */
-/*           // end of first file */
-/*     39, */
-/*     164, */
-/*     216, */
-/*     59,  // end of 1st read */
-/*          // 2nd read is empty */
-/*     1, */
-/*     2, */
-/*     3, */
-/*     4,  // end of 3rd read */
-/*         // empty line */
-/*     0, */
-/*     1, */
-/*     2, */
-/*     4, */
-/*     5, */
-/*     6, */
-/*     pad, */
-/*     pad  // end of 4th read */
-/*   }}; */
-/*   const vector<vector<u64>> expected_warps_before_new_reads */
-/*     = {{1, 1, 2, 2, 4, 5, 5, 6, 6, max}}; */
-/*   const vector<vector<u64>> expected_reads_before_newfile = {{5, max}}; */
-/*   const vector<vector<u64>> expected_found_idxs */
-/*     = {{4, 0, 4, 0, 6, 4, 0, 4, 0, 6}}; */
-/*   const vector<vector<u64>> expected_not_found_idxs */
-/*     = {{1, 5, 0, 0, 0, 1, 5, 0, 0, 0}}; */
-/*   const vector<vector<u64>> expected_invalid_idxs */
-/*     = {{2, 2, 0, 0, 0, 2, 2, 0, 0, 0}}; */
-/*   for (auto max_batches : {1, 2, 3, 4, 5, 7, 99}) { */
-/*     run_test( */
-/*       max_batches, */
-/*       max_indexes_per_batch, */
-/*       max_reads_per_batch, */
-/*       read_padding, */
-/*       filenames, */
-/*       to_u64s(expected_indexes), */
-/*       expected_warps_before_new_reads, */
-/*       expected_reads_before_newfile, */
-/*       expected_found_idxs, */
-/*       expected_not_found_idxs, */
-/*       expected_invalid_idxs */
-/*     ); */
-/*   } */
-/* } */
+TEST_F(ContinuousIndexFileParserTest, TestOneBatch) {
+  const u64 max_indexes_per_batch = 999;
+  const u64 max_reads_per_batch = 999;
+  const vector<string> filenames
+    = {"test_objects/example_index_search_result.txt", get_binary_filename()};
+  const u64 read_padding = 4;
+  int pad = -1;
+  const vector<vector<int>> expected_indexes = {{
+    39,
+    164,
+    216,
+    59,  // end of 1st read
+         // 2nd read is empty
+    1,
+    2,
+    3,
+    4,  // end of 3rd read
+        // empty line
+    0,
+    1,
+    2,
+    4,
+    5,
+    6,
+    pad,
+    pad,  // end of 4th read
+          // end of first file
+    39,
+    164,
+    216,
+    59,  // end of 1st read
+         // 2nd read is empty
+    1,
+    2,
+    3,
+    4,  // end of 3rd read
+        // empty line
+    0,
+    1,
+    2,
+    4,
+    5,
+    6,
+    pad,
+    pad  // end of 4th read
+  }};
+  u64 max = numeric_limits<u64>::max();
+  const vector<vector<u64>> expected_warps_intervals = {{0, 1, 2, 4, 5, 6, 8}};
+  const vector<vector<u64>> expected_seqs_before_newfile = {{5, max}};
+  const vector<vector<u64>> expected_found_idxs
+    = {{4, 0, 4, 0, 6, 4, 0, 4, 0, 6, 0}};
+  const vector<vector<u64>> expected_not_found_idxs
+    = {{1, 5, 0, 0, 0, 1, 5, 0, 0, 0, 0}};
+  const vector<vector<u64>> expected_invalid_idxs
+    = {{2, 2, 0, 0, 0, 2, 2, 0, 0, 0, 0}};
+  const vector<vector<u64>> expected_colored_seq_id
+    = {{0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6}};
+  for (auto max_batches : {1, 2, 3, 4, 5, 7, 99}) {
+    run_test(
+      max_batches,
+      max_indexes_per_batch,
+      max_reads_per_batch,
+      read_padding,
+      filenames,
+      to_u64s(expected_indexes),
+      expected_warps_intervals,
+      expected_found_idxs,
+      expected_not_found_idxs,
+      expected_invalid_idxs,
+      expected_colored_seq_id,
+      expected_seqs_before_newfile
+    );
+  }
+}
 
 }  // namespace sbwt_search

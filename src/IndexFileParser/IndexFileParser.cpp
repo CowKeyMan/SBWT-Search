@@ -30,10 +30,6 @@ auto IndexFileParser::generate_batch(
 ) -> bool {
   seq_statistics_batch = std::move(read_statistics_batch_);
   indexes_batch = std::move(indexes_batch_);
-  seq_statistics_batch->found_idxs.push_back(0);
-  seq_statistics_batch->not_found_idxs.push_back(0);
-  seq_statistics_batch->invalid_idxs.push_back(0);
-  seq_statistics_batch->colored_seq_id.push_back(0);
   return false;
 }
 

@@ -37,7 +37,7 @@ public:
 
   auto search(
     const vector<u64> &sbwt_index_idxs,
-    const vector<u64> &warps_before_new_read,
+    const vector<u64> &warps_intervals,
     vector<u64> &results,
     u64 batch_id
   ) -> void;
@@ -50,10 +50,12 @@ private:
   auto
   combine_copy_to_gpu(u64 batch_id, const vector<u64> &warps_before_new_read)
     -> void;
-  auto launch_combine_kernel(
-    u64 num_warps, u64 num_reads, u64 num_colors, u64 batch_id
-  ) -> void;
+  auto launch_combine_kernel(u64 num_warps, u64 num_colors, u64 batch_id)
+    -> void;
   auto copy_from_gpu(vector<u64> &results, u64 batch_id) -> void;
+  auto fill_unique_warps_before_new_read(
+    const vector<u64> &warps_before_new_read, u64 num_warps
+  ) -> void;
 };
 
 }  // namespace sbwt_search
