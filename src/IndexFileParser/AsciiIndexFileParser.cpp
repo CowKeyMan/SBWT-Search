@@ -42,7 +42,7 @@ auto AsciiIndexFileParser::generate_batch(
   char c = '\0';
   while (
     get_indexes().size() < get_max_indexes() && get_num_seqs() < get_max_seqs()
-    /* && (!get_istream().eof() || buffer_index != buffer_size) */
+    && (!get_istream().eof() || buffer_index != buffer_size)
   ) {
     c = getc();
     if (c == '\0') {  // EOF

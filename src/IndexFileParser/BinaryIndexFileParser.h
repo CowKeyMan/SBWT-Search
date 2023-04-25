@@ -26,7 +26,6 @@ private:
   vector<u64> buffer;
   u64 buffer_size = 0;
   u64 buffer_index = 0;
-  bool new_read = false;
 
 public:
   BinaryIndexFileParser(
@@ -37,8 +36,7 @@ public:
     u64 buffer_size = sixteen_kB / sizeof(u64)
   );
   auto generate_batch(
-    shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
-    shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch_,
+    shared_ptr<SeqStatisticsBatch> read_statistics_batch_,
     shared_ptr<IndexesBatch> indexes_batch_
   ) -> bool override;
 

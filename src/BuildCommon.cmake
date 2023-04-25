@@ -32,7 +32,7 @@ set(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
 set(CXXOPTS_ENABLE_WARNINGS OFF CACHE BOOL "" FORCE)
-include_directories("${CMAKE_BINARY_DIR}/_deps/cxxopts-src/include")
+include_directories(SYSTEM "${CMAKE_BINARY_DIR}/_deps/cxxopts-src/include")
 FetchContent_MakeAvailable(cxxopts)
 
 # Fetch OpenMP
@@ -194,7 +194,7 @@ add_library(
 
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser.cpp"
-  # "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/BinaryIndexFileParser.cpp"
 
   "${PROJECT_SOURCE_DIR}/IndexFileParser/SeqStatisticsBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexesBatchProducer.cpp"

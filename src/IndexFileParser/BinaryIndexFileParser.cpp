@@ -33,45 +33,34 @@ auto BinaryIndexFileParser::assert_version() -> void {
 }
 
 auto BinaryIndexFileParser::generate_batch(
-  shared_ptr<ReadStatisticsBatch> read_statistics_batch_,
-  shared_ptr<WarpsBeforeNewReadBatch> warps_before_new_read_batch_,
+  shared_ptr<SeqStatisticsBatch> read_statistics_batch_,
   shared_ptr<IndexesBatch> indexes_batch_
 ) -> bool {
   u64 i = 0;
   IndexFileParser::generate_batch(
-    std::move(read_statistics_batch_),
-    std::move(warps_before_new_read_batch_),
-    std::move(indexes_batch_)
+    std::move(read_statistics_batch_), std::move(indexes_batch_)
   );
-  const u64 initial_size = get_indexes_batch()->indexes.size()
-    + get_warps_before_new_read_batch()->warps_before_new_read->size();
+  const u64 initial_size = get_indexes_batch()->warped_indexes.size()
+    + get_seq_statistics_batch()->colored_seq_id.size();
   while (get_indexes().size() < get_max_indexes()
+         && get_num_seqs() < get_max_seqs()
          && (!get_istream().eof() || buffer_index != buffer_size)) {
     i = get_next();
     if (buffer_size == 0) { break; }  // EOF
-    if (new_read) {
-      if (get_read_statistics_batch()->found_idxs.size() == get_max_reads()) {
-        --buffer_index;
-        break;
-      }
-      begin_new_read();
-      new_read = false;
-    }
     if (i == static_cast<u64>(-1)) {
-      ++get_read_statistics_batch()->not_found_idxs.back();
+      ++get_seq_statistics_batch()->not_found_idxs.back();
     } else if (i == static_cast<u64>(-2)) {
-      ++get_read_statistics_batch()->invalid_idxs.back();
+      ++get_seq_statistics_batch()->invalid_idxs.back();
     } else if (i == static_cast<u64>(-3)) {
-      pad_read();
-      new_read = true;
+      end_seq();
     } else {
-      ++get_read_statistics_batch()->found_idxs.back();
+      ++get_seq_statistics_batch()->found_idxs.back();
       get_indexes().push_back(i);
     }
   }
-  pad_read();
-  return (get_indexes_batch()->indexes.size()
-          + get_warps_before_new_read_batch()->warps_before_new_read->size())
+  add_warp_interval();
+  return (get_indexes_batch()->warped_indexes.size()
+          + get_seq_statistics_batch()->colored_seq_id.size())
     > initial_size;
 }
 

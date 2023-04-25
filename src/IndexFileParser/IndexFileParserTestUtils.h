@@ -14,9 +14,9 @@ namespace sbwt_search {
 using std::string;
 using std::vector;
 
-[[nodiscard]] auto get_binary_index_output_filename() -> string;
-
-auto write_fake_binary_results_to_file() -> void;
+auto write_fake_binary_results_to_file(
+  const string &filename, const vector<vector<int>> &results_ints
+) -> void;
 
 }  // namespace sbwt_search
 
