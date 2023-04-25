@@ -33,6 +33,7 @@ auto IndexFileParser::generate_batch(
   seq_statistics_batch->found_idxs.push_back(0);
   seq_statistics_batch->not_found_idxs.push_back(0);
   seq_statistics_batch->invalid_idxs.push_back(0);
+  seq_statistics_batch->colored_seq_id.push_back(0);
   return false;
 }
 
@@ -65,11 +66,12 @@ auto IndexFileParser::begin_new_seq() -> void {
   seq_statistics_batch->found_idxs.push_back(0);
   seq_statistics_batch->invalid_idxs.push_back(0);
   seq_statistics_batch->not_found_idxs.push_back(0);
+  seq_statistics_batch->colored_seq_id.push_back(0);
 }
 
 auto IndexFileParser::add_warp_interval() -> void {
   auto &warp_intervals = indexes_batch->warps_intervals;
-  seq_statistics_batch->colored_seq_id.push_back(warp_intervals.size() - 1);
+  seq_statistics_batch->colored_seq_id.back() = warp_intervals.size() - 1;
   if (warp_intervals.back() != indexes_batch->warped_indexes.size() / warp_size) {
     warp_intervals.push_back(indexes_batch->warped_indexes.size() / warp_size);
   }

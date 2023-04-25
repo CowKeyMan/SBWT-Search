@@ -12,23 +12,25 @@ namespace sbwt_search {
 
 using std::ios;
 using std::make_shared;
+using std::filesystem::remove;
 
 class BinaryIndexFileParserTest: public ::testing::Test {
 private:
   string temp_filename = "test_objects/tmp/BinaryIndexFileParserTest.bin";
 
 protected:
-  auto get_results_ints() {
-    return vector<vector<int>>{
+  auto get_results_ints() -> vector<vector<int>> {
+    const vector<vector<int>> result = {
       {-2, 39, 164, 216, 59, -1, -2},
       {-2, -1, -1, -1, -1, -1, -2},
       {1, 2, 3, 4},
       {},
       {0, 1, 2, 4, 5, 6},
     };
+    return result;
   }
-  auto get_results_ints_with_newlines() {
-    return vector<vector<int>>{
+  auto get_results_ints_with_newlines() -> vector<vector<int>> {
+    const vector<vector<int>> result = {
       {},
       {},
       {-2, 39, 164, 216, 59, -1, -2},
@@ -37,9 +39,10 @@ protected:
       {},
       {0, 1, 2, 4, 5, 6},
     };
+    return result;
   }
   auto run_test(
-    const vector<vector<int>> results_ints,
+    const vector<vector<int>> &results_ints,
     u64 max_indexes,
     u64 max_seqs,
     u64 warp_size,
@@ -75,6 +78,7 @@ protected:
         seq_statistics_batch->colored_seq_id, expected_colored_seq_id[i]
       );
     }
+    remove(temp_filename);
   }
 };
 
@@ -129,7 +133,7 @@ TEST_F(BinaryIndexFileParserTest, OneBatch) {
 
 TEST_F(BinaryIndexFileParserTest, MaxSeqs) {
   const u64 max_indexes = 999;
-  const u64 max_seqs = 3;
+  const u64 max_seqs = 4;
   const u64 warp_size = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {

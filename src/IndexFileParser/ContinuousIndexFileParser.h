@@ -12,8 +12,7 @@
 #include "IndexFileParser/ColorsIntervalBatchProducer.h"
 #include "IndexFileParser/IndexFileParser.h"
 #include "IndexFileParser/IndexesBatchProducer.h"
-#include "IndexFileParser/ReadStatisticsBatchProducer.h"
-#include "IndexFileParser/WarpsBeforeNewReadBatchProducer.h"
+#include "IndexFileParser/SeqStatisticsBatchProducer.h"
 
 namespace sbwt_search {
 
@@ -23,11 +22,7 @@ using std::vector;
 
 class ContinuousIndexFileParser {
 private:
-  vector<shared_ptr<vector<u64>>> warps_before_new_read;
-  shared_ptr<ColorsIntervalBatchProducer> colors_interval_batch_producer;
-  shared_ptr<ReadStatisticsBatchProducer> read_statistics_batch_producer;
-  shared_ptr<WarpsBeforeNewReadBatchProducer>
-    warps_before_new_read_batch_producer;
+  shared_ptr<SeqStatisticsBatchProducer> seq_statistics_batch_producer;
   shared_ptr<IndexesBatchProducer> indexes_batch_producer;
 
   vector<string> filenames;
@@ -36,7 +31,7 @@ private:
   bool fail = false;
   unique_ptr<IndexFileParser> index_file_parser;
   u64 max_indexes_per_batch;
-  u64 max_reads_per_batch;
+  u64 max_seqs_per_batch;
   u64 warp_size;
   u64 stream_id;
 
@@ -44,21 +39,15 @@ public:
   ContinuousIndexFileParser(
     u64 stream_id_,
     u64 max_indexes_per_batch_,
-    u64 max_reads_per_batch_,
+    u64 max_seqs_per_batch_,
     u64 warp_size_,
     vector<string> filenames_,
-    u64 interval_batch_producer_max_batches,
-    u64 read_statistics_batch_producer_max_batches,
-    u64 get_warps_before_new_read_batch_producer_max_batches,
+    u64 seq_statistics_batch_producer_max_batches,
     u64 indexes_batch_producer_max_batches
   );
 
-  [[nodiscard]] auto get_colors_interval_batch_producer() const
-    -> const shared_ptr<ColorsIntervalBatchProducer> &;
-  [[nodiscard]] auto get_read_statistics_batch_producer() const
-    -> const shared_ptr<ReadStatisticsBatchProducer> &;
-  [[nodiscard]] auto get_warps_before_new_read_batch_producer() const
-    -> const shared_ptr<WarpsBeforeNewReadBatchProducer> &;
+  [[nodiscard]] auto get_seq_statistics_batch_producer() const
+    -> const shared_ptr<SeqStatisticsBatchProducer> &;
   [[nodiscard]] auto get_indexes_batch_producer() const
     -> const shared_ptr<IndexesBatchProducer> &;
 
@@ -71,8 +60,6 @@ private:
   auto read_next() -> void;
   auto start_next_file() -> bool;
   auto start_new_file(const string &filename) -> void;
-  [[nodiscard]] auto create_warps_before_new_read(u64 amount) const
-    -> vector<shared_ptr<vector<u64>>>;
   auto reset_batches() -> void;
 };
 

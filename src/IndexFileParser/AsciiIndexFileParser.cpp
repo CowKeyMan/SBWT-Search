@@ -40,10 +40,9 @@ auto AsciiIndexFileParser::generate_batch(
   const u64 initial_size = get_indexes_batch()->warped_indexes.size()
     + get_seq_statistics_batch()->colored_seq_id.size();
   char c = '\0';
-  while (
-    get_indexes().size() < get_max_indexes() && get_num_seqs() < get_max_seqs()
-    && (!get_istream().eof() || buffer_index != buffer_size)
-  ) {
+  while (get_indexes().size() < get_max_indexes()
+         && get_num_seqs() < get_max_seqs()
+         && (!get_istream().eof() || buffer_index != buffer_size)) {
     c = getc();
     if (c == '\0') {  // EOF
       break;
@@ -57,9 +56,7 @@ auto AsciiIndexFileParser::generate_batch(
       }
       c = skip_until_next_whitespace();
     }
-    if (c == '\n') {
-      end_seq();
-    }
+    if (c == '\n') { end_seq(); }
     // if it is a number (note: all special characters are smaller than '0')
     if (c >= '0') {
       ++get_seq_statistics_batch()->found_idxs.back();

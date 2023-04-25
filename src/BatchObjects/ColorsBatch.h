@@ -16,6 +16,7 @@ namespace sbwt_search {
 using std::vector;
 
 class ColorsBatch {
+public:
   vector<u64> colors;
 };
 

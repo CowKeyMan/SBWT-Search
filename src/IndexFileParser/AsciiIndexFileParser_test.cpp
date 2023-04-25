@@ -104,7 +104,7 @@ TEST_F(AsciiIndexFileParserTest, OneBatch) {
 
 TEST_F(AsciiIndexFileParserTest, MaxSeqs) {
   const u64 max_indexes = 999;
-  const u64 max_seqs = 3;
+  const u64 max_seqs = 4;
   const u64 warp_size = 4;
   const int pad = -1;
   const vector<vector<int>> expected_indexes = {
@@ -280,8 +280,7 @@ TEST_F(AsciiIndexFileParserTest, MultipleBatches) {
   const vector<vector<u64>> expected_found_idxs = {{4, 0, 4}, {0, 0, 6, 0}};
   const vector<vector<u64>> expected_not_found_idxs = {{1, 5, 0}, {0, 0, 0, 0}};
   const vector<vector<u64>> expected_invalid_idxs = {{2, 2, 0}, {0, 0, 0, 0}};
-  const vector<vector<u64>> expected_colored_seq_id
-    = {{0, 1, 1}, {0, 0, 0, 1}};
+  const vector<vector<u64>> expected_colored_seq_id = {{0, 1, 1}, {0, 0, 0, 1}};
 
   // 22 is how many characters are on the first line, 23 includes '\n'
   // 63 is how many characters are in entire file, 24 includes EOF

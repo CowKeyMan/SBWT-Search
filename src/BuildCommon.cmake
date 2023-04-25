@@ -190,7 +190,7 @@ target_link_libraries(index_results_printer PRIVATE io_utils fmt::fmt OpenMP::Op
 # Colors
 add_library(
   index_file_parser
-  # "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
+  "${PROJECT_SOURCE_DIR}/IndexFileParser/ContinuousIndexFileParser.cpp"
 
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexFileParser.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/AsciiIndexFileParser.cpp"
@@ -199,7 +199,7 @@ add_library(
   "${PROJECT_SOURCE_DIR}/IndexFileParser/SeqStatisticsBatchProducer.cpp"
   "${PROJECT_SOURCE_DIR}/IndexFileParser/IndexesBatchProducer.cpp"
 )
-target_link_libraries(index_file_parser PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX)
+target_link_libraries(index_file_parser PRIVATE io_utils fmt::fmt OpenMP::OpenMP_CXX error_utils)
 
 add_library(
   color_index_container
