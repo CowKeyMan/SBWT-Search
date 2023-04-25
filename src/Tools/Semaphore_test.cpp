@@ -1,6 +1,6 @@
+#include <chrono>
 #include <memory>
 #include <omp.h>
-#include <chrono>
 #include <thread>
 
 #include "gtest/gtest.h"
