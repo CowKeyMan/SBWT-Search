@@ -50,7 +50,6 @@ function run_tests() {
       last_exit=$?
       if [ ${last_exit} -ne 0 ]; then
         echo ${expected} and ${actual} do not match
-        cat ${actual}
         echo ""
       fi
       ((bad_exits+=${last_exit}))
