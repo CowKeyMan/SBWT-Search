@@ -38,6 +38,7 @@ __device__ auto d_dense_get_arrays_start_end(
 ) -> void;
 __device__ auto
 d_dense_get_next_color_present(u64 &array_idx, const u64 *dense_arrays) -> bool;
+__device__ auto d_dense_get_min(u64 array_idx, const u64 *dense_arrays) -> u64;
 
 __device__ auto d_sparse_get_arrays_start_end(
   const u64 color_set_idx,
@@ -57,6 +58,12 @@ __device__ auto d_sparse_get_next_color_present(
   const u64 sparse_arrays_width,
   const u64 sparse_arrays_width_set_bits
 ) -> bool;
+__device__ auto d_sparse_get_min(
+  const u64 array_idx,
+  const u64 *sparse_arrays,
+  const u64 sparse_arrays_width,
+  const u64 sparse_arrays_width_set_bits
+) -> u64;
 
 __global__ auto d_color_search(
   const u64 *sbwt_idxs,
@@ -127,8 +134,24 @@ __global__ auto d_color_search(
       arrays_end
     );
   }
-  array_idx = arrays_start;
-  for (u64 color_idx = 0; color_idx < num_colors; ++color_idx) {
+  u64 min_color = is_dense ? d_dense_get_min(arrays_start, dense_arrays) :
+                             d_sparse_get_min(
+                               arrays_start,
+                               sparse_arrays,
+                               sparse_arrays_width,
+                               sparse_arrays_width_set_bits
+                             );
+  u64 copy = min_color;
+  for (int offset = gpu_warp_size / 2; offset > 0; offset /= 2) {
+#if (defined(__HIP_CPU_RT__) || defined(__HIP_PLATFORM_HCC__) || defined(__HIP_PLATFORM_AMD__))
+    min_color = llmin(min_color, __shfl_down(min_color, offset));
+#elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
+    min_color
+      = llmin(min_color, __shfl_down_sync(full_mask, min_color, offset));
+#endif
+  }
+  array_idx = arrays_start + (is_dense ? min_color : 0);
+  for (u64 color_idx = min_color; color_idx < num_colors; ++color_idx) {
     bool color_present = false;
     if (array_idx < arrays_end) {
       if (is_dense) {
@@ -198,6 +221,23 @@ d_dense_get_next_color_present(u64 &array_idx, const u64 *dense_arrays)
   return d_get_bool_from_bit_vector(dense_arrays, array_idx++);
 }
 
+__device__ auto d_dense_get_min(const u64 array_idx, const u64 *dense_arrays)
+  -> u64 {
+  u64 result = array_idx;
+  while (true) {
+    if (result % u64_bits == 0) {
+      int zeros = __clzll(__brevll(dense_arrays[result / u64_bits]));
+      result += zeros;
+      if (zeros < u64_bits) { break; }
+    } else {
+      u64 is_1 = d_get_bool_from_bit_vector(dense_arrays, result);
+      if (is_1) { break; }
+      ++result;
+    }
+  }
+  return result - array_idx;
+}
+
 __device__ auto d_sparse_get_arrays_start_end(
   const u64 color_set_idx,
   const u64 *is_dense_marks,
@@ -243,6 +283,17 @@ __device__ auto d_sparse_get_next_color_present(
     return true;
   }
   return false;
+}
+
+__device__ auto d_sparse_get_min(
+  const u64 array_idx,
+  const u64 *sparse_arrays,
+  const u64 sparse_arrays_width,
+  const u64 sparse_arrays_width_set_bits
+) -> u64 {
+  return d_variable_length_int_index(
+    sparse_arrays, sparse_arrays_width, sparse_arrays_width_set_bits, array_idx
+  );
 }
 
 }  // namespace sbwt_search

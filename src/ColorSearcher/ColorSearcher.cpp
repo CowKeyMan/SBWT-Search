@@ -24,9 +24,7 @@ ColorSearcher::ColorSearcher(
     d_fat_results(
       max_indexes_per_batch / gpu_warp_size * container->num_colors, gpu_stream
     ),
-    d_results(
-      max_seqs_per_batch * container->num_colors, gpu_stream
-    ),
+    d_results(max_seqs_per_batch * container->num_colors, gpu_stream),
     stream_id(stream_id_) {}
 
 auto ColorSearcher::search(
