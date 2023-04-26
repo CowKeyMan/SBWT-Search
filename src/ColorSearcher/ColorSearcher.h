@@ -11,11 +11,13 @@
 #include "ColorIndexContainer/GpuColorIndexContainer.h"
 #include "Tools/GpuEvent.h"
 #include "Tools/GpuStream.h"
+#include "Tools/PinnedVector.h"
 
 namespace sbwt_search {
 
 using gpu_utils::GpuEvent;
 using gpu_utils::GpuStream;
+using gpu_utils::PinnedVector;
 using std::shared_ptr;
 
 class ColorSearcher {
@@ -37,26 +39,24 @@ public:
   );
 
   auto search(
-    const vector<u64> &sbwt_index_idxs,
-    const vector<u64> &warps_intervals,
-    vector<u64> &results,
+    const PinnedVector<u64> &sbwt_index_idxs,
+    const PinnedVector<u64> &warps_intervals,
+    PinnedVector<u64> &results,
     u64 batch_id
   ) -> void;
 
 private:
-  auto searcher_copy_to_gpu(u64 batch_id, const vector<u64> &sbwt_index_ids)
+  auto
+  searcher_copy_to_gpu(u64 batch_id, const PinnedVector<u64> &sbwt_index_ids)
     -> void;
   auto launch_search_kernel(u64 num_queries, u64 batch_id) -> void;
 
   auto
-  combine_copy_to_gpu(u64 batch_id, const vector<u64> &warps_before_new_read)
+  combine_copy_to_gpu(u64 batch_id, const PinnedVector<u64> &warps_intervals)
     -> void;
   auto launch_combine_kernel(u64 num_warps, u64 num_colors, u64 batch_id)
     -> void;
-  auto copy_from_gpu(vector<u64> &results, u64 batch_id) -> void;
-  auto fill_unique_warps_before_new_read(
-    const vector<u64> &warps_before_new_read, u64 num_warps
-  ) -> void;
+  auto copy_from_gpu(PinnedVector<u64> &results, u64 batch_id) -> void;
 };
 
 }  // namespace sbwt_search

@@ -7,17 +7,17 @@
  * sequence means that the sequence has found_idxs > 0.
  */
 
-#include <vector>
-
+#include "Tools/PinnedVector.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
-using std::vector;
+using gpu_utils::PinnedVector;
 
 class ColorsBatch {
 public:
-  vector<u64> colors;
+  PinnedVector<u64> colors;
+  explicit ColorsBatch(u64 colors_size): colors(colors_size) {}
 };
 
 }  // namespace sbwt_search

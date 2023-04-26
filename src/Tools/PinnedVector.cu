@@ -46,6 +46,12 @@ auto PinnedVector<T>::empty() const -> bool {
   return num_elems == 0;
 }
 
+template <class T>
+auto PinnedVector<T>::back() -> T & {
+  // NOLINTNEXTLIE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
+  return ptr[num_elems - 1];
+}
+
 // We set these here because we need the class to be instantiated since we are
 // using templates
 template class PinnedVector<char>;

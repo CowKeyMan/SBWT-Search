@@ -18,7 +18,7 @@ IndexFileParser::IndexFileParser(
 auto IndexFileParser::get_istream() const -> ThrowingIfstream & {
   return *in_stream;
 }
-auto IndexFileParser::get_indexes() const -> vector<u64> & {
+auto IndexFileParser::get_indexes() const -> PinnedVector<u64> & {
   return indexes_batch->warped_indexes;
 }
 auto IndexFileParser::get_max_indexes() const -> u64 { return max_indexes; }

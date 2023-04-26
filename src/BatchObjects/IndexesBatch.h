@@ -7,18 +7,22 @@
  * in the 'index' phase
  */
 
-#include <vector>
-
+#include "Tools/PinnedVector.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
+using gpu_utils::PinnedVector;
 using std::vector;
 
 class IndexesBatch {
 public:
-  vector<u64> warped_indexes;
-  vector<u64> warps_intervals;
+  PinnedVector<u64> warped_indexes;
+  PinnedVector<u64> warps_intervals;
+
+  IndexesBatch(u64 warped_indexes_size, u64 warps_intervals_size):
+      warped_indexes(warped_indexes_size),
+      warps_intervals(warps_intervals_size) {}
 
   auto reset() -> void {
     warped_indexes.resize(0);

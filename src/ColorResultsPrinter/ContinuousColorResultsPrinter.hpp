@@ -175,8 +175,8 @@ protected:
     not_found_idxs[0] += previous_last_not_found_idxs;
     invalid_idxs[0] += previous_last_invalid_idxs;
     std::transform(
-      colors.begin(),
-      copy_advance(colors.begin(), num_colors),
+      colors.data(),
+      colors.data() + num_colors,
       previous_last_results.begin(),
       colors.data(),
       std::plus<>()
@@ -198,7 +198,7 @@ protected:
 #pragma omp for schedule(static)
         for (u64 seq_idx = start_seq; seq_idx < end_seq; ++seq_idx) {
           impl().do_print_seq(
-            copy_advance(colors.begin(), colored_seq_id[seq_idx] * num_colors),
+            colors.data() + colored_seq_id[seq_idx] * num_colors,
             found_idxs[seq_idx],
             not_found_idxs[seq_idx],
             invalid_idxs[seq_idx],
@@ -219,10 +219,10 @@ protected:
       previous_last_results.insert(
         previous_last_results.begin(),
         std::make_move_iterator(
-          copy_advance(colors.begin(), colored_seq_id.back() * num_colors)
+          colors.data() + colored_seq_id.back() * num_colors
         ),
         std::make_move_iterator(
-          copy_advance(colors.begin(), (colored_seq_id.back() + 1) * num_colors)
+          colors.data() + (colored_seq_id.back() + 1) * num_colors
         )
       );
     } else {
@@ -231,7 +231,7 @@ protected:
   }
 
   auto do_print_seq(
-    vector<u64>::iterator results,
+    u64 *results,
     u64 found_idxs,
     u64 not_found_idxs,
     u64 invalid_idxs,

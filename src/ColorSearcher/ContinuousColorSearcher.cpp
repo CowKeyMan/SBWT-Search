@@ -55,9 +55,9 @@ auto ContinuousColorSearcher::get_bits_per_seq_gpu(u64 num_colors) -> u64 {
 }
 
 auto ContinuousColorSearcher::get_default_value() -> shared_ptr<ColorsBatch> {
-  auto batch = make_shared<ColorsBatch>();
-  batch->colors.reserve(max_indexes_per_batch / gpu_warp_size * num_colors);
-  return batch;
+  return make_shared<ColorsBatch>(
+    max_indexes_per_batch / gpu_warp_size * num_colors
+  );
 }
 
 auto ContinuousColorSearcher::continue_read_condition() -> bool {

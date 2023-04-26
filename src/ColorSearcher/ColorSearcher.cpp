@@ -28,9 +28,9 @@ ColorSearcher::ColorSearcher(
     stream_id(stream_id_) {}
 
 auto ColorSearcher::search(
-  const vector<u64> &sbwt_index_idxs,
-  const vector<u64> &warps_intervals,
-  vector<u64> &results,
+  const PinnedVector<u64> &sbwt_index_idxs,
+  const PinnedVector<u64> &warps_intervals,
+  PinnedVector<u64> &results,
   u64 batch_id
 ) -> void {
   Logger::log(
@@ -50,7 +50,7 @@ auto ColorSearcher::search(
 }
 
 auto ColorSearcher::searcher_copy_to_gpu(
-  u64 batch_id, const vector<u64> &sbwt_index_idxs
+  u64 batch_id, const PinnedVector<u64> &sbwt_index_idxs
 ) -> void {
   Logger::log_timed_event(
     format("SearcherCopyToGpu1_{}", stream_id),
@@ -60,7 +60,7 @@ auto ColorSearcher::searcher_copy_to_gpu(
   auto padded_query_size
     = round_up<u64>(sbwt_index_idxs.size(), superblock_bits);
   d_sbwt_index_idxs.set_async(
-    sbwt_index_idxs, sbwt_index_idxs.size(), gpu_stream
+    sbwt_index_idxs.data(), sbwt_index_idxs.size(), gpu_stream
   );
   d_sbwt_index_idxs.memset_async(
     sbwt_index_idxs.size(),
@@ -76,7 +76,7 @@ auto ColorSearcher::searcher_copy_to_gpu(
 }
 
 auto ColorSearcher::combine_copy_to_gpu(
-  u64 batch_id, const vector<u64> &warps_intervals
+  u64 batch_id, const PinnedVector<u64> &warps_intervals
 ) -> void {
   Logger::log_timed_event(
     format("SearcherCopyToGpu2_{}", stream_id),
@@ -94,13 +94,14 @@ auto ColorSearcher::combine_copy_to_gpu(
   );
 }
 
-auto ColorSearcher::copy_from_gpu(vector<u64> &results, u64 batch_id) -> void {
+auto ColorSearcher::copy_from_gpu(PinnedVector<u64> &results, u64 batch_id)
+  -> void {
   Logger::log_timed_event(
     format("SearcherCopyFromGpu_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  d_results.copy_to_async(results, results.size(), gpu_stream);
+  d_results.copy_to_async(results.data(), results.size(), gpu_stream);
   Logger::log_timed_event(
     format("SearcherCopyFromGpu_{}", stream_id),
     Logger::EVENT_STATE::STOP,

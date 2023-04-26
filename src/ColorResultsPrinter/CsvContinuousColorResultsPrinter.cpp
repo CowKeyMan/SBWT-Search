@@ -75,7 +75,7 @@ auto CsvContinuousColorResultsPrinter::do_write_file_header(
 }
 
 auto CsvContinuousColorResultsPrinter::do_print_seq(
-  vector<u64>::iterator results,
+  u64 *results,
   u64 found_idxs,
   u64 not_found_idxs,
   u64 invalid_idxs,

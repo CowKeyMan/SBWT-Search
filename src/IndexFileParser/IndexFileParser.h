@@ -40,7 +40,7 @@ private:
 
 protected:
   [[nodiscard]] auto get_istream() const -> ThrowingIfstream &;
-  [[nodiscard]] auto get_indexes() const -> vector<u64> &;
+  [[nodiscard]] auto get_indexes() const -> PinnedVector<u64> &;
   [[nodiscard]] auto get_max_indexes() const -> u64;
   [[nodiscard]] auto get_max_seqs() const -> u64;
   IndexFileParser(

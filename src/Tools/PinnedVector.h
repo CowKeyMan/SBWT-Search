@@ -23,11 +23,12 @@ public:
   explicit PinnedVector(u64 size);
   auto data() const -> T *;
   auto operator[](u64 n) -> T &;
-  auto operator[](const u64 n) const -> const T &;
+  auto operator[](u64 n) const -> const T &;
   auto push_back(const T &elem) -> void;
   [[nodiscard]] auto size() const -> u64;
   auto resize(u64 n) -> void;
-  auto empty() const -> bool;
+  [[nodiscard]] auto empty() const -> bool;
+  auto back() -> T &;
 };
 
 }  // namespace gpu_utils
