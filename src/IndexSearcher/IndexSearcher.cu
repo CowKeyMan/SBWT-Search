@@ -28,16 +28,16 @@ auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
       0,
       *static_cast<hipStream_t *>(gpu_stream.data()),
       container->get_kmer_size(),
-      container->get_c_map().get(),
-      container->get_acgt_pointers().get(),
-      container->get_layer_0_pointers().get(),
-      container->get_layer_1_2_pointers().get(),
-      container->get_presearch_left().get(),
-      container->get_presearch_right().get(),
-      d_kmer_positions.get(),
-      d_bit_seqs.get(),
-      container->get_key_kmer_marks().get(),
-      d_kmer_positions.get()
+      container->get_c_map().data(),
+      container->get_acgt_pointers().data(),
+      container->get_layer_0_pointers().data(),
+      container->get_layer_1_2_pointers().data(),
+      container->get_presearch_left().data(),
+      container->get_presearch_right().data(),
+      d_kmer_positions.data(),
+      d_bit_seqs.data(),
+      container->get_key_kmer_marks().data(),
+      d_kmer_positions.data()
     );
   } else {
     hipLaunchKernelGGL(
@@ -47,16 +47,16 @@ auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
       0,
       *static_cast<hipStream_t *>(gpu_stream.data()),
       container->get_kmer_size(),
-      container->get_c_map().get(),
-      container->get_acgt_pointers().get(),
-      container->get_layer_0_pointers().get(),
-      container->get_layer_1_2_pointers().get(),
-      container->get_presearch_left().get(),
-      container->get_presearch_right().get(),
-      d_kmer_positions.get(),
-      d_bit_seqs.get(),
+      container->get_c_map().data(),
+      container->get_acgt_pointers().data(),
+      container->get_layer_0_pointers().data(),
+      container->get_layer_1_2_pointers().data(),
+      container->get_presearch_left().data(),
+      container->get_presearch_right().data(),
+      d_kmer_positions.data(),
+      d_bit_seqs.data(),
       nullptr,
-      d_kmer_positions.get()
+      d_kmer_positions.data()
     );
   }
   end_timer.record(&gpu_stream);

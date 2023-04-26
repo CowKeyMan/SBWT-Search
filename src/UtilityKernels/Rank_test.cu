@@ -21,11 +21,11 @@ auto get_rank(
     1,
     0,
     nullptr,
-    bit_vector.get(),
-    poppy_layer_0.get(),
-    poppy_layer_1_2.get(),
+    bit_vector.data(),
+    poppy_layer_0.data(),
+    poppy_layer_1_2.data(),
     index,
-    d_result.get()
+    d_result.data()
   );
   GPU_CHECK(hipPeekAtLastError());
   GPU_CHECK(hipDeviceSynchronize());

@@ -33,28 +33,28 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
     threads_per_block,
     0,
     *static_cast<hipStream_t *>(gpu_stream.data()),
-    d_sbwt_index_idxs.get(),
-    container->key_kmer_marks.get(),
-    container->key_kmer_marks_poppy_layer_0.get(),
-    container->key_kmer_marks_poppy_layer_1_2.get(),
-    container->color_set_idxs.get(),
+    d_sbwt_index_idxs.data(),
+    container->key_kmer_marks.data(),
+    container->key_kmer_marks_poppy_layer_0.data(),
+    container->key_kmer_marks_poppy_layer_1_2.data(),
+    container->color_set_idxs.data(),
     container->color_set_idxs_width,
     set_bits.at(container->color_set_idxs_width),
-    container->is_dense_marks.get(),
-    container->is_dense_marks_poppy_layer_0.get(),
-    container->is_dense_marks_poppy_layer_1_2.get(),
-    container->dense_arrays.get(),
-    container->dense_arrays_intervals.get(),
+    container->is_dense_marks.data(),
+    container->is_dense_marks_poppy_layer_0.data(),
+    container->is_dense_marks_poppy_layer_1_2.data(),
+    container->dense_arrays.data(),
+    container->dense_arrays_intervals.data(),
     container->dense_arrays_intervals_width,
     set_bits.at(container->dense_arrays_intervals_width),
-    container->sparse_arrays.get(),
+    container->sparse_arrays.data(),
     container->sparse_arrays_width,
     set_bits.at(container->sparse_arrays_width),
-    container->sparse_arrays_intervals.get(),
+    container->sparse_arrays_intervals.data(),
     container->sparse_arrays_intervals_width,
     set_bits.at(container->sparse_arrays_intervals_width),
     container->num_colors,
-    d_fat_results.get()
+    d_fat_results.data()
   );
   end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());
@@ -95,11 +95,11 @@ auto ColorSearcher::launch_combine_kernel(
     threads_per_block,
     0,
     *static_cast<hipStream_t *>(gpu_stream.data()),
-    d_fat_results.get(),
-    d_warps_intervals.get(),
+    d_fat_results.data(),
+    d_warps_intervals.data(),
     num_warps,
     num_colors,
-    d_results.get()
+    d_results.data()
   );
   end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());

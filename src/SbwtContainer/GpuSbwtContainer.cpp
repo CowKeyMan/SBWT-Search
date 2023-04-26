@@ -32,16 +32,19 @@ GpuSbwtContainer::GpuSbwtContainer(
   }
   c_map = make_unique<GpuPointer<u64>>(cpu_c_map);
   acgt_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
-    {acgt[0]->get(), acgt[1]->get(), acgt[2]->get(), acgt[3]->get()}
+    {acgt[0]->data(), acgt[1]->data(), acgt[2]->data(), acgt[3]->data()}
   ));
   layer_0_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
-    {layer_0[0]->get(), layer_0[1]->get(), layer_0[2]->get(), layer_0[3]->get()}
+    {layer_0[0]->data(),
+     layer_0[1]->data(),
+     layer_0[2]->data(),
+     layer_0[3]->data()}
   ));
   layer_1_2_pointers = make_unique<GpuPointer<u64 *>>(vector<u64 *>(
-    {layer_1_2[0]->get(),
-     layer_1_2[1]->get(),
-     layer_1_2[2]->get(),
-     layer_1_2[3]->get()}
+    {layer_1_2[0]->data(),
+     layer_1_2[1]->data(),
+     layer_1_2[2]->data(),
+     layer_1_2[3]->data()}
   ));
   key_kmer_marks = make_unique<GpuPointer<u64>>(
     cpu_key_kmer_marks.data(), cpu_key_kmer_marks.size()

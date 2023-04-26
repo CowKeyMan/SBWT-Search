@@ -43,7 +43,7 @@ public:
     -> void;
   auto memset_async(u64 index, uint8_t value, GpuStream &gpu_stream) -> void;
 
-  auto get() const -> T *;
+  auto data() const -> T *;
 
   auto set(const T *source, u64 amount, u64 destination_index = 0) -> void;
   auto set(const vector<T> &source, u64 amount, u64 destination_index = 0)

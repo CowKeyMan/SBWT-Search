@@ -18,12 +18,12 @@ auto Presearcher::launch_presearch_kernel(
     threads_per_block,
     0,
     nullptr,
-    container->get_c_map().get(),
-    container->get_acgt_pointers().get(),
-    container->get_layer_0_pointers().get(),
-    container->get_layer_1_2_pointers().get(),
-    presearch_left->get(),
-    presearch_right->get()
+    container->get_c_map().data(),
+    container->get_acgt_pointers().data(),
+    container->get_layer_0_pointers().data(),
+    container->get_layer_1_2_pointers().data(),
+    presearch_left->data(),
+    presearch_right->data()
   );
   GPU_CHECK(hipPeekAtLastError());
   GPU_CHECK(hipDeviceSynchronize());

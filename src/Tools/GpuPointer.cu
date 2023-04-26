@@ -45,7 +45,7 @@ GpuPointer<T>::GpuPointer(const vector<T> &v, GpuStream &gpu_stream):
     GpuPointer<T>(v.data(), v.size(), gpu_stream) {}
 
 template <class T>
-auto GpuPointer<T>::get() const -> T * {
+auto GpuPointer<T>::data() const -> T * {
   return ptr;
 }
 
