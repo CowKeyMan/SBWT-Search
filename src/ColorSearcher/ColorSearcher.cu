@@ -24,6 +24,9 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   );
   u64 blocks_per_grid = divide_and_ceil<u64>(num_queries, threads_per_block);
   start_timer.record(&gpu_stream);
+  d_fat_results.memset_async(
+    0, num_queries / gpu_warp_size * container->num_colors, 0, gpu_stream
+  );
   hipLaunchKernelGGL(
     d_color_search,
     blocks_per_grid,

@@ -169,14 +169,7 @@ __global__ auto d_color_search(
 #endif
   }
 
-  // set all before min_color to 0
-  if (thread_idx % gpu_warp_size == 0) {
-    for (u64 color_idx = 0; color_idx < min_color; ++color_idx) {
-      results[num_colors * thread_idx / gpu_warp_size + color_idx] = 0;
-    }
-  }
-
-  // normal colors
+  // fill colors
   for (u64 color_idx = min_color; color_idx < max_color; ++color_idx) {
     bool color_present = false;
     if (array_idx < arrays_end) {
@@ -207,13 +200,6 @@ __global__ auto d_color_search(
 #else
 #error("No runtime defined");
 #endif
-  }
-
-  // set all after max_color to 0
-  if (thread_idx % gpu_warp_size == 0) {
-    for (u64 color_idx = max_color; color_idx < num_colors; ++color_idx) {
-      results[num_colors * thread_idx / gpu_warp_size + color_idx] = 0;
-    }
   }
 }
 
