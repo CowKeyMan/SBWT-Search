@@ -12,6 +12,6 @@ GpuStream::~GpuStream() {
   hipStreamDestroy(*static_cast<hipStream_t *>(element));
 }
 
-auto GpuStream::get() const -> void * { return element; }
+auto GpuStream::data() const -> void * { return element; }
 
 }  // namespace gpu_utils

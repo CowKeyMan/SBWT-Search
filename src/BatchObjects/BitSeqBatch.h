@@ -7,17 +7,17 @@
  * versions from  the string representation
  */
 
-#include <vector>
-
+#include "Tools/PinnedVector.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
-using std::vector;
+using gpu_utils::PinnedVector;
 
 class BitSeqBatch {
 public:
-  vector<u64> bit_seq;
+  PinnedVector<u64> bit_seq;
+  explicit BitSeqBatch(u64 bit_seq_size): bit_seq(bit_seq_size) {}
 };
 
 }  // namespace sbwt_search

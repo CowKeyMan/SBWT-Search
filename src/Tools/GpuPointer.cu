@@ -26,7 +26,7 @@ template <class T>
 GpuPointer<T>::GpuPointer(u64 size, GpuStream &gpu_stream):
     bytes(size * sizeof(T)) {
   GPU_CHECK(hipMallocAsync(
-    (void **)(&ptr), bytes, *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+    (void **)(&ptr), bytes, *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
 }
 template <class T>
@@ -37,7 +37,7 @@ GpuPointer<T>::GpuPointer(const T *cpu_ptr, u64 size, GpuStream &gpu_stream):
     cpu_ptr,
     bytes,
     hipMemcpyHostToDevice,
-    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+    *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
 }
 template <class T>
@@ -70,7 +70,7 @@ auto GpuPointer<T>::memset_async(
     ptr + index,
     value,
     bytes,
-    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+    *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
 }
 
@@ -83,7 +83,7 @@ auto GpuPointer<T>::memset_async(
     ptr + index,
     value,
     amount * sizeof(T),
-    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+    *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
 }
 
@@ -115,7 +115,7 @@ auto GpuPointer<T>::set_async(
     source,
     amount * sizeof(T),
     hipMemcpyHostToDevice,
-    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+    *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
 }
 template <class T>
@@ -157,7 +157,7 @@ auto GpuPointer<T>::copy_to_async(
     ptr,
     amount * sizeof(T),
     hipMemcpyDeviceToHost,
-    *reinterpret_cast<hipStream_t *>(gpu_stream.get())
+    *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
 }
 template <class T>

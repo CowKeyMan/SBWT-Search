@@ -78,6 +78,7 @@ set(
   "${PROJECT_SOURCE_DIR}/Tools/GpuPointer.cu"
   "${PROJECT_SOURCE_DIR}/Tools/GpuStream.cu"
   "${PROJECT_SOURCE_DIR}/Tools/GpuEvent.cu"
+  "${PROJECT_SOURCE_DIR}/Tools/PinnedVector.cu"
 )
 
 add_library(

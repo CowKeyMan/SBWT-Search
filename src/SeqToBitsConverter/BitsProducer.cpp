@@ -21,11 +21,9 @@ auto BitsProducer::get_bits_per_element() -> u64 {
 }
 
 auto BitsProducer::get_default_value() -> shared_ptr<BitSeqBatch> {
-  auto batch = make_shared<BitSeqBatch>();
-  batch->bit_seq.reserve(
+  return make_shared<BitSeqBatch>(
     round_up<u64>(max_chars_per_batch, chars_per_u64) / chars_per_u64
   );
-  return batch;
 }
 
 auto BitsProducer::start_new_batch(u64 num_chars) -> void {

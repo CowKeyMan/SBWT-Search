@@ -13,15 +13,17 @@
 
 #include <vector>
 
+#include "Tools/PinnedVector.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
-using std::vector;
+using gpu_utils::PinnedVector;
 
 class PositionsBatch {
 public:
-  vector<u64> positions;
+  PinnedVector<u64> positions;
+  explicit PositionsBatch(u64 positions_size): positions(positions_size) {}
 };
 
 }  // namespace sbwt_search

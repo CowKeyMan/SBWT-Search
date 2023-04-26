@@ -7,17 +7,17 @@
  * k-mer within the SBWT index
  */
 
-#include <vector>
-
+#include "Tools/PinnedVector.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
-using std::vector;
+using gpu_utils::PinnedVector;
 
 class ResultsBatch {
 public:
-  vector<u64> results;
+  PinnedVector<u64> results;
+  explicit ResultsBatch(u64 results_size): results(results_size) {}
 };
 
 }  // namespace sbwt_search

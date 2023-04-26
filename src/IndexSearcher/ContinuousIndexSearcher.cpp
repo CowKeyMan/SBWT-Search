@@ -54,9 +54,7 @@ auto ContinuousIndexSearcher::get_bits_per_element_gpu() -> u64 {
 }
 
 auto ContinuousIndexSearcher::get_default_value() -> shared_ptr<ResultsBatch> {
-  auto batch = make_shared<ResultsBatch>();
-  batch->results.reserve(max_chars_per_batch);
-  return batch;
+  return make_shared<ResultsBatch>(max_chars_per_batch);
 }
 
 auto ContinuousIndexSearcher::continue_read_condition() -> bool {

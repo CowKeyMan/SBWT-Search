@@ -10,10 +10,12 @@
 #include <cstddef>
 #include <vector>
 
+#include "Tools/PinnedVector.h"
 #include "Tools/TypeDefinitions.h"
 
 namespace sbwt_search {
 
+using gpu_utils::PinnedVector;
 using std::vector;
 
 class PositionsBuilder {
@@ -25,7 +27,7 @@ public:
   void build_positions(
     const vector<u64> &chars_before_newline,
     const u64 &string_size,
-    vector<u64> &positions
+    PinnedVector<u64> &positions
   );
 
 private:
@@ -33,7 +35,7 @@ private:
     u64 start_position_index,
     u64 end_position_index,
     u64 first_position,
-    vector<u64> &positions
+    PinnedVector<u64> &positions
   );
 };
 

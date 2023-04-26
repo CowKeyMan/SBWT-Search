@@ -15,7 +15,7 @@ PositionsBuilder::PositionsBuilder(const u64 _kmer_size):
 auto PositionsBuilder::build_positions(
   const vector<u64> &chars_before_newline,
   const u64 &string_size,
-  vector<u64> &positions
+  PinnedVector<u64> &positions
 ) -> void {
   u64 start_position_index = 0;
   u64 end_position_index = 0;
@@ -50,7 +50,7 @@ auto PositionsBuilder::process_one_string(
   const u64 start_position_index,
   const u64 end_position_index,
   const u64 first_position_content,
-  vector<u64> &positions
+  PinnedVector<u64> &positions
 ) -> void {
   if (start_position_index >= end_position_index) { return; }
 #pragma omp simd

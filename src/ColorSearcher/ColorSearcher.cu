@@ -32,7 +32,7 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
     blocks_per_grid,
     threads_per_block,
     0,
-    *static_cast<hipStream_t *>(gpu_stream.get()),
+    *static_cast<hipStream_t *>(gpu_stream.data()),
     d_sbwt_index_idxs.get(),
     container->key_kmer_marks.get(),
     container->key_kmer_marks_poppy_layer_0.get(),
@@ -58,7 +58,7 @@ auto ColorSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   );
   end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());
-  GPU_CHECK(hipStreamSynchronize(*static_cast<hipStream_t *>(gpu_stream.get()))
+  GPU_CHECK(hipStreamSynchronize(*static_cast<hipStream_t *>(gpu_stream.data()))
   );
   float millis = start_timer.time_elapsed_ms(end_timer);
   Logger::log(
@@ -94,7 +94,7 @@ auto ColorSearcher::launch_combine_kernel(
     blocks_per_grid,
     threads_per_block,
     0,
-    *static_cast<hipStream_t *>(gpu_stream.get()),
+    *static_cast<hipStream_t *>(gpu_stream.data()),
     d_fat_results.get(),
     d_warps_intervals.get(),
     num_warps,
@@ -103,7 +103,7 @@ auto ColorSearcher::launch_combine_kernel(
   );
   end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());
-  GPU_CHECK(hipStreamSynchronize(*static_cast<hipStream_t *>(gpu_stream.get()))
+  GPU_CHECK(hipStreamSynchronize(*static_cast<hipStream_t *>(gpu_stream.data()))
   );
   float millis = start_timer.time_elapsed_ms(end_timer);
   Logger::log(

@@ -13,7 +13,7 @@ GpuEvent::~GpuEvent() { hipEventDestroy(*static_cast<hipEvent_t *>(element)); }
 auto GpuEvent::record(GpuStream *s) -> void {
   GPU_CHECK(hipEventRecord(
     *static_cast<hipEvent_t *>(element),
-    s == nullptr ? nullptr : *static_cast<hipStream_t *>(s->get())
+    s == nullptr ? nullptr : *static_cast<hipStream_t *>(s->data())
   ));
 }
 

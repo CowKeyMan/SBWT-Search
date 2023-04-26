@@ -23,7 +23,7 @@ public:
   auto operator=(GpuStream &) = delete;
   auto operator=(GpuStream &&) = delete;
   ~GpuStream();
-  [[nodiscard]] auto get() const -> void *;
+  [[nodiscard]] auto data() const -> void *;
 };
 
 }  // namespace gpu_utils

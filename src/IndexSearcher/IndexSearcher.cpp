@@ -24,9 +24,9 @@ IndexSearcher::IndexSearcher(
     move_to_key_kmer(move_to_key_kmer_) {}
 
 auto IndexSearcher::search(
-  const vector<u64> &bit_seqs,
-  const vector<u64> &kmer_positions,
-  vector<u64> &results,
+  const PinnedVector<u64> &bit_seqs,
+  const PinnedVector<u64> &kmer_positions,
+  PinnedVector<u64> &results,
   u64 batch_id
 ) -> void {
   Logger::log(
@@ -52,16 +52,16 @@ auto IndexSearcher::search(
 
 auto IndexSearcher::copy_to_gpu(
   u64 batch_id,
-  const vector<u64> &bit_seqs,
-  const vector<u64> &kmer_positions,
-  vector<u64> &results
+  const PinnedVector<u64> &bit_seqs,
+  const PinnedVector<u64> &kmer_positions,
+  PinnedVector<u64> &results
 ) -> void {
   Logger::log_timed_event(
     format("SearcherCopyToGpu_{}", stream_id),
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  d_bit_seqs.set_async(bit_seqs, bit_seqs.size(), gpu_stream);
+  d_bit_seqs.set_async(bit_seqs.data(), bit_seqs.size(), gpu_stream);
   auto padded_query_size
     = round_up<u64>(kmer_positions.size(), superblock_bits);
   d_kmer_positions.set_async(
@@ -82,7 +82,9 @@ auto IndexSearcher::copy_to_gpu(
 }
 
 auto IndexSearcher::copy_from_gpu(
-  vector<u64> &results, u64 batch_id, const vector<u64> &kmer_positions
+  PinnedVector<u64> &results,
+  u64 batch_id,
+  const PinnedVector<u64> &kmer_positions
 ) -> void {
   Logger::log_timed_event(
     format("SearcherCopyFromGpu_{}", stream_id),

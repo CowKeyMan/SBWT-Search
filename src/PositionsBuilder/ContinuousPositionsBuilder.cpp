@@ -32,9 +32,7 @@ auto ContinuousPositionsBuilder::get_bits_per_element() -> u64 {
 
 auto ContinuousPositionsBuilder::get_default_value()
   -> shared_ptr<PositionsBatch> {
-  auto batch = make_shared<PositionsBatch>();
-  batch->positions.reserve(max_chars_per_batch);
-  return batch;
+  return make_shared<PositionsBatch>(max_chars_per_batch);
 }
 
 auto ContinuousPositionsBuilder::continue_read_condition() -> bool {

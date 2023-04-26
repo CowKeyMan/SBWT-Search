@@ -26,7 +26,7 @@ auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
       blocks_per_grid,
       threads_per_block,
       0,
-      *static_cast<hipStream_t *>(gpu_stream.get()),
+      *static_cast<hipStream_t *>(gpu_stream.data()),
       container->get_kmer_size(),
       container->get_c_map().get(),
       container->get_acgt_pointers().get(),
@@ -45,7 +45,7 @@ auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
       blocks_per_grid,
       threads_per_block,
       0,
-      *static_cast<hipStream_t *>(gpu_stream.get()),
+      *static_cast<hipStream_t *>(gpu_stream.data()),
       container->get_kmer_size(),
       container->get_c_map().get(),
       container->get_acgt_pointers().get(),
@@ -61,7 +61,7 @@ auto IndexSearcher::launch_search_kernel(u64 num_queries, u64 batch_id)
   }
   end_timer.record(&gpu_stream);
   GPU_CHECK(hipPeekAtLastError());
-  GPU_CHECK(hipStreamSynchronize(*static_cast<hipStream_t *>(gpu_stream.get()))
+  GPU_CHECK(hipStreamSynchronize(*static_cast<hipStream_t *>(gpu_stream.data()))
   );
   float millis = start_timer.time_elapsed_ms(end_timer);
   Logger::log(

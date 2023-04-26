@@ -11,11 +11,13 @@
 #include "SbwtContainer/GpuSbwtContainer.h"
 #include "Tools/GpuEvent.h"
 #include "Tools/GpuStream.h"
+#include "Tools/PinnedVector.h"
 
 namespace sbwt_search {
 
 using gpu_utils::GpuEvent;
 using gpu_utils::GpuStream;
+using gpu_utils::PinnedVector;
 using std::shared_ptr;
 
 class IndexSearcher {
@@ -37,22 +39,24 @@ public:
   );
 
   auto search(
-    const vector<u64> &bit_seqs,
-    const vector<u64> &kmer_positions,
-    vector<u64> &results,
+    const PinnedVector<u64> &bit_seqs,
+    const PinnedVector<u64> &kmer_positions,
+    PinnedVector<u64> &results,
     u64 batch_id
   ) -> void;
 
 private:
   auto copy_to_gpu(
     u64 batch_id,
-    const vector<u64> &bit_seqs,
-    const vector<u64> &kmer_positions,
-    vector<u64> &results
+    const PinnedVector<u64> &bit_seqs,
+    const PinnedVector<u64> &kmer_positions,
+    PinnedVector<u64> &results
   ) -> void;
   auto launch_search_kernel(u64 num_queries, u64 batch_id) -> void;
   auto copy_from_gpu(
-    vector<u64> &results, u64 batch_id, const vector<u64> &kmer_positions
+    PinnedVector<u64> &results,
+    u64 batch_id,
+    const PinnedVector<u64> &kmer_positions
   ) -> void;
 };
 
