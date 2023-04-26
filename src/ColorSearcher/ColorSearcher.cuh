@@ -134,6 +134,8 @@ __global__ auto d_color_search(
       arrays_end
     );
   }
+
+  // get min_color in this warp
   u64 min_color = is_dense ? d_dense_get_min(arrays_start, dense_arrays) :
                              d_sparse_get_min(
                                arrays_start,
@@ -149,12 +151,33 @@ __global__ auto d_color_search(
 #endif
   }
   array_idx = arrays_start + (is_dense ? min_color : 0);
+
+  // get max_color in this warp (max_color is not included)
+  u64 max_color = is_dense ?
+    arrays_end - arrays_start :
+    d_variable_length_int_index(
+      sparse_arrays,
+      sparse_arrays_width,
+      sparse_arrays_width_set_bits,
+      arrays_end - 1
+    ) + 1;
+  for (int offset = gpu_warp_size / 2; offset > 0; offset /= 2) {
+#if (defined(__HIP_CPU_RT__) || defined(__HIP_PLATFORM_HCC__) || defined(__HIP_PLATFORM_AMD__))
+    max_color = llmax(max_color, __shfl_xor(max_color, offset));
+#elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
+    max_color = llmax(max_color, __shfl_xor_sync(full_mask, max_color, offset));
+#endif
+  }
+
+  // set all before min_color to 0
   if (thread_idx % gpu_warp_size == 0) {
-    for (u64 i = 0; i < min_color; ++i) {
-      results[num_colors * thread_idx / gpu_warp_size + i] = 0;
+    for (u64 color_idx = 0; color_idx < min_color; ++color_idx) {
+      results[num_colors * thread_idx / gpu_warp_size + color_idx] = 0;
     }
   }
-  for (u64 color_idx = min_color; color_idx < num_colors; ++color_idx) {
+
+  // normal colors
+  for (u64 color_idx = min_color; color_idx < max_color; ++color_idx) {
     bool color_present = false;
     if (array_idx < arrays_end) {
       if (is_dense) {
@@ -184,6 +207,13 @@ __global__ auto d_color_search(
 #else
 #error("No runtime defined");
 #endif
+  }
+
+  // set all after max_color to 0
+  if (thread_idx % gpu_warp_size == 0) {
+    for (u64 color_idx = max_color; color_idx < num_colors; ++color_idx) {
+      results[num_colors * thread_idx / gpu_warp_size + color_idx] = 0;
+    }
   }
 }
 
