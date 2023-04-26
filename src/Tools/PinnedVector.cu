@@ -51,7 +51,7 @@ auto PinnedVector<T>::empty() const -> bool {
 
 template <class T>
 auto PinnedVector<T>::back() -> T & {
-  // NOLINTNEXTLIE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
+  // NOLINTNEXTLINE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
   return ptr[num_elems - 1];
 }
 

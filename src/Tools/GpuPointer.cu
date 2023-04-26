@@ -159,6 +159,7 @@ auto GpuPointer<T>::copy_to_async(
     hipMemcpyDeviceToHost,
     *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
+  hipStreamSynchronize(*reinterpret_cast<hipStream_t *>(gpu_stream.data()));
 }
 template <class T>
 auto GpuPointer<T>::copy_to_async(T *destination, GpuStream &gpu_stream) const
