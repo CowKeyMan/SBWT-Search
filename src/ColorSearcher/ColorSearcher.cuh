@@ -141,16 +141,19 @@ __global__ auto d_color_search(
                                sparse_arrays_width,
                                sparse_arrays_width_set_bits
                              );
-  u64 copy = min_color;
   for (int offset = gpu_warp_size / 2; offset > 0; offset /= 2) {
 #if (defined(__HIP_CPU_RT__) || defined(__HIP_PLATFORM_HCC__) || defined(__HIP_PLATFORM_AMD__))
-    min_color = llmin(min_color, __shfl_down(min_color, offset));
+    min_color = llmin(min_color, __shfl_xor(min_color, offset));
 #elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
-    min_color
-      = llmin(min_color, __shfl_down_sync(full_mask, min_color, offset));
+    min_color = llmin(min_color, __shfl_xor_sync(full_mask, min_color, offset));
 #endif
   }
   array_idx = arrays_start + (is_dense ? min_color : 0);
+  if (thread_idx % gpu_warp_size == 0) {
+    for (u64 i = 0; i < min_color; ++i) {
+      results[num_colors * thread_idx / gpu_warp_size + i] = 0;
+    }
+  }
   for (u64 color_idx = min_color; color_idx < num_colors; ++color_idx) {
     bool color_present = false;
     if (array_idx < arrays_end) {
@@ -226,11 +229,11 @@ __device__ auto d_dense_get_min(const u64 array_idx, const u64 *dense_arrays)
   u64 result = array_idx;
   while (true) {
     if (result % u64_bits == 0) {
-      int zeros = __clzll(__brevll(dense_arrays[result / u64_bits]));
+      u64 zeros = __clzll(__brevll(dense_arrays[result / u64_bits]));
       result += zeros;
       if (zeros < u64_bits) { break; }
     } else {
-      u64 is_1 = d_get_bool_from_bit_vector(dense_arrays, result);
+      bool is_1 = d_get_bool_from_bit_vector(dense_arrays, result);
       if (is_1) { break; }
       ++result;
     }
