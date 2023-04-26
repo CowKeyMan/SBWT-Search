@@ -110,9 +110,6 @@ auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
     static_cast<double>(get_free_gpu_memory() * bits_in_byte)
     * get_args().get_gpu_memory_percentage()
   );
-  /* const u64 bits_required_per_character = static_cast<double>( */
-  // 64 for each index found
-  // The results take: num_colors * 64 / warp_size
   const double bits_required_per_character =
     // bits per element
     static_cast<double>(ContinuousColorSearcher::get_bits_per_element_gpu())
@@ -268,6 +265,7 @@ auto ColorSearchMain::get_components(
       gpu_container,
       index_file_parsers[i]->get_indexes_batch_producer(),
       max_indexes_per_batch,
+      max_seqs_per_batch,
       color_searcher_max_batches,
       gpu_container->num_colors
     );

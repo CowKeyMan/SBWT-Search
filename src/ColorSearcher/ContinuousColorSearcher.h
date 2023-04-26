@@ -35,6 +35,7 @@ public:
     shared_ptr<GpuColorIndexContainer> color_index_container_,
     shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer_,
     u64 max_indexes_per_batch_,
+    u64 max_seqs_per_batch,
     u64 max_batches,
     u64 num_colors_
   );

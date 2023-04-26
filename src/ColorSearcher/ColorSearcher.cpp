@@ -16,7 +16,8 @@ using std::numeric_limits;
 ColorSearcher::ColorSearcher(
   u64 stream_id_,
   shared_ptr<GpuColorIndexContainer> container_,
-  u64 max_indexes_per_batch
+  u64 max_indexes_per_batch,
+  u64 max_seqs_per_batch
 ):
     container(std::move(container_)),
     d_sbwt_index_idxs(max_indexes_per_batch),
@@ -24,7 +25,7 @@ ColorSearcher::ColorSearcher(
       max_indexes_per_batch / gpu_warp_size * container->num_colors, gpu_stream
     ),
     d_results(
-      max_indexes_per_batch / gpu_warp_size * container->num_colors, gpu_stream
+      max_seqs_per_batch * container->num_colors, gpu_stream
     ),
     stream_id(stream_id_) {}
 

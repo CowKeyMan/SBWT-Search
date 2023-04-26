@@ -32,7 +32,8 @@ public:
   ColorSearcher(
     u64 stream_id_,
     shared_ptr<GpuColorIndexContainer> container,
-    u64 max_indexes_per_batch
+    u64 max_indexes_per_batch,
+    u64 max_seqs_per_batch
   );
 
   auto search(
