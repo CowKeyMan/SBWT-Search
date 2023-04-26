@@ -1,3 +1,6 @@
+#include <iostream>
+
+#include "Tools/GpuUtils.h"
 #include "Tools/PinnedVector.h"
 #include "hip/hip_runtime.h"
 
@@ -6,7 +9,7 @@ namespace gpu_utils {
 template <class T>
 PinnedVector<T>::PinnedVector(u64 size): bytes(size * sizeof(T)) {
   // NOLINTNEXTLIE (google-readability-casting)
-  hipHostMalloc((void **)(&ptr), size * sizeof(T));
+  GPU_CHECK(hipHostMalloc((void **)(&ptr), size * sizeof(T)));
 }
 
 template <class T>
@@ -50,6 +53,14 @@ template <class T>
 auto PinnedVector<T>::back() -> T & {
   // NOLINTNEXTLIE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
   return ptr[num_elems - 1];
+}
+
+template <class T>
+PinnedVector<T>::~PinnedVector() {
+  // NOLINTNEXTLIE (cppcoreguidelines-pro-bounds-pointer-arithmetic)
+  try {
+    GPU_CHECK(hipHostFree(ptr));
+  } catch (std::runtime_error &e) { std::cerr << e.what() << std::endl; }
 }
 
 // We set these here because we need the class to be instantiated since we are

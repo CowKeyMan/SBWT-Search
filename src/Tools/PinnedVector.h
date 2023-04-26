@@ -21,6 +21,11 @@ class PinnedVector {
 
 public:
   explicit PinnedVector(u64 size);
+  PinnedVector(PinnedVector &) = delete;
+  PinnedVector(PinnedVector &&) = delete;
+  auto operator=(PinnedVector &) = delete;
+  auto operator=(PinnedVector &&) = delete;
+
   auto data() const -> T *;
   auto operator[](u64 n) -> T &;
   auto operator[](u64 n) const -> const T &;
@@ -29,6 +34,8 @@ public:
   auto resize(u64 n) -> void;
   [[nodiscard]] auto empty() const -> bool;
   auto back() -> T &;
+
+  ~PinnedVector();
 };
 
 }  // namespace gpu_utils
