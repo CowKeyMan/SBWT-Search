@@ -26,7 +26,7 @@ auto SeqStatisticsBatchProducer::get_default_value()
   batch->not_found_idxs.reserve(max_seqs_per_batch);
   batch->invalid_idxs.reserve(max_seqs_per_batch);
   batch->colored_seq_id.reserve(max_seqs_per_batch);
-  batch->seqs_before_new_file.reserve(max_seqs_per_batch);
+  batch->seqs_before_newfile.reserve(max_seqs_per_batch);
   return batch;
 }
 

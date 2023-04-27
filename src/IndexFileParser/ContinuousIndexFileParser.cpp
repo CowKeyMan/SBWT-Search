@@ -68,7 +68,7 @@ auto ContinuousIndexFileParser::start_next_file() -> bool {
       Logger::LOG_LEVEL::INFO, format("Now reading file {}", filename)
     );
     auto seqs_statistics_batch = seq_statistics_batch_producer->current_write();
-    seqs_statistics_batch->seqs_before_new_file.push_back(
+    seqs_statistics_batch->seqs_before_newfile.push_back(
       seqs_statistics_batch->colored_seq_id.size() - 1
     );
     try {
@@ -168,8 +168,9 @@ auto ContinuousIndexFileParser::do_at_batch_finish() -> void {
     format("batch {}", batch_id)
   );
   ++batch_id;
-  seq_statistics_batch_producer->current_write()
-    ->seqs_before_new_file.push_back(numeric_limits<u64>::max());
+  seq_statistics_batch_producer->current_write()->seqs_before_newfile.push_back(
+    numeric_limits<u64>::max()
+  );
   seq_statistics_batch_producer->do_at_batch_finish();
   indexes_batch_producer->do_at_batch_finish();
 }

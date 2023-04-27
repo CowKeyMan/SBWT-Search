@@ -144,11 +144,10 @@ private:
     for (batches = 0; interval_batch_producer >> interval_batch; ++batches) {
       sleep_for(milliseconds(rng()));
       EXPECT_EQ(
-        chars_before_newline[batches], *interval_batch->chars_before_newline
+        chars_before_newline[batches], *interval_batch->chars_before_new_seq
       );
       EXPECT_EQ(
-        newlines_before_newfile[batches],
-        interval_batch->newlines_before_newfile
+        newlines_before_newfile[batches], interval_batch->seqs_before_newfile
       );
     }
     EXPECT_EQ(batches, expected_batches);

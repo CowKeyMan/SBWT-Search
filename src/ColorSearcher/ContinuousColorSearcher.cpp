@@ -67,7 +67,7 @@ auto ContinuousColorSearcher::continue_read_condition() -> bool {
 auto ContinuousColorSearcher::generate() -> void {
   searcher.search(
     indexes_batch->warped_indexes,
-    indexes_batch->warps_intervals,
+    indexes_batch->warp_intervals,
     current_write()->colors,
     get_batch_id()
   );

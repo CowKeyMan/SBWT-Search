@@ -168,7 +168,7 @@ protected:
     auto &not_found_idxs = seq_statistics_batch->not_found_idxs;
     auto &invalid_idxs = seq_statistics_batch->invalid_idxs;
     auto &colored_seq_id = seq_statistics_batch->colored_seq_id;
-    auto &sbnfs = seq_statistics_batch->seqs_before_new_file;
+    auto &sbnfs = seq_statistics_batch->seqs_before_newfile;
 
     // Fill in from previous batch (seq is continued)
     found_idxs[0] += previous_last_found_idx;

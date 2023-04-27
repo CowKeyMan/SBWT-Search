@@ -66,7 +66,7 @@ auto IndexFileParser::begin_new_seq() -> void {
 }
 
 auto IndexFileParser::add_warp_interval() -> void {
-  auto &warp_intervals = indexes_batch->warps_intervals;
+  auto &warp_intervals = indexes_batch->warp_intervals;
   seq_statistics_batch->colored_seq_id.back() = warp_intervals.size() - 1;
   if (warp_intervals.back() != indexes_batch->warped_indexes.size() / warp_size) {
     warp_intervals.push_back(indexes_batch->warped_indexes.size() / warp_size);

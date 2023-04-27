@@ -147,8 +147,8 @@ private:
     populate_results_before_newline();
     const auto &results = results_batch->results;
     const auto &invalid_chars = invalid_chars_batch->invalid_chars;
-    const auto &nlbnfs = interval_batch->newlines_before_newfile;
-    const auto &cbnls = *interval_batch->chars_before_newline;
+    const auto &nlbnfs = interval_batch->seqs_before_newfile;
+    const auto &cbnls = *interval_batch->chars_before_new_seq;
     const auto &rbnls = results_before_newline;
     u64 prev_last_results_idx = 0;
     // for each file
@@ -231,7 +231,7 @@ private:
   }
 
   auto populate_results_before_newline() -> void {
-    const auto &cbnl = *interval_batch->chars_before_newline;
+    const auto &cbnl = *interval_batch->chars_before_new_seq;
     auto &rbnl = results_before_newline;
     rbnl.resize(cbnl.size());
     u64 last_rbnl = 0;
@@ -253,7 +253,7 @@ private:
     u64 buffer_idx = 0;
     auto &buffer = buffers[0];
     buffer.resize(buffer.capacity());
-    const auto &nlbnfs = interval_batch->newlines_before_newfile;
+    const auto &nlbnfs = interval_batch->seqs_before_newfile;
     const auto &rbnls = results_before_newline;
     while (rbnls[rbnl_idx] == res_idx && rbnl_idx < nlbnfs[nlbnf_idx]) {
       buffer_idx

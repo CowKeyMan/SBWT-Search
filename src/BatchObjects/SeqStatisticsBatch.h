@@ -30,7 +30,7 @@ public:
   vector<u64> invalid_idxs;
   vector<u64> not_found_idxs;
   vector<u64> colored_seq_id;
-  vector<u64> seqs_before_new_file;
+  vector<u64> seqs_before_newfile;
 
   auto reset() -> void {
     found_idxs.resize(0);
@@ -41,7 +41,7 @@ public:
     not_found_idxs.push_back(0);
     colored_seq_id.resize(0);
     colored_seq_id.push_back(0);
-    seqs_before_new_file.resize(0);
+    seqs_before_newfile.resize(0);
   }
 };
 

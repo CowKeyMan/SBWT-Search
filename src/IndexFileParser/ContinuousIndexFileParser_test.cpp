@@ -27,13 +27,14 @@ const u64 time_to_wait = 50;
 class ContinuousIndexFileParserTest: public ::testing::Test {
 private:
   auto get_results_ints() -> vector<vector<int>> {
-    return vector<vector<int>>{
+    const auto result = vector<vector<int>>{
       {-2, 39, 164, 216, 59, -1, -2},
       {-2, -1, -1, -1, -1, -1, -2},
       {1, 2, 3, 4},
       {},
       {0, 1, 2, 4, 5, 6},
     };
+    return result;
   }
 
 protected:
@@ -122,7 +123,7 @@ protected:
       EXPECT_EQ(expected_colored_seq_id[batches], batch->colored_seq_id)
         << "at index " << batches;
       EXPECT_EQ(
-        expected_seqs_before_newfile[batches], batch->seqs_before_new_file
+        expected_seqs_before_newfile[batches], batch->seqs_before_newfile
       ) << "at index "
         << batches;
     }
@@ -141,7 +142,7 @@ protected:
       sleep_for(milliseconds(rng()));
       EXPECT_EQ(expected_indexes[batches], batch->warped_indexes)
         << "at index " << batches;
-      EXPECT_EQ(expected_warps_intervals[batches], batch->warps_intervals)
+      EXPECT_EQ(expected_warps_intervals[batches], batch->warp_intervals)
         << "at index " << batches;
     }
     EXPECT_EQ(batches, expected_indexes.size());

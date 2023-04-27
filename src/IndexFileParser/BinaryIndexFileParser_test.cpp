@@ -68,7 +68,7 @@ protected:
       indexes_batch->reset();
       host.generate_batch(seq_statistics_batch, indexes_batch);
       EXPECT_EQ(indexes_batch->warped_indexes, expected_indexes[i]);
-      EXPECT_EQ(indexes_batch->warps_intervals, expected_warps_intervals[i]);
+      EXPECT_EQ(indexes_batch->warp_intervals, expected_warps_intervals[i]);
       EXPECT_EQ(seq_statistics_batch->found_idxs, expected_found_idxs[i]);
       EXPECT_EQ(
         seq_statistics_batch->not_found_idxs, expected_not_found_idxs[i]

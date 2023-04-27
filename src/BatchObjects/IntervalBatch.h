@@ -22,8 +22,8 @@ using std::vector;
 
 class IntervalBatch {
 public:
-  const vector<u64> *chars_before_newline;
-  vector<u64> newlines_before_newfile;
+  const vector<u64> *chars_before_new_seq;
+  vector<u64> seqs_before_newfile;
 };
 
 }  // namespace sbwt_search

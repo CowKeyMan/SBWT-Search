@@ -31,23 +31,22 @@ auto IntervalBatchProducer::get_default_value() -> shared_ptr<IntervalBatch> {
 }
 
 auto IntervalBatchProducer::add_file_start(u64 newlines) -> void {
-  current_write()->newlines_before_newfile.push_back(newlines);
+  current_write()->seqs_before_newfile.push_back(newlines);
 }
 
 auto IntervalBatchProducer::set_chars_before_newline(
   const vector<u64> &chars_before_newline
 ) -> void {
-  current_write()->chars_before_newline = &chars_before_newline;
+  current_write()->chars_before_new_seq = &chars_before_newline;
 }
 
 auto IntervalBatchProducer::do_at_batch_start() -> void {
   SharedBatchesProducer<IntervalBatch>::do_at_batch_start();
-  current_write()->newlines_before_newfile.resize(0);
+  current_write()->seqs_before_newfile.resize(0);
 }
 
 auto IntervalBatchProducer::do_at_batch_finish() -> void {
-  current_write()->newlines_before_newfile.push_back(numeric_limits<u64>::max()
-  );
+  current_write()->seqs_before_newfile.push_back(numeric_limits<u64>::max());
   SharedBatchesProducer<IntervalBatch>::do_at_batch_finish();
 }
 
