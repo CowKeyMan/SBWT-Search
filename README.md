@@ -4,7 +4,14 @@ An application for k-mer searching within an SBWT structure and also pseudoalign
 
 ## For Users
 
-This respository takes 2 inputs: A themisto structure created by themisto v3.0, which can be found at <https://github.com/algbio/themisto>.
+This respository takes as inputs a themisto `.tdbg` and `.tcolors` structures created by themisto v3.0, which can be found at <https://github.com/algbio/themisto>.
+
+### Requirements
+REQUIREMENTS: gcc>=11.0, cuda/nvcc>=11.0
+
+If you wish to use a lower version of cuda/nvcc, you may remove or comment out this line `add_compile_options("$<$<COMPILE_LANGUAGE:CUDA>:--gpu-architecture=all>")` from the file `cmake/SetHipTargetDevice.cmake`
+
+### Installation
 
 To build the program, simply run the following commands:
 
