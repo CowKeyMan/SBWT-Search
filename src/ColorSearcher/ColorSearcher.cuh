@@ -146,7 +146,7 @@ __global__ auto d_color_search(
   for (int offset = gpu_warp_size / 2; offset > 0; offset /= 2) {
 #if (defined(__HIP_CPU_RT__) || defined(__HIP_PLATFORM_HCC__) || defined(__HIP_PLATFORM_AMD__))
     u64 shfld = __shfl_xor(min_color, offset);
-    min_color = min_color < shfld? min_color: shfld;
+    min_color = min_color < shfld ? min_color : shfld;
 #elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
     min_color = llmin(min_color, __shfl_xor_sync(full_mask, min_color, offset));
 #endif
@@ -165,7 +165,7 @@ __global__ auto d_color_search(
   for (int offset = gpu_warp_size / 2; offset > 0; offset /= 2) {
 #if (defined(__HIP_CPU_RT__) || defined(__HIP_PLATFORM_HCC__) || defined(__HIP_PLATFORM_AMD__))
     u64 shfld = __shfl_xor(max_color, offset);
-    max_color = max_color > shfld? max_color: shfld;
+    max_color = max_color > shfld ? max_color : shfld;
 #elif (defined(__HIP_PLATFORM_NVCC__) || defined(__HIP_PLATFORM_NVIDIA__))
     max_color = llmax(max_color, __shfl_xor_sync(full_mask, max_color, offset));
 #endif

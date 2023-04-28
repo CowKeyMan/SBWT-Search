@@ -81,7 +81,7 @@ protected:
         shared_ptr<BitSeqBatch> bit_seq_batch;
         for (batches = 0; (*bits_producer) >> bit_seq_batch; ++batches) {
           sleep_for(milliseconds(rng()));
-          EXPECT_EQ(bits[batches], bit_seq_batch->bit_seq);
+          EXPECT_EQ(bits[batches], bit_seq_batch->bit_seq.to_vector());
         }
         EXPECT_EQ(batches, expected_batches);
       }

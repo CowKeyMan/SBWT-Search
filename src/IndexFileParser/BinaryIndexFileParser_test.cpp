@@ -59,7 +59,7 @@ protected:
     auto format_name = in_stream->read_string_with_size();
     ASSERT_EQ(format_name, "binary");
     auto seq_statistics_batch = make_shared<SeqStatisticsBatch>();
-    auto indexes_batch = make_shared<IndexesBatch>();
+    auto indexes_batch = make_shared<IndexesBatch>(999, 999);
     auto host = BinaryIndexFileParser(
       in_stream, max_indexes, max_seqs, warp_size, buffer_size
     );
@@ -67,8 +67,10 @@ protected:
       seq_statistics_batch->reset();
       indexes_batch->reset();
       host.generate_batch(seq_statistics_batch, indexes_batch);
-      EXPECT_EQ(indexes_batch->warped_indexes, expected_indexes[i]);
-      EXPECT_EQ(indexes_batch->warp_intervals, expected_warps_intervals[i]);
+      EXPECT_EQ(indexes_batch->warped_indexes.to_vector(), expected_indexes[i]);
+      EXPECT_EQ(
+        indexes_batch->warp_intervals.to_vector(), expected_warps_intervals[i]
+      );
       EXPECT_EQ(seq_statistics_batch->found_idxs, expected_found_idxs[i]);
       EXPECT_EQ(
         seq_statistics_batch->not_found_idxs, expected_not_found_idxs[i]

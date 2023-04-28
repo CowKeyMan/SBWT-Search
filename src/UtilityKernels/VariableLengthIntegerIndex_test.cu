@@ -15,11 +15,11 @@ auto get_variable_length_int_index(
     1,
     0,
     nullptr,
-    container.get(),
+    container.data(),
     width,
     width_set_bits,
     index,
-    d_result.get()
+    d_result.data()
   );
   u64 result = static_cast<u64>(-1);
   d_result.copy_to(&result);

@@ -66,7 +66,9 @@ protected:
         shared_ptr<PositionsBatch> positions_batch;
         for (batches = 0; host >> positions_batch; ++batches) {
           sleep_for(milliseconds(rng()));
-          EXPECT_EQ(expected_positions[batches], positions_batch->positions);
+          EXPECT_EQ(
+            expected_positions[batches], positions_batch->positions.to_vector()
+          );
         }
         EXPECT_EQ(batches, expected_batches);
       }

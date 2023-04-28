@@ -9,9 +9,13 @@
  * faster.
  */
 
+#include <vector>
+
 #include "Tools/TypeDefinitions.h"
 
 namespace gpu_utils {
+
+using std::vector;
 
 template <class T>
 class PinnedVector {
@@ -34,6 +38,7 @@ public:
   auto resize(u64 n) -> void;
   [[nodiscard]] auto empty() const -> bool;
   auto back() -> T &;
+  auto to_vector() -> vector<T> { return vector<T>(ptr, ptr + num_elems); }
 
   ~PinnedVector();
 };

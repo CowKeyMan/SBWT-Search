@@ -32,9 +32,9 @@ TEST(PositionsBuilderTest, WithLastPosition) {
     = {4, 6, 9, 13, 19, 23, numeric_limits<u64>::max()};
   const vector<u64> expected = {0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20};
   auto host = PositionsBuilder(kmer_size);
-  vector<u64> positions;
+  PinnedVector<u64> positions(9999);
   host.build_positions(chars_before_newline, seq_size, positions);
-  ASSERT_EQ(positions, expected);
+  ASSERT_EQ(positions.to_vector(), expected);
 }
 
 TEST(PositionsBuilderTest, WithNoLastPosition) {
@@ -42,9 +42,9 @@ TEST(PositionsBuilderTest, WithNoLastPosition) {
     = {4, 6, 9, 13, 19, numeric_limits<u64>::max()};
   const vector<u64> expected = {0, 1, 6, 9, 10, 13, 14, 15, 16, 19, 20};
   auto host = PositionsBuilder(kmer_size);
-  vector<u64> positions;
+  PinnedVector<u64> positions(9999);
   host.build_positions(chars_before_newline, seq_size, positions);
-  ASSERT_EQ(positions, expected);
+  ASSERT_EQ(positions.to_vector(), expected);
 }
 
 }  // namespace sbwt_search

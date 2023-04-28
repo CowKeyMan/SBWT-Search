@@ -17,9 +17,9 @@ auto get_bool_from_bit_vector(const GpuPointer<u64> &bit_vector, u64 index)
     1,
     0,
     nullptr,
-    bit_vector.get(),
+    bit_vector.data(),
     index,
-    d_result.get()
+    d_result.data()
   );
   GPU_CHECK(hipPeekAtLastError());
   GPU_CHECK(hipDeviceSynchronize());

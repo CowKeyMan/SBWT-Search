@@ -26,7 +26,9 @@ auto IndexesBatchProducer::get_bits_per_seq() -> u64 {
 }
 
 auto IndexesBatchProducer::get_default_value() -> shared_ptr<IndexesBatch> {
-  return make_shared<IndexesBatch>(max_indexes_per_batch, max_seqs_per_batch);
+  return make_shared<IndexesBatch>(
+    max_indexes_per_batch, max_seqs_per_batch + 1
+  );
 }
 
 }  // namespace sbwt_search
