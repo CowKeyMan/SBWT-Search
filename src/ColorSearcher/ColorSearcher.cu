@@ -87,7 +87,6 @@ auto ColorSearcher::launch_combine_kernel(
   );
   u64 blocks_per_grid
     = divide_and_ceil<u64>(num_warps * num_colors, threads_per_block);
-  auto &d_warps_intervals = d_sbwt_index_idxs;
   start_timer.record(&gpu_stream);
   hipLaunchKernelGGL(
     d_post_process,

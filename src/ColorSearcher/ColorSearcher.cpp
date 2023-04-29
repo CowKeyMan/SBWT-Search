@@ -20,11 +20,19 @@ ColorSearcher::ColorSearcher(
   u64 max_seqs_per_batch
 ):
     container(std::move(container_)),
-    d_sbwt_index_idxs(max_indexes_per_batch),
+    d_sbwt_index_idxs(std::max(
+      max_indexes_per_batch,
+      max_seqs_per_batch * container->num_colors + max_seqs_per_batch + 1
+    )),
     d_fat_results(
       max_indexes_per_batch / gpu_warp_size * container->num_colors, gpu_stream
     ),
-    d_results(max_seqs_per_batch * container->num_colors, gpu_stream),
+    d_results(d_sbwt_index_idxs, 0, max_seqs_per_batch * container->num_colors),
+    d_warps_intervals(
+      d_sbwt_index_idxs,
+      max_seqs_per_batch * container->num_colors,
+      max_seqs_per_batch + 1
+    ),
     stream_id(stream_id_) {}
 
 auto ColorSearcher::search(
@@ -83,7 +91,6 @@ auto ColorSearcher::combine_copy_to_gpu(
     Logger::EVENT_STATE::START,
     format("batch {}", batch_id)
   );
-  auto &d_warps_intervals = d_sbwt_index_idxs;
   d_warps_intervals.set_async(
     warps_intervals.data(), warps_intervals.size(), gpu_stream
   );

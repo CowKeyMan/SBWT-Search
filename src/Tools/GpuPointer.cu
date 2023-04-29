@@ -11,7 +11,8 @@ using std::vector;
 namespace gpu_utils {
 
 template <class T>
-GpuPointer<T>::GpuPointer(u64 size): bytes(size * sizeof(T)) {
+GpuPointer<T>::GpuPointer(u64 size):
+    bytes(size * sizeof(T)), owning_pointer(true) {
   GPU_CHECK(hipMalloc((void **)(&ptr), bytes));
 }
 template <class T>
@@ -23,8 +24,12 @@ GpuPointer<T>::GpuPointer(const vector<T> &v):
     GpuPointer<T>(v.data(), v.size()) {}
 
 template <class T>
+GpuPointer<T>::GpuPointer(GpuPointer<T> &other, u64 offset, u64 amount):
+    ptr(other.ptr + offset), bytes(amount * sizeof(T)), owning_pointer(false) {}
+
+template <class T>
 GpuPointer<T>::GpuPointer(u64 size, GpuStream &gpu_stream):
-    bytes(size * sizeof(T)) {
+    bytes(size * sizeof(T)), owning_pointer(true) {
   GPU_CHECK(hipMallocAsync(
     (void **)(&ptr), bytes, *reinterpret_cast<hipStream_t *>(gpu_stream.data())
   ));
@@ -181,13 +186,15 @@ auto GpuPointer<T>::copy_to_async(vector<T> &destination, GpuStream &gpu_stream)
 
 template <class T>
 GpuPointer<T>::~GpuPointer() {
-  try {
-    GPU_CHECK(hipFree(ptr));
-  } catch (std::runtime_error &e) { std::cerr << e.what() << std::endl; }
+  if (owning_pointer) {
+    try {
+      GPU_CHECK(hipFree(ptr));
+    } catch (std::runtime_error &e) { std::cerr << e.what() << std::endl; }
+  }
 }
 
-// We set these here because we need the class to be instantiated since we are
-// using templates
+// We set these here because we need the class to be instantiated since we
+// are using templates
 template class GpuPointer<char>;
 template class GpuPointer<float>;
 template class GpuPointer<double>;

@@ -22,11 +22,14 @@ class GpuPointer {
 private:
   T *ptr;
   u64 bytes = 0;
+  bool owning_pointer;
 
 public:
   explicit GpuPointer(u64 size);
   explicit GpuPointer(const vector<T> &v);
   GpuPointer(const T *cpu_ptr, u64 size);
+
+  GpuPointer(GpuPointer<T> &other, u64 offset, u64 amount);
 
   GpuPointer(u64 size, GpuStream &gpu_stream);
   GpuPointer(const vector<T> &v, GpuStream &gpu_stream);

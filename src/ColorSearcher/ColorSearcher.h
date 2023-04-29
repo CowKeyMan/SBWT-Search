@@ -27,6 +27,7 @@ private:
   GpuPointer<u64> d_sbwt_index_idxs;
   GpuPointer<u8> d_fat_results;
   GpuPointer<u64> d_results;
+  GpuPointer<u64> d_warps_intervals;
   GpuEvent start_timer{}, end_timer{};
   u64 stream_id;
 

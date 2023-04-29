@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <memory>
 
 #include "ColorSearcher/ContinuousColorSearcher.h"
@@ -16,7 +17,7 @@ ContinuousColorSearcher::ContinuousColorSearcher(
   shared_ptr<GpuColorIndexContainer> color_index_container_,
   shared_ptr<SharedBatchesProducer<IndexesBatch>> indexes_batch_producer_,
   u64 max_indexes_per_batch_,
-  u64 max_seqs_per_batch,
+  u64 max_seqs_per_batch_,
   u64 max_batches,
   u64 num_colors_
 ):
@@ -25,10 +26,11 @@ ContinuousColorSearcher::ContinuousColorSearcher(
       stream_id_,
       std::move(color_index_container_),
       max_indexes_per_batch_,
-      max_seqs_per_batch
+      max_seqs_per_batch_
     ),
     indexes_batch_producer(std::move(indexes_batch_producer_)),
     max_indexes_per_batch(max_indexes_per_batch_),
+    max_seqs_per_batch(max_seqs_per_batch_),
     num_colors(num_colors_),
     stream_id(stream_id_) {
   initialise_batches();
@@ -39,9 +41,20 @@ auto ContinuousColorSearcher::get_bits_per_seq_cpu(u64 num_colors) -> u64 {
   return num_colors * bits_required_per_result;
 }
 
-auto ContinuousColorSearcher::get_bits_per_element_gpu() -> u64 {
-  const u64 bits_required_per_index = 64;
-  return bits_required_per_index;
+auto ContinuousColorSearcher::get_bits_per_element_gpu(
+  u64 num_colors, u64 idxs_per_seq
+) -> double {
+  const double bits_required_per_index = 64;
+  const double bits_required_per_color = 64;
+  const double bits_required_per_warp_interval = 64;
+  return std::max(
+    // searching part
+    bits_required_per_index,
+    // post processing part
+    (bits_required_per_color * static_cast<double>(num_colors)
+     + bits_required_per_warp_interval)
+      / static_cast<double>(idxs_per_seq)
+  );
 }
 
 auto ContinuousColorSearcher::get_bits_per_warp_gpu(u64 num_colors) -> u64 {
@@ -49,15 +62,8 @@ auto ContinuousColorSearcher::get_bits_per_warp_gpu(u64 num_colors) -> u64 {
   return num_colors * bits_required_per_fat_result;
 }
 
-auto ContinuousColorSearcher::get_bits_per_seq_gpu(u64 num_colors) -> u64 {
-  const u64 bits_required_per_result = 64;
-  return num_colors * bits_required_per_result;
-}
-
 auto ContinuousColorSearcher::get_default_value() -> shared_ptr<ColorsBatch> {
-  return make_shared<ColorsBatch>(
-    max_indexes_per_batch / gpu_warp_size * num_colors
-  );
+  return make_shared<ColorsBatch>(max_seqs_per_batch * num_colors);
 }
 
 auto ContinuousColorSearcher::continue_read_condition() -> bool {

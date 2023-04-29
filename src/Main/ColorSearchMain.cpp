@@ -112,17 +112,14 @@ auto ColorSearchMain::get_max_chars_per_batch_gpu() -> u64 {
   );
   const double bits_required_per_character =
     // bits per element
-    static_cast<double>(ContinuousColorSearcher::get_bits_per_element_gpu())
+    static_cast<double>(ContinuousColorSearcher::get_bits_per_element_gpu(
+      num_colors, get_args().get_indexes_per_seq()
+    ))
     // bits per warp
     + static_cast<double>(
         ContinuousColorSearcher::get_bits_per_warp_gpu(num_colors)
       )
-      / static_cast<double>(gpu_warp_size)
-    // bits per seq
-    + static_cast<double>(
-        ContinuousColorSearcher::get_bits_per_seq_gpu(num_colors)
-      )
-      / static_cast<double>(get_args().get_indexes_per_seq());
+      / static_cast<double>(gpu_warp_size);
   u64 max_chars_per_batch = static_cast<u64>(std::floor(
     static_cast<double>(free_bits) / bits_required_per_character
     / static_cast<double>(streams)
@@ -163,10 +160,10 @@ auto ColorSearchMain::get_max_chars_per_batch_cpu() -> u64 {
     )
     // bits per seq
     + static_cast<double>(
-        +SeqStatisticsBatchProducer::get_bits_per_seq()
-          * seq_statistics_batch_producer_max_batches
-        + IndexesBatchProducer::get_bits_per_seq()
+        IndexesBatchProducer::get_bits_per_seq()
           * indexes_batch_producer_max_batches
+        + SeqStatisticsBatchProducer::get_bits_per_seq()
+          * seq_statistics_batch_producer_max_batches
         + ContinuousColorSearcher::get_bits_per_seq_cpu(num_colors)
           * color_searcher_max_batches
         + get_results_printer_bits_per_seq()
@@ -251,6 +248,9 @@ auto ColorSearchMain::get_components(
   vector<shared_ptr<ContinuousColorSearcher>> searchers(streams);
   vector<shared_ptr<ColorResultsPrinter>> results_printers(streams);
   for (u64 i = 0; i < streams; ++i) {
+    Logger::log_timed_event(
+      format("IndexFileParserAllocator_{}", i), Logger::EVENT_STATE::START
+    );
     index_file_parsers[i] = make_shared<ContinuousIndexFileParser>(
       i,
       max_indexes_per_batch,
@@ -259,6 +259,12 @@ auto ColorSearchMain::get_components(
       split_input_filenames[i],
       seq_statistics_batch_producer_max_batches,
       indexes_batch_producer_max_batches
+    );
+    Logger::log_timed_event(
+      format("IndexFileParserAllocator_{}", i), Logger::EVENT_STATE::STOP
+    );
+    Logger::log_timed_event(
+      format("SearcherAllocator_{}", i), Logger::EVENT_STATE::START
     );
     searchers[i] = make_shared<ContinuousColorSearcher>(
       i,
@@ -269,12 +275,21 @@ auto ColorSearchMain::get_components(
       color_searcher_max_batches,
       gpu_container->num_colors
     );
+    Logger::log_timed_event(
+      format("SearcherAllocator_{}", i), Logger::EVENT_STATE::STOP
+    );
+    Logger::log_timed_event(
+      format("ResultsPrinterAllocator_{}", i), Logger::EVENT_STATE::START
+    );
     results_printers[i] = get_results_printer(
       i,
       index_file_parsers[i],
       searchers[i],
       split_output_filenames[i],
       num_colors
+    );
+    Logger::log_timed_event(
+      format("ResultsPrinterAllocator_{}", i), Logger::EVENT_STATE::STOP
     );
   }
   Logger::log_timed_event("MemoryAllocator", Logger::EVENT_STATE::STOP);
