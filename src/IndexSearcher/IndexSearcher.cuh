@@ -45,8 +45,10 @@ __global__ void d_search(
     = (kmer >> (64 - presearch_letters * 2)) & presearch_mask;
   u64 node_left = presearch_left[presearched];
   u64 node_right = presearch_right[presearched];
-  for (u32 i = presearch_letters * 2; i < kmer_size * 2; i += 2) {
-    const u32 c = (kmer >> (62 - i)) & two_1s;
+  for (u64 i = kmer_positions[idx] + presearch_letters;
+       i < kmer_positions[idx] + kmer_size;
+       ++i) {
+    const u32 c = (bit_seqs[i / 32] >> (62 - (i % 32) * 2)) & two_1s;
     node_left = c_map[c] + d_rank(acgt[c], layer_0[c], layer_1_2[c], node_left);
     node_right = c_map[c]
       + d_rank(acgt[c], layer_0[c], layer_1_2[c], node_right + 1) - 1;
