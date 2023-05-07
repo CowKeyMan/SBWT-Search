@@ -1,2 +1,0 @@
-Color Search Components
-=======================

@@ -1,4 +1,0 @@
-Benchmark Results
-=================
-
-**Coming soon**

@@ -99,17 +99,17 @@ Usage:
                                 be slightly more for small variables and
                                 other registers used throughout the
                                 program. (default: 0.8)
-  -r, --base-pairs-per-read arg
-                                The approximate number of base pairs in
-                                every read. This is necessary because we
+  -r, --base-pairs-per-seq arg  The approximate number of base pairs in
+                                every seq. This is necessary because we
                                 need to keep track of the breaks where each
-                                read starts and ends in our list of base
+                                seq starts and ends in our list of base
                                 pairs. As such we must allocate memory for
                                 it. By defalt, this value is 100, meaning
                                 that we would then allocate enough memory
                                 for 1 break per 100 base pairs. This option
-                                is available in case your reads vary a lot
-                                more than that. (default: 100)
+                                is available in case your seqs vary a lot
+                                more than that and you wish to optimise for
+                                space. (default: 100)
   -g, --gpu-memory-percentage arg
                                 The percentage of gpu memory to use from
                                 the remaining free memory after the index
@@ -142,22 +142,22 @@ Usage:
                                 mode the results will be printed in ASCII
                                 format so that the number viewed represents
                                 the position in the SBWT index. The indexes
-                                within a read are separated by spaces and
-                                each read is separated by a newline.
-                                Strings which are not found are represented
-                                by -1 and strings which are invalid (they
-                                contain characters other than ACGT) are
-                                represented by a -2. For binary format, the
-                                output is in binary, that is, each index
-                                takes 8 bits. The numbers are placed in a
-                                single binary string where every 8 bytes
+                                within a seq are separated by spaces and
+                                each seq is separated by a newline. Strings
+                                which are not found are represented by -1
+                                and strings which are invalid (they contain
+                                characters other than ACGT) are represented
+                                by a -2. For binary format, the output is
+                                in binary, that is, each index takes 8
+                                bits. The numbers are placed in a single
+                                binary string where every 8 bytes
                                 represents an unsigned 64-bit number.
                                 Similarly to ASCII, strings which are not
                                 found are represented by a -1 (which loops
                                 around to become the maximum 64-bit integer
                                 (ULLONG_MAX=18446744073709551615)), strings
                                 which are invalid are represented by -2
-                                (ULLONG_MAX-1) and reads are separeted by a
+                                (ULLONG_MAX-1) and seqs are separeted by a
                                 -3 (ULLONG_MAX-2). This version turns out
                                 to be slower and uses more space, it is
                                 only recommended if your indexes are huge
@@ -167,7 +167,7 @@ Usage:
                                 results in a single ASCII byte, which
                                 contains the value 0 if found, 1 if not
                                 found and 2 if the value is invalid.
-                                Similarly to the ascii format, each read is
+                                Similarly to the ascii format, each seq is
                                 separated by a newline. This is the fastest
                                 and most condensed way of printing the
                                 results, but we lose the position in the
@@ -283,17 +283,6 @@ Usage:
                                 be slightly more for small variables and
                                 other registers used throughout the
                                 program. (default: 0.8)
-  -r, --base-pairs-per-read arg
-                                The approximate number of base pairs in
-                                every read. This is necessary because we
-                                need to keep track of the breaks where each
-                                read starts and ends in our list of base
-                                pairs. As such we must allocate memory for
-                                it. By defalt, this value is 100, meaning
-                                that we would then allocate enough memory
-                                for 1 break per 100 base pairs. This option
-                                is available in case your reads vary a lot
-                                more than that. (default: 100)
   -g, --gpu-memory-percentage arg
                                 The percentage of gpu memory to use from
                                 the remaining free memory after the index
@@ -311,14 +300,14 @@ Usage:
                                 (default), 'binary' or 'csv'. In ascii
                                 omde, the results are printed in ASCII
                                 format so that the numbers viewed in each
-                                line represent the colors found. The reads
+                                line represent the colors found. The seqs
                                 are separated by newline characters. The
                                 binary format   will be similar to the
                                 index search in that each color found will
                                 be represented instead by an 8 byte
                                 (64-bit) integer, and the start of a new
-                                read is indicated by a -1 (ULLONG_MAX).
-                                This can result in larger files due to the
+                                seq is indicated by a -1 (ULLONG_MAX). This
+                                can result in larger files due to the
                                 characters taken by the colors usually
                                 being quite small, so the ascii format does
                                 not take as many characters. The csv format
@@ -343,7 +332,7 @@ Usage:
                                 less files than this, then the program will
                                 automatically default to using as many
                                 streams as you have files. (default: 4)
-  -t, --threshold arg           The percentage of kmers within a read which
+  -t, --threshold arg           The percentage of kmers within a seq which
                                 need to be attributed to a color in order
                                 for us to accept that color as being part
                                 of our output. Must be a value between 1
@@ -352,7 +341,7 @@ Usage:
                                 found in the index search (represented by
                                 -1s) are not considered by the algorithm,
                                 and they are simply skipped over and
-                                considered to not be part of the read. If
+                                considered to not be part of the seq. If
                                 this option is set, then they will be
                                 considered as indexes which have had no
                                 colors found.
@@ -362,7 +351,7 @@ Usage:
                                 (represented by -2s) are not considered by
                                 the algorithm, and they are simply skipped
                                 over and considered to not be part of the
-                                read. If this option is set, then they will
+                                seq. If this option is set, then they will
                                 be considered as indexes which have had no
                                 colors found.
       --no-headers              Do not write the headers to the outut
@@ -385,7 +374,18 @@ Usage:
                                 Please note that if you wish to use the
                                 ascii or binary format for pseudoalignment
                                 later, this header is mandatory.
-  -h, --help                    Print usage
+  -r, --indexes-per-seq arg     The approximate number of indexes in every
+                                seq. This is necessary because we need to
+                                keep track of the breaks where each seq
+                                starts and ends in our list of base pairs.
+                                As such we must allocate memory for it. By
+                                defalt, this value is 70, meaning that we
+                                would then allocate enough memory for 1
+                                break per 70 indexes. This option is
+                                available in case your seqs vary a lot more
+                                than that and you wish to optimise for
+                                space. (default: 70)
+  -h, --help                    Print usage (you are here)
 ```
 
 As a sample for this, you may run the following:
