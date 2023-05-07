@@ -46,7 +46,7 @@ echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms"
 cd benchmark_objects
 export THEMISTO_VERSION="3.1.2"
 export THEMISTO_FOLDER="themisto_linux-v${THEMISTO_VERSION}"
-wget -nc https://github.com/algbio/themisto/releases/download/v${THEMISTO_VERSION}/${THEMISTO_FOLDER}.tar.gz
+curl -O -L https://github.com/algbio/themisto/releases/download/v${THEMISTO_VERSION}/${THEMISTO_FOLDER}.tar.gz
 tar -xvzf ${THEMISTO_FOLDER}.tar.gz
 rm ${THEMISTO_FOLDER}.tar.gz
 mv ${THEMISTO_FOLDER} themisto
