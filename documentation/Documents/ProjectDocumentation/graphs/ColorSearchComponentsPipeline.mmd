@@ -3,40 +3,24 @@ flowchart TD
         IndexesBatch(["
             IndexesBatch
             <i>
-            indexes (max_idxs * 64)
+            warped_indexes (max_idxs * 64)
+            warp_intervals (max_seqs * 64)
             </i>
         "])
-        ColorsIntervalBatch(["
-            ColorsIntervalBatch
+        SeqStatisticsBatch(["
+            SeqStatisticsBatch
             <i>
-            warps_before_new_read (max_reads * 64)
-            reads_before_newfile (max_reads * 64)
+            found_indexes (max_seqs * 64)
+            not_found (max_seqs * 64)
+            invalid (max_seqs * 64)
+            seqs_before_newfile (max_seqs * 64)
+            colored_seq_id (max_seqs * 64)
             </i>
         "])
-        WarpsBeforeNewReadBatch(["
-            WarpsBeforeNewReadBatch
+        ColorsBatch(["
+            ColorsBatch
             <i>
-            warps_before_new_read (shared with ColorsIntervalBatch)
-            </i>
-        "])
-        ReadStatisticsBatch(["
-            ReadStatisticsBatch
-            <i>
-            found_indexes (max_reads * 64)
-            invalid (max_reads * 64)
-            not_found (max_reads * 64)
-            </i>
-        "])
-        ColorSearchResultsBatch(["
-            ColorSearchResultsBatch
-            <i>
-            results (max_idxs / warp_size * colors * 64)
-            </i>
-        "])
-        ColorSearchResultsPostProcessedBatch(["
-            ColorSearchResultsBatch
-            <i>
-            results (shared with ColorSearchResultsBath)
+            results (max_seqs * colors * 64)
             </i>
         "])
         ColorsPrintBatch(["
@@ -45,14 +29,11 @@ flowchart TD
             results ((20 + 1) * 8 * max_reads * num_colors)
             </i>
         "])
-        ColorSearchResultsPostProcessor
         ColorResultsPrinter
 
         subgraph IndexFileParser
             IndexesBatchProducer
-            ColorsIntervalBatchProducer
-            WarpsBeforeNewReadBatchProducer
-            ReadStatisticsBatchProducer
+            SeqStatisticsBatchProducer
         end
     end
 
@@ -68,19 +49,13 @@ flowchart TD
     Indexes --> IndexFileParser
 
     IndexesBatchProducer --- IndexesBatch
-    ColorsIntervalBatchProducer --- ColorsIntervalBatch
-    WarpsBeforeNewReadBatchProducer --- WarpsBeforeNewReadBatch
-    ReadStatisticsBatchProducer --- ReadStatisticsBatch
-    ColorSearchResultsPostProcessor --- ColorSearchResultsPostProcessedBatch
-    ColorSearcher --- ColorSearchResultsBatch
+    SeqStatisticsBatchProducer --- SeqStatisticsBatch
+    ColorSearcher --- ColorsBatch
 
     IndexesBatch --> ColorSearcher
-    ColorsIntervalBatch --> ColorResultsPrinter
-    WarpsBeforeNewReadBatch --> ColorSearchResultsPostProcessor
-    ColorSearchResultsBatch --> ColorSearchResultsPostProcessor
 
-    ReadStatisticsBatch --> ColorResultsPrinter
-    ColorSearchResultsPostProcessedBatch --> ColorResultsPrinter
+    SeqStatisticsBatch --> ColorResultsPrinter
+    ColorsBatch --> ColorResultsPrinter
 
     ColorResultsPrinter --- ColorsPrintBatch
     ColorsPrintBatch --> Colors
