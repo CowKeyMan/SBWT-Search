@@ -4,7 +4,9 @@
 /**
  * @file ContinuousIndexFileParser.h
  * @brief Reads a list of files one by one, filling in the batches producer as
- * it goes along. Uses the sub IndexFileParsers to do its parsing for it
+ * it goes along. Uses the sub IndexFileParsers to do its parsing for it.
+ * Indexes are padded to the next warp and sequence statistics are counted as
+ * well.
  */
 
 #include <memory>

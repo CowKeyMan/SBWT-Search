@@ -4,7 +4,9 @@
 /**
  * @file IndexesBatch.h
  * @brief Contains the indexes of the search function which are output to disk
- * in the 'index' phase
+ * in the 'index' phase. These are warped, meaning that the sequences are padded
+ * to the multiple of the next warp_size. Warp intervals tell us at which warp
+ * the current sequence starts and ends.
  */
 
 #include "Tools/PinnedVector.h"

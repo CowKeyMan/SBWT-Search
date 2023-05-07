@@ -5,7 +5,8 @@
  * @file ColorPostProcessor.cuh
  * @brief Squeezes the color results by adding the color sets of the same warp
  * together and storing the results in a new array where the color results are
- * stored contiguously
+ * stored contiguously. Each index handles a single color from a single
+ * sequence.
  */
 
 #include "Global/GlobalDefinitions.h"

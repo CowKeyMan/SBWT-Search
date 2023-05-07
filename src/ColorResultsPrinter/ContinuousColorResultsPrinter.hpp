@@ -3,7 +3,9 @@
 
 /**
  * @file ContinuousColorResultsPrinter.hpp
- * @brief Prints out the color results
+ * @brief Prints out the color results in parallel. Each threads handles an
+ * equal number of sequences (colored or not). Then these are first printed to a
+ * buffer in parallel, and later serially output to disk.
  */
 
 #include <algorithm>

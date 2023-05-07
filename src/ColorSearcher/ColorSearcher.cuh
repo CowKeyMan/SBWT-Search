@@ -4,7 +4,7 @@
 /**
  * @file ColorSearcher.cuh
  * @brief Search kernel for searching for the colors and merging them. The
- * '_set_bits' variables take a u64 with the least significant <width> bits set
+ * '*_set_bits' variables take a u64 with the least significant <width> bits set
  * to 1, while the rest are 0s. The <width> is the width of the respective
  * variable length vector that they correspond to.
  */

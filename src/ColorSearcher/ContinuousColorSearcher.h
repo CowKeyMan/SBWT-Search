@@ -3,7 +3,9 @@
 
 /**
  * @file ContinuousColorSearcher.h
- * @brief
+ * @brief Takes the index batch, searches for its color sets, and post processes
+ * them to give the color sums for each colored sequence. The searching and post
+ * processing are done through gpu kernel launches
  */
 
 #include <memory>

@@ -3,7 +3,8 @@
 
 /**
  * @file ColorSearcher.h
- * @brief Offloads color searching to the gpu, given sbwt indexes
+ * @brief Offloads color searching and memory copies to the gpu, given the
+ * indexes
  */
 
 #include <memory>

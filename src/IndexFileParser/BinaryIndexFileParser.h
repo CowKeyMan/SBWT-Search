@@ -3,9 +3,7 @@
 
 /**
  * @file BinaryIndexFileParser.h
- * @brief Reads the input binary file integer by integer, and pads each
- * line/seq to the given parameter. It also takes note of the starting index of
- * where each seq starts in our vector of integers.
+ * @brief Index file parser for binary files
  */
 
 #include <memory>

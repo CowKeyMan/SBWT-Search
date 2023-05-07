@@ -18,6 +18,7 @@
 #include "BatchObjects/SeqStatisticsBatch.h"
 #include "Tools/IOUtils.h"
 #include "Tools/SharedBatchesProducer.hpp"
+#include <zlib.h>
 
 namespace sbwt_search {
 

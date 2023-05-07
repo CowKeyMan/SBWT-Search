@@ -4,8 +4,7 @@
 /**
  * @file IndexesBatchProducer.h
  * @brief Simple class used by the IndexFileParser which stores the index batch
- * and serves it to its consumers. The current_write batch can be obtained and
- * written to.
+ * and serves it to its consumers.
  */
 
 #include <memory>

@@ -3,9 +3,7 @@
 
 /**
  * @file AsciiIndexFileParser.h
- * @brief Reads the input text file integer by integer, and pads each
- * line/sequence to the given parameter. It also takes note of the starting
- * index of where each seq starts in our vector of integers.
+ * @brief Index file parser for ascii files
  */
 
 #include <memory>
