@@ -44,14 +44,18 @@ echo "Time taken to copy and build in LOCAL_SCRATCH: $((t2-t1)) ms"
 
 # get themisto executable
 cd benchmark_objects
-wget -nc https://github.com/algbio/themisto/releases/download/3.0.0/themisto_linux-v3.0.0.tar.gz
-tar -xvzf themisto_linux-v3.0.0.tar.gz
+export THEMISTO_VERSION="3.1.2"
+export THEMISTO_FOLDER="themisto_linux-v${THEMISTO_VERSION}"
+wget -nc https://github.com/algbio/themisto/releases/download/v${THEMISTO_VERSION}/${THEMISTO_FOLDER}.tar.gz
+tar -xvzf ${THEMISTO_FOLDER}.tar.gz
+rm ${THEMISTO_FOLDER}.tar.gz
+mv ${THEMISTO_FOLDER} themisto
 cd ..
 mkdir -p themisto_temp
 
 cp benchmark_objects/index/index_d1.tcolors benchmark_objects/index/index.tcolors
 
-./benchmark_objects/themisto_linux-v3.0.0/themisto pseudoalign \
+./benchmark_objects/themisto/themisto pseudoalign \
   --n-threads 32 \
   --sort-output \
   --temp-dir themisto_temp \
