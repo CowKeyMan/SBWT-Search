@@ -17,18 +17,21 @@ TEST(MemoryUnitsParserTest, TestAll) {
   EXPECT_EQ(
     MemoryUnitsParser::convert("102GB"), 102 * 8 * 1024 * 1024 * 1024ULL
   );
+  EXPECT_EQ(MemoryUnitsParser::convert("102"), 102);
   EXPECT_EQ(MemoryUnitsParser::convert("102 B"), 102 * 8ULL);
   EXPECT_EQ(MemoryUnitsParser::convert("102B"), 102 * 8ULL);
   EXPECT_EQ(MemoryUnitsParser::convert("102MB"), 102 * 8 * 1024 * 1024ULL);
   EXPECT_EQ(MemoryUnitsParser::convert("167MB"), 167 * 8 * 1024 * 1024ULL);
+  EXPECT_EQ(MemoryUnitsParser::convert("167M"), 167 * 8 * 1024 * 1024ULL);
   EXPECT_EQ(MemoryUnitsParser::convert("167KB"), 167 * 8 * 1024ULL);
+  EXPECT_EQ(MemoryUnitsParser::convert("167K"), 167 * 8 * 1024ULL);
 }
 
 TEST(MemoryUnitsParserTest, InvalidInput) {
   try {
-    EXPECT_EQ(MemoryUnitsParser::convert("1G"), 8 * 1024 * 1024 * 1024ULL);
+    EXPECT_EQ(MemoryUnitsParser::convert("1F"), 8 * 1024 * 1024 * 1024ULL);
   } catch (runtime_error &e) {
-    ASSERT_STREQ(e.what(), "Unable to infer bits from 1G");
+    ASSERT_STREQ(e.what(), "Unable to infer bits from 1F");
   }
 }
 

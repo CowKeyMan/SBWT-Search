@@ -8,19 +8,21 @@
  */
 
 #include <cctype>
+#include <regex>
 #include <string>
-
-#include <unordered_map>
+#include <vector>
 
 #include "Tools/TypeDefinitions.h"
 
 namespace units_parser {
 
+using std::pair;
+using std::regex;
 using std::string;
-using std::unordered_map;
+using std::vector;
 
 class MemoryUnitsParser {
-  const static unordered_map<string, u64> units_to_multiplier;
+  static auto units_to_multiplier() -> const vector<pair<regex, u64>>;
 
 public:
   static auto convert(const string &s) -> u64;

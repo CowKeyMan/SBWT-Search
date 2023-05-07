@@ -11,31 +11,28 @@ using std::runtime_error;
 using std::stoull;
 using std::string;
 using std::toupper;
+using std::vector;
 
-const unordered_map<string, u64> MemoryUnitsParser::units_to_multiplier = {
-  {"B", 8ULL},
-  {"KB", 8ULL * 1024},
-  {"MB", 8ULL * 1024 * 1024},
-  {"GB", 8ULL * 1024 * 1024 * 1024}};
+auto MemoryUnitsParser::units_to_multiplier()
+  -> const vector<pair<regex, u64>> {
+  return {
+    {regex(R"(^([0-9]+)$)"), 1ULL},
+    {regex(R"(^([0-9]+)[ ]?B$)"), 8ULL},
+    {regex(R"(^([0-9]+)[ ]?K[B]?$)"), 8ULL * 1024},
+    {regex(R"(^([0-9]+)[ ]?M[B]?$)"), 8ULL * 1024 * 1024},
+    {regex(R"(^([0-9]+)[ ]?G[B]?$)"), 8ULL * 1024 * 1024 * 1024}};
+}
 
 auto MemoryUnitsParser::convert(const string &s) -> u64 {
   u64 str_size = s.size();
-  u64 multiplier = 1;
   string str_number = s;
-  if (units_to_multiplier.find(s.substr(str_size - 2, 2)) != units_to_multiplier.end()) {
-    auto sub = s.substr(str_size - 2, 2);
-    for (auto &c : sub) { c = toupper(c); }
-    multiplier = units_to_multiplier.at(sub);
-    str_number = s.substr(0, str_size - 2);
-  } else if (toupper(s.back()) == 'B') {
-    multiplier = units_to_multiplier.at("B");
-    str_number = s.substr(0, str_size - 1);
+  std::smatch match;
+  for (auto &utm : units_to_multiplier()) {
+    if (std::regex_search(s.begin(), s.end(), match, utm.first)) {
+      return stoull(match[0]) * utm.second;
+    }
   }
-  auto re = regex(R"(\s*[0-9]+\s*)");
-  if (!regex_match(str_number.begin(), str_number.end(), re)) {
-    throw runtime_error("Unable to infer bits from " + s);
-  }
-  return stoull(str_number) * multiplier;
+  throw runtime_error("Unable to infer bits from " + s);
 }
 
 }  // namespace units_parser
