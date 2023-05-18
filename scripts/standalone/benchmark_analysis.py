@@ -18,16 +18,35 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
 
+sns.color_palette("pastel")
+
 total_time_component = 'Querier'
 
+dpi = 100
+
+device_to_machine = {
+    'nvidia': 'Mahti',
+    'amd': 'LUMI'
+}
+file_to_alias = {
+    'unzipped_seqs': 'Unzipped',
+    'zipped_seqs': 'Zipped',
+    'AsciiIndexes': 'ASCII',
+    'BinaryIndexes': 'Binary',
+}
+format_to_alias = {
+    'ascii': 'ASCII',
+    'binary': 'Binary',
+    'bool': 'Boolean',
+}
 
 ordered_components = [
     # 'main',
     # 'SBWTLoader',
     # 'SBWTParserAndIndex',
-    'SBWTReadAndPopppy',
-    'SbwtGpuTransfer',
-    'Presearcher',
+    # 'SBWTReadAndPopppy',
+    # 'SbwtGpuTransfer',
+    # 'Presearcher',
     # 'PresearchFunction',
     'MemoryAllocator',
     # 'Querier',
@@ -81,6 +100,19 @@ parser.add_argument(
     help='Include memory allocation time',
     action='store_true',
     required=False
+)
+parser.add_argument(
+    '-d',
+    help='Checkpoint parameter',
+    type=int,
+    required=True,
+)
+parser.add_argument(
+    '-t',
+    help='Type of analysis',
+    type=str,
+    choices=['Index', 'Color'],
+    required=True,
 )
 args = vars(parser.parse_args())
 
@@ -286,10 +318,14 @@ class StreamsVsTime:
             df = filter_df_by_series(self.df, ug)
             self.generate_graph(
                 df,
-                self.output_folder
-                    / f"StreamsVsTime_{ug['file']}_{ug['device']}.svg",
-                "Streams vs Time separated by different output formats\n"
-                f"for file {ug['file']} running on {ug['device']} hardware"
+                self.output_folder / (
+                    f"{device_to_machine[ug['device']]}{args['t']}"
+                    f"{file_to_alias[ug['file']]}D{args['d']}.png"
+                ),
+                f"Streams vs Time for the {args['t']} Search separated "
+                f"by different output formats for {file_to_alias[ug['file']]}"
+                f"\nfiles running on {device_to_machine[ug['device']]} "
+                f"with d={args['d']}"
             )
 
     def generate_graph(
@@ -326,7 +362,7 @@ class StreamsVsTime:
                     f", {ugc['print_mode']}, {ugc['streams_total']} streams"
                 )
                 sys.exit(1)
-        df = pd.DataFrame(graph_dict)
+        df = pd.DataFrame(graph_dict).replace(format_to_alias)
         print(title)
         print(df)
         print()
@@ -352,7 +388,7 @@ class StreamsVsTime:
             loc='upper left',
             title='streams'
         )
-        plt.savefig(output_filename, bbox_inches='tight', format='svg')
+        plt.savefig(output_filename, bbox_inches='tight', format='png')
         plt.close(fig)
 
     def generate_bar_plot(
@@ -429,23 +465,27 @@ class IndividualAnalysis:
         streams_total: str,
         print_mode: str
     ):
-        fig, axs = plt.subplots(2, 1)
+        fig, ax = plt.subplots(1)
         plt.subplots_adjust(wspace=0, hspace=0.05)
         title = (
-            f"Individual Analysis for file {file} running\n"
-            f"on {device} hardware with {streams_total} "
-            f"streams and outputting in {print_mode} format"
+            f"Individual Analysis of the {args['t']} Search for file "
+            f"{file} running on {device_to_machine[device]}\nwith "
+            f"{streams_total} streams, d={args['d']}, and outputting in "
+            f"{format_to_alias[print_mode]} format"
         )
-        axs[0].set_title(title)
+        ax.set_title(title)
+        self.bar_components = 0
         print(title)
-        self.generate_timeline(axs[0], df)
-        self.generate_table(axs[1], df)
+        self.generate_timeline(ax, df)
+        self.generate_table(ax, df)
         plt.savefig(
             self.output_folder
-            / f"Individual_{file}_{device}_"
-            f"{print_mode}_{streams_total}_streams.svg",
+            / f"{device_to_machine[device]}{args['t']}{file_to_alias[file]}"
+            f"D{args['d']}S{streams_total}"
+            f"{format_to_alias[print_mode]}.png",
             bbox_inches='tight',
-            format='svg'
+            format='png',
+            dpi=dpi
         )
         plt.close(fig)
 
@@ -461,24 +501,53 @@ class IndividualAnalysis:
             ],
             ascending=False
         )
-        height = 0.1
+        height = 0
+        height_increase = 20
+        component_height = 0.6
         component_ticks = []
+        covered_components = set()
+        loading_time = 0
         for _, row in (
             components_df
             .reset_index(drop=True)
             .iterrows()
         ):
+            if (
+                (
+                    row['component'] == 'MemoryAllocator'
+                    and not args['include_memory_allcator']
+                ) or (
+                    row['component'] in ['SBWTLoader', 'ColorsLoader']
+                    and not args['include_loading']
+                )
+            ):
+                filtered_df = filter_df_by_series(df, row)
+                for batch_df in (
+                    filtered_df[filtered_df['batch'] == x]
+                    for x in filtered_df['batch'].unique()
+                ):
+                    start_time = (
+                        batch_df[batch_df['state'] == 'start']['time'].iloc[0]
+                    )
+                    stop_time = (
+                        batch_df[batch_df['state'] == 'stop']['time'].iloc[0]
+                    )
+                    loading_time += stop_time - start_time
+                continue
             if row['component'] not in ordered_components:
                 continue
             component_ticks.append(
                 f"{row['component']}_{row['stream']}"
             )
             filtered_df = filter_df_by_series(df, row)
+            if f"{row['component']}_{row['stream']}" not in covered_components:
+                height += height_increase
+                self.bar_components += 1
+                covered_components.add(f"{row['component']}_{row['stream']}")
             for batch_df in (
                 filtered_df[filtered_df['batch'] == x]
                 for x in filtered_df['batch'].unique()
             ):
-                height += 0.03
                 start_time = (
                     batch_df[batch_df['state'] == 'start']['time'].iloc[0]
                 )
@@ -488,13 +557,13 @@ class IndividualAnalysis:
                 ax.barh(
                     index,
                     width=stop_time - start_time,
-                    height=0.3,
-                    left=start_time,
+                    height=component_height,
+                    left=start_time - loading_time,
                 )
             index += 1
-        ax.figure.set_size_inches(15, height)
+        ax.figure.set_size_inches(15, height / dpi)
         ax.yaxis.set_ticks(
-            range(len(component_ticks)), component_ticks, fontsize=11
+            range(len(component_ticks)), component_ticks, fontsize=9
         )
         ax.set_xlabel('Time (s)')
 
@@ -533,18 +602,22 @@ class IndividualAnalysis:
         #     np.std(x) for x in streams_values
         # ]
         result_df['total_time'] = [np.sum(x) for x in batches_values]
+        result_df = result_df.round(2)
         print(result_df)
-        ax.table(
+        table_height = len(result_df) / self.bar_components
+        plt.table(
             result_df.values,
             colLabels=result_df.columns,
-            loc='best',
-            fontsize=6
+            loc='bottom',
+            fontsize=6,
+            bbox=[0.1, -(table_height * 1.2), 0.9, table_height]
         )
-        ax.axis('off')
         ax.axis('tight')
 
 
-input_file = Path(args['input'])
+input_file = Path(args['input'] + '/benchmark_out.txt')
+# analysis_text_file = open(args['input'] + '/analysis.txt', 'w')
+# sys.stdout = analysis_text_file
 output_folder = input_file.parent
 
 print('Parsing: ', end='')
