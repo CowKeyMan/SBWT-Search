@@ -416,11 +416,3 @@ Furthermore, we make use of code and ideas from other code repositories:
 * The API is based on this repository: <https://github.com/algbio/SBWT>
 
 The repository also makes use of a number of other tools/code bases, however we do not distribute these as part of our code base. Instead they are downloaded automatically using CMake, or are shown in the tools section of the github pages documentation.
-
-## TODO
-
-* Currently I am not making the best use of RAM when reserving memory, and I can have batch sizes be larger
-* Support for writing zipped indexes and colors
-* Support for reading zipped indexes in the colors phase
-* Static binaries
-* Project documentation in the developer documentation
