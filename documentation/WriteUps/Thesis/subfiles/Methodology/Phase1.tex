@@ -31,7 +31,7 @@ For this reason, they are summarised in Appendix~\ref{app:IndexSearchDataStructu
 Next is to parse the FASTA/FASTQ files.
 A custom-made parser was built for this which was put in its own repository\footnote{\url{https://github.com/CowKeyMan/kseqpp_REad}} and used as an external library for anyone to use separately.
 It is called \texit{kseqpp\_REad} as it is built from kseq++, although highly modified, and it only performs reading, whereas kseq++ can do writing as well.
-It is inspired by kseq\footnote{\url{https://github.com/attractivechaos/klib/blob/master/kseq.h}} and kseq++\footnote{\url{https://github.com/cartoonist/kseq++}}, the latter of which is simply a rewrite of the former in C++.
+It is inspired by kseq\footnote{\url{https://github.com/attractivechaos/klib/blob/master/kseq.h}} and kseq++\footnote{\url{https://github.com/cartoonist/kseqpp}}, the latter of which is simply a rewrite of the former in C++.
 These parsers were inspirations because they are extremely fast and can support a mixture of FASTA and FASTQ formats within the same file and can handle multiline sequences as well.
 They can also handle line endings with and without a carriage return.
 
@@ -217,10 +217,10 @@ No detail will be given as to how the u64 to ASCII algorithm works and what diff
 The second format is the binary format.
 In this format, each element that is printed takes 8 bytes, as everything is printed as a u64.
 Results are printed as they are.
-Meanwhile, not-found values are printed as the maximum u64 value, that is, $2^{64}$, invalid values are printed as $2^{64} - 1$, and newlines are printed as the $2^{64} - 2$.
+Meanwhile, not-found values are printed as the maximum u64 value, that is, $2^{64} - 1$, invalid values are printed as $2^{64} - 2$, and newlines are printed as the $2^{64} - 3$.
 In C++, unsigned integers loop back when they overflow, so that one can say that the values for not-founds, invalids and newlines are $-1$, $-2$, and $-3$ respectively.
 This method would be faster and with less memory requirements than the ASCII format if most of the indexes contain more than 8 bytes.
-The ASCII format requires at most 20 bits for each character, since the maximum value of u64 is 20 characters long, plus another character for the whitespace character which separates the values.
+The ASCII format requires at most 20 bytes for each character, since the maximum value of u64 is 20 characters long, plus another character for the whitespace character which separates the values.
 However, as will be seen in Chapter~\ref{ch:Results}, while not drastically slower than the ASCII format, this method ends up taking a lot more space, since the indexes are usually not too large.
 
 The last format is dubbed the boolean format.

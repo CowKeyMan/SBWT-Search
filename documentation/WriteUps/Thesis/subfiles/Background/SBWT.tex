@@ -158,7 +158,7 @@ On the previous CPU implementation of Themisto~\cite{Themisto}, the SDSL~\cite{S
 Meanwhile, on the previous GPU implementation~\cite{Harri}, the Poppy data structure~\cite{Poppy} is used, to turn the rank function from $O(n)$, where $n$ is the number of vertices in the DBG, to $O(1)$, needing at most 3 cache line accesses per query.
 This makes the entire search function $O(k)$.
 For this thesis, Poppy is used, hence this will be further focused on.
-Another advantage of this data structure is that its memory footprint is negligible, as it only uses 3.125\% more memory than the bitvector alone~\cite{Poppy}.
+Another advantage of this data structure is that its memory footprint is negligible, as it only uses 6.25\% more memory than the bitvector alone~\cite{Poppy}.
 
 To construct the Poppy data structure, the vectors can be scanned once and checkpoints are inserted at each step.
 For those familiar with skip lists, the cost-saving ideas are comparable.

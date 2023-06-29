@@ -27,8 +27,9 @@ If a $k$-mer is not found in the DBG, then it is ignored.
 This is the technique used by Kallisto~\cite{Kallisto}, the first pseudoalignment tool.
 
 Metagraph~\cite{Metagraph} and Bifrost~\cite{Bifrost}, two separate pseudoalignment tools, went one step further than Kallisto and instead of ignoring the $k$-mers not found in the DBG, they set a threshold $\tau$, and if more than $\tau$ color sets of $k$-mers in a read include a color, then it is said that the read is associated with that color.
+$\tau$ is percentage based, not a discrete threshold.
 Themisto~\cite{Themisto}, whose implementation this work is based on, combines the two methods so that the user can choose to remove or include the $k$-mers with no color sets, and then set a threshold on the remaining $k$-mers.
-If a threshold $\tau=1$ is set and the missing $k$-mers are ignored, then the result is the same as Kallisto.
+If a threshold $\tau=1.0$ is set and the missing $k$-mers are ignored, then the result is the same as Kallisto.
 Meanwhile, if the missing $k$-mers are included, the results are the same as those of Metagraph and Bifrost~\cite{Themisto}.
 Themisto has shown to be the best method as, besides supporting both threshold and the removal of missing $k$-mers, it is usually faster and uses less space than other methods~\cite{Themisto}.
 Metagraph has the potential of using less memory for its index when using binary-relation wavelet trees, but then has 100 times less query throughput on some datasets~\cite{Themisto}.
@@ -56,7 +57,7 @@ Third, if it has an outgoing edge to a vertex $v_i$ with $\#in_v(v_i) \ge 2$.
 Because of this, \textit{TAC} and \textit{AAC} are labeled as key-$k$-mers.
 Fourth and last, if the vertex $v_i$ itself has $\#out_v(v_i) \ge 2$.
 The last condition causes \textit{TCG} to be labeled as a key-$k$-mer.
-Notice how each unitig will have the same color set, unless a new sequence starts in the middle of that unitig.
+Notice how each unitig will have the same color set, unless a new sequence starts or ends in the middle of that unitig.
 
 Remember that these rules exist because one can always go forwards in the graph, using Algorithm~\ref{alg:MovingForward}, but not backwards.
 This algorithm assumes a single outgoing edge from the current vertex, otherwise, it would lead to ambiguities.
@@ -80,9 +81,9 @@ In Chapter~\ref{ch:Results}, the datasets used for this thesis are evaluated wit
     c-map $C$
 	}
 
-  \ForEach{$b, label$ \textbf{in} $Bitvectors, BitvectorLabels$}{\
-    \If{$b[i]$ = 1}{\
-      \textbf{return} $C[label]$ + rank($b_{label}, i$)
+  \ForEach{$b$ \textbf{in} $Bitvectors$}{\
+    \If{$b$ = 1}{\
+      \textbf{return} $C[label]$ + rank($b, i$)
     }
   }
 	\caption{Walking 1 step forward in the SBWT}\label{alg:MovingForward}
@@ -117,7 +118,7 @@ Each sub-array in the \textit{sparse\_arrays} is sorted, to make querying and th
 Algorithm~\ref{alg:ColorSearch} shows the color set search, given the index of a key-$k$-mer.
 This corresponds to Figure~\ref{fig:ColorComponents} and the terminology used so far, which will carry on to the next section as well.
 Themisto uses some optimisations for combining color sets.
-For example, when $\tau=1$, a technique which is also used in Kallisto~\cite{Kallisto}, is that when both color sets that need to be combined are dense, a bitwise AND can be used.
+For example, when $\tau=1.0$, a technique which is also used in Kallisto~\cite{Kallisto}, is that when both color sets that need to be combined are dense, a bitwise AND can be used.
 
 \begin{algorithm}
 	\KwIn{ \\
@@ -144,18 +145,18 @@ For example, when $\tau=1$, a technique which is also used in Kallisto~\cite{Kal
 
   $is\_dense$ = $is\_dense\_marks[color\_set\_idx]$
 
-  $is\_dense\_rank$ = rank($is\_dense\_marks, is\_dense$)
+  $is\_dense\_rank$ = rank($is\_dense\_marks, color\_set\_idx$)
 
   \If{is\_dense}{\
     $start$ = $dense\_arrays\_intervals[is\_dense\_rank]$
 
-    $end$ = $dense\_arrays\_intervals[is\_dense\_rank$ + 1]
+    $end$ = $dense\_arrays\_intervals[is\_dense\_rank + 1]$
 
     \textbf{return} $dense\_arrays[start, \ldots, (end - 1)]$  // returns dense format
   }\Else{
-    $start$ = $sparse\_arrays\_intervals[is\_dense\_rank]$
+    $start$ = $sparse\_arrays\_intervals[color\_set\_idx - is\_dense\_rank]$
 
-    $end$ = $sparse\_arrays\_intervals[is\_dense\_rank + 1]$
+    $end$ = $sparse\_arrays\_intervals[color\_set\_idx - is\_dense\_rank + 1]$
 
     \textbf{return} $sparse\_arrays[start, \ldots, (end - 1)]$  // returns sparse format
   }
