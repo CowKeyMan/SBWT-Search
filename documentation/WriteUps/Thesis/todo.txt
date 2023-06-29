@@ -1,0 +1,20 @@
+-cell
+-nucleus
+-chromosone
+-DNA - double helix - ACGT
+- RNA copying the cell (do some research on this or ask jarno)
+-reverse complements
+-shotgun sequencing
+-Illumina vs Nanopore
+-31 (why we use odd not even)
+-sbwt index construction
+-sbwt search
+-color data structure
+-color search
+
+CRTP
+semaphore
+shared batches producer architecture
+Greedy algorithm for partitioning - 3/4 bound (refernces are in main.bib already)
+
+Terminilolgy: While I will be using British English throughout the text, I will use the word 'color' with the American spelling as it is the way that the term is used in the literature

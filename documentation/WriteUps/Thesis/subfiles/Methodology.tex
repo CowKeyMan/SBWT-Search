@@ -1,0 +1,13 @@
+\chapter{Methodology}\label{ch:Methodology}
+
+The final algorithm is split into two phases.
+In the first phase, dubbed as the \textit{index search}, given sequences from multiple FASTA/FASTQ files, searches for the key-$k$-mers.
+Then, this index is written to disk, and in the second phase it is read again, where the second phase is known as the \textit{color search}.
+In this section, the pipeline of both phases are described first.
+The two phases bear a lot of similarities, hence these are further expanded upon in the description of the first phase and some of them will be mentioned again without going into detail when describing the second phase.
+Later, some additional techniques will be described, which are used in order to massively parallelise and optimise the phases, which are also common between the two of them, but can be described separately from the main pipeline.
+With this structure, the reader will get a good idea of how the data flows and also gets familiar with the components, before jumping into more complex optimisations which would be difficult to grasp without context.
+
+\input{subfiles/Methodology/Phase1}
+\input{subfiles/Methodology/Phase2}
+\input{subfiles/Methodology/Optimisations}

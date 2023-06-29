@@ -1,0 +1,37 @@
+\chapter{Introduction}
+
+Alignment is the process of finding the best match where one source DNA string matches a target DNA~\cite{Alignment}.
+Pseudoalignment is the process of finding out if a substring of the source DNA can be found in the target DNA~\cite{Kallisto}.
+The latter has emerged as a faster alternative, which can replace full alignment for a lot of use cases~\cite{Kallisto}.
+Kallisto~\cite{Kallisto} was the first tool to introduce pseudoalignment, and after some iterations, Themisto~\cite{Themisto} emerged as state-of-the-art, and more recently Fulgor~\cite{Fulgor} has also shown great promise.
+This thesis uses the same method as Themisto, but puts most of the heavy lifting on the GPU.
+The implementation is GPU vendor agnostic, so the target GPU may be either from NVIDIA or AMD.
+This was achieved with the utilisation of the HIP framework.
+
+The goal of the solution presented prioritises speed, but over that, general usability is given even more importance.
+Hence some minor optimisations may have been altered from previous GPU methods~\cite{Harri} as they would have made the tool less usable for users.
+This removal of some minor optimisations usually did not significantly affect overall performance, as the pipeline as a whole depends on a lot of hardware features and the benchmarks may vary by a few seconds from one run to the next.
+Furthermore, a new feature was added over Themisto which is that invalid DNA base pairs, those containing characters outside of the $ACGT$ alphabet, can be differentiated from the rest of the characters, such that $k$-mers with these characters inside them may be included or ignored individually from $k$-mers which were not found in the de Bruijn Graph.
+
+The approach taken when creating the algorithm was to first divide the pipeline into several components, and then connect the components together.
+Next, the full pipeline is benchmarked while recording metrics from each component individually, and then optimise the bottlenecks.
+This process was repeated several times.
+Using this method and the Mahti supercomputer by CSC, pseudoalignment with an end-to-end throughput of 500MB/s has been observed, which is 10 times faster than Themisto when Themisto would be put on the LUMI supercomputer which has twice the CPU cores.
+
+Some of the components are placed on the CPU.
+As a result, these components sometimes became the bottleneck, and were thus also parallelised, using OpenMP.
+This makes sure that parallelisation is done on all fronts and using all resources available: the CPU, GPU, as much RAM and VRAM as is available, and as much memory transfer speed available in both ways between CPU and disk as well between GPU and CPU.
+
+Thus, this thesis sets out with the following questions:
+(a) Can CPU side implementation be improved through increased parallelisation, so that even with sequences of vastly different sizes, the amount of work between each unit of parallelisation is kept as equal as possible?
+(b) Can GPU side implementation be made more usable, specifically by allowing $k \ge 32$ and allowing the differentiation of $k$-mers which are not found in the graph and those which are invalid, without significantly impacting computational performance?
+(c) Can the color searching phase of pseudoalignment also be adapted to the GPU such that it may be significantly faster than the CPU version?
+
+The structure of this thesis is as follows.
+First, in Chapter~\ref{ch:Background}, the necessary biological, algorithmic, and domain specific background is introduced.
+Then, in Chapter~\ref{ch:Methodology}, the contributions of this thesis are presented, through a deep explanation of all the optimisations that have been included to speed up pseudoalignment using the same de Bruijn Graph and Colors structure as Themisto.
+The results are then shown in Chapter~\ref{ch:Results}, where the two phases of the proposed method are analysed individually and as a whole.
+Lastly, this thesis is concluded in Chapter~\ref{ch:Conclusion} with some thought given as to how this work may evolve alongside ideas for future research.
+
+The first repository produced in this thesis is the FASTA/FASTQ parser which may be found at \url{https://github.com/CowKeyMan/kseqpp_REad}, where version $\mathit{v1.6.0}$ is used.
+The pseudoalignment repository may be found at \url{https://github.com/CowKeyMan/SBWT-Search}, where $\mathit{v2.0.0b1}$ is used, and $\mathit{v2.0.0}$ will be released once this thesis is published, and the only difference will be that this thesis will be included in that repository.

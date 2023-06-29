@@ -1,0 +1,795 @@
+@article {Themisto,
+  author = {Alanko, Jarno N. and Vuohtoniemi, Jaakko and M{\"a}klin, Tommi and Puglisi, Simon J.},
+  title = {{Themisto: A scalable colored \textit{k}-mer index for sensitive pseudoalignment against hundreds of thousands of bacterial genomes}},
+  elocation-id = {2023.02.24.529942},
+  year = {2023},
+  doi = {10.1101/2023.02.24.529942},
+  publisher = {Cold Spring Harbor Laboratory},
+  abstract = {Motivation Huge data sets containing whole-genome sequences of bacterial strains are now commonplace and represent a rich and important resource for modern genomic epidemiology and metagenomics. In order to efficiently make use of these data sets, efficient indexing data structures {\textemdash} that are both scalable and provide rapid query throughput {\textemdash} are paramount.Results Here, we present Themisto, a scalable colored k-mer index designed for large collections of microbial reference genomes, that works for both short and long read data. Themisto indexes 179 thousand Salmonella enterica genomes in 9 hours. The resulting index takes 142 gigabytes, and Themisto pseudoaligns reads from a Salmonella enterica isolate sample against the index at a rate of 2 million base pairs per second on 48 threads. In comparison, the best competing tools Metagraph and Bifrost were only able to index 11 thousand genomes in the same time. In pseudoalignment, these other tools were either an order of magnitude slower than Themisto, or used an order of magnitude more memory. Themisto also offers superior pseudoalignment quality, achieving a higher recall than previous methods on Nanopore read sets.Availability and implementation Themisto is available and documented as a C++ package at https://github.com/algbio/themisto available under the GPLv2 license.Contact jarno.alanko{at}helsinki.fiSupplementary information Supplementary data are available at Bioinformatics online.Competing Interest StatementThe authors have declared no competing interest.},
+  URL = {https://www.biorxiv.org/content/early/2023/02/24/2023.02.24.529942},
+  eprint = {https://www.biorxiv.org/content/early/2023/02/24/2023.02.24.529942.full.pdf},
+  journal = {bioRxiv}
+}
+
+@article{ecoli_genomes_1,
+  author = "Horesh, Gal and Blackwell, Grace A. and Tonkin-Hill, Gerry and Corander, Jukka and Heinz, Eva and Thomson, Nicholas R.",
+  title = {{A comprehensive and high-quality collection of Escherichia coli genomes and their genes}},
+  journal= "Microbial Genomics",
+  year = "2021",
+  volume = "7",
+  number = "2",
+  pages = "",
+  doi = "https://doi.org/10.1099/mgen.0.000499",
+  url = "https://www.microbiologyresearch.org/content/journal/mgen/10.1099/mgen.0.000499",
+  publisher = "Microbiology Society",
+  issn = "2057-5858",
+  type = "Journal Article",
+  keywords = "antimicrobial resistance",
+  keywords = "horizontal gene transfer",
+  keywords = "Escherichia coli",
+  keywords = "pan-genome",
+  keywords = "Shigella",
+  eid = "000499",
+  abstract = " Escherichia coli is a highly diverse organism that includes a range of commensal and pathogenic variants found across a range of niches and worldwide. In addition to causing severe intestinal and extraintestinal disease, E. coli is considered a priority pathogen due to high levels of observed drug resistance. The diversity in the E. coli population is driven by high genome plasticity and a very large gene pool. All these have made E. coli one of the most well-studied organisms, as well as a commonly used laboratory strain. Today, there are thousands of sequenced E. coli genomes stored in public databases. While data is widely available, accessing the information in order to perform analyses can still be a challenge. Collecting relevant available data requires accessing different sources, where data may be stored in a range of formats, and often requires further manipulation and processing to apply various analyses and extract useful information. In this study, we collated and intensely curated a collection of over 10 000 E. coli and Shigella genomes to provide a single, uniform, high-quality dataset. Shigella were included as they are considered specialized pathovars of E. coli . We provide these data in a number of easily accessible formats that can be used as the foundation for future studies addressing the biological differences between E. coli lineages and the distribution and flow of genes in the E. coli population at a high resolution. The analysis we present emphasizes our lack of understanding of the true diversity of the E. coli species, and the biased nature of our current understanding of the genetic diversity of such a key pathogen.",
+}
+
+@article{ecoli_genomes_2,
+  author={Gladstone, Rebecca A.
+  and McNally, Alan
+  and P{\"o}ntinen, Anna K.
+  and Tonkin-Hill, Gerry
+  and Lees, John A.
+  and Skyt{\'e}n, Kusti
+  and Cl{\'e}on, Fran{\c{c}}ois
+  and Christensen, Martin O. K.
+  and Haldorsen, Bj{\o}rg C.
+  and Bye, Kristina K.
+  and Gammelsrud, Karianne W.
+  and Hjetland, Reidar
+  and K{\"u}mmel, Angela
+  and Larsen, Hege E.
+  and Lindemann, Paul Christoffer
+  and L{\"o}hr, Iren H.
+  and Marvik, {\AA}shild
+  and Nilsen, Einar
+  and Noer, Marie T.
+  and Simonsen, Gunnar S.
+  and Steinbakk, Martin
+  and Tofteland, St{\aa}le
+  and Vatt{\o}y, Marit
+  and Bentley, Stephen D.
+  and Croucher, Nicholas J.
+  and Parkhill, Julian
+  and Johnsen, P{\aa}l J.
+  and Samuelsen, {\O}rjan
+  and Corander, Jukka},
+  title={{Emergence and dissemination of antimicrobial resistance in Escherichia coli causing bloodstream infections in Norway in 2002-17: a nationwide, longitudinal, microbial population genomic study}},
+  journal={The Lancet Microbe},
+  year={2021},
+  month={Jul},
+  day={01},
+  publisher={Elsevier},
+  volume={2},
+  number={7},
+  pages={e331-e341},
+  issn={2666-5247},
+  doi={10.1016/S2666-5247(21)00031-8},
+  url={https://doi.org/10.1016/S2666-5247(21)00031-8}
+}
+
+@Article{ecoli_genomes_3,
+  author={Shao, Yan
+  and Forster, Samuel C.
+  and Tsaliki, Evdokia
+  and Vervier, Kevin
+  and Strang, Angela
+  and Simpson, Nandi
+  and Kumar, Nitin
+  and Stares, Mark D.
+  and Rodger, Alison
+  and Brocklehurst, Peter
+  and Field, Nigel
+  and Lawley, Trevor D.},
+  title={{Stunted microbiota and opportunistic pathogen colonization in caesarean-section birth}},
+  journal={Nature},
+  year={2019},
+  month={Oct},
+  day={01},
+  volume={574},
+  number={7776},
+  pages={117-121},
+  abstract={Immediately after birth, newborn babies experience rapid colonization by microorganisms from their mothers and the surrounding environment1. Diseases in childhood and later in life are potentially mediated by the perturbation of the colonization of the infant gut microbiota2. However, the effects of delivery via caesarean section on the earliest stages of the acquisition and development of the gut microbiota, during the neonatal period (≤1 month), remain controversial3,4. Here we report the disrupted transmission of maternal Bacteroides strains, and high-level colonization by opportunistic pathogens associated with the hospital environment (including Enterococcus, Enterobacter and Klebsiella species), in babies delivered by caesarean section. These effects were also seen, to a lesser extent, in vaginally delivered babies whose mothers underwent antibiotic prophylaxis and in babies who were not breastfed during the neonatal period. We applied longitudinal sampling and whole-genome shotgun metagenomic analysis to 1,679 gut microbiota samples (taken at several time points during the neonatal period, and in infancy) from 596 full-term babies born in UK hospitals; for a subset of these babies, we collected additional matched samples from mothers (175 mothers paired with 178 babies). This analysis demonstrates that the mode of delivery is a significant factor that affects the composition of the gut microbiota throughout the neonatal period, and into infancy. Matched large-scale culturing and whole-genome sequencing of over 800 bacterial strains from these babies identified virulence factors and clinically relevant antimicrobial resistance in opportunistic pathogens that may predispose individuals to opportunistic infections. Our findings highlight the critical role of the local environment in establishing the gut microbiota in very early life, and identify colonization with antimicrobial-resistance-containing opportunistic pathogens as a previously underappreciated risk factor in hospital births.},
+  issn={1476-4687},
+  doi={10.1038/s41586-019-1560-1},
+  url={https://doi.org/10.1038/s41586-019-1560-1}
+}
+
+@Article{genomes_compilation,
+  author={M{\"a}klin, Tommi
+  and Thorpe, Harry A.
+  and P{\"o}ntinen, Anna K.
+  and Gladstone, Rebecca A.
+  and Shao, Yan
+  and Pesonen, Maiju
+  and McNally, Alan
+  and Johnsen, P{\aa}l J.
+  and Samuelsen, {\O}rjan
+  and Lawley, Trevor D.
+  and Honkela, Antti
+  and Corander, Jukka},
+  title={{Strong pathogen competition in neonatal gut colonisation}},
+  journal={Nature Communications},
+  year={2022},
+  month={Dec},
+  day={01},
+  volume={13},
+  number={1},
+  pages={7417},
+  abstract={Opportunistic bacterial pathogen species and their strains that colonise the human gut are generally understood to compete against both each other and the commensal species colonising this ecosystem. Currently we are lacking a population-wide quantification of strain-level colonisation dynamics and the relationship of colonisation potential to prevalence in disease, and how ecological factors might be modulating these. Here, using a combination of latest high-resolution metagenomics and strain-level genomic epidemiology methods we performed a characterisation of the competition and colonisation dynamics for a longitudinal cohort of neonatal gut microbiomes. We found strong inter- and intra-species competition dynamics in the gut colonisation process, but also a number of synergistic relationships among several species belonging to genus Klebsiella, which includes the prominent human pathogen Klebsiella pneumoniae. No evidence of preferential colonisation by hospital-adapted pathogen lineages in either vaginal or caesarean section birth groups was detected. Our analysis further enabled unbiased assessment of strain-level colonisation potential of extra-intestinal pathogenic Escherichia coli (ExPEC) in comparison with their propensity to cause bloodstream infections. Our study highlights the importance of systematic surveillance of bacterial gut pathogens, not only from disease but also from carriage state, to better inform therapies and preventive medicine in the future.},
+  issn={2041-1723},
+  doi={10.1038/s41467-022-35178-5},
+  url={https://doi.org/10.1038/s41467-022-35178-5}
+}
+
+@article{LPT1,
+  author = {Graham, R. L.},
+  title = {{Bounds on Multiprocessing Timing Anomalies}},
+  journal = {SIAM Journal on Applied Mathematics},
+  volume = {17},
+  number = {2},
+  pages = {416-429},
+  year = {1969},
+  doi = {10.1137/0117039},
+}
+
+@inproceedings{LPT2,
+  title={{A Direct Proof of the 4/3 Bound of LPT Scheduling Rule}},
+  author={Xin Xiao},
+  year={2017/04},
+  booktitle={Proceedings of the 2017 5th International Conference on Frontiers of Manufacturing Science and Measuring Technology (FMSMT 2017)},
+  pages={486-489},
+  issn={2352-5401},
+  isbn={978-94-6252-331-9},
+  url={https://doi.org/10.2991/fmsmt-17.2017.102},
+  doi={10.2991/fmsmt-17.2017.102},
+  publisher={Atlantis Press}
+}
+
+@Article{DNA,
+  author={Watson, J. D., Crick, F. H. C.},
+  title={{Molecular Structure of Nucleic Acids: A Structure for Deoxyribose Nucleic Acid}},
+  journal={Nature},
+  year={1953},
+  month={Apr},
+  day={01},
+  volume={171},
+  number={4356},
+  pages={737-738},
+  abstract={The determination in 1953 of the structure of deoxyribonucleic acid (DNA), with its two entwined helices and paired organic bases, was a tour de force in X-ray crystallography. But more significantly, it also opened the way for a deeper understanding of perhaps the most important biological process. In the words of Watson and Crick: "It has not escaped our notice that the specific pairing that we have postulated immediately suggests a possible copying mechanism for the genetic material." [Obituary of Francis Crick: Nature 430, 845-847 (2004); obituary of Maurice Wilkins: Nature 431, 922 (2004)]},
+  issn={1476-4687},
+  doi={10.1038/171737a0},
+  url={https://doi.org/10.1038/171737a0}
+}
+
+@ARTICLE{ShotgunSequencing,
+  title    = {{Shotgun DNA sequencing using cloned DNase I-generated fragments}},
+  author   = "Anderson, S",
+  abstract = "A method for DNA sequencing has been developed that utilises
+              libraries of cloned randomly-fragmented DNA. The DNA to be
+              sequenced is first subjected to limit attach by a non-specific
+              endonuclease (DNase I in the presence of Mn++), fractionated by
+              size and cloned in a single-stranded phage vector. Clones are
+              then picked at random and used to provide a template for
+              sequencing by the dideoxynucleotide chain termination method.
+              This technique was used to sequence completely a 4257 bp EcoRI
+              fragment of bovine mitochondrial DNA. The cloned fragments were
+              evenly distributed with respect to the EcoRI fragment, and
+              completion of the entire sequence required the construction of
+              only a single library. In general, once a clone library has been
+              prepared, the speed of this approach (greater than 1000
+              nucleotides of randomly selected sequence per day) is limited
+              mainly by the rate at which the data can be processed. Because
+              the clones are selected randomly, however, the average amount of
+              new sequence information per clone is substantially diminished as
+              the sequence near completion.",
+  journal  = "Nucleic Acids Research",
+  volume   =  9,
+  number   =  13,
+  pages    = "3015--3027",
+  month    =  jul,
+  year     =  1981,
+  address  = "England",
+  language = "en"
+}
+
+@ARTICLE{SrsVsLrs,
+  title    = {{Will long-read sequencing technologies replace short-read sequencing technologies in the next 10 years?}},
+  author   = "Adewale, Boluwatife A",
+  journal  = "African Journal of Laboratory Medicine",
+  volume   =  9,
+  number   =  1,
+  pages    = "1340",
+  month    =  nov,
+  year     =  2020,
+  address  = "South Africa",
+  language = "en"
+}
+
+@ARTICLE{LrsChallenges,
+  title    = {{Opportunities and challenges in long-read sequencing data analysis}},
+  author   = "Amarasinghe, Shanika L and Su, Shian and Dong, Xueyi and Zappia,
+              Luke and Ritchie, Matthew E and Gouil, Quentin",
+  abstract = "Long-read technologies are overcoming early limitations in
+              accuracy and throughput, broadening their application domains in
+              genomics. Dedicated analysis tools that take into account the
+              characteristics of long-read data are thus required, but the fast
+              pace of development of such tools can be overwhelming. To assist
+              in the design and analysis of long-read sequencing projects, we
+              review the current landscape of available tools and present an
+              online interactive database, long-read-tools.org, to facilitate
+              their browsing. We further focus on the principles of error
+              correction, base modification detection, and long-read
+              transcriptomics analysis and highlight the challenges that
+              remain.",
+  journal  = "Genome Biol",
+  volume   =  21,
+  number   =  1,
+  pages    = "30",
+  month    =  feb,
+  year     =  2020,
+  address  = "England",
+  keywords = "Data analysis; Long-read sequencing; Oxford Nanopore; PacBio",
+  language = "en"
+}
+
+@article{mrna,
+  title = {{Genetic regulatory mechanisms in the synthesis of proteins}},
+  journal = {Journal of Molecular Biology},
+  volume = {3},
+  number = {3},
+  pages = {318-356},
+  year = {1961},
+  issn = {0022-2836},
+  doi = {https://doi.org/10.1016/S0022-2836(61)80072-7},
+  url = {https://www.sciencedirect.com/science/article/pii/S0022283661800727},
+  author = {François Jacob and Jacques Monod},
+  abstract = {The synthesis of enzymes in bacteria follows a double genetic control. The socalled structural genes determine the molecular organization of the proteins. Other, functionally specialized, genetic determinants, called regulator and operator genes, control the rate of protein synthesis through the intermediacy of cytoplasmic components or repressors. The repressors can be either inactivated (induction) or activated (repression) by certain specific metabolites. This system of regulation appears to operate directly at the level of the synthesis by the gene of a shortlived intermediate, or messenger, which becomes associated with the ribosomes where protein synthesis takes place.}
+}
+
+@inproceedings{ReverseComplements,
+ author = {Mallet, Vincent and Vert, Jean-Philippe},
+ booktitle = {Advances in Neural Information Processing Systems},
+ editor = {M. Ranzato and A. Beygelzimer and Y. Dauphin and P.S. Liang and J. Wortman Vaughan},
+ pages = {13511--13523},
+ publisher = {Curran Associates, Inc.},
+ title = {{Reverse-Complement Equivariant Networks for DNA Sequences}},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2021/file/706608cfdbcc1886bb7eea5513f90133-Paper.pdf},
+ volume = {34},
+ year = {2021}
+}
+
+@ARTICLE{Mutations,
+  title    = {{Early somatic mosaicism is a rare cause of {long-QT} syndrome}},
+  author   = "Priest, James Rush and Gawad, Charles and Kahlig, Kristopher M
+              and Yu, Joseph K and O'Hara, Thomas and Boyle, Patrick M and
+              Rajamani, Sridharan and Clark, Michael J and Garcia, Sarah T K
+              and Ceresnak, Scott and Harris, Jason and Boyle, Sean and Dewey,
+              Frederick E and Malloy-Walton, Lindsey and Dunn, Kyla and Grove,
+              Megan and Perez, Marco V and Neff, Norma F and Chen, Richard and
+              Maeda, Katsuhide and Dubin, Anne and Belardinelli, Luiz and West,
+              John and Antolik, Christian and Macaya, Daniela and Quertermous,
+              Thomas and Trayanova, Natalia A and Quake, Stephen R and Ashley,
+              Euan A",
+  abstract = "Somatic mosaicism, the occurrence and propagation of genetic
+              variation in cell lineages after fertilization, is increasingly
+              recognized to play a causal role in a variety of human diseases.
+              We investigated the case of life-threatening arrhythmia in a
+              10-day-old infant with long QT syndrome (LQTS). Rapid genome
+              sequencing suggested a variant in the sodium channel Na(V)1.5
+              encoded by SCN5A, NM\_000335:c.5284G > T predicting p.(V1762L),
+              but read depth was insufficient to be diagnostic. Exome
+              sequencing of the trio confirmed read ratios inconsistent with
+              Mendelian inheritance only in the proband. Genotyping of single
+              circulating leukocytes demonstrated the mutation in the genomes
+              of 8\% of patient cells, and RNA sequencing of cardiac tissue
+              from the infant confirmed the expression of the mutant allele at
+              mosaic ratios. Heterologous expression of the mutant channel
+              revealed significantly delayed sodium current with a dominant
+              negative effect. To investigate the mechanism by which mosaicism
+              might cause arrhythmia, we built a finite element simulation
+              model incorporating Purkinje fiber activation. This model
+              confirmed the pathogenic consequences of cardiac cellular
+              mosaicism and, under the presenting conditions of this case,
+              recapitulated 2:1 AV block and arrhythmia. To investigate the
+              extent to which mosaicism might explain undiagnosed arrhythmia,
+              we studied 7,500 affected probands undergoing commercial
+              gene-panel testing. Four individuals with pathogenic variants
+              arising from early somatic mutation events were found. Here we
+              establish cardiac mosaicism as a causal mechanism for LQTS and
+              present methods by which the general phenomenon, likely to be
+              relevant for all genetic diseases, can be detected through
+              single-cell analysis and next-generation sequencing.",
+  journal  = "Proc Natl Acad Sci U S A",
+  volume   =  113,
+  number   =  41,
+  pages    = "11555--11560",
+  month    =  sep,
+  year     =  2016,
+  address  = "United States",
+  keywords = "arrhythmia; computational modeling; genomics; mosaicism; single
+              cell",
+  language = "en"
+}
+
+@ARTICLE{EulerianPath,
+  title    = {{An Eulerian path approach to {DNA} fragment assembly}},
+  author   = "Pevzner, P A and Tang, H and Waterman, M S",
+  abstract = "For the last 20 years, fragment assembly in DNA sequencing
+              followed the ``overlap-layout-consensus'' paradigm that is used
+              in all currently available assembly tools. Although this approach
+              proved useful in assembling clones, it faces difficulties in
+              genomic shotgun assembly. We abandon the classical
+              ``overlap-layout-consensus'' approach in favor of a new euler
+              algorithm that, for the first time, resolves the 20-year-old
+              ``repeat problem'' in fragment assembly. Our main result is the
+              reduction of the fragment assembly to a variation of the
+              classical Eulerian path problem that allows one to generate
+              accurate solutions of large-scale sequencing problems. euler, in
+              contrast to the celera assembler, does not mask such repeats but
+              uses them instead as a powerful fragment assembly tool.",
+  journal  = "Proc Natl Acad Sci U S A",
+  volume   =  98,
+  number   =  17,
+  pages    = "9748--9753",
+  month    =  aug,
+  year     =  2001,
+  address  = "United States",
+  language = "en"
+}
+
+@ARTICLE{DeNovoAssembly,
+  title    = {{Assembly algorithms for next-generation sequencing data}},
+  author   = "Miller, Jason R and Koren, Sergey and Sutton, Granger",
+  abstract = "The emergence of next-generation sequencing platforms led to
+              resurgence of research in whole-genome shotgun assembly
+              algorithms and software. DNA sequencing data from the Roche 454,
+              Illumina/Solexa, and ABI SOLiD platforms typically present
+              shorter read lengths, higher coverage, and different error
+              profiles compared with Sanger sequencing data. Since 2005,
+              several assembly software packages have been created or revised
+              specifically for de novo assembly of next-generation sequencing
+              data. This review summarizes and compares the published
+              descriptions of packages named SSAKE, SHARCGS, VCAKE, Newbler,
+              Celera Assembler, Euler, Velvet, ABySS, AllPaths, and SOAPdenovo.
+              More generally, it compares the two standard methods known as the
+              de Bruijn graph approach and the overlap/layout/consensus
+              approach to assembly.",
+  journal  = "Genomics",
+  volume   =  95,
+  number   =  6,
+  pages    = "315--327",
+  month    =  mar,
+  year     =  2010,
+  address  = "United States",
+  language = "en"
+}
+
+@article{Alignment,
+title = {{A review on multiple sequence alignment from the perspective of genetic algorithm}},
+journal = {Genomics},
+volume = {109},
+number = {5},
+pages = {419-431},
+year = {2017},
+issn = {0888-7543},
+doi = {https://doi.org/10.1016/j.ygeno.2017.06.007},
+url = {https://www.sciencedirect.com/science/article/pii/S0888754317300551},
+author = {Biswanath Chowdhury and Gautam Garai},
+keywords = {Multiple sequence alignment, Genetic algorithm, Multiobjective function},
+abstract = {Sequence alignment is an active research area in the field of bioinformatics. It is also a crucial task as it guides many other tasks like phylogenetic analysis, function, and/or structure prediction of biological macromolecules like DNA, RNA, and Protein. Proteins are the building blocks of every living organism. Although protein alignment problem has been studied for several decades, unfortunately, every available method produces alignment results differently for a single alignment problem. Multiple sequence alignment is characterized as a very high computational complex problem. Many stochastic methods, therefore, are considered for improving the accuracy of alignment. Among them, many researchers frequently use Genetic Algorithm. In this study, we have shown different types of the method applied in alignment and the recent trends in the multiobjective genetic algorithm for solving multiple sequence alignment. Many recent studies have demonstrated considerable progress in finding the alignment accuracy.}
+}
+
+@ARTICLE{ShotgunSequencingOriginal,
+  title    = {{Cloning in single-stranded bacteriophage as an aid to rapid DNA sequencing}},
+  author   = "Sanger, F and Coulson, A R and Barrell, B G and Smith, A J and
+              Roe, B A",
+  journal  = "J Mol Biol",
+  volume   =  143,
+  number   =  2,
+  pages    = "161--178",
+  month    =  oct,
+  year     =  1980,
+  address  = "Netherlands",
+  language = "en"
+}
+
+@Article{TargetedSequencing,
+author={Myllykangas, Samuel
+and Natsoulis, Georges
+and Bell, John M.
+and Ji, Hanlee P.},
+title={{Targeted sequencing library preparation by genomic DNA circularization}},
+journal={BMC Biotechnology},
+year={2011},
+month={Dec},
+day={14},
+volume={11},
+number={1},
+pages={122},
+abstract={For next generation DNA sequencing, we have developed a rapid and simple approach for preparing DNA libraries of targeted DNA content. Current protocols for preparing DNA for next-generation targeted sequencing are labor-intensive, require large amounts of starting material, and are prone to artifacts that result from necessary PCR amplification of sequencing libraries. Typically, sample preparation for targeted NGS is a two-step process where (1) the desired regions are selectively captured and (2) the ends of the DNA molecules are modified to render them compatible with any given NGS sequencing platform.},
+issn={1472-6750},
+doi={10.1186/1472-6750-11-122},
+url={https://doi.org/10.1186/1472-6750-11-122}
+}
+
+@Article{Contig,
+author={Kececioglu, J. D.
+and Myers, E. W.},
+title={{Combinatorial algorithms for DNA sequence assembly}},
+journal={Algorithmica},
+year={1995},
+month={Feb},
+day={01},
+volume={13},
+number={1},
+pages={7-51},
+abstract={The trend toward very large DNA sequencing projects, such as those being undertaken as part of the Human Genome Program, necessitates the development of efficient and precise algorithms for assembling a long DNA sequence from the fragments obtained by shotgun sequencing or other methods. The sequence reconstruction problem that we take as our formulation of DNA sequence assembly is a variation of the shortest common superstring problem, complicated by the presence of sequencing errors and reverse complements of fragments. Since the simpler superstring problem is NP-hard, any efficient reconstruction procedure must resort to heuristics. In this paper, however, a four-phase approach based on rigorous design criteria is presented, and has been found to be very accurate in practice. Our method is robust in the sense that it can accommodate high sequencing error rates, and list a series of alternate solutions in the event that several appear equally good. Moreover, it uses a limited form of multiple sequence alignment to detect, and often correct, errors in the data. Our combined algorithm has successfully reconstructed nonrepetitive sequences of length 50,000 sampled at error rates of as high as 10{\%}.},
+issn={1432-0541},
+doi={10.1007/BF01188580},
+url={https://doi.org/10.1007/BF01188580}
+}
+
+@Article{BreastCancer,
+author={Prat, Aleix
+and Bras{\'o}-Maristany, Fara
+and Mart{\'i}nez-S{\'a}ez, Olga
+and Sanfeliu, Esther
+and Xia, Youli
+and Bellet, Meritxell
+and Galv{\'a}n, Patricia
+and Mart{\'i}nez, D{\'e}bora
+and Pascual, Tom{\'a}s
+and Mar{\'i}n-Aguilera, Mercedes
+and Rodr{\'i}guez, Anna
+and Chic, Nuria
+and Adamo, Barbara
+and Par{\'e}, Laia
+and Vidal, Maria
+and Margel{\'i}, Mireia
+and Ballana, Ester
+and G{\'o}mez-Rey, Marina
+and Oliveira, Mafalda
+and Felip, Eudald
+and Matito, Judit
+and S{\'a}nchez-Bayona, Rodrigo
+and Su{\~{n}}ol, Anna
+and Saura, Cristina
+and Ciruelos, Eva
+and Tolosa, Pablo
+and Mu{\~{n}}oz, Montserrat
+and Gonz{\'a}lez-Farr{\'e}, Blanca
+and Villagrasa, Patricia
+and Parker, Joel S.
+and Perou, Charles M.
+and Vivancos, Ana},
+title={{Circulating tumor DNA reveals complex biological features with clinical relevance in metastatic breast cancer}},
+journal={Nature Communications},
+year={2023},
+month={Mar},
+day={01},
+volume={14},
+number={1},
+pages={1157},
+abstract={Liquid biopsy has proven valuable in identifying individual genetic alterations; however, the ability of plasma ctDNA to capture complex tumor phenotypes with clinical value is unknown. To address this question, we have performed 0.5X shallow whole-genome sequencing in plasma from 459 patients with metastatic breast cancer, including 245 patients treated with endocrine therapy and a CDK4/6 inhibitor (ET{\thinspace}+{\thinspace}CDK4/6i) from 2 independent cohorts. We demonstrate that machine learning multi-gene signatures, obtained from ctDNA, identify complex biological features, including measures of tumor proliferation and estrogen receptor signaling, similar to what is accomplished using direct tumor tissue DNA or RNA profiling. More importantly, 4 DNA-based subtypes, and a ctDNA-based genomic signature tracking retinoblastoma loss-of-heterozygosity, are significantly associated with poor response and survival outcome following ET{\thinspace}+{\thinspace}CDK4/6i, independently of plasma tumor fraction. Our approach opens opportunities for the discovery of additional multi-feature genomic predictors coming from ctDNA in breast cancer and other cancer-types.},
+issn={2041-1723},
+doi={10.1038/s41467-023-36801-9},
+url={https://doi.org/10.1038/s41467-023-36801-9}
+}
+
+@ARTICLE{FastaAndFastq,
+  title    = {{The Sanger FASTQ file format for sequences with quality scores, and the Solexa/Illumina FASTQ variants}},
+  author   = "Cock, Peter J A and Fields, Christopher J and Goto, Naohisa and
+              Heuer, Michael L and Rice, Peter M",
+  abstract = "FASTQ has emerged as a common file format for sharing sequencing
+              read data combining both the sequence and an associated per base
+              quality score, despite lacking any formal definition to date, and
+              existing in at least three incompatible variants. This article
+              defines the FASTQ format, covering the original Sanger standard,
+              the Solexa/Illumina variants and conversion between them, based
+              on publicly available information such as the MAQ documentation
+              and conventions recently agreed by the Open Bioinformatics
+              Foundation projects Biopython, BioPerl, BioRuby, BioJava and
+              EMBOSS. Being an open access publication, it is hoped that this
+              description, with the example files provided as Supplementary
+              Data, will serve in future as a reference for this important file
+              format.",
+  journal  = "Nucleic Acids Res",
+  volume   =  38,
+  number   =  6,
+  pages    = "1767--1771",
+  month    =  dec,
+  year     =  2009,
+  address  = "England",
+  language = "en"
+}
+
+@article{DeBruijnGraph,
+  doi = {10.1089/cmb.1995.2.291},
+  url = {https://doi.org/10.1089/cmb.1995.2.291},
+  year = {1995},
+  month = jan,
+  publisher = {Mary Ann Liebert Inc},
+  volume = {2},
+  number = {2},
+  pages = {291--306},
+  author = {RAMANA M. IDURY and MICHAEL S. WATERMAN},
+  title = {{A New Algorithm for {DNA} Sequence Assembly}},
+  journal = {Journal of Computational Biology}
+}
+
+@ARTICLE{EulerianPath,
+  title    = {{An Eulerian path approach to {DNA} fragment assembly}},
+  author   = "Pevzner, P A and Tang, H and Waterman, M S",
+  abstract = "For the last 20 years, fragment assembly in DNA sequencing
+              followed the ``overlap-layout-consensus'' paradigm that is used
+              in all currently available assembly tools. Although this approach
+              proved useful in assembling clones, it faces difficulties in
+              genomic shotgun assembly. We abandon the classical
+              ``overlap-layout-consensus'' approach in favor of a new euler
+              algorithm that, for the first time, resolves the 20-year-old
+              ``repeat problem'' in fragment assembly. Our main result is the
+              reduction of the fragment assembly to a variation of the
+              classical Eulerian path problem that allows one to generate
+              accurate solutions of large-scale sequencing problems. euler, in
+              contrast to the celera assembler, does not mask such repeats but
+              uses them instead as a powerful fragment assembly tool.",
+  journal  = "Proc Natl Acad Sci U S A",
+  volume   =  98,
+  number   =  17,
+  pages    = "9748--9753",
+  month    =  aug,
+  year     =  2001,
+  address  = "United States",
+  language = "en"
+}
+
+@inproceedings{SuccinctDeBruijnGraphs,
+  author = {Bowe, Alex and Onodera, Taku and Sadakane, Kunihiko and Shibuya, Tetsuo},
+  year = {2012},
+  month = {09},
+  pages = {225-235},
+  title = {{Succinct de Bruijn Graphs}},
+  isbn = {978-3-642-33121-3},
+  journal = {Algorithms in Bioinformatics, Volume 7534 of Lecture Notes in Computer Science},
+  doi = {10.1007/978-3-642-33122-0_18}
+}
+
+@article{SuccinctColoredDeBruijnGraphs,
+  author = {Muggli, Martin and Bowe, Alex and Noyes, Noelle and Morley, Paul and Belk, Keith and Raymond, Robert and Gagie, Travis and Puglisi, Simon and Boucher, Christina},
+  year = {2017},
+  month = {02},
+  pages = {},
+  title = {{Succinct Colored de Bruijn Graphs}},
+  volume = {33},
+  journal = {Bioinformatics},
+  doi = {10.1093/bioinformatics/btx067}
+}
+
+@book{BWT,
+  title={{A Block-sorting Lossless Data Compression Algorithm}},
+  author={Burrows, M. and Wheeler, D.J.},
+  series={Digital SRC},
+  url={https://books.google.fi/books?id=wPIkAQAAIAAJ},
+  year={1994},
+  publisher={Digital, Systems Research Center}
+}
+
+@inproceedings{SBWT,
+  title={{Small Searchable \textit{k}-Spectra via Subset Rank Queries on the Spectral Burrows-Wheeler Transform}},
+  author={Alanko, Jarno N and Puglisi, Simon J and Vuohtoniemi, Jaakko},
+  booktitle={SIAM Conference on Applied and Computational Discrete Algorithms (ACDA23)},
+  pages={225--236},
+  year={2023},
+  organization={SIAM}
+}
+
+@inproceedings{SDSL,
+  title     = {{From Theory to Practice: Plug and Play with Succinct Data Structures}},
+  author    = {Gog, Simon and Beller, Timo and Moffat, Alistair and Petri, Matthias},
+  booktitle = {13th International Symposium on Experimental Algorithms, (SEA 2014)},
+  year      = {2014},
+  pages     = {326-337},
+  ee        = {http://dx.doi.org/10.1007/978-3-319-07959-2_28}
+}
+
+@InProceedings{Poppy,
+  author="Zhou, Dong
+  and Andersen, David G.
+  and Kaminsky, Michael",
+  editor="Bonifaci, Vincenzo
+  and Demetrescu, Camil
+  and Marchetti-Spaccamela, Alberto",
+  title={{Space-Efficient, High-Performance Rank and Select Structures on Uncompressed Bit Sequences}},
+  booktitle="Experimental Algorithms",
+  year="2013",
+  publisher="Springer Berlin Heidelberg",
+  address="Berlin, Heidelberg",
+  pages="151--163",
+  abstract="Rank {\&} select data structures are one of the fundamental building blocks for many modern succinct data structures. With the continued growth of massive-scale information services, the space efficiency of succinct data structures is becoming increasingly attractive in practice. In this paper, we re-examine the design of rank {\&} select data structures from the bottom up, applying an architectural perspective to optimize their operation. We present our results in the form of a recipe for constructing space and time efficient rank {\&} select data structures for a given hardware architecture. By adopting a cache-centric design approach, our rank {\&} select structures impose space overhead as low as the most space-efficient, but slower, prior designs---only 3.2{\%} and 0.39{\%} extra space respectively---while offering performance competitive with the highest-performance prior designs.",
+  isbn="978-3-642-38527-8"
+}
+
+@Article{kallisto,
+  author={Bray, Nicolas L.
+  and Pimentel, Harold
+  and Melsted, P{\'a}ll
+  and Pachter, Lior},
+  title={{Near-optimal probabilistic RNA-seq quantification}},
+  journal={Nature Biotechnology},
+  year={2016},
+  month={May},
+  day={01},
+  volume={34},
+  number={5},
+  pages={525-527},
+  abstract={A pseudoalignment-based method enables faster quantification and measurement of uncertainty in RNA-seq experiments.},
+  issn={1546-1696},
+  doi={10.1038/nbt.3519},
+  url={https://doi.org/10.1038/nbt.3519}
+}
+
+@ARTICLE{CDBG,
+  title    = {{De novo assembly and genotyping of variants using colored de Bruijn graphs}},
+  author   = "Iqbal, Zamin and Caccamo, Mario and Turner, Isaac and Flicek,
+              Paul and McVean, Gil",
+  abstract = "Gil McVean and colleagues report algorithms for de novo assembly
+              and genotyping of variants using colored de Bruijn graphs and
+              provide these in a software implementation called Cortex. Their
+              methods can detect and genotype both simple and complex genetic
+              variants in either an individual or a population.",
+  journal  = "Nature Genetics",
+  volume   =  44,
+  number   =  2,
+  pages    = "226--232",
+  month    =  feb,
+  year     =  2012
+}
+
+@article {Metagraph,
+	author = {Mikhail Karasikov and Harun Mustafa and Daniel Danciu and Marc Zimmermann and Christopher Barber and Gunnar R{\"a}tsch and Andr{\'e} Kahles},
+	title = {{MetaGraph: Indexing and Analysing Nucleotide Archives at Petabase-scale}},
+	elocation-id = {2020.10.01.322164},
+	year = {2020},
+	doi = {10.1101/2020.10.01.322164},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {The amount of biological sequencing data available in public repositories is growing exponentially, forming an invaluable biomedical research resource. Yet, making all this sequencing data searchable and easily accessible to life science and data science researchers is an unsolved problem. We present MetaGraph, a versatile framework for the scalable analysis of extensive sequence repositories. MetaGraph efficiently indexes vast collections of sequences to enable fast search and comprehensive analysis. A wide range of underlying data structures offer different practically relevant trade-offs between the space taken by the index and its query performance. MetaGraph provides a flexible methodological framework allowing for index construction to be scaled from consumer laptops to distribution onto a cloud compute cluster for processing terabases to petabases of input data. Achieving compression ratios of up to 1,000-fold over the already compressed raw input data, MetaGraph can represent the content of large sequencing archives in the working memory of a single compute server. We demonstrate our framework{\textquoteright}s scalability by indexing over 1.4 million whole genome sequencing (WGS) records from NCBI{\textquoteright}s Sequence Read Archive, representing a total input of more than three petabases.Besides demonstrating the utility of MetaGraph indexes on key applications, such as experiment discovery, sequence alignment, error correction, and differential assembly, we make a wide range of indexes available as a community resource, including those over 450,000 microbial WGS records, more than 110,000 fungi WGS records, and more than 20,000 whole metagenome sequencing records. A subset of these indexes is made available online for interactive queries. All indexes created from public data comprising in total more than 1 million records are available for download or usage in the cloud.As an example of our indexes{\textquoteright} integrative analysis capabilities, we introduce the concept of differential assembly, which allows for the extraction of sequences present in a foreground set of samples but absent in a given background set. We apply this technique to differentially assemble contigs to identify pathogenic agents transfected via human kidney transplants. In a second example, we indexed more than 20,000 human RNA-Seq records from the TCGA and GTEx cohorts and use them to extract transcriptome features that are hard to characterize using a classical linear reference. We discovered over 200 trans-splicing events in GTEx and found broad evidence for tissue-specific non-A-to-I RNA-editing in GTEx and TCGA.Competing Interest StatementThe authors have declared no competing interest.},
+	URL = {https://www.biorxiv.org/content/early/2020/11/03/2020.10.01.322164},
+	eprint = {https://www.biorxiv.org/content/early/2020/11/03/2020.10.01.322164.full.pdf},
+	journal = {bioRxiv}
+}
+
+@Article{Bifrost,
+author={Holley, Guillaume
+and Melsted, P{\'a}ll},
+title={{Bifrost: highly parallel construction and indexing of colored and compacted de Bruijn graphs}},
+journal={Genome Biology},
+year={2020},
+month={Sep},
+day={17},
+volume={21},
+number={1},
+pages={249},
+abstract={Memory consumption of de Bruijn graphs is often prohibitive. Most de Bruijn graph-based assemblers reduce the complexity by compacting paths into single vertices, but this is challenging as it requires the uncompacted de Bruijn graph to be available in memory. We present a parallel and memory-efficient algorithm enabling the direct construction of the compacted de Bruijn graph without producing the intermediate uncompacted graph. Bifrost features a broad range of functions, such as indexing, editing, and querying the graph, and includes a graph coloring method that maps each k-mer of the graph to the genomes it occurs in.},
+issn={1474-760X},
+doi={10.1186/s13059-020-02135-8},
+url={https://doi.org/10.1186/s13059-020-02135-8}
+}
+
+@article {GGCAT,
+	author = {Andrea Cracco and Alexandru I. Tomescu},
+	title = {{Extremely-fast construction and querying of compacted and colored de Bruijn graphs with GGCAT}},
+	elocation-id = {2022.10.24.513174},
+	year = {2022},
+	doi = {10.1101/2022.10.24.513174},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {Compacted de Bruijn graphs are one of the most fundamental data structures in computational genomics. Colored compacted graphs Bruijn graphs are a variant built on a collection of sequences, and associate to each k-mer the sequences in which it appears.Here we present GGCAT, a tool for constructing both types of graphs. Compared to Cuttlefish 2 (Genome Biology, 2022), the state-of-the-art for constructing compacted de Bruijn graphs, GGCAT has a speedup of up to 3.4{\texttimes} for k = 63 and up to 20.8{\texttimes} for k = 255. Compared to Bifrost (Genome Biology, 2020), the state-of-the-art for constructing the colored variant, GGCAT achieves a speedup of up to 12.6{\texttimes} for k = 27. GGCAT is up to 480{\texttimes} faster than BiFrost for batch sequence queries on colored graphs. GGCAT is based on a new approach merging the k-mer counting step with the unitig construction step, and on many practical optimizations.GGCAT is implemented in Rust and is freely available at https://github.com/algbio/ggcatCompeting Interest StatementThe authors have declared no competing interest.},
+	URL = {https://www.biorxiv.org/content/early/2022/10/25/2022.10.24.513174},
+	eprint = {https://www.biorxiv.org/content/early/2022/10/25/2022.10.24.513174.full.pdf},
+	journal = {bioRxiv}
+}
+
+@mastersthesis {Harri,
+	author = {Harri K\"ahk\"onen},
+	title = {{High-Performance \textit{k}-mer Membership Queries over Spectral Burrows-Wheeler Transform with GPU computing}},
+	year = {2023},
+	school = {University of Helsinki}
+}
+
+@ARTICLE{Presearch,
+  title    = {{An optimized FM-index library for nucleotide and amino acid search}},
+  author   = "Anderson, Tim and Wheeler, Travis J",
+  abstract = "Pattern matching is a key step in a variety of biological
+              sequence analysis pipelines. The FM-index is a compressed data
+              structure for pattern matching, with search run time that is
+              independent of the length of the database text. Implementation of
+              the FM-index is reasonably complicated, so that increased
+              adoption will be aided by the availability of a fast and flexible
+              FM-index library.",
+  journal  = "Algorithms for Molecular Biology",
+  volume   =  16,
+  number   =  1,
+  pages    = "25",
+  month    =  dec,
+  year     =  2021
+}
+
+@incollection{CellBiology,
+  title = {{Glossary}},
+  editor = {Thomas D. Pollard and William C. Earnshaw and Jennifer Lippincott-Schwartz and Graham T. Johnson},
+  booktitle = {Cell Biology (Third Edition)},
+  publisher = {Elsevier},
+  edition = {Third Edition},
+  pages = {823-850},
+  year = {2017},
+  isbn = {978-0-323-34126-4},
+  doi = {https://doi.org/10.1016/B978-0-323-34126-4.00047-5},
+  url = {https://www.sciencedirect.com/science/article/pii/B9780323341264000475}
+}
+
+@ARTICLE{Palindromes,
+  title    = {{Correcting palindromes in long reads after whole-genome amplification}},
+  author   = "Warris, Sven and Schijlen, Elio and van de Geest, Henri and
+              Vegesna, Rahulsimham and Hesselink, Thamara and te Lintel
+              Hekkert, Bas and Sanchez Perez, Gabino and Medvedev, Paul and
+              Makova, Kateryna D and de Ridder, Dick",
+  abstract = "Next-generation sequencing requires sufficient DNA to be
+              available. If limited, whole-genome amplification is applied to
+              generate additional amounts of DNA. Such amplification often
+              results in many chimeric DNA fragments, in particular artificial
+              palindromic sequences, which limit the usefulness of long
+              sequencing reads.",
+  journal  = "BMC Genomics",
+  volume   =  19,
+  number   =  1,
+  pages    = "798",
+  month    =  nov,
+  year     =  2018
+}
+
+@article {ModernAssembly,
+	author = {Laura Gonzalez-Garcia and David Guevara-Barrientos and Daniela Lozano-Arce and Juanita Gil and Jorge D{\'\i}az-Ria{\~n}o and Erick Duarte and Germ{\'a}n Andrade and Juan Camilo Bojac{\'a} and Maria Camila Hoyos-Sanchez and Christian Chavarro and Natalia Guayazan and Luis Alberto Chica and Maria Camila Buitrago Acosta and Edwin Bautista and Miller Trujillo and Jorge Duitama},
+	title = {{New algorithms for accurate and efficient de novo genome assembly from long DNA sequencing reads}},
+	volume = {6},
+	number = {5},
+	elocation-id = {e202201719},
+	year = {2023},
+	doi = {10.26508/lsa.202201719},
+	publisher = {Life Science Alliance},
+	abstract = {Building de novo genome assemblies for complex genomes is possible thanks to long-read DNA sequencing technologies. However, maximizing the quality of assemblies based on long reads is a challenging task that requires the development of specialized data analysis techniques. We present new algorithms for assembling long DNA sequencing reads from haploid and diploid organisms. The assembly algorithm builds an undirected graph with two vertices for each read based on minimizers selected by a hash function derived from the k-mer distribution. Statistics collected during the graph construction are used as features to build layout paths by selecting edges, ranked by a likelihood function. For diploid samples, we integrated a reimplementation of the ReFHap algorithm to perform molecular phasing. We ran the implemented algorithms on PacBio HiFi and Nanopore sequencing data taken from haploid and diploid samples of different species. Our algorithms showed competitive accuracy and computational efficiency, compared with other currently used software. We expect that this new development will be useful for researchers building genome assemblies for different species.},
+	URL = {https://www.life-science-alliance.org/content/6/5/e202201719},
+	eprint = {https://www.life-science-alliance.org/content/6/5/e202201719.full.pdf},
+	journal = {Life Science Alliance}
+}
+
+@phdthesis{Succinct,
+author = {Jacobson, Guy Joseph},
+title = {{Succinct Static Data Structures}},
+year = {1988},
+publisher = {Carnegie Mellon University},
+address = {USA},
+abstract = {Data compression is when you take a big chunk of data and crunch it down to fit into a smaller space. That data is put on ice; you have to un-crunch the compressed data to get at it. Data optimization, on the other hand, is when you take a chunk of data plus a collection of operations you can perform on that data, and crunch it into a smaller space while retaining the ability to perform the operations efficiently. This thesis investigates the problem of data optimization for some fundamental static data types, concentrating on linked data structures such as trees. I chose to restrict my attention to static data structures because they are easier to optimize since the optimization can be performed off-line.Data optimization comes in two different flavors: concrete and abstract. Concrete optimization finds minimal representations within a given implementation of a data structure; abstract optimization seeks implementations with guaranteed economy of space and time.I consider the problem of concrete optimization of various pointer-based implementations of trees and graphs. The only legitimate use of a pointer is as a reference, so we are free to map the pieces of a linked structure into memory as we choose. The problem is to find a mapping that maximizes overlap of the pieces, and hence minimizes the space they occupy.I solve the problem of finding a minimal representation for general unordered trees where pointers to children are stored in a block of consecutive locations. The algorithm presented is based on weighted matching. I also present an analysis showing that the average number of cons-cells required to store a binary tree of n nodes as a minimal binary DAG is asymptotic to $n/({piover 8}$ lg $n)sp{1/2}$.Methods for representing trees of n nodes in $O$($n$) bits that allow efficient tree-traversal are presented. I develop tools for abstract optimization based on a succinct representation for ordered sets that supports ranking and selection. These tools are put to use in a building an $O$($n$)-bit data structure that represents n-node planar graphs, allowing efficient traversal and adjacency-testing.},
+note = {AAI8918056}
+}
+
+@article {Fulgor,
+	author = {Jason Fan and Noor Pratap Singh and Jamshed Khan and Giulio Ermanno Pibiri and Rob Patro},
+	title = {{Fulgor: A fast and compact k-mer index for large-scale matching and color queries}},
+	elocation-id = {2023.05.09.539895},
+	year = {2023},
+	doi = {10.1101/2023.05.09.539895},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {The problem of sequence identification or matching {\textemdash} determining the subset of references from a given collection that are likely to contain a query nucleotide sequence {\textemdash} is relevant for many important tasks in Computational Biology, such as metagenomics and pan-genome analysis. Due to the complex nature of such analyses and the large scale of the reference collections a resource-efficient solution to this problem is of utmost importance. The reference collection should therefore be pre-processed into an index for fast queries. This poses the threefold challenge of designing an index that is efficient to query, has light memory usage, and scales well to large collections.To solve this problem, we describe how recent advancements in associative, order-preserving, k-mer dictionaries can be combined with a compressed inverted index to implement a fast and compact colored de Bruijn graph data structure. This index takes full advantage of the fact that unitigs in the colored de Bruijn graph are monochromatic (all k-mers in a unitig have the same set of references of origin, or {\textquotedblleft}color{\textquotedblright}), leveraging the order-preserving property of its dictionary. In fact, k-mers are kept in unitig order by the dictionary, thereby allowing for the encoding of the map from k-mers to their inverted lists in as little as 1 + o(1) bits per unitig. Hence, one inverted list per unitig is stored in the index with almost no space/time overhead. By combining this property with simple but effective compression methods for inverted lists, the index achieves very small space.We implement these methods in a tool called Fulgor. Compared to Themisto, the prior state of the art, Fulgor indexes a heterogeneous collection of 30,691 bacterial genomes in 3.8{\texttimes} less space, a collection of 150,000 Salmonella enterica genomes in approximately 2 {\texttimes} less space, and is at least twice as fast for color queries.2012 ACM Subject Classification Applied computing {\textrightarrow} BioinformaticsCompeting Interest StatementR.P. is a co-founder of Ocean Genomics Inc.},
+	URL = {https://www.biorxiv.org/content/early/2023/05/11/2023.05.09.539895},
+	eprint = {https://www.biorxiv.org/content/early/2023/05/11/2023.05.09.539895.full.pdf},
+	journal = {bioRxiv}
+}

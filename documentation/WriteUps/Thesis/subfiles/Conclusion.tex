@@ -1,0 +1,30 @@
+\chapter{Conclusion}\label{ch:Conclusion}
+
+Thus this thesis comes to a conclusion.
+A highly parallelised implementation of Themisto was presented which uses all available computational resources.
+The background which preceded this thesis was thoroughly presented alongside all the biological and algorithmic research.
+The full method including the several modes of parallelisation used was then discussed in Chapter~\ref{ch:Methodology}.
+The results were then discussed in Chapter~\ref{ch:Results}, with a detailed discussion and reasons for why certain results are the way there are were given, with uncertainties pointed out and left for future work.
+
+With regard to the research questions, the CPU side has been improved through using parallel disk I/O and using a multithreaded pipeline.
+Since sequences can be divided into parts, different threads will get an equal amount of work, by getting the same amount of characters or indexes to process.
+Then, the GPU implementation has been improved by allowing $k \ge 32$ through a small change in the GPU kernel, which did not significantly impact performance.
+Furthermore, the algorithm presented in this thesis can differentiate between $k$-mers which are invalid and those not found in the graph by using a simple boolean list and some changes in the printing of results.
+Lastly, the color search was put on the GPU and when comparing the best version to the best version of Themisto, the GPU is 10 times faster than this.
+The final section of this thesis will discuss how this research may be extended and improved.
+
+\section{Future Work}
+
+In terms of extending the work done in this thesis, there are several which may be made, each providing different contributions.
+One more optimisation which can be made is to attempt using unified memory\footnote{\url{https://developer.nvidia.com/blog/unified-memory-cuda-beginners/}} for possibly better GPU memory transfers.
+Additionally, when $\tau=1$ in phase two, it would be enough to represent each color count with a single bit, that is, if it appears or not, and then using a bitwise $AND$ to intersect the colors.
+As stated before, this optimisation is already done by Kallisto and Themisto.
+In terms of new features, the ability to write in a compressed format would make the method even more usable by more institutions.
+Moreover, an implementation where the GPU components are put on the CPU, while keeping all the parallelisations introduced in this thesis, would be an interesting comparison, to see how far a CPU implementation can be taken.
+It was also stated in Subsection~\ref{subs:ColorSearch} that the method used in this thesis wastes a lot of memory if most color counts are zeros, so a new implementation that overcomes this hurdle may also significantly improve throughput.
+
+Further results using this method could also be obtained by analysing how it scales with different datasets, compared to the CPU version.
+Different values of $k$ may also lead to different results.
+Another way to evaluate the results would be to use them for pseudoaligning an existing dataset and test how taking the invalid characters into account affects the accuracy of pseudoalignment.
+A deeper analysis may also be made into each of the components, such as analysing why runs on LUMI take so long in the GPU when compared to Mahti.
+Lastly, with the introduction of Fulgor, it would be interesting to see its methods executed on the GPU alongside the parallelisations presented both here and in their work.

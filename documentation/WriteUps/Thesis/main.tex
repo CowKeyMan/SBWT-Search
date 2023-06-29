@@ -1,0 +1,141 @@
+%% This file is modified by Veli Mäkinen from HY_fysiikka_LuKtemplate.tex authored by Roope Halonen ja Tomi Vainio.
+%% Some text is also inherited from engl_malli.tex by Kutvonen, Erkiö, Mäkelä, Verkamo, Kurhila, and Nykänen.
+
+
+% STEP 1: Choose oneside or twoside
+\documentclass[english,twoside,openright]{HYgraduMLDS}
+%finnish,swedish
+
+%\usepackage[utf8]{inputenc} % For UTF8 support. Use UTF8 when saving your file.
+\usepackage{lmodern} % Font package
+\usepackage{textcomp} % Package for special symbols
+\usepackage[pdftex]{color, graphicx} % For pdf output and jpg/png graphics
+\usepackage[pdftex, plainpages=false]{hyperref} % For hyperlinks and pdf metadata
+\usepackage{fancyhdr} % For nicer page headers
+\usepackage{tikz} % For making vector graphics (hard to learn but powerful)
+\usepackage{svg}
+\svgpath{{.}}
+\usepackage[ruled,vlined,linesnumbered,noend]{algorithm2e}
+%\usepackage{wrapfig} % For nice text-wrapping figures (use at own discretion)
+\usepackage{amsmath, amssymb} % For better math
+%\usepackage[square]{natbib} % For bibliography
+\usepackage[footnotesize,bf]{caption} % For more control over figure captions
+\usepackage{blindtext}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage[titletoc]{appendix}
+\usepackage{booktabs}
+\usepackage{courier}
+
+% \DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+% \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+\onehalfspacing %line spacing
+%\singlespacing
+%\doublespacing
+
+%\fussy
+\sloppy % sloppy and fussy commands can be used to avoid overlong text lines
+
+% STEP 2:
+% Set up all the information for the title page and the abstract form.
+% Replace parameters with your information.
+\title{GPU Accelerated Pseudoalignment}
+\author{Daniel Cauchi}
+\date{\today}
+\prof{Professor Keijo Heljanko}{PhD Jarno Niklas Alanko}
+\censors{Professor Keijo Heljanko}{PhD Jarno Niklas Alanko}{}
+\keywords{Pseudoalignment, SBWT, Multithreading, GPU, CUDA, HIP}
+\depositeplace{}
+\additionalinformation{}
+
+
+\classification{\protect{ \\
+        Applied computing $\rightarrow$ Life and medical sciences $\rightarrow$ Computational Biology $\rightarrow$ Computational genomics \\
+        Applied computing $\rightarrow$ Life and medical sciences $\rightarrow$ Bioinformatics
+}}
+
+% if you want to quote someone special. You can comment this line and there will be nothing on the document.
+%\quoting{Bachelor's degrees make pretty good placemats if you get them laminated.}{Jeph Jacques}
+
+
+% OPTIONAL STEP: Set up properties and metadata for the pdf file that pdfLaTeX makes.
+% But you don't really need to do this unless you want to.
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar first?
+    unicode=true,           % to show non-Latin characters in Acrobatâ€™s bookmarks
+    pdftoolbar=true,        % show Acrobatâ€™s toolbar?
+    pdfmenubar=true,        % show Acrobatâ€™s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={},            % title
+    pdfauthor={},           % author
+    pdfsubject={},          % subject of the document
+    pdfcreator={},          % creator of the document
+    pdfproducer={pdfLaTeX}, % producer of the document
+    pdfkeywords={something} {something else}, % list of keywords for
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,        % false: boxed links; true: colored links
+    linkcolor=black,        % color of internal links
+    citecolor=black,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+
+\begin{document}
+
+% Generate title page.
+\maketitle
+
+\chapter*{Acknowledgements}
+
+Credit where credit is due, I want to thank those people who shared their time with me, those who gave me a chance, and those who offered their services to me in some way or another during the past two years that I have spent pursuing this Master's Programme in Data Science. I will not mention any specific names, not only because they would most likely not fit into a single page, but because I am afraid I would forget someone. Those of you who fulfil the above criteria, you know who you are, and I am eternally grateful to you for cultivating my development and now I hope that I can make you proud with my future achievements.
+
+The research work disclosed in this publication is partially funded by the Endeavour Scholarship Scheme (Malta). Project part-financed by the European Social Fund - Operational Programme II - European Structural and Investment Funds 2014-2020 "Investing in human capital to create more opportunities and promote the well-being of society".
+
+% STEP 3:
+% Write your abstract (of course you really do this last).
+% You can make several abstract pages (if you want it in different languages),
+% but you should also then redefine some of the above parameters in the proper
+% language as well, in between the abstract definitions.
+
+\clearpage
+\begin{abstract}
+
+Alignment in genomics is the process of finding the positions where DNA strings fit best with one another, that is, where there are the least differences if they were placed side by side.
+This process, however, remains very computationally intensive, even with more recent algorithmic advancements in the field.
+Pseudoalignment is emerging as a new method over full alignment as an inexpensive alternative, both in terms of memory needed as well as in terms of power consumption.
+The process is to instead check for the existence of substrings within the target DNA, and this has been shown to produce good results for a lot of use cases.
+New methods for pseudoalignment are still evolving, and the goal of this thesis is to provide an implementation that massively parallelises the current state of the art, Themisto, by using all resources available.
+The most intensive parts of the pipeline are put on the GPU.
+Meanwhile, the components which run on the CPU are heavily parallelised.
+Reading and writing of the files is also done in parallel, so that parallel I/O can also be taken advantage of.
+Results on the Mahti supercomputer, using an NVIDIA A100, shows a 10 times end-to-end querying speedup over the best run of Themisto, using half the CPU cores as Themisto, on the dataset used in this thesis.
+
+\end{abstract}
+
+% Place ToC
+\mytableofcontents
+
+\mynomenclature
+
+% -----------------------------------------------------------------------------------
+% STEP 4: Write the thesis.
+% Your actual text starts here. You shouldn't mess with the code above the line except
+% to change the parameters. Removing the abstract and ToC commands will mess up stuff.
+\include{subfiles/Introduction}
+\include{subfiles/Background}
+\include{subfiles/Methodology}
+\include{subfiles/Results}
+\include{subfiles/Conclusion}
+
+\cleardoublepage %fixes the position of bibliography in bookmarks
+\phantomsection
+
+\addcontentsline{toc}{chapter}{\bibname} % This lines adds the bibliography to the ToC
+\bibliographystyle{abbrv} % numbering alphabetic order
+\bibliography{bibliography}
+
+\include{subfiles/Appendix}
+
+\end{document}
