@@ -50,6 +50,14 @@ jobs:
       - name: Run tests
         run: sh ./scripts/test/test.sh
 
+      - name: Build Thesis
+        run: |
+          sudo apt install texlive-full
+          cd documentation/WriteUps/Thesis/
+          ./scripts/compile.sh
+          cd ../../..
+          cp documentation/WriteUps/Thesis/main.pdf docs/thesis.pdf
+
       # The website is put inside the docs folder, which is why
       # the .gitignore within that folder is removed when we push to github pages
       # since otherwise the website would not be pushed to the gh-pages branch.
