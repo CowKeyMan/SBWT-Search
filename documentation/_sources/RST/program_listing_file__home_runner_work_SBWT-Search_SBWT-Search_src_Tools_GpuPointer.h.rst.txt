@@ -1,0 +1,92 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h:
+
+Program Listing for File GpuPointer.h
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/GpuPointer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef GPU_POINTER_H
+   #define GPU_POINTER_H
+   
+   #include <cstdint>
+   #include <vector>
+   
+   #include "Tools/GpuStream.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace gpu_utils {
+   
+   using std::uint8_t;
+   using std::vector;
+   
+   template <class T>
+   class GpuPointer {
+   private:
+     T *ptr;
+     u64 bytes = 0;
+     bool owning_pointer;
+   
+   public:
+     explicit GpuPointer(u64 size);
+     explicit GpuPointer(const vector<T> &v);
+     GpuPointer(const T *cpu_ptr, u64 size);
+   
+     GpuPointer(GpuPointer<T> &other, u64 offset, u64 amount);
+   
+     GpuPointer(u64 size, GpuStream &gpu_stream);
+     GpuPointer(const vector<T> &v, GpuStream &gpu_stream);
+     GpuPointer(const T *cpu_ptr, u64 size, GpuStream &gpu_stream);
+   
+     GpuPointer(GpuPointer &) = delete;
+     GpuPointer(GpuPointer &&) = delete;
+     auto operator=(GpuPointer &) = delete;
+     auto operator=(GpuPointer &&) = delete;
+   
+     auto memset(u64 index, u64 amount, uint8_t value) -> void;
+     auto memset(u64 index, uint8_t value) -> void;
+     auto memset_async(u64 index, u64 amount, uint8_t value, GpuStream &gpu_stream)
+       -> void;
+     auto memset_async(u64 index, uint8_t value, GpuStream &gpu_stream) -> void;
+   
+     auto data() const -> T *;
+   
+     auto set(const T *source, u64 amount, u64 destination_index = 0) -> void;
+     auto set(const vector<T> &source, u64 amount, u64 destination_index = 0)
+       -> void;
+     auto set_async(
+       const T *source,
+       u64 amount,
+       GpuStream &gpu_stream,
+       u64 destination_index = 0
+     ) -> void;
+     auto set_async(
+       const vector<T> &source,
+       u64 amount,
+       GpuStream &gpu_stream,
+       u64 destination_index = 0
+     ) -> void;
+   
+     auto copy_to(T *destination, u64 amount) const -> void;
+     auto copy_to(T *destination) const -> void;
+     auto copy_to(vector<T> &destination, u64 amount) const -> void;
+     auto copy_to(vector<T> &destination) const -> void;
+   
+     auto copy_to_async(T *destination, u64 amount, GpuStream &gpu_stream) const
+       -> void;
+     auto copy_to_async(T *destination, GpuStream &gpu_stream) const -> void;
+     auto
+     copy_to_async(vector<T> &destination, u64 amount, GpuStream &gpu_stream) const
+       -> void;
+     auto copy_to_async(vector<T> &destination, GpuStream &gpu_stream) const
+       -> void;
+   
+     ~GpuPointer();
+   };
+   }  // namespace gpu_utils
+   
+   #endif

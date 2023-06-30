@@ -1,0 +1,23 @@
+.. _dir__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer:
+
+
+Directory SbwtContainer
+=======================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src>` (``/home/runner/work/SBWT-Search/SBWT-Search/src``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+*Directory path:* ``/home/runner/work/SBWT-Search/SBWT-Search/src/SbwtContainer``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_CpuSbwtContainer.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_GpuSbwtContainer.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h`
+
+

@@ -1,0 +1,49 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp:
+
+Program Listing for File StdUtils.hpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/StdUtils.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef STD_UTILS_HPP
+   #define STD_UTILS_HPP
+   
+   #include <iterator>
+   #include <vector>
+   
+   #include "Tools/MathUtils.hpp"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace std_utils {
+   
+   using math_utils::divide_and_round;
+   using std::vector;
+   
+   template <class Iterator>
+   auto copy_advance(Iterator iter, u64 n) -> Iterator {
+     std::advance(iter, n);
+     return iter;
+   }
+   
+   template <class T>
+   auto split_vector(const vector<T> &v, u64 parts) -> vector<vector<T>> {
+     vector<vector<T>> result;
+     for (u64 i = 0; i < parts; ++i) {
+       result.push_back(
+         {copy_advance(v.begin(), divide_and_round<u64>(i * v.size(), parts)),
+          copy_advance(
+            v.begin(), divide_and_round<u64>((i + 1) * v.size(), parts)
+          )}
+       );
+     }
+     return result;
+   }
+   
+   }  // namespace std_utils
+   
+   #endif

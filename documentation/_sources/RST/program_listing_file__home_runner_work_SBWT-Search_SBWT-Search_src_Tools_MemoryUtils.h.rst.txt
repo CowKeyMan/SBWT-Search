@@ -1,0 +1,27 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUtils.h:
+
+Program Listing for File MemoryUtils.h
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUtils.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/MemoryUtils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef MEMORY_UTILS_H
+   #define MEMORY_UTILS_H
+   
+   // Function credits:
+   // https://stackoverflow.com/questions/2513505/how-to-get-available-memory-c-g
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace memory_utils {
+   
+   auto get_total_system_memory() -> u64;
+   
+   }  // namespace memory_utils
+   
+   #endif

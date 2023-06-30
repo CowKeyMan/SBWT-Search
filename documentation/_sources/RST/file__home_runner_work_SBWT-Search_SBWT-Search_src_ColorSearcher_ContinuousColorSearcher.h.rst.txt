@@ -1,0 +1,73 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h:
+
+File ContinuousColorSearcher.h
+==============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorSearcher``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Takes the index batch, searches for its color sets, and post processes them to give the color sums for each colored sequence. The searching and post processing are done through gpu kernel launches. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorSearcher/ContinuousColorSearcher.h``)
+------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``BatchObjects/ColorsBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h`)
+
+- ``ColorIndexContainer/GpuColorIndexContainer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h`)
+
+- ``ColorSearcher/ColorSearcher.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h`)
+
+- ``IndexFileParser/IndexesBatchProducer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousColorSearcher`
+

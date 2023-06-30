@@ -1,0 +1,38 @@
+.. _dir__home_runner_work_SBWT-Search_SBWT-Search_src:
+
+
+Directory src
+=============
+
+
+*Directory path:* ``/home/runner/work/SBWT-Search/SBWT-Search/src``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_Global`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_Main`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools`
+- :ref:`dir__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels`
+
+
+

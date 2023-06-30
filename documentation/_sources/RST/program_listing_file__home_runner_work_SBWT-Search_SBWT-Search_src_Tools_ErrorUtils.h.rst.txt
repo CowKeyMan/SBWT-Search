@@ -1,0 +1,28 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_ErrorUtils.h:
+
+Program Listing for File ErrorUtils.h
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_ErrorUtils.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/ErrorUtils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef ERROR_UTILS_H
+   #define ERROR_UTILS_H
+   
+   #include <string>
+   
+   using std::string;
+   
+   namespace error_utils {
+   
+   auto _throw_uninitialised(string file, unsigned int line) -> void;
+   #define throw_uninitialised() \
+     error_utils::_throw_uninitialised(__FILE__, __LINE__)
+   
+   }  // namespace error_utils
+   
+   #endif

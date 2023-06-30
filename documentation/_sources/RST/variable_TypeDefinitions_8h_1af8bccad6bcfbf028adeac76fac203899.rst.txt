@@ -1,0 +1,14 @@
+.. _exhale_variable_TypeDefinitions_8h_1af8bccad6bcfbf028adeac76fac203899:
+
+Variable u64_bits
+=================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: u64_bits
+   :project: SBWT Search

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search &mdash; SBWT Search  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="_static/dark_mode_css/general.css" type="text/css" />
+      <link rel="stylesheet" href="_static/dark_mode_css/dark.css" type="text/css" />
+    
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="https://unpkg.com/mermaid@10.2.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+        <script src="_static/dark_mode_js/default_light.js"></script>
+        <script src="_static/dark_mode_js/theme_switcher.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="#" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SBWT Search
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Documents/ProjectDocumentation/ProjectDocumentation.html">Project Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Documents/ProjectDocumentation/IndexSearching.html">Index Searching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Documents/ProjectDocumentation/ColorSearching.html">Color Searching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Documents/WorkflowDocumentation/WorkflowDocumentation.html">Workflow Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Documents/WorkflowDocumentation/GettingsStarted.html">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/GettingsStarted.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/GettingsStarted.html#typical-workflow">Typical workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html">Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#git-hooks">Git Hooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#gcc">GCC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#cmake">CMake</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id1">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#doxygen">Doxygen</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id2">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#sphinx">Sphinx</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id3">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#mermaid">Mermaid</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id4">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#clang-format">clang-format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id5">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#googletest">googletest</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id6">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#lcov">lcov</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id7">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#github-pages">Github pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#hip">HIP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#cuda">CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#rocm">ROCm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#cpu">CPU</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#kseqpp-read">kseqpp_REad</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id8">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#spdlog">spdlog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#openmp">OpenMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Tools.html#id9">Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html">Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#trailing-return-type">Trailing return type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#naming-conventions">Naming Conventions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#file-naming-convention">File naming convention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#function-and-variable-names">Function and variable names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#c-files">C++ files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#in-code-comments">In-code comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Documents/WorkflowDocumentation/Practices.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Documents/FileDocumentation.html">File Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RST/modules.html">src</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="RST/modules.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RST/modules.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="RST/modules.html#full-api">Full API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="RST/modules.html#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_benchmark_utils.html">Namespace benchmark_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_bit_utils.html">Namespace bit_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_design_utils.html">Namespace design_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_error_utils.html">Namespace error_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_gpu_utils.html">Namespace gpu_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_io_utils.html">Namespace io_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_log_utils.html">Namespace log_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_math_utils.html">Namespace math_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_memory_utils.html">Namespace memory_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_rng_utils.html">Namespace rng_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_sbwt_search.html">Namespace sbwt_search</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_std.html">Namespace std</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_std_utils.html">Namespace std_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_structure_utils.html">Namespace structure_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_test_utils.html">Namespace test_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_threading_utils.html">Namespace threading_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/namespace_units_parser.html">Namespace units_parser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="RST/modules.html#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="RST/classdesign__utils_1_1SharedBatchesProducer.html">Template Class SharedBatchesProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classgpu__utils_1_1GpuEvent.html">Class GpuEvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classgpu__utils_1_1GpuPointer.html">Template Class GpuPointer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classgpu__utils_1_1GpuStream.html">Class GpuStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classgpu__utils_1_1PinnedVector.html">Template Class PinnedVector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classio__utils_1_1ThrowingIfstream.html">Class ThrowingIfstream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classio__utils_1_1ThrowingOfstream.html">Class ThrowingOfstream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classlog__utils_1_1Logger.html">Class Logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ArgumentParser.html">Class ArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html">Class AsciiContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html">Class AsciiContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1AsciiIndexFileParser.html">Class AsciiIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html">Class BinaryContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html">Class BinaryContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1BinaryIndexFileParser.html">Class BinaryIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1BitSeqBatch.html">Class BitSeqBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1BitsProducer.html">Class BitsProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html">Class BoolContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1CharToBits.html">Class CharToBits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ColorIndexBuilder.html">Class ColorIndexBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ColorsBatch.html">Class ColorsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ColorSearchArgumentParser.html">Class ColorSearchArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ColorSearcher.html">Class ColorSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ColorSearchMain.html">Class ColorSearchMain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousColorResultsPrinter.html">Template Class ContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousColorSearcher.html">Class ContinuousColorSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousIndexFileParser.html">Class ContinuousIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousIndexResultsPrinter.html">Template Class ContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousIndexSearcher.html">Class ContinuousIndexSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousPositionsBuilder.html">Class ContinuousPositionsBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousSeqToBitsConverter.html">Class ContinuousSeqToBitsConverter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ContinuousSequenceFileParser.html">Class ContinuousSequenceFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1CpuColorIndexContainer.html">Class CpuColorIndexContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1CpuSbwtContainer.html">Class CpuSbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1CsvContinuousColorResultsPrinter.html">Class CsvContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1FilenamesParser.html">Class FilenamesParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1FilesizeLoadBalancer.html">Class FilesizeLoadBalancer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1GpuColorIndexContainer.html">Class GpuColorIndexContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1GpuSbwtContainer.html">Class GpuSbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IndexesBatch.html">Class IndexesBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IndexesBatchProducer.html">Class IndexesBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IndexFileParser.html">Class IndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IndexSearchArgumentParser.html">Class IndexSearchArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IndexSearcher.html">Class IndexSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IndexSearchMain.html">Class IndexSearchMain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IntervalBatch.html">Class IntervalBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1IntervalBatchProducer.html">Class IntervalBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1InvalidCharsBatch.html">Class InvalidCharsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1InvalidCharsProducer.html">Class InvalidCharsProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1Main.html">Class Main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1Poppy.html">Class Poppy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1PoppyBuilder.html">Class PoppyBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1PositionsBatch.html">Class PositionsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1PositionsBuilder.html">Class PositionsBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1Presearcher.html">Class Presearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1ResultsBatch.html">Class ResultsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1SbwtBuilder.html">Class SbwtBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1SbwtContainer.html">Class SbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1SeqStatisticsBatch.html">Class SeqStatisticsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1SeqStatisticsBatchProducer.html">Class SeqStatisticsBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1StringBreakBatch.html">Class StringBreakBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1StringBreakBatchProducer.html">Class StringBreakBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1StringSequenceBatch.html">Class StringSequenceBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classsbwt__search_1_1StringSequenceBatchProducer.html">Class StringSequenceBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classstructure__utils_1_1CircularBuffer.html">Template Class CircularBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classstructure__utils_1_1CircularQueue.html">Template Class CircularQueue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classtest__utils_1_1DummyBatchProducer.html">Template Class DummyBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classthreading__utils_1_1OmpLock.html">Class OmpLock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classthreading__utils_1_1Semaphore.html">Class Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/classunits__parser_1_1MemoryUnitsParser.html">Class MemoryUnitsParser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="RST/modules.html#enums">Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="RST/enum_SbwtContainer_8h_1a82ce2e4d2f9e33cdea30a70049a3fcfe.html">Enum ACGT</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="RST/modules.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec.html">Function bit_utils::_get_set_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_ErrorUtils_8h_1a135754c79536f40c1ba89374f70764cc.html">Function error_utils::_throw_uninitialised</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f.html">Function gpu_utils::get_free_gpu_memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_MathUtils_8hpp_1a7aa310486c40ef60f8670c5ee8d6834a.html">Function math_utils::bits_to_gB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_MathUtils_8hpp_1acd3dd187141f060d3f668e46ddd5b031.html">Template Function math_utils::divide_and_ceil</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_MathUtils_8hpp_1ad70360805c3fdf6a7e2f77b67aa5ec8b.html">Template Function math_utils::divide_and_round</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_MathUtils_8hpp_1ad99dc9679530f3f98711c3e2509daf8c.html">Function math_utils::gB_to_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_MathUtils_8hpp_1ab462ecf04def5ea064d6998a5187fbb2.html">Template Function math_utils::round_down</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_MathUtils_8hpp_1a57b39ffa901081cf3760a80e345a13b6.html">Template Function math_utils::round_up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_MemoryUtils_8h_1aa9dae2e89db35eb54749351bfc95ee30.html">Function memory_utils::get_total_system_memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_DebugUtils_8hpp_1a5ec4da283c6224b1eddcb991f366815a.html">Template Function print</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_RNGUtils_8hpp_1ae61e7824f6aebbe5f31c8f4b8bf4b19c.html">Template Function rng_utils::get_uniform_int_generator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_GetBoolFromBitVector__test_8h_1a56f5d8cef0e8aebcd60c28dcf5c73d87.html">Function sbwt_search::get_bool_from_bit_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299.html">Function sbwt_search::get_rank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_VariableLengthIntegerIndex__test_8h_1a68db2b67fdca238d7ea7d9e93cb48862.html">Function sbwt_search::get_variable_length_int_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424.html">Function sbwt_search::write_fake_binary_results_to_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_StdUtils_8hpp_1ab19a8dafe77baa346b4faacf94910259.html">Template Function std_utils::copy_advance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_StdUtils_8hpp_1afdd23b2e5d5d538e82d3a76fe092e596.html">Template Function std_utils::split_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_TestUtils_8hpp_1aec7931b7f47602618965112c55719147.html">Template Function test_utils::assert_arrays_equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_TestUtils_8hpp_1afc467ccdf2c6a0a3c0063a95ef950af7.html">Template Function test_utils::assert_vectors_equal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_TestUtils_8hpp_1a20313e3dee8281a27883abd56befc1e0.html">Function test_utils::to_char_vec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/function_TestUtils_8hpp_1a08036f93ddd4f87ffd52058f05396e24.html">Template Function test_utils::to_u64s</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="RST/modules.html#variables">Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_BenchmarkUtils_8hpp_1a3539a78d9115de442ea3d98ad18770f7.html">Variable benchmark_utils::TIME_IT_END_TIME</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_BenchmarkUtils_8hpp_1a5edd72773534aa85e34512678cbf5cc3.html">Variable benchmark_utils::TIME_IT_START_TIME</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_BenchmarkUtils_8hpp_1a142193fdf593aa7211221a018df2328f.html">Variable benchmark_utils::TIME_IT_TOTAL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b.html">Variable bit_utils::set_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33.html">Variable bit_utils::ten_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_BitDefinitions_8h_1a7065f53c73f6d51f1fca4a593a1ea870.html">Variable bit_utils::thirty_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_BitDefinitions_8h_1a9aae8b89133af5dc92acf753870cd6a3.html">Variable bit_utils::two_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_TypeDefinitions_8h_1a93436ed122c10bfeb8c885ea85d6c7c6.html">Variable bits_in_byte</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_TypeDefinitions_8h_1a0afa205b69ed107ba739ebb3d53504e0.html">Variable max_chars_in_u64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a.html">Variable sbwt_search::basicblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_SbwtContainer_8h_1a8de8dcd3628550aed5f24e7b74b8b84d.html">Variable sbwt_search::cmap_size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_GlobalDefinitions_8h_1a427cad7fed6538fefd42f623ae33008a.html">Variable sbwt_search::gpu_warp_size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412.html">Variable sbwt_search::hyperblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c.html">Variable sbwt_search::invalid_char_to_bits_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_Poppy_8h_1a6ab78996b008aa3d3b5816a85d837d1d.html">Variable sbwt_search::layer_1_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_Poppy_8h_1a8cbab7d04bb295d78fe17452045ddc07.html">Variable sbwt_search::layer_2_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a.html">Variable sbwt_search::num_ascii_characters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c.html">Variable sbwt_search::pad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_GlobalDefinitions_8h_1a87288ec90579454822c04ce173d06e36.html">Variable sbwt_search::presearch_letters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9.html">Variable sbwt_search::sixteen_kB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_GlobalDefinitions_8h_1af361dd3ffbcd191cfdc312bfd64eefa8.html">Variable sbwt_search::superblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_GlobalDefinitions_8h_1a967c8556fd9d51942dfe64d59cccc260.html">Variable sbwt_search::threads_per_block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/variable_TypeDefinitions_8h_1af8bccad6bcfbf028adeac76fac203899.html">Variable u64_bits</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="RST/modules.html#defines">Defines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="RST/define_GpuUtils_8h_1a4eb22c89929e9e4ea34590e1e5356d6a.html">Define GPU_CHECK</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/define_ErrorUtils_8h_1aa63be6a8da3f95704f040e9c92c28248.html">Define throw_uninitialised</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/define_BenchmarkUtils_8hpp_1adadc8eb1d96857f385a393c78c6c1cd8.html">Define TIME_IT</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="RST/modules.html#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_TypeDefinitions_8h_1aec41e5f8e4b7aef2540e84268692fa84.html">Typedef i32</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_TypeDefinitions_8h_1a86025ec3a0bc201ca893caac2cb2acbd.html">Typedef i64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_TypeDefinitions_8h_1a196513547113c3f96a078ee3e658a6ef.html">Typedef i8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9.html">Typedef sbwt_search::ColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e.html">Typedef sbwt_search::IndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_TypeDefinitions_8h_1a70c1fcc1a4e96af8f6580f708657cd41.html">Typedef u32</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_TypeDefinitions_8h_1a1af9f95651e921615e75917a6dd1b574.html">Typedef u64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="RST/typedef_TypeDefinitions_8h_1a987e4d6cf789cb59dbb390728271e4d6.html">Typedef u8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SBWT Search</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Search</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <noscript>
+  <div id="fallback" class="admonition warning">
+    <p class="last">
+      Please activate JavaScript to enable the search functionality.
+    </p>
+  </div>
+  </noscript>
+
+  
+  <div id="search-results">
+  
+  </div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Daniel Cauchi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+  <script>
+    jQuery(function() { Search.loadIndex("searchindex.js"); });
+  </script>
+  
+  <script id="searchindexloader"></script>
+   
+
+
+</body>
+</html>

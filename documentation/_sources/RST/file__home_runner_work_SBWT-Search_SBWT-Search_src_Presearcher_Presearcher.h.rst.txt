@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h:
+
+File Presearcher.h
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Presearcher``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+The presearcher will search for all permutations of k-mers of a certain size and cache them, so that future searches can continue from this checkpoint. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Presearcher/Presearcher.h``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``SbwtContainer/GpuSbwtContainer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_GpuSbwtContainer.h`)
+
+- ``Tools/GpuPointer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``memory``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1Presearcher`
+

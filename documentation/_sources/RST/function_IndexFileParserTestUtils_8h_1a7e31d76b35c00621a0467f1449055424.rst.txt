@@ -1,0 +1,14 @@
+.. _exhale_function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424:
+
+Function sbwt_search::write_fake_binary_results_to_file
+=======================================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParserTestUtils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sbwt_search::write_fake_binary_results_to_file(const string&, const vector<vector<int>>&)
+   :project: SBWT Search

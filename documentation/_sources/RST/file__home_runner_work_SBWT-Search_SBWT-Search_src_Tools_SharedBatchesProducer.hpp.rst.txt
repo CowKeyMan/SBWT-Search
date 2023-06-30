@@ -1,0 +1,105 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp:
+
+File SharedBatchesProducer.hpp
+==============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Template class for any class which is a continuous batch producer that shares its batch. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/SharedBatchesProducer.hpp``)
+----------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/CircularBuffer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularBuffer.hpp`)
+
+- ``Tools/ErrorUtils.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_ErrorUtils.h`)
+
+- ``Tools/OmpLock.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h`)
+
+- ``Tools/Semaphore.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``memory``
+
+- ``stdexcept``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_ContinuousIndexSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_ContinuousSeqToBitsConverter.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_InvalidCharsProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringBreakBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_design_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classdesign__utils_1_1SharedBatchesProducer`
+

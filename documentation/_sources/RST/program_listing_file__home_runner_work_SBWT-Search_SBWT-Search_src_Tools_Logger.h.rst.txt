@@ -1,0 +1,43 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Logger.h:
+
+Program Listing for File Logger.h
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Logger.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/Logger.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef LOGGER_H
+   #define LOGGER_H
+   
+   #include <string>
+   
+   namespace log_utils {
+   
+   using std::string;
+   
+   class Logger {
+   private:
+     Logger() = default;
+   
+   public:
+     enum class LOG_LEVEL { TRACE, DEBUG, INFO, WARN, ERROR, FATAL, OFF };
+     enum class EVENT_STATE { START, STOP };
+   
+     static auto
+     initialise_global_logging(LOG_LEVEL default_log_level = LOG_LEVEL::WARN)
+       -> void;
+     static auto log(LOG_LEVEL level, const string &message) -> void;
+     static auto log_timed_event(
+       const string &component,
+       EVENT_STATE start_stop,
+       const string &message = "",
+       LOG_LEVEL level = LOG_LEVEL::DEBUG
+     ) -> void;
+   };
+   
+   }  // namespace log_utils
+   #endif

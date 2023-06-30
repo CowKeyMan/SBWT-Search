@@ -1,0 +1,33 @@
+
+.. _namespace_bit_utils:
+
+Namespace bit_utils
+===================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b`
+
+- :ref:`exhale_variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33`
+
+- :ref:`exhale_variable_BitDefinitions_8h_1a7065f53c73f6d51f1fca4a593a1ea870`
+
+- :ref:`exhale_variable_BitDefinitions_8h_1a9aae8b89133af5dc92acf753870cd6a3`

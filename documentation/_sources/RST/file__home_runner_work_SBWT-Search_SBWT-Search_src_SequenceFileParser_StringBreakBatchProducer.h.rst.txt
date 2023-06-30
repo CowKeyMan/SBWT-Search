@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringBreakBatchProducer.h:
+
+File StringBreakBatchProducer.h
+===============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+In charge of storing and handing out the locations where one sequence ends and another begins, stored in the StringBreakBatch. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser/StringBreakBatchProducer.h``)
+------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringBreakBatchProducer.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``BatchObjects/StringBreakBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``algorithm``
+
+- ``memory``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1StringBreakBatchProducer`
+

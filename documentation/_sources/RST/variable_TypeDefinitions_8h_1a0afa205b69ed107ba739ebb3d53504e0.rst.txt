@@ -1,0 +1,14 @@
+.. _exhale_variable_TypeDefinitions_8h_1a0afa205b69ed107ba739ebb3d53504e0:
+
+Variable max_chars_in_u64
+=========================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: max_chars_in_u64
+   :project: SBWT Search

@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h:
+
+File OmpLock.h
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+A wrapper over omp_lock_t to allow deletion when the resource is released, like a smart pointer. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/OmpLock.h``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``omp.h``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_threading_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classthreading__utils_1_1OmpLock`
+

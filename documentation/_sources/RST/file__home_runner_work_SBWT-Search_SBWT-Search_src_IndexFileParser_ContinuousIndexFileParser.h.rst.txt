@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_ContinuousIndexFileParser.h:
+
+File ContinuousIndexFileParser.h
+================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Reads a list of files one by one, filling in the batches producer as it goes along. Uses the sub IndexFileParsers to do its parsing for it. Indexes are padded to the next warp and sequence statistics are counted as well. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser/ContinuousIndexFileParser.h``)
+----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_ContinuousIndexFileParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``IndexFileParser/IndexFileParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`)
+
+- ``IndexFileParser/IndexesBatchProducer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h`)
+
+- ``IndexFileParser/SeqStatisticsBatchProducer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h`)
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousIndexFileParser`
+

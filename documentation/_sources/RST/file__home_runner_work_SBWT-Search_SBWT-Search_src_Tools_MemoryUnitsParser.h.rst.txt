@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h:
+
+File MemoryUnitsParser.h
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Given a string such as "1KB" or "1000" (bits) or "10 GB", this module converts it to bits. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/MemoryUnitsParser.h``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``cctype``
+
+- ``regex``
+
+- ``string``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_IndexSearchArgumentParser.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_units_parser`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classunits__parser_1_1MemoryUnitsParser`
+

@@ -1,0 +1,37 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h:
+
+Program Listing for File GpuStream.h
+====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/GpuStream.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef GPU_STREAM_H
+   #define GPU_STREAM_H
+   
+   #include <memory>
+   
+   namespace gpu_utils {
+   
+   using std::shared_ptr;
+   
+   class GpuStream {
+     void *element;
+   
+   public:
+     GpuStream();
+     GpuStream(GpuStream &) = delete;
+     GpuStream(GpuStream &&) = delete;
+     auto operator=(GpuStream &) = delete;
+     auto operator=(GpuStream &&) = delete;
+     ~GpuStream();
+     [[nodiscard]] auto data() const -> void *;
+   };
+   
+   }  // namespace gpu_utils
+   
+   #endif

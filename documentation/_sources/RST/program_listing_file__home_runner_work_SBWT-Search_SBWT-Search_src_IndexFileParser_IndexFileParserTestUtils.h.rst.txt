@@ -1,0 +1,30 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParserTestUtils.h:
+
+Program Listing for File IndexFileParserTestUtils.h
+===================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParserTestUtils.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser/IndexFileParserTestUtils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef INDEX_FILE_PARSER_TEST_UTILS_H
+   #define INDEX_FILE_PARSER_TEST_UTILS_H
+   
+   #include <string>
+   #include <vector>
+   
+   namespace sbwt_search {
+   
+   using std::string;
+   using std::vector;
+   
+   auto write_fake_binary_results_to_file(
+     const string &filename, const vector<vector<int>> &results_ints
+   ) -> void;
+   
+   }  // namespace sbwt_search
+   
+   #endif

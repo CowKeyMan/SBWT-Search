@@ -1,0 +1,49 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_PositionsBuilder.h:
+
+Program Listing for File PositionsBuilder.h
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_PositionsBuilder.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/PositionsBuilder/PositionsBuilder.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef POSITIONS_BUILDER_H
+   #define POSITIONS_BUILDER_H
+   
+   #include <cstddef>
+   #include <vector>
+   
+   #include "Tools/PinnedVector.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::PinnedVector;
+   using std::vector;
+   
+   class PositionsBuilder {
+   private:
+     u64 kmer_size;
+   
+   public:
+     explicit PositionsBuilder(u64 kmer_size);
+     void build_positions(
+       const vector<u64> &chars_before_newline,
+       const u64 &string_size,
+       PinnedVector<u64> &positions
+     );
+   
+   private:
+     void process_one_string(
+       u64 start_position_index,
+       u64 end_position_index,
+       u64 first_position,
+       PinnedVector<u64> &positions
+     );
+   };
+   
+   }  // namespace sbwt_search
+   #endif

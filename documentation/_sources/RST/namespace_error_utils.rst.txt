@@ -1,0 +1,20 @@
+
+.. _namespace_error_utils:
+
+Namespace error_utils
+=====================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_ErrorUtils_8h_1a135754c79536f40c1ba89374f70764cc`

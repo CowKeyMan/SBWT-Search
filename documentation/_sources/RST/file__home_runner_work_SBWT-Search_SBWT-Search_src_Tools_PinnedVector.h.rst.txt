@@ -1,0 +1,79 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h:
+
+File PinnedVector.h
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+This class is part of the gpu utilities and represents an array of fixed size but with some nice utilities to interact with other gpu utilities. It uses pinned memory so that memory transfers between cpu and gpu are much faster. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/PinnedVector.h``)
+-----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_IndexSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_PositionsBuilder.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_gpu_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classgpu__utils_1_1PinnedVector`
+

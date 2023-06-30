@@ -1,0 +1,27 @@
+.. _exhale_class_classsbwt__search_1_1ArgumentParser:
+
+Class ArgumentParser
+====================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public sbwt_search::ColorSearchArgumentParser`` (:ref:`exhale_class_classsbwt__search_1_1ColorSearchArgumentParser`)
+- ``public sbwt_search::IndexSearchArgumentParser`` (:ref:`exhale_class_classsbwt__search_1_1IndexSearchArgumentParser`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::ArgumentParser
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

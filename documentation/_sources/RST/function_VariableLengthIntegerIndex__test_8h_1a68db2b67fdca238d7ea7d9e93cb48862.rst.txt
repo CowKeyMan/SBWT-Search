@@ -1,0 +1,14 @@
+.. _exhale_function_VariableLengthIntegerIndex__test_8h_1a68db2b67fdca238d7ea7d9e93cb48862:
+
+Function sbwt_search::get_variable_length_int_index
+===================================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_VariableLengthIntegerIndex_test.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sbwt_search::get_variable_length_int_index(const GpuPointer<u64>&, u64, u64, u64)
+   :project: SBWT Search

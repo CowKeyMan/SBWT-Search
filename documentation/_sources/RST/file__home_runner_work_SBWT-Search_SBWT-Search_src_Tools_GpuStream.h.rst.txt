@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h:
+
+File GpuStream.h
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+A class to manage gpu streams, useful for not having to create and delete streams, and instead we can create them and use them as is. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/GpuStream.h``)
+--------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_IndexSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuEvent.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_gpu_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classgpu__utils_1_1GpuStream`
+

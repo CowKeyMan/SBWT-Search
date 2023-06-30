@@ -1,0 +1,14 @@
+.. _exhale_variable_SbwtContainer_8h_1a8de8dcd3628550aed5f24e7b74b8b84d:
+
+Variable sbwt_search::cmap_size
+===============================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::cmap_size
+   :project: SBWT Search

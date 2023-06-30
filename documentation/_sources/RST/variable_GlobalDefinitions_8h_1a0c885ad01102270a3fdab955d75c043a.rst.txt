@@ -1,0 +1,14 @@
+.. _exhale_variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a:
+
+Variable sbwt_search::basicblock_bits
+=====================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::basicblock_bits
+   :project: SBWT Search

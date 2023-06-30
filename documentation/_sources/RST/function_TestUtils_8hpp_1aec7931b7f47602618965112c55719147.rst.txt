@@ -1,0 +1,14 @@
+.. _exhale_function_TestUtils_8hpp_1aec7931b7f47602618965112c55719147:
+
+Template Function test_utils::assert_arrays_equals
+==================================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: test_utils::assert_arrays_equals(const span<T>, const span<T>, const string&, int)
+   :project: SBWT Search

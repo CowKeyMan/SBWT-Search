@@ -1,0 +1,24 @@
+.. _dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter:
+
+
+Directory ColorResultsPrinter
+=============================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src>` (``/home/runner/work/SBWT-Search/SBWT-Search/src``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+*Directory path:* ``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorResultsPrinter``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_AsciiContinuousColorResultsPrinter.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_BinaryContinuousColorResultsPrinter.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_CsvContinuousColorResultsPrinter.h`
+
+

@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h:
+
+Program Listing for File IntervalBatch.h
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/IntervalBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef INTERVAL_BATCH_H
+   #define INTERVAL_BATCH_H
+   
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::vector;
+   
+   class IntervalBatch {
+   public:
+     const vector<u64> *chars_before_new_seq;
+     vector<u64> seqs_before_newfile;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

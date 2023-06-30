@@ -1,0 +1,14 @@
+.. _exhale_function_TestUtils_8hpp_1a20313e3dee8281a27883abd56befc1e0:
+
+Function test_utils::to_char_vec
+================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: test_utils::to_char_vec(const vector<string>&)
+   :project: SBWT Search

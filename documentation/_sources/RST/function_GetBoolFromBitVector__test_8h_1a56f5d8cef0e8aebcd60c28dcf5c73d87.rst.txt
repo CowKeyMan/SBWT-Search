@@ -1,0 +1,14 @@
+.. _exhale_function_GetBoolFromBitVector__test_8h_1a56f5d8cef0e8aebcd60c28dcf5c73d87:
+
+Function sbwt_search::get_bool_from_bit_vector
+==============================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_GetBoolFromBitVector_test.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sbwt_search::get_bool_from_bit_vector(const GpuPointer<u64>&, u64)
+   :project: SBWT Search

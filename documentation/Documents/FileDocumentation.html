@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Documentation &mdash; SBWT Search  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/dark_mode_css/general.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/dark_mode_css/dark.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/dark_mode_js/default_light.js"></script>
+        <script src="../_static/dark_mode_js/theme_switcher.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="src" href="../RST/modules.html" />
+    <link rel="prev" title="Practices" href="WorkflowDocumentation/Practices.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SBWT Search
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="ProjectDocumentation/ProjectDocumentation.html">Project Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ProjectDocumentation/IndexSearching.html">Index Searching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ProjectDocumentation/ColorSearching.html">Color Searching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="WorkflowDocumentation/WorkflowDocumentation.html">Workflow Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="WorkflowDocumentation/GettingsStarted.html">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/GettingsStarted.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/GettingsStarted.html#typical-workflow">Typical workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="WorkflowDocumentation/Tools.html">Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#git-hooks">Git Hooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#gcc">GCC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#cmake">CMake</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id1">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#doxygen">Doxygen</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id2">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#sphinx">Sphinx</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id3">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#mermaid">Mermaid</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id4">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#clang-format">clang-format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id5">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#googletest">googletest</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id6">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#lcov">lcov</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id7">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#github-pages">Github pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#hip">HIP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#cuda">CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#rocm">ROCm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#cpu">CPU</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#kseqpp-read">kseqpp_REad</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id8">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#spdlog">spdlog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Tools.html#openmp">OpenMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Tools.html#id9">Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="WorkflowDocumentation/Practices.html">Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Practices.html#trailing-return-type">Trailing return type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Practices.html#naming-conventions">Naming Conventions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Practices.html#file-naming-convention">File naming convention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Practices.html#function-and-variable-names">Function and variable names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="WorkflowDocumentation/Practices.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Practices.html#c-files">C++ files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Practices.html#in-code-comments">In-code comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="WorkflowDocumentation/Practices.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">File Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RST/modules.html">src</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../RST/modules.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RST/modules.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../RST/modules.html#full-api">Full API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../RST/modules.html#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_benchmark_utils.html">Namespace benchmark_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_bit_utils.html">Namespace bit_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_design_utils.html">Namespace design_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_error_utils.html">Namespace error_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_gpu_utils.html">Namespace gpu_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_io_utils.html">Namespace io_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_log_utils.html">Namespace log_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_math_utils.html">Namespace math_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_memory_utils.html">Namespace memory_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_rng_utils.html">Namespace rng_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_sbwt_search.html">Namespace sbwt_search</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_std.html">Namespace std</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_std_utils.html">Namespace std_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_structure_utils.html">Namespace structure_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_test_utils.html">Namespace test_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_threading_utils.html">Namespace threading_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/namespace_units_parser.html">Namespace units_parser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../RST/modules.html#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classdesign__utils_1_1SharedBatchesProducer.html">Template Class SharedBatchesProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classgpu__utils_1_1GpuEvent.html">Class GpuEvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classgpu__utils_1_1GpuPointer.html">Template Class GpuPointer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classgpu__utils_1_1GpuStream.html">Class GpuStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classgpu__utils_1_1PinnedVector.html">Template Class PinnedVector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classio__utils_1_1ThrowingIfstream.html">Class ThrowingIfstream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classio__utils_1_1ThrowingOfstream.html">Class ThrowingOfstream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classlog__utils_1_1Logger.html">Class Logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ArgumentParser.html">Class ArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html">Class AsciiContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html">Class AsciiContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1AsciiIndexFileParser.html">Class AsciiIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html">Class BinaryContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html">Class BinaryContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1BinaryIndexFileParser.html">Class BinaryIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1BitSeqBatch.html">Class BitSeqBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1BitsProducer.html">Class BitsProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html">Class BoolContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1CharToBits.html">Class CharToBits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ColorIndexBuilder.html">Class ColorIndexBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ColorsBatch.html">Class ColorsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ColorSearchArgumentParser.html">Class ColorSearchArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ColorSearcher.html">Class ColorSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ColorSearchMain.html">Class ColorSearchMain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousColorResultsPrinter.html">Template Class ContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousColorSearcher.html">Class ContinuousColorSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousIndexFileParser.html">Class ContinuousIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousIndexResultsPrinter.html">Template Class ContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousIndexSearcher.html">Class ContinuousIndexSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousPositionsBuilder.html">Class ContinuousPositionsBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousSeqToBitsConverter.html">Class ContinuousSeqToBitsConverter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ContinuousSequenceFileParser.html">Class ContinuousSequenceFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1CpuColorIndexContainer.html">Class CpuColorIndexContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1CpuSbwtContainer.html">Class CpuSbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1CsvContinuousColorResultsPrinter.html">Class CsvContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1FilenamesParser.html">Class FilenamesParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1FilesizeLoadBalancer.html">Class FilesizeLoadBalancer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1GpuColorIndexContainer.html">Class GpuColorIndexContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1GpuSbwtContainer.html">Class GpuSbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IndexesBatch.html">Class IndexesBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IndexesBatchProducer.html">Class IndexesBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IndexFileParser.html">Class IndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IndexSearchArgumentParser.html">Class IndexSearchArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IndexSearcher.html">Class IndexSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IndexSearchMain.html">Class IndexSearchMain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IntervalBatch.html">Class IntervalBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1IntervalBatchProducer.html">Class IntervalBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1InvalidCharsBatch.html">Class InvalidCharsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1InvalidCharsProducer.html">Class InvalidCharsProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1Main.html">Class Main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1Poppy.html">Class Poppy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1PoppyBuilder.html">Class PoppyBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1PositionsBatch.html">Class PositionsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1PositionsBuilder.html">Class PositionsBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1Presearcher.html">Class Presearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1ResultsBatch.html">Class ResultsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1SbwtBuilder.html">Class SbwtBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1SbwtContainer.html">Class SbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1SeqStatisticsBatch.html">Class SeqStatisticsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1SeqStatisticsBatchProducer.html">Class SeqStatisticsBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1StringBreakBatch.html">Class StringBreakBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1StringBreakBatchProducer.html">Class StringBreakBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1StringSequenceBatch.html">Class StringSequenceBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classsbwt__search_1_1StringSequenceBatchProducer.html">Class StringSequenceBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classstructure__utils_1_1CircularBuffer.html">Template Class CircularBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classstructure__utils_1_1CircularQueue.html">Template Class CircularQueue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classtest__utils_1_1DummyBatchProducer.html">Template Class DummyBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classthreading__utils_1_1OmpLock.html">Class OmpLock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classthreading__utils_1_1Semaphore.html">Class Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/classunits__parser_1_1MemoryUnitsParser.html">Class MemoryUnitsParser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../RST/modules.html#enums">Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RST/enum_SbwtContainer_8h_1a82ce2e4d2f9e33cdea30a70049a3fcfe.html">Enum ACGT</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../RST/modules.html#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec.html">Function bit_utils::_get_set_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_ErrorUtils_8h_1a135754c79536f40c1ba89374f70764cc.html">Function error_utils::_throw_uninitialised</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f.html">Function gpu_utils::get_free_gpu_memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_MathUtils_8hpp_1a7aa310486c40ef60f8670c5ee8d6834a.html">Function math_utils::bits_to_gB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_MathUtils_8hpp_1acd3dd187141f060d3f668e46ddd5b031.html">Template Function math_utils::divide_and_ceil</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_MathUtils_8hpp_1ad70360805c3fdf6a7e2f77b67aa5ec8b.html">Template Function math_utils::divide_and_round</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_MathUtils_8hpp_1ad99dc9679530f3f98711c3e2509daf8c.html">Function math_utils::gB_to_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_MathUtils_8hpp_1ab462ecf04def5ea064d6998a5187fbb2.html">Template Function math_utils::round_down</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_MathUtils_8hpp_1a57b39ffa901081cf3760a80e345a13b6.html">Template Function math_utils::round_up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_MemoryUtils_8h_1aa9dae2e89db35eb54749351bfc95ee30.html">Function memory_utils::get_total_system_memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_DebugUtils_8hpp_1a5ec4da283c6224b1eddcb991f366815a.html">Template Function print</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_RNGUtils_8hpp_1ae61e7824f6aebbe5f31c8f4b8bf4b19c.html">Template Function rng_utils::get_uniform_int_generator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_GetBoolFromBitVector__test_8h_1a56f5d8cef0e8aebcd60c28dcf5c73d87.html">Function sbwt_search::get_bool_from_bit_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299.html">Function sbwt_search::get_rank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_VariableLengthIntegerIndex__test_8h_1a68db2b67fdca238d7ea7d9e93cb48862.html">Function sbwt_search::get_variable_length_int_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424.html">Function sbwt_search::write_fake_binary_results_to_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_StdUtils_8hpp_1ab19a8dafe77baa346b4faacf94910259.html">Template Function std_utils::copy_advance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_StdUtils_8hpp_1afdd23b2e5d5d538e82d3a76fe092e596.html">Template Function std_utils::split_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_TestUtils_8hpp_1aec7931b7f47602618965112c55719147.html">Template Function test_utils::assert_arrays_equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_TestUtils_8hpp_1afc467ccdf2c6a0a3c0063a95ef950af7.html">Template Function test_utils::assert_vectors_equal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_TestUtils_8hpp_1a20313e3dee8281a27883abd56befc1e0.html">Function test_utils::to_char_vec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/function_TestUtils_8hpp_1a08036f93ddd4f87ffd52058f05396e24.html">Template Function test_utils::to_u64s</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../RST/modules.html#variables">Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_BenchmarkUtils_8hpp_1a3539a78d9115de442ea3d98ad18770f7.html">Variable benchmark_utils::TIME_IT_END_TIME</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_BenchmarkUtils_8hpp_1a5edd72773534aa85e34512678cbf5cc3.html">Variable benchmark_utils::TIME_IT_START_TIME</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_BenchmarkUtils_8hpp_1a142193fdf593aa7211221a018df2328f.html">Variable benchmark_utils::TIME_IT_TOTAL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b.html">Variable bit_utils::set_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33.html">Variable bit_utils::ten_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_BitDefinitions_8h_1a7065f53c73f6d51f1fca4a593a1ea870.html">Variable bit_utils::thirty_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_BitDefinitions_8h_1a9aae8b89133af5dc92acf753870cd6a3.html">Variable bit_utils::two_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_TypeDefinitions_8h_1a93436ed122c10bfeb8c885ea85d6c7c6.html">Variable bits_in_byte</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_TypeDefinitions_8h_1a0afa205b69ed107ba739ebb3d53504e0.html">Variable max_chars_in_u64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a.html">Variable sbwt_search::basicblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_SbwtContainer_8h_1a8de8dcd3628550aed5f24e7b74b8b84d.html">Variable sbwt_search::cmap_size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_GlobalDefinitions_8h_1a427cad7fed6538fefd42f623ae33008a.html">Variable sbwt_search::gpu_warp_size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412.html">Variable sbwt_search::hyperblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c.html">Variable sbwt_search::invalid_char_to_bits_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_Poppy_8h_1a6ab78996b008aa3d3b5816a85d837d1d.html">Variable sbwt_search::layer_1_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_Poppy_8h_1a8cbab7d04bb295d78fe17452045ddc07.html">Variable sbwt_search::layer_2_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a.html">Variable sbwt_search::num_ascii_characters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c.html">Variable sbwt_search::pad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_GlobalDefinitions_8h_1a87288ec90579454822c04ce173d06e36.html">Variable sbwt_search::presearch_letters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9.html">Variable sbwt_search::sixteen_kB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_GlobalDefinitions_8h_1af361dd3ffbcd191cfdc312bfd64eefa8.html">Variable sbwt_search::superblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_GlobalDefinitions_8h_1a967c8556fd9d51942dfe64d59cccc260.html">Variable sbwt_search::threads_per_block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/variable_TypeDefinitions_8h_1af8bccad6bcfbf028adeac76fac203899.html">Variable u64_bits</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../RST/modules.html#defines">Defines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RST/define_GpuUtils_8h_1a4eb22c89929e9e4ea34590e1e5356d6a.html">Define GPU_CHECK</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/define_ErrorUtils_8h_1aa63be6a8da3f95704f040e9c92c28248.html">Define throw_uninitialised</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/define_BenchmarkUtils_8hpp_1adadc8eb1d96857f385a393c78c6c1cd8.html">Define TIME_IT</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../RST/modules.html#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_TypeDefinitions_8h_1aec41e5f8e4b7aef2540e84268692fa84.html">Typedef i32</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_TypeDefinitions_8h_1a86025ec3a0bc201ca893caac2cb2acbd.html">Typedef i64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_TypeDefinitions_8h_1a196513547113c3f96a078ee3e658a6ef.html">Typedef i8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9.html">Typedef sbwt_search::ColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e.html">Typedef sbwt_search::IndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_TypeDefinitions_8h_1a70c1fcc1a4e96af8f6580f708657cd41.html">Typedef u32</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_TypeDefinitions_8h_1a1af9f95651e921615e75917a6dd1b574.html">Typedef u64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../RST/typedef_TypeDefinitions_8h_1a987e4d6cf789cb59dbb390728271e4d6.html">Typedef u8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SBWT Search</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">File Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/Documents/FileDocumentation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="file-documentation">
+<h1>File Documentation<a class="headerlink" href="#file-documentation" title="Permalink to this headline"></a></h1>
+<p>This page will go through each file with a docstring and display them here in a structured order. This page is a good reference to keep open while working as a quick glance to see what each file does.</p>
+<ul>
+<li><p><cite>.clang-format</cite>: This is the file used by the clang-format tool, which makes sure that the  code base follows a consistent coding style. For those familiar, it is  similar to python’s flake8. Inside the file we specify how we want our  codebase to look. For detailed explanation of each option, the reader is  referred to the official documentation which also contains a lot of examples  for each option: <a class="reference external" href="https://clang.llvm.org/docs/ClangFormatStyleOptions.html">https://clang.llvm.org/docs/ClangFormatStyleOptions.html</a>.  Rather than running clang-format directly, we make use of 2 python scripts:  scripts/cmake_checks/check_clang_format.py and  scripts/standalone/apply_clang_format.py.</p></li>
+<li><p><cite>.clang-tidy</cite>: This is the file used by the clang-tidy tool, which performs static analysis. Inside the file we specify which files to ignore when going through the codebase. Rather than using clang-tidy directly, we make use of a python script: scripts/cmake_checks/clang_tidy.py. Note: clang-tidy may fail the first time we run scripts/build/build_all.sh since the compilation database would not have been built by then. So when we run it afterwards it will be successful.</p></li>
+<li><p><cite>.clangd</cite>: This file indicates to the clang compiler (which is used for linting) certain options. This includes for example ignoring certain flags which are specific to the nvcc compiler</p></li>
+<li><p><cite>.gitignore</cite>: Specifies which files should be ignored by our git repository</p></li>
+<li><p><cite>.ycm_extra_conf.py</cite>: This file is used by the YouCompleteMe language server to get the build from the compilation_database_folder (./build in our case)</p></li>
+<li><p><cite>CMakeLists.txt</cite>: This is the root CMakeLists which calls all other cmake files. It is used by the cmake tool to build the Makefile which would then be used to compile our program. Inside it, we specify the project name and details, we load all files within the cmake folder and then add the src and documentation folder, which also contain a CMakeLists.txt file, as subdirectories, so that the CMakeLists.txt file within them is also executed (sequentially).  Since we will be using CUDA and HIP, we want to use a pretty high version of CMake.</p></li>
+<li><p><strong>.github</strong>:</p>
+<ul class="simple">
+<li><p><strong>workflows</strong>:</p>
+<ul>
+<li><p><cite>publish-documentation.yml</cite>: This is the file responsible for building the documentation and tests on github using github-actions and then publishing both the documentation and test results + code coverage as a github page. Within the file, each step has a name which describes its purpose.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>benchmark_objects</strong>: A folder to hold objects used for benchmarking. Can be downloaded using the configure scripts</p>
+<ul class="simple">
+<li><p><cite>.gitignore</cite>: Gitignore to ignore everything but keep the folder in git</p></li>
+</ul>
+</li>
+<li><p><strong>cmake</strong>: Contains cmake files which act as helper functions for cmake</p>
+<ul class="simple">
+<li><p><cite>CCache.cmake</cite>: Enables CCache, which prevents rebuilding of files which are already built. If not available, it is ignored</p></li>
+<li><p><cite>CompilerWarnings.cmake</cite>: This file creates a function to enable compiler warnings for both gcc and MSVC as well</p></li>
+<li><p><cite>Options.cmake</cite>: This enables or disables several CMake options, such as having Interprodecural optimisation, and positioning independent code</p></li>
+<li><p><cite>PreventBuildingInCmakeDirectory.cmake</cite>: This file ensures that CMake does not run in a folder where there is an existing CMakeLists.txt, as this is usually not desired. It is better to build in a separate directory as CMake generates a lot of ‘garbage’ files for caching</p></li>
+<li><p><cite>Profiling.cmake</cite>: Adds the flags -pg to gcc so we can profile with gprof</p></li>
+<li><p><cite>SetHipTargetDevice.cmake</cite>: Sets the target device for the build, which is either NVIDIA, AMD or CPU. Here you may also change the target architectures for the AMD target</p></li>
+</ul>
+</li>
+<li><p><strong>docs</strong>:</p>
+<ul class="simple">
+<li><p><cite>.gitignore</cite>: Ignore everything except itself and index.html</p></li>
+</ul>
+</li>
+<li><p><strong>documentation</strong>: Any files related to documentation contents will be kept here. Documentation is generated by both doxygen and Sphinx</p>
+<ul class="simple">
+<li><p><cite>.gitignore</cite>: Ignores unnecessary files and files which are generated on the fly when building</p></li>
+<li><p><cite>CMakeLists.txt</cite>: Looks for Doxygen and fails if it cannot find it. If it finds it, it will replace any text within the specified files (usually these files will end with the .in extension) which is surrounded by &#64; by the parameters provided by cmake. For example, if we look at the first line of documentation/index.rst, you will notice that part of the title is surrounded by &#64;. This part will be replaced by the same value as it is within cmake. The output file is the same file but without the .in extension, so that the original file is unmodified. So if the input is a.txt.in, the output will be a.txt. Look at the configure_file cmake command here: <a class="reference external" href="https://cmake.org/cmake/help/latest/command/configure_file.html">https://cmake.org/cmake/help/latest/command/configure_file.html</a>. This CMakeLists.txt is not to be used directly, but rather through the scripts/build/build_docs.sh script.</p></li>
+<li><p><cite>Doxyfile.in</cite>: This file describes the settings to be used by the documentation system doxygen (www.doxygen.org) for a project. Change the settings here as you see fit, however make sure to keep GENERATE_XML to YES, because this output is used by Sphinx’s breathe extension to generate our documentation.</p></li>
+<li><p><cite>conf.py.in</cite>: Configuration file for the Sphinx documentation builder. This is where we specify the theme, the extensions we wish to use and other options for our documentation</p></li>
+<li><p><cite>make.bat</cite>: This is the Windows equivalent of the Makefile for the documentation. It is usually unused.</p></li>
+<li><p><strong>RST</strong>:</p>
+<ul>
+<li><p><cite>.gitignore</cite>: Ignore everything in the folder except for itself and the .doc_string</p></li>
+</ul>
+</li>
+<li><p><strong>WriteUps</strong>:</p>
+<ul>
+<li><p><strong>Thesis</strong>:</p>
+<ul>
+<li><p><cite>.gitignore</cite>:</p></li>
+<li><p><strong>scripts</strong>:</p>
+<ul>
+<li><p><cite>compile.sh</cite>: Compiles the thesis</p></li>
+<li><p><cite>compose_dbg.py</cite>: A script to extract kmers from a string of raw reads and outputs the kmers as well as a De Bruijn Graph construction in the mermaid format</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>static</strong>:</p>
+<ul>
+<li><p><cite>.gitignore</cite>: Ignore everything in the folder except for itself</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>hooks</strong>:</p>
+<ul class="simple">
+<li><p><cite>ascii_and_whitespace.sh</cite>: The default git pre-commit hook to remove trailing whitespaces. It also makes sure that all files are ascii</p></li>
+<li><p><cite>pre-commit</cite>: Used as a pre-commit check for git. Adding or removing commands is extremely easy by changing the ‘hook_commands’ list. If any of the commands fail, then the hook will fail.</p></li>
+</ul>
+</li>
+<li><p><strong>scripts</strong>: This folder contains scripts written in multiple languages which are used to combine multiple commands into a single file. It is advised to only build using these scripts rather than using the individual Tools directly.</p>
+<ul>
+<li><p><strong>benchmark</strong>:</p>
+<ul class="simple">
+<li><p><cite>color_search_d1.sh</cite>: Run the benchmark_main several times and save the results to a file. Called by scipts/sbatch/benchmark.sbatch It is expected that the *.tdbg file is within benchmark_objects/colors folder</p></li>
+<li><p><cite>color_search_d20.sh</cite>: Run the benchmark_main several times and save the results to a file. Called by scipts/sbatch/benchmark.sbatch It is expected that the *.tdbg file is within benchmark_objects/colors folder</p></li>
+<li><p><cite>index_search_d1.sh</cite>: Run the benchmark_main several times and save the results to a file. Called by scipts/sbatch/benchmark.sbatch It is expected that the *.tdbg file is within benchmark_objects/index folder</p></li>
+<li><p><cite>index_search_d20.sh</cite>: Run the benchmark_main several times and save the results to a file. Called by scipts/sbatch/benchmark.sbatch It is expected that the *.tdbg file is within benchmark_objects/index folder</p></li>
+</ul>
+</li>
+<li><p><strong>build</strong>: Scripts used to build executables and documentation. Within this script, cmake configuration options are set. Change these if you wish to set different options.</p>
+<ul class="simple">
+<li><p><cite>all.sh</cite>: Build the compilation commands, main executable in release mode, tests as well as documentation. It takes a single argument which is one of NVIDIA, AMD or CPU.</p></li>
+<li><p><cite>compilation_commands.sh</cite>: Generate the compilation commands database for the target platform. It takes a single argument which is one of NVIDIA, AMD or CPU. The result will be found in build/compile_commands.json.</p></li>
+<li><p><cite>debug.sh</cite>: Build the debug version of the main executable for the target platform. It takes a single argument which is one of NVIDIA, AMD or CPU. If any other argument (any sequence of characters is accepted) is given besides these 3, it will skip the cmake step and run the build step only.</p></li>
+<li><p><cite>docs.sh</cite>: Build only the documentation. If any argument at all is passed to this script, it will skip the cmake step and just execute the build step only</p></li>
+<li><p><cite>release.sh</cite>: Build the release version of the main executable for the target platform. It takes a single argument which is one of NVIDIA, AMD or CPU. If any other argument (any sequence of characters is accepted) is given besides these 3, it will skip the cmake step and run the build step only.</p></li>
+<li><p><cite>tests.sh</cite>: Build the tests for the target platform. It takes a single argument which is one of NVIDIA, AMD or CPU. If any other argument (any sequence of characters is accepted) is given besides these 3, it will skip the cmake step and run the build step only.</p></li>
+</ul>
+</li>
+<li><p><strong>configure</strong>:</p>
+<ul class="simple">
+<li><p><cite>download_benchmark_data.sh</cite>: Download the data used for benchmarking from public databases. The dataset file list is contained <cite>scripts/configure/benchmark_datra_list.txt</cite>. This file contains all the files obtained from <a class="reference external" href="https://www.ebi.ac.uk/ena/browser/view/PRJEB32631">https://www.ebi.ac.uk/ena/browser/view/PRJEB32631</a>, from this paper: doi:10.1038/s41467-022-35178-5. The original dataset is 2TB big, so I have chosen to only have the first 20 files. The index contains ecoli genomes, found at https://zenodo.org/record/6656897#.ZASdeR9BwQ8, created using themisto using the genomes compiled in these papers: https://doi.org/10.1099/mgen.0.000499, https://doi.org/10.1099/mgen.0.000499 and https://doi.org/10.1038/s41586-019-1560-1</p></li>
+<li><p><cite>download_dummy_benchmark_data.sh</cite>: This script is used to test benchmarking locally. We download the pre made benchmark files from dropbox and unzip them locally</p></li>
+<li><p><cite>download_large_test_objects.sh</cite>: Download some test objects which should probably not be as part of the repository. This script makes sure to not download again if the target folder already exists. However, if any parameter at all is passed, this is ignored and the existing folder is deleted and replaced.</p></li>
+<li><p><cite>install_hip.sh</cite>: Helper script called in cmake/SetHipTargetDevice.cmake to automatically download the necessary hip extras alongside the already installed target device compilers. Example: the user is expected to already have nvcc installed on an NVIDIA machine, so the script then simply downloads and installs any extras related to HIP. Similarly on AMD. To install the necessary items on each platform, the user is encouraged to look at the <a class="reference internal" href="WorkflowDocumentation/Tools.html#tools"><span class="std std-ref">Tools</span></a> section of the documentation</p></li>
+</ul>
+</li>
+<li><p><strong>modifiers</strong>:</p>
+<ul class="simple">
+<li><p><cite>apply_clang_format.py</cite>: Applies the changes proposed by clang format. Warning: This actually changes the source code. While it would not change the contents, make sure that you agree with the changes (you can check what changes will be applied if you run ./scripts/static_analysers/clang_format.py)</p></li>
+<li><p><cite>sbwt_index_results_to_ascii.py</cite>: Converts output from algbio/sbwt to the ascii format produced by this program</p></li>
+<li><p><cite>themisto_colors_to_ascii.py</cite>: Converts (sorted) output from themisto into the same output format as this repo</p></li>
+<li><p><cite>themisto_tdbg_to_sbwt.py</cite>: Converts *.tdbg files to *.sbwt files by adding ‘plain-matrix’ at the beginning</p></li>
+<li><p><cite>unix_line_endings.sh</cite>: run twice as sometimes once is not enough Only run on tracked files</p></li>
+</ul>
+</li>
+<li><p><strong>sbatch</strong>:</p>
+<ul class="simple">
+<li><p><cite>lumi_benchmark_colors_search_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on LUMI supercomputer by CSC: <a class="reference external" href="https://www.csc.fi/lumi">https://www.csc.fi/lumi</a></p></li>
+<li><p><cite>lumi_benchmark_colors_search_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on LUMI supercomputer by CSC: <a class="reference external" href="https://www.csc.fi/lumi">https://www.csc.fi/lumi</a></p></li>
+<li><p><cite>lumi_benchmark_index_search_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on LUMI supercomputer by CSC: <a class="reference external" href="https://www.csc.fi/lumi">https://www.csc.fi/lumi</a></p></li>
+<li><p><cite>lumi_benchmark_index_search_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on LUMI supercomputer by CSC: <a class="reference external" href="https://www.csc.fi/lumi">https://www.csc.fi/lumi</a></p></li>
+<li><p><cite>lumi_benchmark_themisto_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>lumi_benchmark_themisto_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>mahti_benchmark_color_search_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>mahti_benchmark_color_search_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>mahti_benchmark_index_search_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>mahti_benchmark_index_search_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>mahti_benchmark_themisto_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>mahti_benchmark_themisto_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Mahti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/mahti">https://research.csc.fi/-/mahti</a></p></li>
+<li><p><cite>puhti_benchmark_color_search_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Puhti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/puhti">https://research.csc.fi/-/puhti</a></p></li>
+<li><p><cite>puhti_benchmark_color_search_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Puhti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/puhti">https://research.csc.fi/-/puhti</a></p></li>
+<li><p><cite>puhti_benchmark_index_search_d1.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Puhti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/puhti">https://research.csc.fi/-/puhti</a></p></li>
+<li><p><cite>puhti_benchmark_index_search_d20.sbatch</cite>: This will configure items for benchmarking and then run the benchmarks through the scripts/standalone/benchmark.sh script. Meant to be run on Puhti supercomputer by CSC: <a class="reference external" href="https://research.csc.fi/-/puhti">https://research.csc.fi/-/puhti</a></p></li>
+</ul>
+</li>
+<li><p><strong>standalone</strong>: Scripts which usualy alter the repository in some manner, either by modifying files or by adding new files</p>
+<ul class="simple">
+<li><p><cite>benchmark_analysis.py</cite>: Script to analyse the benchmark output.</p></li>
+<li><p><cite>generate_file_documentation.py</cite>: Goes through the specified files in the repository, reads the first comment, and generates a documentation page file tree with the directory structure and the comment next to the file. This makes it easier to generate documentation where the user can see all the file descriptions in one documentation page</p></li>
+</ul>
+</li>
+<li><p><strong>static_analysers</strong>:</p>
+<ul>
+<li><p><cite>clang_format.py</cite>: clang-format is a bit difficult to work with on its own. Its output is not very easy to read. Hence, here we have created a script to make it easier to work with. It creates temporary files so that we see the difference between each file individually, and then we format them as we see fit in stdout, to be easier for the eyes and to see which file is being analysed at the time  This script is executed automatically by cmake when building</p></li>
+<li><p><cite>clang_tidy.py</cite>: clang-tidy needs the files input manually. However, we do not want to put test files in there, as these trigger a chain reaction to add the googltest imported header files as well. Hence we simply glob for all the other .h and .cpp files and put them through the tool  This script is executed automatically by cmake when building</p></li>
+<li><div class="line-block">
+<div class="line"><cite>headers.py</cite>:
+Checks that the header files start with:</div>
+<div class="line"><br /></div>
+<div class="line">#ifndef FILE_NAME_CAPITALIZED_&lt;EXTENSION&gt;</div>
+<div class="line">#define FILE_NAME_CAPITALIZED_&lt;EXTENSION&gt;</div>
+<div class="line"><br /></div>
+<div class="line">/**</div>
+<div class="line-block">
+<div class="line">* &#64;file FileName.&lt;extension&gt;</div>
+<div class="line">* &#64;brief &lt;description goes here and on next line&gt;</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">and ends with:</div>
+<div class="line"><br /></div>
+<div class="line">#endif</div>
+<div class="line"><br /></div>
+<div class="line">The term FILE_NAME_CAPITALIZED_&lt;EXTENSION&gt; would be replaced by the filename. So if we have a file called MyClass.h, it would be MY_CLASS_H The steps are:</div>
+<div class="line-block">
+<div class="line">* Remove the .h</div>
+<div class="line">* Convert from camel case to snake case</div>
+<div class="line">* capitalise everything</div>
+<div class="line">* add a _H at the end</div>
+<div class="line"><br /></div>
+</div>
+<div class="line">If the file is a cuh file, it is the same as above but it will have _CUH at the end</div>
+<div class="line"><br /></div>
+<div class="line">The script also checks that python files start with:</div>
+<div class="line"><br /></div>
+<div class="line">#!/usr/bin/python3</div>
+<div class="line">&lt;new line here&gt;</div>
+<div class="line">&lt;3 ” here, ie a docstring&gt;</div>
+<div class="line"><br /></div>
+<div class="line">And bash files should start with the following:</div>
+<div class="line"><br /></div>
+<div class="line">#!/usr/bin/bash</div>
+<div class="line">&lt;new line here&gt;</div>
+<div class="line"># some comment</div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>test</strong>:</p>
+<ul class="simple">
+<li><p><cite>color_pipeline_test.sh</cite>: Build the main executable, run the executable on test_objects/full_pipeline/color_search/ and verify that the outputs are correct (ie equal to the expected values, which can be found in the same folder)</p></li>
+<li><p><cite>d20_pipeline_test.sh</cite>: Build the main executable, run the executable on test_objects/full_pipeline/color_search/ and verify that the outputs are correct (ie equal to the expected values, which can be found in the same folder). The temporary files are kept in tmp/d20_pipeline_test and are subsequently delted after the test is finished.</p></li>
+<li><p><cite>index_pipeline_test.sh</cite>: Build the main executable, run the executable on test_objects/full_pipeline/index_pipeline_search/ and verify that the outputs are correct (ie equal to the expected values, which can be found in the same folder)</p></li>
+<li><p><cite>test.sh</cite>: Run the tests as well as generate code coverage. Also generates html so that code coverage can easily be seen in the docs.</p></li>
+<li><p><cite>verify_color_results_equal.py</cite>: Gets a list of files output from the color results, which can be of different formats, and makes sure that their contents are the same.  (usage: ./verify_files_equal.py -l &lt;file 1&gt; &lt;file 2&gt;)</p></li>
+<li><p><cite>verify_index_results_equal.py</cite>: Gets a list of files output from the index results, which can be of different formats, and makes sure that their contents are the same.  (usage: ./verify_files_equal.py -l &lt;file 1&gt; &lt;file 2&gt;)</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>src</strong>:</p>
+<ul>
+<li><p><cite>BuildCommon.cmake</cite>: Builds items which are commonly used between the main program and the tests. Usually these are classes, files and options which are used by the main program but are also tested individually. Any common options are put as an interface rather than putting it with each file individually</p></li>
+<li><p><cite>BuildMain.cmake</cite>: Builds the main program, linking all the files and header files together</p></li>
+<li><p><cite>BuildTests.cmake</cite>: Builds the testing program. We use googletest as a testing framework</p></li>
+<li><p><cite>BuildTools.cmake</cite>: This file contains all the compilation necessary for modules I created to make development easier which can be used across projects not just for this one</p></li>
+<li><p><cite>CMakeLists.txt</cite>: Builds the main as well as testing programs, through the use of other .cmake files in this folder</p></li>
+<li><p><strong>ArgumentParser</strong>:</p>
+<ul class="simple">
+<li><p><cite>ArgumentParser.h</cite>: Parent class for argument parsers which take command line arguments and parses them into usable data structures</p></li>
+<li><p><cite>ColorSearchArgumentParser.h</cite>: Command line argument parser for the color searching / pseudoalignment module</p></li>
+<li><p><cite>IndexSearchArgumentParser.h</cite>: Contains functions to parse the main program’s arguments</p></li>
+</ul>
+</li>
+<li><p><strong>BatchObjects</strong>:</p>
+<ul class="simple">
+<li><p><cite>BitSeqBatch.h</cite>: Container for the bit sequences. These are the converted binary versions from  the string representation</p></li>
+<li><p><cite>ColorsBatch.h</cite>: Stores the colors contiguously for each colored sequence. A colored sequence means that the sequence has found_idxs &gt; 0.</p></li>
+<li><p><cite>IndexesBatch.h</cite>: Contains the indexes of the search function which are output to disk in the ‘index’ phase. These are warped, meaning that the sequences are padded to the multiple of the next warp_size. Warp intervals tell us at which warp the current sequence starts and ends.</p></li>
+<li><p><cite>IntervalBatch.h</cite>: Data class for the intervals. The chars_before_newline is a vector which gives the number of characters that a string contains, before the new one ends. newlines_before_newfile is a vector which tells us how many newlines we need before we need to start considering the next lines or sequences as originating from a new file. Note: the last character of both vectores will always be the max value (ULLONG_MAX), and both vectors are cumulative</p></li>
+<li><p><cite>InvalidCharsBatch.h</cite>: Contains a binary vector of wether a string is valid or not</p></li>
+<li><p><cite>PositionsBatch.h</cite>: Has data created by the positions builder, which is a list of valid positions within a string sequence where the SBWT should search. A valid sequence is one where the string length is equal to the k-mer size. For example, given the string ABCDE and FGHIJ, and k-mer size 3, positions 0, 1, 2 are valid positions, but position 3, which is the k-mer starting at D, is not valid. Hence, our final position list will be: [0, 1, 2, 5, 6, 7]</p></li>
+<li><p><cite>ResultsBatch.h</cite>: Contains the vector with the results obtained after searching for the k-mer within the SBWT index</p></li>
+<li><p><cite>SeqStatisticsBatch.h</cite>: Stores statistics about each sequence of indexes. These include how many ids were actually found within this seq, how many were invalid and how many were not found. Each of these are vectors, since a single batch can have many seqs. A seq may be split between 2 batches, so we also also store a boolean if the first seq of this batch should be joined with the last seq of the previous batch. We also have a colored_seq_id, which is useful since we do not store ‘0’ colors for warps and seqs without colors, so we keep a cumulative id here for the colors id, where the colors are stored in a separate batch object. The seqs_before_new_file stores how many sequences we need to process before we need to start considering the next sequences as part of the next file.</p></li>
+<li><p><cite>StringBreakBatch.h</cite>: Data which contains data about the points where strings end and another starts, as well as the string size which is how long the current character vector associated with this batch is. Note that chars_before_newline is cumulative</p></li>
+<li><p><cite>StringSequenceBatch.h</cite>: Data class for the string sequence associated with this batch, which is a simple pointer of a character vector</p></li>
+</ul>
+</li>
+<li><p><strong>ColorIndexBuilder</strong>:</p>
+<ul class="simple">
+<li><p><cite>ColorIndexBuilder.h</cite>: Here, the colors file is read from disk and the CpuColorIndexContainer is constructed from it</p></li>
+</ul>
+</li>
+<li><p><strong>ColorIndexContainer</strong>:</p>
+<ul class="simple">
+<li><p><cite>CpuColorIndexContainer.h</cite>: A container which holds items related to the color sets in the cpu</p></li>
+<li><p><cite>GpuColorIndexContainer.h</cite>: A container which holds items related to the color sets in the gpu</p></li>
+</ul>
+</li>
+<li><p><strong>ColorResultsPrinter</strong>:</p>
+<ul class="simple">
+<li><p><cite>AsciiContinuousColorResultsPrinter.h</cite>: Outputs ascii results. Color indexes are ordered and space separated, and each seq is placed on a new line. When calculating memory reservations for this class, we use the max_index to see how many characters we really need per index, rather than the maximum needed for the maximum u64. This saves us a lot of space.</p></li>
+<li><p><cite>BinaryContinuousColorResultsPrinter.h</cite>: Outputs binary results. Color indexes are ordered and space separated, and each seq is placed on a new line</p></li>
+<li><p><cite>ContinuousColorResultsPrinter.hpp</cite>: Prints out the color results in parallel. Each threads handles an equal number of sequences (colored or not). Then these are first printed to a buffer in parallel, and later serially output to disk.</p></li>
+<li><p><cite>CsvContinuousColorResultsPrinter.h</cite>: Outputs csv results. Color indexes are ordered and space separated, and each seq is placed on a new line</p></li>
+</ul>
+</li>
+<li><p><strong>ColorSearcher</strong>:</p>
+<ul class="simple">
+<li><p><cite>ColorPostProcessor.cuh</cite>: Squeezes the color results by adding the color sets of the same warp together and storing the results in a new array where the color results are stored contiguously. Each index handles a single color from a single sequence.</p></li>
+<li><p><cite>ColorSearcher.cuh</cite>: Search kernel for searching for the colors and merging them. The ‘<a href="#id1"><span class="problematic" id="id2">*</span></a>_set_bits’ variables take a u64 with the least significant &lt;width&gt; bits set to 1, while the rest are 0s. The &lt;width&gt; is the width of the respective variable length vector that they correspond to.</p></li>
+<li><p><cite>ColorSearcher.h</cite>: Offloads color searching and memory copies to the gpu, given the indexes</p></li>
+<li><p><cite>ContinuousColorSearcher.h</cite>: Takes the index batch, searches for its color sets, and post processes them to give the color sums for each colored sequence. The searching and post processing are done through gpu kernel launches</p></li>
+</ul>
+</li>
+<li><p><strong>FilenamesParser</strong>:</p>
+<ul class="simple">
+<li><p><cite>FilenamesParser.h</cite>: Takes the input and output user input and outputs if the files are a direct input or if they are a series of files. They are considered a series of files if the extension of the file is ‘.list’</p></li>
+</ul>
+</li>
+<li><p><strong>FilesizeLoadBalancer</strong>:</p>
+<ul class="simple">
+<li><p><cite>FilesizeLoadBalancer.h</cite>: Takes in a list of files and a number N. N determines how many partitions (streams) we want for the files. The vector of files is then split into N buckets of approximately equal size. This is known as the multiway partitioning problem and more information about it can be found here: <a class="reference external" href="https://en.wikipedia.org/wiki/Multiway_number_partitioning">https://en.wikipedia.org/wiki/Multiway_number_partitioning</a>. In our implementation, we use the greedy algorithm due to its simplicity and speed, and it comes close to a bound of 4/3 of the optimal solution. This method is also called the longest processing time first algorithm and more information can be found here: <a class="reference external" href="https://en.wikipedia.org/wiki/Longest-processing-time-first_scheduling">https://en.wikipedia.org/wiki/Longest-processing-time-first_scheduling</a>. Other methods were attempted but they were too slow, especially as N increases.</p></li>
+</ul>
+</li>
+<li><p><strong>IndexFileParser</strong>:</p>
+<ul class="simple">
+<li><p><cite>AsciiIndexFileParser.h</cite>: Index file parser for ascii files</p></li>
+<li><p><cite>BinaryIndexFileParser.h</cite>: Index file parser for binary files</p></li>
+<li><p><cite>ContinuousIndexFileParser.h</cite>: Reads a list of files one by one, filling in the batches producer as it goes along. Uses the sub IndexFileParsers to do its parsing for it. Indexes are padded to the next warp and sequence statistics are counted as well.</p></li>
+<li><p><cite>IndexFileParser.h</cite>: Parent template class for reading the list of integers provided by the indexing function. Provides a padded list of integers per seq and another list of indexes to indicate where each seq starts in our list of integers. Note: these classes expect the input to have the version number as the first item, and then the contents later. The format encoded in the file’s header is read by another part of the code</p></li>
+<li><p><cite>IndexFileParserTestUtils.h</cite>: Methods used by the testing modules of the IndexFileParsers</p></li>
+<li><p><cite>IndexesBatchProducer.h</cite>: Simple class used by the IndexFileParser which stores the index batch and serves it to its consumers.</p></li>
+<li><p><cite>SeqStatisticsBatchProducer.h</cite>: Producer for SeqStatisticsBatch, which includes the count of found_idxs, not_found_idxs and invalid_idxs for each read in the current batch, as well as when each file starts and ends and other information about the sequence list.</p></li>
+</ul>
+</li>
+<li><p><strong>IndexResultsPrinter</strong>:</p>
+<ul class="simple">
+<li><p><cite>AsciiContinuousIndexResultsPrinter.h</cite>: Inherits ContinuousIndexResultsPrinter and prints out ascii values. Indexes are printed as their space separated ASCII values, with a newline character separating the reads. Not-found values are printed as ‘-1’ and invalid values are printed as ‘-2’. When calculating memory reservations for this class, we use the max_index to see how many characters we really need per index, rather than the maximum needed for the maximum u64. This saves us a lot of space.</p></li>
+<li><p><cite>BinaryContinuousIndexResultsPrinter.h</cite>: Inherits ContinuousIndexResultsPrinter and prints out binary values. Not-found characters are reprented with a max_u64, invalids with a max_u64-1 and newlines with a max_u64-2.</p></li>
+<li><p><cite>BoolContinuousIndexResultsPrinter.h</cite>: Inherits ContinuousIndexResultsPrinter and prints out values in ASCII format. If a result is found, we print out a 0, if it is not found, we print out a 1 and if it is invalid, we print 2. Different sequences are split with a newline character. This output format is not suitable for pseudoalignment since we lose the index value but it is the fastest and has the least memory footprint.</p></li>
+<li><p><cite>ContinuousIndexResultsPrinter.hpp</cite>: Gets results, intervals and list of invalid chars and prints the results out to disk based on the given data and filenames. This printing is done in parallel by first printing to a memory buffer and then outputting this to disk. This class uses the Template Pattern, with CRTP. Honestly its a disgusting class, mosly due to all the variables it needs to manage in order to be efficient and highly parallel. All the variable names are also super long, and then I tried to give them some short name but it still ended up seeming obscure. I tried my best to make it as easy to understand as possible, but good luck!</p></li>
+</ul>
+</li>
+<li><p><strong>IndexSearcher</strong>:</p>
+<ul class="simple">
+<li><p><cite>ContinuousIndexSearcher.h</cite>: Search implementation with threads</p></li>
+<li><p><cite>IndexSearcher.cuh</cite>: Search implementation</p></li>
+<li><p><cite>IndexSearcher.h</cite>: Class for searching the SBWT index</p></li>
+</ul>
+</li>
+<li><p><strong>Main</strong>:</p>
+<ul class="simple">
+<li><p><cite>ColorSearchMain.h</cite>: The main function for searching for the colors. The ‘color’ mode of the main executable</p></li>
+<li><p><cite>IndexSearchMain.h</cite>: The main function for searching the index. The ‘index’ mode of the main executable.</p></li>
+<li><p><cite>Main.h</cite>: Interface class for main classes</p></li>
+</ul>
+</li>
+<li><p><strong>Poppy</strong>:</p>
+<ul class="simple">
+<li><p><cite>Poppy.h</cite>: The rank data structure container as discussed in the paper “Space-Efficient, High-Performance Rank &amp; Select Structures on Uncompressed Bit Sequences” by Zhou et. al.</p></li>
+</ul>
+</li>
+<li><p><strong>PoppyBuilder</strong>:</p>
+<ul>
+<li><div class="line-block">
+<div class="line"><cite>PoppyBuilder.h</cite>:
+Module responsible for building the rank index of the SBWT file</div>
+<div class="line">Assumptions made:</div>
+<div class="line-block">
+<div class="line">* basicblock_bits is a multiple of 64</div>
+<div class="line">* superblock_bits is a multiple of basicblock_bits</div>
+<div class="line">* hyperblock_bits is a multiple of hyperblock_bits</div>
+</div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>PositionsBuilder</strong>:</p>
+<ul class="simple">
+<li><p><cite>ContinuousPositionsBuilder.h</cite>: Builds the positions of the indexes of the first characters of the kmers in our sequences in the batch</p></li>
+<li><p><cite>PositionsBuilder.h</cite>: Builds a vector of the positions of the starting chracter of each kmer in our sequence</p></li>
+</ul>
+</li>
+<li><p><strong>Presearcher</strong>:</p>
+<ul class="simple">
+<li><p><cite>Presearcher.cuh</cite>: Device function for presearching</p></li>
+<li><p><cite>Presearcher.h</cite>: The presearcher will search for all permutations of k-mers of a certain size and cache them, so that future searches can continue from this checkpoint</p></li>
+</ul>
+</li>
+<li><p><strong>SbwtBuilder</strong>:</p>
+<ul class="simple">
+<li><p><cite>SbwtBuilder.h</cite>: Loads SBWT from disk and also builds the other components such as their Poppy data structure and the c-map. If prompted, it will also load the key-kmer marks from disk from the colors file. These components are stored in the CpuSbwtContainer.</p></li>
+</ul>
+</li>
+<li><p><strong>SbwtContainer</strong>:</p>
+<ul class="simple">
+<li><p><cite>CpuSbwtContainer.h</cite>: SbwtContainer for that on the cpu side. Contains the acgt bitvectors, their Poppys, the c-map and also possibly the key-kmer marks, if loaded.</p></li>
+<li><p><cite>GpuSbwtContainer.h</cite>: Contains the same items as the CpuSbwtContainer but as pointers on the GPU</p></li>
+<li><p><cite>SbwtContainer.h</cite>: Contains data class for SBWT index. Contains the more generic items from the SBWT items such as the bit vector sizes, and the kmer size. Cpu and Gpu specific items are in the subclasses.</p></li>
+</ul>
+</li>
+<li><p><strong>SeqToBitsConverter</strong>:</p>
+<ul class="simple">
+<li><p><cite>BitsProducer.h</cite>: Transforms a list of ACTG characters into their 2-bit equivalent and packs them into a u64 bitvector</p></li>
+<li><p><cite>CharToBits.h</cite>: Contains mapping functions which map the characters ACGT to their corresponding bit value</p></li>
+<li><p><cite>ContinuousSeqToBitsConverter.h</cite>: Class for converting char sequences continuously, with parallel capabilities. Also builds the invalid characters list in the same pass</p></li>
+<li><p><cite>InvalidCharsProducer.h</cite>: Produces a list of booleans which tell wether a character is valid or not. Instead of bool we use a 1 or 0 character since it is faster to process, even though the memory footprint is higher</p></li>
+</ul>
+</li>
+<li><p><strong>SequenceFileParser</strong>:</p>
+<ul class="simple">
+<li><p><cite>ContinuousSequenceFileParser.h</cite>: Continuously reads sequences from a file or multiple files into a buffer. Then it can serve these sequences to its consumers. The reading is done in such a way that a single batch can contain characters from multiple lines. kseqpp_REad is used for parsing the files and getting the list of where each line break is.</p></li>
+<li><p><cite>IntervalBatchProducer.h</cite>: Builds the IntervalBatch, which tells where one sequence ends and another begins, and how many sequences are there before we need to start a new file.</p></li>
+<li><p><cite>StringBreakBatchProducer.h</cite>: In charge of storing and handing out the locations where one sequence ends and another begins, stored in the StringBreakBatch</p></li>
+<li><p><cite>StringSequenceBatchProducer.h</cite>: Takes care of building and producing the stringsequencebatch. This is handed over as a pointer from the ContinuousSequenceFileParser, to be shared with the next consumer component</p></li>
+</ul>
+</li>
+<li><p><strong>Tools</strong>:</p>
+<ul class="simple">
+<li><p><cite>BenchmarkUtils.hpp</cite>: A collection of utility scripts used for benchmarking</p></li>
+<li><p><cite>BitDefinitions.h</cite>: Contains definitions for some useful commonly used bit related items.</p></li>
+<li><p><cite>CircularBuffer.hpp</cite>: Implementation of a Circular Buffer which is used for optimising memory when using large buffers</p></li>
+<li><p><cite>CircularQueue.hpp</cite>: Implementation of a Circular Queue which is used for optimising memory when using queues</p></li>
+<li><p><cite>DebugUtils.hpp</cite>: Utilities for debugging code</p></li>
+<li><p><cite>DummyBatchProducer.hpp</cite>: Inheriting from the SharedBatchesProducer, this class sequentially produces the batches it was given in its constructor. Useful for testing</p></li>
+<li><p><cite>ErrorUtils.h</cite>: Helper class for error related functionality</p></li>
+<li><p><cite>GpuEvent.h</cite>: A class to manage gpu events, useful for not having to create and delete events, and instead we can create them and use them as is.</p></li>
+<li><p><cite>GpuPointer.h</cite>: Class to abstract copying to and from the GPU</p></li>
+<li><p><cite>GpuStream.h</cite>: A class to manage gpu streams, useful for not having to create and delete streams, and instead we can create them and use them as is.</p></li>
+<li><p><cite>GpuUtils.h</cite>: Contains GPU commonly used functions and tools</p></li>
+<li><p><cite>IOUtils.h</cite>: Contains utilities to ease interacting with IO streams        such as check if a file exists</p></li>
+<li><p><cite>KernelUtils.cuh</cite>: Contains kernel device functions used commonly in some kernels</p></li>
+<li><p><cite>Logger.h</cite>: Utilities for structured logging</p></li>
+<li><p><cite>MathUtils.hpp</cite>: A collection of utility scripts to extend math functionality</p></li>
+<li><p><cite>MemoryUnitsParser.h</cite>: Given a string such as “1KB” or “1000” (bits) or “10 GB”, this module converts it to bits.</p></li>
+<li><p><cite>MemoryUtils.h</cite>: Utilities which deal with memory management and querying</p></li>
+<li><p><cite>OmpLock.h</cite>: A wrapper over omp_lock_t to allow deletion when the resource is released, like a smart pointer</p></li>
+<li><p><cite>PinnedVector.h</cite>: This class is part of the gpu utilities and represents an array of fixed size but with some nice utilities to interact with other gpu utilities. It uses pinned memory so that memory transfers between cpu and gpu are much faster.</p></li>
+<li><p><cite>RNGUtils.hpp</cite>: Utilities for random number generation</p></li>
+<li><p><cite>Semaphore.h</cite>: A C++ implementation for counted semaphores using standard library mutex and condition variables. Credit for class base: <a class="reference external" href="http://www.cs.umd.edu/~shankar/412-Notes/10x-countingSemUsingBinarySem.pdf">http://www.cs.umd.edu/~shankar/412-Notes/10x-countingSemUsingBinarySem.pdf</a></p></li>
+<li><p><cite>SharedBatchesProducer.hpp</cite>: Template class for any class which is a continuous batch producer that shares its batch</p></li>
+<li><p><cite>StdUtils.hpp</cite>: Functions to help out with standard library items</p></li>
+<li><p><cite>TestUtils.hpp</cite>: Contains functions to make testing functions cleaner</p></li>
+<li><p><cite>TypeDefinitions.h</cite>: Contains type definitions created for convenience</p></li>
+</ul>
+</li>
+<li><p><strong>UtilityKernels</strong>:</p>
+<ul class="simple">
+<li><p><cite>GetBoolFromBitVector.cuh</cite>: Given a bit vector (which is an array of u64s, where each bit in each element should be considered individually), this function will get the index of a certain bit within the whole bit vector and return wether it is False (0) or True (1). For example, given the index 78, this will be found on the 2nd element of the u64 array, and we must check the (78 - 64 =) 14th bit. This is the same as the sdsl-lite library’s bit vector.</p></li>
+<li><p><cite>GetBoolFromBitVector_test.cuh</cite>: A simple kernel which performs the GetBoolFromBitVector function for a single item in the gpu. Used only for testing</p></li>
+<li><p><cite>GetBoolFromBitVector_test.h</cite>: Header for function used in testing the GetBoolFromBitVector kernel</p></li>
+<li><p><cite>Rank.cuh</cite>: The rank function is given an index within a bit vector and returns the number of 1s up to that point. We use the poppy data structure which is described in the paper Space-Efficient, High-Performance Rank &amp; Select Structures on Uncompressed Bit Sequences by Zhou et. al. This data structure is also included in the sdsl library with rank_support_v5 (see test for this class if you wish to know how that is used).</p></li>
+<li><p><cite>Rank_test.cuh</cite>: A simple kernel which performs rank function for a single item in the gpu. Used only for testing</p></li>
+<li><p><cite>Rank_test.h</cite>: Header for functions used in testing the device rank function</p></li>
+<li><p><cite>VariableLengthIntegerIndex.cuh</cite>: Given a u64 integer vector whose size is not a regular number such as 32 or 64 bits, we can index it using this function. So for example, given a vector of u64s which contain the bits for a vector of integers of 12 bits each, we can get the 1st, 2nd,…,nth element using this function. Note: only works for variables with number of bits less than or equal to the bits of the container (so if we have a list of u64 elements, the bit size of the containing elements must be less than 64. This kernel is usually used for indexing sdsl int_vectors of irregular size. The same implementation is done by sdsl: <a class="reference external" href="https://github.com/simongog/sdsl-lite/blob/master/include/sdsl/bits.hpp#L501">https://github.com/simongog/sdsl-lite/blob/master/include/sdsl/bits.hpp#L501</a></p></li>
+<li><p><cite>VariableLengthIntegerIndex_test.cuh</cite>: Test kernel for VariableLengthIntegerIndex</p></li>
+<li><p><cite>VariableLengthIntegerIndex_test.h</cite>: Header for functions used in testing the d_variable_length_int_index</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>test_objects</strong>: Contains objects used for testing, such as small input files which are used by the various unit tests</p>
+<ul class="simple">
+<li><p><strong>full_pipeline</strong>:</p>
+<ul>
+<li><p><strong>index_search</strong>: Here are some files which are used by tests/standalone/pipeline_test.sh to test our outputs and thus making sure the index search program works end to end</p></li>
+</ul>
+</li>
+<li><p><strong>tmp</strong>:</p>
+<ul>
+<li><p><cite>.gitignore</cite>:</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="WorkflowDocumentation/Practices.html" class="btn btn-neutral float-left" title="Practices" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../RST/modules.html" class="btn btn-neutral float-right" title="src" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Daniel Cauchi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

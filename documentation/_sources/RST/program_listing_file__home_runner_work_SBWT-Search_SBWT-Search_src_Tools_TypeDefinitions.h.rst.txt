@@ -1,0 +1,30 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h:
+
+Program Listing for File TypeDefinitions.h
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/TypeDefinitions.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef TYPE_DEFINITIONS_H
+   #define TYPE_DEFINITIONS_H
+   
+   #include <cstdint>
+   #include <vector>
+   
+   using i64 = int64_t;
+   using u64 = uint64_t;
+   using u32 = uint32_t;
+   using i32 = int32_t;
+   using u8 = uint8_t;
+   using i8 = int8_t;
+   
+   const u64 u64_bits = 64;
+   const u64 max_chars_in_u64 = 20;
+   const u64 bits_in_byte = 8;
+   
+   #endif

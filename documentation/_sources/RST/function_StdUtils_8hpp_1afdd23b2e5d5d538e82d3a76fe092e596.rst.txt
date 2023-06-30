@@ -1,0 +1,14 @@
+.. _exhale_function_StdUtils_8hpp_1afdd23b2e5d5d538e82d3a76fe092e596:
+
+Template Function std_utils::split_vector
+=========================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: std_utils::split_vector(const vector<T>&, u64)
+   :project: SBWT Search

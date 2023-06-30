@@ -1,0 +1,14 @@
+.. _exhale_function_ErrorUtils_8h_1a135754c79536f40c1ba89374f70764cc:
+
+Function error_utils::_throw_uninitialised
+==========================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_ErrorUtils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: error_utils::_throw_uninitialised(string, unsigned int)
+   :project: SBWT Search

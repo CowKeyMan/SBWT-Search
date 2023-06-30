@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_IndexSearchArgumentParser.h:
+
+File IndexSearchArgumentParser.h
+================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ArgumentParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains functions to parse the main program's arguments. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/ArgumentParser/IndexSearchArgumentParser.h``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_IndexSearchArgumentParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``ArgumentParser/ArgumentParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h`)
+
+- ``Tools/MemoryUnitsParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h`)
+
+- ``cxxopts.hpp``
+
+- ``memory``
+
+- ``string``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexSearchArgumentParser`
+

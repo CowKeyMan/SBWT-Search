@@ -1,0 +1,47 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h:
+
+Program Listing for File StringSequenceBatchProducer.h
+======================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser/StringSequenceBatchProducer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef STRING_SEQUENCE_BATCH_PRODUCER_H
+   #define STRING_SEQUENCE_BATCH_PRODUCER_H
+   
+   #include <memory>
+   #include <string>
+   
+   #include "BatchObjects/StringSequenceBatch.h"
+   #include "Tools/SharedBatchesProducer.hpp"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   class ContinuousSequenceFileParser;
+   
+   using design_utils::SharedBatchesProducer;
+   using std::shared_ptr;
+   using std::vector;
+   
+   class StringSequenceBatchProducer:
+       public SharedBatchesProducer<StringSequenceBatch> {
+     using Base = SharedBatchesProducer<StringSequenceBatch>;
+     friend ContinuousSequenceFileParser;
+   
+   public:
+     explicit StringSequenceBatchProducer(u64 max_batches);
+   
+     auto static get_bits_per_element() -> u64;
+   
+   private:
+     void set_string(const vector<char> &s);
+     auto get_default_value() -> shared_ptr<StringSequenceBatch> override;
+   };
+   
+   }  // namespace sbwt_search
+   #endif

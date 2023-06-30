@@ -1,0 +1,67 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h:
+
+File GlobalDefinitions.h
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Global>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Global``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains all items which are constant throughout the program after compilation. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Global/GlobalDefinitions.h``)
+-----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a427cad7fed6538fefd42f623ae33008a`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a87288ec90579454822c04ce173d06e36`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1af361dd3ffbcd191cfdc312bfd64eefa8`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a967c8556fd9d51942dfe64d59cccc260`
+

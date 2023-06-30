@@ -1,0 +1,31 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h:
+
+Program Listing for File ResultsBatch.h
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/ResultsBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef RESULTS_BATCH_H
+   #define RESULTS_BATCH_H
+   
+   #include "Tools/PinnedVector.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::PinnedVector;
+   
+   class ResultsBatch {
+   public:
+     PinnedVector<u64> results;
+     explicit ResultsBatch(u64 results_size): results(results_size) {}
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

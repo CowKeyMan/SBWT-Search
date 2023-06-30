@@ -1,0 +1,14 @@
+.. _exhale_function_MathUtils_8hpp_1ad70360805c3fdf6a7e2f77b67aa5ec8b:
+
+Template Function math_utils::divide_and_round
+==============================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: math_utils::divide_and_round(Real1, Real2)
+   :project: SBWT Search

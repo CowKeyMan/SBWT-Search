@@ -1,0 +1,42 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h:
+
+Program Listing for File IndexesBatch.h
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/IndexesBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef INDEXES_BATCH_H
+   #define INDEXES_BATCH_H
+   
+   #include "Tools/PinnedVector.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::PinnedVector;
+   using std::vector;
+   
+   class IndexesBatch {
+   public:
+     PinnedVector<u64> warped_indexes;
+     PinnedVector<u64> warp_intervals;
+   
+     IndexesBatch(u64 warped_indexes_size, u64 warps_intervals_size):
+         warped_indexes(warped_indexes_size),
+         warp_intervals(warps_intervals_size) {}
+   
+     auto reset() -> void {
+       warped_indexes.resize(0);
+       warp_intervals.resize(1);
+       warp_intervals[0] = 0;
+     }
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

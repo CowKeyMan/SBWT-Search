@@ -1,0 +1,99 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp:
+
+File ContinuousIndexResultsPrinter.hpp
+======================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Gets results, intervals and list of invalid chars and prints the results out to disk based on the given data and filenames. This printing is done in parallel by first printing to a memory buffer and then outputting this to disk. This class uses the Template Pattern, with CRTP. Honestly its a disgusting class, mosly due to all the variables it needs to manage in order to be efficient and highly parallel. All the variable names are also super long, and then I tried to give them some short name but it still ended up seeming obscure. I tried my best to make it as easy to understand as possible, but good luck! 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp``)
+--------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``BatchObjects/IntervalBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h`)
+
+- ``BatchObjects/InvalidCharsBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_InvalidCharsBatch.h`)
+
+- ``BatchObjects/ResultsBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h`)
+
+- ``Tools/IOUtils.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h`)
+
+- ``Tools/Logger.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Logger.h`)
+
+- ``Tools/MathUtils.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp`)
+
+- ``Tools/OmpLock.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``Tools/StdUtils.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``algorithm``
+
+- ``bit``
+
+- ``cmath``
+
+- ``fmt/core.h``
+
+- ``functional``
+
+- ``iterator``
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BinaryContinuousIndexResultsPrinter.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BoolContinuousIndexResultsPrinter.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousIndexResultsPrinter`
+

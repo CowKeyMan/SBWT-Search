@@ -1,0 +1,14 @@
+.. _exhale_function_MathUtils_8hpp_1ad99dc9679530f3f98711c3e2509daf8c:
+
+Function math_utils::gB_to_bits
+===============================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: math_utils::gB_to_bits(double)
+   :project: SBWT Search

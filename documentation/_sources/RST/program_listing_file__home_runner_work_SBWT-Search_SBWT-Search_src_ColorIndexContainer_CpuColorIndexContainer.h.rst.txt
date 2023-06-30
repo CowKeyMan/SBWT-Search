@@ -1,0 +1,47 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_CpuColorIndexContainer.h:
+
+Program Listing for File CpuColorIndexContainer.h
+=================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_CpuColorIndexContainer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorIndexContainer/CpuColorIndexContainer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef CPU_COLOR_INDEX_CONTAINER_H
+   #define CPU_COLOR_INDEX_CONTAINER_H
+   
+   #include <memory>
+   
+   #include "ColorIndexContainer/GpuColorIndexContainer.h"
+   #include "Poppy/Poppy.h"
+   #include "Tools/TypeDefinitions.h"
+   #include "sdsl/int_vector.hpp"
+   
+   namespace sbwt_search {
+   
+   using std::shared_ptr;
+   using std::unique_ptr;
+   
+   class CpuColorIndexContainer {
+   public:
+     sdsl::bit_vector dense_arrays;
+     sdsl::int_vector<> dense_arrays_intervals;
+     sdsl::int_vector<> sparse_arrays;
+     sdsl::int_vector<> sparse_arrays_intervals;
+     sdsl::bit_vector is_dense_marks;
+     Poppy is_dense_marks_poppy;
+     sdsl::bit_vector key_kmer_marks;
+     Poppy key_kmer_marks_poppy;
+     sdsl::int_vector<> color_set_idxs;
+     u64 num_color_sets;
+     u64 num_colors;
+   
+     [[nodiscard]] auto to_gpu() const -> shared_ptr<GpuColorIndexContainer>;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

@@ -1,0 +1,48 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h:
+
+Program Listing for File Main.h
+===============================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Main/Main.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef MAIN_H
+   #define MAIN_H
+   
+   #include <string>
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::string;
+   using std::vector;
+   
+   class Main {
+   private:
+     u64 threads = 0;
+   
+   protected:
+     [[nodiscard]] auto get_threads() const -> u64;
+   
+   public:
+     virtual auto main(int argc, char **argv) -> int = 0;
+     virtual ~Main() = default;
+     Main(Main &) = delete;
+     Main(Main &&) = delete;
+     auto operator=(Main &) = delete;
+     auto operator=(Main &&) = delete;
+   
+   protected:
+     Main();
+     auto load_threads() -> void;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

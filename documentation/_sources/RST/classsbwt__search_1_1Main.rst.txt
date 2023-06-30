@@ -1,0 +1,27 @@
+.. _exhale_class_classsbwt__search_1_1Main:
+
+Class Main
+==========
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public sbwt_search::ColorSearchMain`` (:ref:`exhale_class_classsbwt__search_1_1ColorSearchMain`)
+- ``public sbwt_search::IndexSearchMain`` (:ref:`exhale_class_classsbwt__search_1_1IndexSearchMain`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::Main
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

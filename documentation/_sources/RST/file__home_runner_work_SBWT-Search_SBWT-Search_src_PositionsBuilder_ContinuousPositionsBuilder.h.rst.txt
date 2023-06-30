@@ -1,0 +1,73 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h:
+
+File ContinuousPositionsBuilder.h
+=================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/PositionsBuilder``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Builds the positions of the indexes of the first characters of the kmers in our sequences in the batch. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/PositionsBuilder/ContinuousPositionsBuilder.h``)
+------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``BatchObjects/PositionsBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h`)
+
+- ``BatchObjects/StringBreakBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h`)
+
+- ``PositionsBuilder/PositionsBuilder.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_PositionsBuilder.h`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousPositionsBuilder`
+

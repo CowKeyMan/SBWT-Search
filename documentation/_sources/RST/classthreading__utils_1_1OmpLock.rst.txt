@@ -1,0 +1,17 @@
+.. _exhale_class_classthreading__utils_1_1OmpLock:
+
+Class OmpLock
+=============
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: threading_utils::OmpLock
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BoolContinuousIndexResultsPrinter.h:
+
+File BoolContinuousIndexResultsPrinter.h
+========================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Inherits ContinuousIndexResultsPrinter and prints out values in ASCII format. If a result is found, we print out a 0, if it is not found, we print out a 1 and if it is invalid, we print 2. Different sequences are split with a newline character. This output format is not suitable for pseudoalignment since we lose the index value but it is the fastest and has the least memory footprint. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter/BoolContinuousIndexResultsPrinter.h``)
+----------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BoolContinuousIndexResultsPrinter.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1BoolContinuousIndexResultsPrinter`
+

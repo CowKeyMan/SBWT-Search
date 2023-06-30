@@ -1,0 +1,45 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h:
+
+Program Listing for File SeqStatisticsBatchProducer.h
+=====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser/SeqStatisticsBatchProducer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef SEQ_STATISTICS_BATCH_PRODUCER_H
+   #define SEQ_STATISTICS_BATCH_PRODUCER_H
+   
+   #include <memory>
+   
+   #include "BatchObjects/SeqStatisticsBatch.h"
+   #include "Tools/SharedBatchesProducer.hpp"
+   
+   namespace sbwt_search {
+   
+   using design_utils::SharedBatchesProducer;
+   using std::shared_ptr;
+   
+   class ContinuousIndexFileParser;
+   
+   class SeqStatisticsBatchProducer:
+       public SharedBatchesProducer<SeqStatisticsBatch> {
+     friend ContinuousIndexFileParser;
+   
+     u64 max_seqs_per_batch;
+   
+   public:
+     explicit SeqStatisticsBatchProducer(u64 max_seqs_per_batch_, u64 max_batches);
+   
+     auto static get_bits_per_seq() -> u64;
+   
+   protected:
+     auto get_default_value() -> shared_ptr<SeqStatisticsBatch> override;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

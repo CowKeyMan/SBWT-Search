@@ -1,0 +1,47 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h:
+
+Program Listing for File SeqStatisticsBatch.h
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/SeqStatisticsBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef SEQ_STATISTICS_BATCH_H
+   #define SEQ_STATISTICS_BATCH_H
+   
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::vector;
+   
+   class SeqStatisticsBatch {
+   public:
+     vector<u64> found_idxs;
+     vector<u64> invalid_idxs;
+     vector<u64> not_found_idxs;
+     vector<u64> colored_seq_id;
+     vector<u64> seqs_before_newfile;
+   
+     auto reset() -> void {
+       found_idxs.resize(0);
+       found_idxs.push_back(0);
+       invalid_idxs.resize(0);
+       invalid_idxs.push_back(0);
+       not_found_idxs.resize(0);
+       not_found_idxs.push_back(0);
+       colored_seq_id.resize(0);
+       colored_seq_id.push_back(0);
+       seqs_before_newfile.resize(0);
+     }
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

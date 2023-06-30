@@ -1,0 +1,59 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParserTestUtils.h:
+
+File IndexFileParserTestUtils.h
+===============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Methods used by the testing modules of the IndexFileParsers. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser/IndexFileParserTestUtils.h``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParserTestUtils.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``string``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424`
+

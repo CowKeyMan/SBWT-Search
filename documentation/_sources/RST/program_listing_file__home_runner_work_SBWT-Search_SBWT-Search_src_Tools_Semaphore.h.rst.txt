@@ -1,0 +1,34 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h:
+
+Program Listing for File Semaphore.h
+====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/Semaphore.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef SEMAPHORE_H
+   #define SEMAPHORE_H
+   
+   #include "Tools/OmpLock.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace threading_utils {
+   
+   class Semaphore {
+   private:
+     OmpLock acquire_gate, count_protector;
+     u64 count;
+   
+   public:
+     explicit Semaphore(unsigned int starting_count = 1);
+     auto acquire() -> void;
+     auto release() -> void;
+   };
+   
+   }  // namespace threading_utils
+   
+   #endif

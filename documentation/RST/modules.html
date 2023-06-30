@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src &mdash; SBWT Search  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/dark_mode_css/general.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/dark_mode_css/dark.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/dark_mode_js/default_light.js"></script>
+        <script src="../_static/dark_mode_js/theme_switcher.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Namespace benchmark_utils" href="namespace_benchmark_utils.html" />
+    <link rel="prev" title="File Documentation" href="../Documents/FileDocumentation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SBWT Search
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Documents/ProjectDocumentation/ProjectDocumentation.html">Project Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Documents/ProjectDocumentation/IndexSearching.html">Index Searching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Documents/ProjectDocumentation/ColorSearching.html">Color Searching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Documents/WorkflowDocumentation/WorkflowDocumentation.html">Workflow Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Documents/WorkflowDocumentation/GettingsStarted.html">Getting Started</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/GettingsStarted.html#setup">Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/GettingsStarted.html#typical-workflow">Typical workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html">Tools</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#git-hooks">Git Hooks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#gcc">GCC</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#installation">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#cmake">CMake</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id1">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#doxygen">Doxygen</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id2">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#sphinx">Sphinx</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id3">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#mermaid">Mermaid</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id4">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#clang-format">clang-format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id5">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#googletest">googletest</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id6">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#lcov">lcov</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id7">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#github-pages">Github pages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#hip">HIP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#cuda">CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#rocm">ROCm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#cpu">CPU</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#kseqpp-read">kseqpp_REad</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id8">Installation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#spdlog">spdlog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#openmp">OpenMP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Tools.html#id9">Installation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html">Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#trailing-return-type">Trailing return type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#naming-conventions">Naming Conventions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#file-naming-convention">File naming convention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#function-and-variable-names">Function and variable names</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#namespaces">Namespaces</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#c-files">C++ files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#in-code-comments">In-code comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../Documents/WorkflowDocumentation/Practices.html#testing">Testing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Documents/FileDocumentation.html">File Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">src</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#full-api">Full API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#namespaces">Namespaces</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="namespace_benchmark_utils.html">Namespace benchmark_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_bit_utils.html">Namespace bit_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_design_utils.html">Namespace design_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_error_utils.html">Namespace error_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_gpu_utils.html">Namespace gpu_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_io_utils.html">Namespace io_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_log_utils.html">Namespace log_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_math_utils.html">Namespace math_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_memory_utils.html">Namespace memory_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_rng_utils.html">Namespace rng_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_sbwt_search.html">Namespace sbwt_search</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_std.html">Namespace std</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_std_utils.html">Namespace std_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_structure_utils.html">Namespace structure_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_test_utils.html">Namespace test_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_threading_utils.html">Namespace threading_utils</a></li>
+<li class="toctree-l4"><a class="reference internal" href="namespace_units_parser.html">Namespace units_parser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#classes-and-structs">Classes and Structs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="classdesign__utils_1_1SharedBatchesProducer.html">Template Class SharedBatchesProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classgpu__utils_1_1GpuEvent.html">Class GpuEvent</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classgpu__utils_1_1GpuPointer.html">Template Class GpuPointer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classgpu__utils_1_1GpuStream.html">Class GpuStream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classgpu__utils_1_1PinnedVector.html">Template Class PinnedVector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classio__utils_1_1ThrowingIfstream.html">Class ThrowingIfstream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classio__utils_1_1ThrowingOfstream.html">Class ThrowingOfstream</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classlog__utils_1_1Logger.html">Class Logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ArgumentParser.html">Class ArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html">Class AsciiContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html">Class AsciiContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1AsciiIndexFileParser.html">Class AsciiIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html">Class BinaryContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html">Class BinaryContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1BinaryIndexFileParser.html">Class BinaryIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1BitSeqBatch.html">Class BitSeqBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1BitsProducer.html">Class BitsProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html">Class BoolContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1CharToBits.html">Class CharToBits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ColorIndexBuilder.html">Class ColorIndexBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ColorsBatch.html">Class ColorsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ColorSearchArgumentParser.html">Class ColorSearchArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ColorSearcher.html">Class ColorSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ColorSearchMain.html">Class ColorSearchMain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorResultsPrinter.html">Template Class ContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorSearcher.html">Class ContinuousColorSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexFileParser.html">Class ContinuousIndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexResultsPrinter.html">Template Class ContinuousIndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexSearcher.html">Class ContinuousIndexSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousPositionsBuilder.html">Class ContinuousPositionsBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousSeqToBitsConverter.html">Class ContinuousSeqToBitsConverter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ContinuousSequenceFileParser.html">Class ContinuousSequenceFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1CpuColorIndexContainer.html">Class CpuColorIndexContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1CpuSbwtContainer.html">Class CpuSbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1CsvContinuousColorResultsPrinter.html">Class CsvContinuousColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1FilenamesParser.html">Class FilenamesParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1FilesizeLoadBalancer.html">Class FilesizeLoadBalancer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1GpuColorIndexContainer.html">Class GpuColorIndexContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1GpuSbwtContainer.html">Class GpuSbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IndexesBatch.html">Class IndexesBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IndexesBatchProducer.html">Class IndexesBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IndexFileParser.html">Class IndexFileParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IndexSearchArgumentParser.html">Class IndexSearchArgumentParser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IndexSearcher.html">Class IndexSearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IndexSearchMain.html">Class IndexSearchMain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IntervalBatch.html">Class IntervalBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1IntervalBatchProducer.html">Class IntervalBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsBatch.html">Class InvalidCharsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsProducer.html">Class InvalidCharsProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1Main.html">Class Main</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1Poppy.html">Class Poppy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1PoppyBuilder.html">Class PoppyBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1PositionsBatch.html">Class PositionsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1PositionsBuilder.html">Class PositionsBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1Presearcher.html">Class Presearcher</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1ResultsBatch.html">Class ResultsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1SbwtBuilder.html">Class SbwtBuilder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1SbwtContainer.html">Class SbwtContainer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatch.html">Class SeqStatisticsBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatchProducer.html">Class SeqStatisticsBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatch.html">Class StringBreakBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatchProducer.html">Class StringBreakBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatch.html">Class StringSequenceBatch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatchProducer.html">Class StringSequenceBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classstructure__utils_1_1CircularBuffer.html">Template Class CircularBuffer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classstructure__utils_1_1CircularQueue.html">Template Class CircularQueue</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classtest__utils_1_1DummyBatchProducer.html">Template Class DummyBatchProducer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classthreading__utils_1_1OmpLock.html">Class OmpLock</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classthreading__utils_1_1Semaphore.html">Class Semaphore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="classunits__parser_1_1MemoryUnitsParser.html">Class MemoryUnitsParser</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#enums">Enums</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="enum_SbwtContainer_8h_1a82ce2e4d2f9e33cdea30a70049a3fcfe.html">Enum ACGT</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec.html">Function bit_utils::_get_set_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_ErrorUtils_8h_1a135754c79536f40c1ba89374f70764cc.html">Function error_utils::_throw_uninitialised</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f.html">Function gpu_utils::get_free_gpu_memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_MathUtils_8hpp_1a7aa310486c40ef60f8670c5ee8d6834a.html">Function math_utils::bits_to_gB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_MathUtils_8hpp_1acd3dd187141f060d3f668e46ddd5b031.html">Template Function math_utils::divide_and_ceil</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_MathUtils_8hpp_1ad70360805c3fdf6a7e2f77b67aa5ec8b.html">Template Function math_utils::divide_and_round</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_MathUtils_8hpp_1ad99dc9679530f3f98711c3e2509daf8c.html">Function math_utils::gB_to_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_MathUtils_8hpp_1ab462ecf04def5ea064d6998a5187fbb2.html">Template Function math_utils::round_down</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_MathUtils_8hpp_1a57b39ffa901081cf3760a80e345a13b6.html">Template Function math_utils::round_up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_MemoryUtils_8h_1aa9dae2e89db35eb54749351bfc95ee30.html">Function memory_utils::get_total_system_memory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_DebugUtils_8hpp_1a5ec4da283c6224b1eddcb991f366815a.html">Template Function print</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_RNGUtils_8hpp_1ae61e7824f6aebbe5f31c8f4b8bf4b19c.html">Template Function rng_utils::get_uniform_int_generator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_GetBoolFromBitVector__test_8h_1a56f5d8cef0e8aebcd60c28dcf5c73d87.html">Function sbwt_search::get_bool_from_bit_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299.html">Function sbwt_search::get_rank</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_VariableLengthIntegerIndex__test_8h_1a68db2b67fdca238d7ea7d9e93cb48862.html">Function sbwt_search::get_variable_length_int_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424.html">Function sbwt_search::write_fake_binary_results_to_file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_StdUtils_8hpp_1ab19a8dafe77baa346b4faacf94910259.html">Template Function std_utils::copy_advance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_StdUtils_8hpp_1afdd23b2e5d5d538e82d3a76fe092e596.html">Template Function std_utils::split_vector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_TestUtils_8hpp_1aec7931b7f47602618965112c55719147.html">Template Function test_utils::assert_arrays_equals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_TestUtils_8hpp_1afc467ccdf2c6a0a3c0063a95ef950af7.html">Template Function test_utils::assert_vectors_equal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_TestUtils_8hpp_1a20313e3dee8281a27883abd56befc1e0.html">Function test_utils::to_char_vec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function_TestUtils_8hpp_1a08036f93ddd4f87ffd52058f05396e24.html">Template Function test_utils::to_u64s</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#variables">Variables</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a3539a78d9115de442ea3d98ad18770f7.html">Variable benchmark_utils::TIME_IT_END_TIME</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a5edd72773534aa85e34512678cbf5cc3.html">Variable benchmark_utils::TIME_IT_START_TIME</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a142193fdf593aa7211221a018df2328f.html">Variable benchmark_utils::TIME_IT_TOTAL</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b.html">Variable bit_utils::set_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33.html">Variable bit_utils::ten_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_BitDefinitions_8h_1a7065f53c73f6d51f1fca4a593a1ea870.html">Variable bit_utils::thirty_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_BitDefinitions_8h_1a9aae8b89133af5dc92acf753870cd6a3.html">Variable bit_utils::two_1s</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_TypeDefinitions_8h_1a93436ed122c10bfeb8c885ea85d6c7c6.html">Variable bits_in_byte</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_TypeDefinitions_8h_1a0afa205b69ed107ba739ebb3d53504e0.html">Variable max_chars_in_u64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a.html">Variable sbwt_search::basicblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_SbwtContainer_8h_1a8de8dcd3628550aed5f24e7b74b8b84d.html">Variable sbwt_search::cmap_size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a427cad7fed6538fefd42f623ae33008a.html">Variable sbwt_search::gpu_warp_size</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412.html">Variable sbwt_search::hyperblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c.html">Variable sbwt_search::invalid_char_to_bits_value</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_Poppy_8h_1a6ab78996b008aa3d3b5816a85d837d1d.html">Variable sbwt_search::layer_1_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_Poppy_8h_1a8cbab7d04bb295d78fe17452045ddc07.html">Variable sbwt_search::layer_2_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a.html">Variable sbwt_search::num_ascii_characters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c.html">Variable sbwt_search::pad</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a87288ec90579454822c04ce173d06e36.html">Variable sbwt_search::presearch_letters</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9.html">Variable sbwt_search::sixteen_kB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_GlobalDefinitions_8h_1af361dd3ffbcd191cfdc312bfd64eefa8.html">Variable sbwt_search::superblock_bits</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a967c8556fd9d51942dfe64d59cccc260.html">Variable sbwt_search::threads_per_block</a></li>
+<li class="toctree-l4"><a class="reference internal" href="variable_TypeDefinitions_8h_1af8bccad6bcfbf028adeac76fac203899.html">Variable u64_bits</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#defines">Defines</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="define_GpuUtils_8h_1a4eb22c89929e9e4ea34590e1e5356d6a.html">Define GPU_CHECK</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define_ErrorUtils_8h_1aa63be6a8da3f95704f040e9c92c28248.html">Define throw_uninitialised</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define_BenchmarkUtils_8hpp_1adadc8eb1d96857f385a393c78c6c1cd8.html">Define TIME_IT</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#typedefs">Typedefs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="typedef_TypeDefinitions_8h_1aec41e5f8e4b7aef2540e84268692fa84.html">Typedef i32</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a86025ec3a0bc201ca893caac2cb2acbd.html">Typedef i64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a196513547113c3f96a078ee3e658a6ef.html">Typedef i8</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9.html">Typedef sbwt_search::ColorResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e.html">Typedef sbwt_search::IndexResultsPrinter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a70c1fcc1a4e96af8f6580f708657cd41.html">Typedef u32</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a1af9f95651e921615e75917a6dd1b574.html">Typedef u64</a></li>
+<li class="toctree-l4"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a987e4d6cf789cb59dbb390728271e4d6.html">Typedef u8</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SBWT Search</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/RST/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src">
+<h1>src<a class="headerlink" href="#src" title="Permalink to this headline"></a></h1>
+<section id="class-hierarchy">
+<h2>Class Hierarchy<a class="headerlink" href="#class-hierarchy" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_design_utils.html#namespace-design-utils"><span class="std std-ref">Namespace design_utils</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classdesign__utils_1_1SharedBatchesProducer.html#exhale-class-classdesign-utils-1-1sharedbatchesproducer"><span class="std std-ref">Template Class SharedBatchesProducer</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_gpu_utils.html#namespace-gpu-utils"><span class="std std-ref">Namespace gpu_utils</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classgpu__utils_1_1GpuEvent.html#exhale-class-classgpu-utils-1-1gpuevent"><span class="std std-ref">Class GpuEvent</span></a></p></li>
+<li><p><a class="reference internal" href="classgpu__utils_1_1GpuPointer.html#exhale-class-classgpu-utils-1-1gpupointer"><span class="std std-ref">Template Class GpuPointer</span></a></p></li>
+<li><p><a class="reference internal" href="classgpu__utils_1_1GpuStream.html#exhale-class-classgpu-utils-1-1gpustream"><span class="std std-ref">Class GpuStream</span></a></p></li>
+<li><p><a class="reference internal" href="classgpu__utils_1_1PinnedVector.html#exhale-class-classgpu-utils-1-1pinnedvector"><span class="std std-ref">Template Class PinnedVector</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_io_utils.html#namespace-io-utils"><span class="std std-ref">Namespace io_utils</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classio__utils_1_1ThrowingIfstream.html#exhale-class-classio-utils-1-1throwingifstream"><span class="std std-ref">Class ThrowingIfstream</span></a></p></li>
+<li><p><a class="reference internal" href="classio__utils_1_1ThrowingOfstream.html#exhale-class-classio-utils-1-1throwingofstream"><span class="std std-ref">Class ThrowingOfstream</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_log_utils.html#namespace-log-utils"><span class="std std-ref">Namespace log_utils</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classlog__utils_1_1Logger.html#exhale-class-classlog-utils-1-1logger"><span class="std std-ref">Class Logger</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_sbwt_search.html#namespace-sbwt-search"><span class="std std-ref">Namespace sbwt_search</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ArgumentParser.html#exhale-class-classsbwt-search-1-1argumentparser"><span class="std std-ref">Class ArgumentParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html#exhale-class-classsbwt-search-1-1asciicontinuouscolorresultsprinter"><span class="std std-ref">Class AsciiContinuousColorResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html#exhale-class-classsbwt-search-1-1asciicontinuousindexresultsprinter"><span class="std std-ref">Class AsciiContinuousIndexResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1AsciiIndexFileParser.html#exhale-class-classsbwt-search-1-1asciiindexfileparser"><span class="std std-ref">Class AsciiIndexFileParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html#exhale-class-classsbwt-search-1-1binarycontinuouscolorresultsprinter"><span class="std std-ref">Class BinaryContinuousColorResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html#exhale-class-classsbwt-search-1-1binarycontinuousindexresultsprinter"><span class="std std-ref">Class BinaryContinuousIndexResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1BinaryIndexFileParser.html#exhale-class-classsbwt-search-1-1binaryindexfileparser"><span class="std std-ref">Class BinaryIndexFileParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1BitSeqBatch.html#exhale-class-classsbwt-search-1-1bitseqbatch"><span class="std std-ref">Class BitSeqBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1BitsProducer.html#exhale-class-classsbwt-search-1-1bitsproducer"><span class="std std-ref">Class BitsProducer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html#exhale-class-classsbwt-search-1-1boolcontinuousindexresultsprinter"><span class="std std-ref">Class BoolContinuousIndexResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1CharToBits.html#exhale-class-classsbwt-search-1-1chartobits"><span class="std std-ref">Class CharToBits</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ColorIndexBuilder.html#exhale-class-classsbwt-search-1-1colorindexbuilder"><span class="std std-ref">Class ColorIndexBuilder</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ColorsBatch.html#exhale-class-classsbwt-search-1-1colorsbatch"><span class="std std-ref">Class ColorsBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ColorSearchArgumentParser.html#exhale-class-classsbwt-search-1-1colorsearchargumentparser"><span class="std std-ref">Class ColorSearchArgumentParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ColorSearcher.html#exhale-class-classsbwt-search-1-1colorsearcher"><span class="std std-ref">Class ColorSearcher</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ColorSearchMain.html#exhale-class-classsbwt-search-1-1colorsearchmain"><span class="std std-ref">Class ColorSearchMain</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousColorResultsPrinter.html#exhale-class-classsbwt-search-1-1continuouscolorresultsprinter"><span class="std std-ref">Template Class ContinuousColorResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousColorSearcher.html#exhale-class-classsbwt-search-1-1continuouscolorsearcher"><span class="std std-ref">Class ContinuousColorSearcher</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexFileParser.html#exhale-class-classsbwt-search-1-1continuousindexfileparser"><span class="std std-ref">Class ContinuousIndexFileParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexResultsPrinter.html#exhale-class-classsbwt-search-1-1continuousindexresultsprinter"><span class="std std-ref">Template Class ContinuousIndexResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexSearcher.html#exhale-class-classsbwt-search-1-1continuousindexsearcher"><span class="std std-ref">Class ContinuousIndexSearcher</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousPositionsBuilder.html#exhale-class-classsbwt-search-1-1continuouspositionsbuilder"><span class="std std-ref">Class ContinuousPositionsBuilder</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousSeqToBitsConverter.html#exhale-class-classsbwt-search-1-1continuousseqtobitsconverter"><span class="std std-ref">Class ContinuousSeqToBitsConverter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ContinuousSequenceFileParser.html#exhale-class-classsbwt-search-1-1continuoussequencefileparser"><span class="std std-ref">Class ContinuousSequenceFileParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1CpuColorIndexContainer.html#exhale-class-classsbwt-search-1-1cpucolorindexcontainer"><span class="std std-ref">Class CpuColorIndexContainer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1CpuSbwtContainer.html#exhale-class-classsbwt-search-1-1cpusbwtcontainer"><span class="std std-ref">Class CpuSbwtContainer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1CsvContinuousColorResultsPrinter.html#exhale-class-classsbwt-search-1-1csvcontinuouscolorresultsprinter"><span class="std std-ref">Class CsvContinuousColorResultsPrinter</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1FilenamesParser.html#exhale-class-classsbwt-search-1-1filenamesparser"><span class="std std-ref">Class FilenamesParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1FilesizeLoadBalancer.html#exhale-class-classsbwt-search-1-1filesizeloadbalancer"><span class="std std-ref">Class FilesizeLoadBalancer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1GpuColorIndexContainer.html#exhale-class-classsbwt-search-1-1gpucolorindexcontainer"><span class="std std-ref">Class GpuColorIndexContainer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1GpuSbwtContainer.html#exhale-class-classsbwt-search-1-1gpusbwtcontainer"><span class="std std-ref">Class GpuSbwtContainer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IndexesBatch.html#exhale-class-classsbwt-search-1-1indexesbatch"><span class="std std-ref">Class IndexesBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IndexesBatchProducer.html#exhale-class-classsbwt-search-1-1indexesbatchproducer"><span class="std std-ref">Class IndexesBatchProducer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IndexFileParser.html#exhale-class-classsbwt-search-1-1indexfileparser"><span class="std std-ref">Class IndexFileParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IndexSearchArgumentParser.html#exhale-class-classsbwt-search-1-1indexsearchargumentparser"><span class="std std-ref">Class IndexSearchArgumentParser</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IndexSearcher.html#exhale-class-classsbwt-search-1-1indexsearcher"><span class="std std-ref">Class IndexSearcher</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IndexSearchMain.html#exhale-class-classsbwt-search-1-1indexsearchmain"><span class="std std-ref">Class IndexSearchMain</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IntervalBatch.html#exhale-class-classsbwt-search-1-1intervalbatch"><span class="std std-ref">Class IntervalBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1IntervalBatchProducer.html#exhale-class-classsbwt-search-1-1intervalbatchproducer"><span class="std std-ref">Class IntervalBatchProducer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1InvalidCharsBatch.html#exhale-class-classsbwt-search-1-1invalidcharsbatch"><span class="std std-ref">Class InvalidCharsBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1InvalidCharsProducer.html#exhale-class-classsbwt-search-1-1invalidcharsproducer"><span class="std std-ref">Class InvalidCharsProducer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1Main.html#exhale-class-classsbwt-search-1-1main"><span class="std std-ref">Class Main</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1Poppy.html#exhale-class-classsbwt-search-1-1poppy"><span class="std std-ref">Class Poppy</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1PoppyBuilder.html#exhale-class-classsbwt-search-1-1poppybuilder"><span class="std std-ref">Class PoppyBuilder</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1PositionsBatch.html#exhale-class-classsbwt-search-1-1positionsbatch"><span class="std std-ref">Class PositionsBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1PositionsBuilder.html#exhale-class-classsbwt-search-1-1positionsbuilder"><span class="std std-ref">Class PositionsBuilder</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1Presearcher.html#exhale-class-classsbwt-search-1-1presearcher"><span class="std std-ref">Class Presearcher</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1ResultsBatch.html#exhale-class-classsbwt-search-1-1resultsbatch"><span class="std std-ref">Class ResultsBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1SbwtBuilder.html#exhale-class-classsbwt-search-1-1sbwtbuilder"><span class="std std-ref">Class SbwtBuilder</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1SbwtContainer.html#exhale-class-classsbwt-search-1-1sbwtcontainer"><span class="std std-ref">Class SbwtContainer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatch.html#exhale-class-classsbwt-search-1-1seqstatisticsbatch"><span class="std std-ref">Class SeqStatisticsBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatchProducer.html#exhale-class-classsbwt-search-1-1seqstatisticsbatchproducer"><span class="std std-ref">Class SeqStatisticsBatchProducer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1StringBreakBatch.html#exhale-class-classsbwt-search-1-1stringbreakbatch"><span class="std std-ref">Class StringBreakBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1StringBreakBatchProducer.html#exhale-class-classsbwt-search-1-1stringbreakbatchproducer"><span class="std std-ref">Class StringBreakBatchProducer</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatch.html#exhale-class-classsbwt-search-1-1stringsequencebatch"><span class="std std-ref">Class StringSequenceBatch</span></a></p></li>
+<li><p><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatchProducer.html#exhale-class-classsbwt-search-1-1stringsequencebatchproducer"><span class="std std-ref">Class StringSequenceBatchProducer</span></a></p></li>
+<li><p><a class="reference internal" href="enum_SbwtContainer_8h_1a82ce2e4d2f9e33cdea30a70049a3fcfe.html#exhale-enum-sbwtcontainer-8h-1a82ce2e4d2f9e33cdea30a70049a3fcfe"><span class="std std-ref">Enum ACGT</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_structure_utils.html#namespace-structure-utils"><span class="std std-ref">Namespace structure_utils</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classstructure__utils_1_1CircularBuffer.html#exhale-class-classstructure-utils-1-1circularbuffer"><span class="std std-ref">Template Class CircularBuffer</span></a></p></li>
+<li><p><a class="reference internal" href="classstructure__utils_1_1CircularQueue.html#exhale-class-classstructure-utils-1-1circularqueue"><span class="std std-ref">Template Class CircularQueue</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_test_utils.html#namespace-test-utils"><span class="std std-ref">Namespace test_utils</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classtest__utils_1_1DummyBatchProducer.html#exhale-class-classtest-utils-1-1dummybatchproducer"><span class="std std-ref">Template Class DummyBatchProducer</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_threading_utils.html#namespace-threading-utils"><span class="std std-ref">Namespace threading_utils</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classthreading__utils_1_1OmpLock.html#exhale-class-classthreading-utils-1-1omplock"><span class="std std-ref">Class OmpLock</span></a></p></li>
+<li><p><a class="reference internal" href="classthreading__utils_1_1Semaphore.html#exhale-class-classthreading-utils-1-1semaphore"><span class="std std-ref">Class Semaphore</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="namespace_units_parser.html#namespace-units-parser"><span class="std std-ref">Namespace units_parser</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="classunits__parser_1_1MemoryUnitsParser.html#exhale-class-classunits-parser-1-1memoryunitsparser"><span class="std std-ref">Class MemoryUnitsParser</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="file-hierarchy">
+<h2>File Hierarchy<a class="headerlink" href="#file-hierarchy" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src.html#dir-home-runner-work-sbwt-search-sbwt-search-src"><span class="std std-ref">Directory src</span></a></dt><dd><ul>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser.html#dir-home-runner-work-sbwt-search-sbwt-search-src-argumentparser"><span class="std std-ref">Directory ArgumentParser</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-argumentparser-argumentparser-h"><span class="std std-ref">File ArgumentParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ColorSearchArgumentParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-argumentparser-colorsearchargumentparser-h"><span class="std std-ref">File ColorSearchArgumentParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_IndexSearchArgumentParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-argumentparser-indexsearchargumentparser-h"><span class="std std-ref">File IndexSearchArgumentParser.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects.html#dir-home-runner-work-sbwt-search-sbwt-search-src-batchobjects"><span class="std std-ref">Directory BatchObjects</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-bitseqbatch-h"><span class="std std-ref">File BitSeqBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-colorsbatch-h"><span class="std std-ref">File ColorsBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-indexesbatch-h"><span class="std std-ref">File IndexesBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-intervalbatch-h"><span class="std std-ref">File IntervalBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_InvalidCharsBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-invalidcharsbatch-h"><span class="std std-ref">File InvalidCharsBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-positionsbatch-h"><span class="std std-ref">File PositionsBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-resultsbatch-h"><span class="std std-ref">File ResultsBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-seqstatisticsbatch-h"><span class="std std-ref">File SeqStatisticsBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-stringbreakbatch-h"><span class="std std-ref">File StringBreakBatch.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringSequenceBatch.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-batchobjects-stringsequencebatch-h"><span class="std std-ref">File StringSequenceBatch.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder.html#dir-home-runner-work-sbwt-search-sbwt-search-src-colorindexbuilder"><span class="std std-ref">Directory ColorIndexBuilder</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder_ColorIndexBuilder.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorindexbuilder-colorindexbuilder-h"><span class="std std-ref">File ColorIndexBuilder.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer.html#dir-home-runner-work-sbwt-search-sbwt-search-src-colorindexcontainer"><span class="std std-ref">Directory ColorIndexContainer</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_CpuColorIndexContainer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorindexcontainer-cpucolorindexcontainer-h"><span class="std std-ref">File CpuColorIndexContainer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorindexcontainer-gpucolorindexcontainer-h"><span class="std std-ref">File GpuColorIndexContainer.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter.html#dir-home-runner-work-sbwt-search-sbwt-search-src-colorresultsprinter"><span class="std std-ref">Directory ColorResultsPrinter</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_AsciiContinuousColorResultsPrinter.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorresultsprinter-asciicontinuouscolorresultsprinter-h"><span class="std std-ref">File AsciiContinuousColorResultsPrinter.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_BinaryContinuousColorResultsPrinter.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorresultsprinter-binarycontinuouscolorresultsprinter-h"><span class="std std-ref">File BinaryContinuousColorResultsPrinter.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorresultsprinter-continuouscolorresultsprinter-hpp"><span class="std std-ref">File ContinuousColorResultsPrinter.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_CsvContinuousColorResultsPrinter.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorresultsprinter-csvcontinuouscolorresultsprinter-h"><span class="std std-ref">File CsvContinuousColorResultsPrinter.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher.html#dir-home-runner-work-sbwt-search-sbwt-search-src-colorsearcher"><span class="std std-ref">Directory ColorSearcher</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorsearcher-colorsearcher-h"><span class="std std-ref">File ColorSearcher.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-colorsearcher-continuouscolorsearcher-h"><span class="std std-ref">File ContinuousColorSearcher.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser.html#dir-home-runner-work-sbwt-search-sbwt-search-src-filenamesparser"><span class="std std-ref">Directory FilenamesParser</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser_FilenamesParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-filenamesparser-filenamesparser-h"><span class="std std-ref">File FilenamesParser.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer.html#dir-home-runner-work-sbwt-search-sbwt-search-src-filesizeloadbalancer"><span class="std std-ref">Directory FilesizeLoadBalancer</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer_FilesizeLoadBalancer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-filesizeloadbalancer-filesizeloadbalancer-h"><span class="std std-ref">File FilesizeLoadBalancer.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_Global.html#dir-home-runner-work-sbwt-search-sbwt-search-src-global"><span class="std std-ref">Directory Global</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-global-globaldefinitions-h"><span class="std std-ref">File GlobalDefinitions.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser.html#dir-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser"><span class="std std-ref">Directory IndexFileParser</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_AsciiIndexFileParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser-asciiindexfileparser-h"><span class="std std-ref">File AsciiIndexFileParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_BinaryIndexFileParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser-binaryindexfileparser-h"><span class="std std-ref">File BinaryIndexFileParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_ContinuousIndexFileParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser-continuousindexfileparser-h"><span class="std std-ref">File ContinuousIndexFileParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser-indexesbatchproducer-h"><span class="std std-ref">File IndexesBatchProducer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser-indexfileparser-h"><span class="std std-ref">File IndexFileParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParserTestUtils.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser-indexfileparsertestutils-h"><span class="std std-ref">File IndexFileParserTestUtils.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexfileparser-seqstatisticsbatchproducer-h"><span class="std std-ref">File SeqStatisticsBatchProducer.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter.html#dir-home-runner-work-sbwt-search-sbwt-search-src-indexresultsprinter"><span class="std std-ref">Directory IndexResultsPrinter</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexresultsprinter-asciicontinuousindexresultsprinter-h"><span class="std std-ref">File AsciiContinuousIndexResultsPrinter.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BinaryContinuousIndexResultsPrinter.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexresultsprinter-binarycontinuousindexresultsprinter-h"><span class="std std-ref">File BinaryContinuousIndexResultsPrinter.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BoolContinuousIndexResultsPrinter.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexresultsprinter-boolcontinuousindexresultsprinter-h"><span class="std std-ref">File BoolContinuousIndexResultsPrinter.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexresultsprinter-continuousindexresultsprinter-hpp"><span class="std std-ref">File ContinuousIndexResultsPrinter.hpp</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher.html#dir-home-runner-work-sbwt-search-sbwt-search-src-indexsearcher"><span class="std std-ref">Directory IndexSearcher</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_ContinuousIndexSearcher.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexsearcher-continuousindexsearcher-h"><span class="std std-ref">File ContinuousIndexSearcher.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_IndexSearcher.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-indexsearcher-indexsearcher-h"><span class="std std-ref">File IndexSearcher.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_Main.html#dir-home-runner-work-sbwt-search-sbwt-search-src-main"><span class="std std-ref">Directory Main</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-main-colorsearchmain-h"><span class="std std-ref">File ColorSearchMain.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-main-indexsearchmain-h"><span class="std std-ref">File IndexSearchMain.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-main-main-h"><span class="std std-ref">File Main.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy.html#dir-home-runner-work-sbwt-search-sbwt-search-src-poppy"><span class="std std-ref">Directory Poppy</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-poppy-poppy-h"><span class="std std-ref">File Poppy.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder.html#dir-home-runner-work-sbwt-search-sbwt-search-src-poppybuilder"><span class="std std-ref">Directory PoppyBuilder</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-poppybuilder-poppybuilder-h"><span class="std std-ref">File PoppyBuilder.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder.html#dir-home-runner-work-sbwt-search-sbwt-search-src-positionsbuilder"><span class="std std-ref">Directory PositionsBuilder</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-positionsbuilder-continuouspositionsbuilder-h"><span class="std std-ref">File ContinuousPositionsBuilder.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_PositionsBuilder.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-positionsbuilder-positionsbuilder-h"><span class="std std-ref">File PositionsBuilder.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher.html#dir-home-runner-work-sbwt-search-sbwt-search-src-presearcher"><span class="std std-ref">Directory Presearcher</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-presearcher-presearcher-h"><span class="std std-ref">File Presearcher.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder.html#dir-home-runner-work-sbwt-search-sbwt-search-src-sbwtbuilder"><span class="std std-ref">Directory SbwtBuilder</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder_SbwtBuilder.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sbwtbuilder-sbwtbuilder-h"><span class="std std-ref">File SbwtBuilder.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer.html#dir-home-runner-work-sbwt-search-sbwt-search-src-sbwtcontainer"><span class="std std-ref">Directory SbwtContainer</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_CpuSbwtContainer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sbwtcontainer-cpusbwtcontainer-h"><span class="std std-ref">File CpuSbwtContainer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_GpuSbwtContainer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sbwtcontainer-gpusbwtcontainer-h"><span class="std std-ref">File GpuSbwtContainer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sbwtcontainer-sbwtcontainer-h"><span class="std std-ref">File SbwtContainer.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter.html#dir-home-runner-work-sbwt-search-sbwt-search-src-seqtobitsconverter"><span class="std std-ref">Directory SeqToBitsConverter</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-seqtobitsconverter-bitsproducer-h"><span class="std std-ref">File BitsProducer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_CharToBits.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-seqtobitsconverter-chartobits-h"><span class="std std-ref">File CharToBits.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_ContinuousSeqToBitsConverter.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-seqtobitsconverter-continuousseqtobitsconverter-h"><span class="std std-ref">File ContinuousSeqToBitsConverter.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_InvalidCharsProducer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-seqtobitsconverter-invalidcharsproducer-h"><span class="std std-ref">File InvalidCharsProducer.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser.html#dir-home-runner-work-sbwt-search-sbwt-search-src-sequencefileparser"><span class="std std-ref">Directory SequenceFileParser</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sequencefileparser-continuoussequencefileparser-h"><span class="std std-ref">File ContinuousSequenceFileParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sequencefileparser-intervalbatchproducer-h"><span class="std std-ref">File IntervalBatchProducer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringBreakBatchProducer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sequencefileparser-stringbreakbatchproducer-h"><span class="std std-ref">File StringBreakBatchProducer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-sequencefileparser-stringsequencebatchproducer-h"><span class="std std-ref">File StringSequenceBatchProducer.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools.html#dir-home-runner-work-sbwt-search-sbwt-search-src-tools"><span class="std std-ref">Directory Tools</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-benchmarkutils-hpp"><span class="std std-ref">File BenchmarkUtils.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-bitdefinitions-h"><span class="std std-ref">File BitDefinitions.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularBuffer.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-circularbuffer-hpp"><span class="std std-ref">File CircularBuffer.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularQueue.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-circularqueue-hpp"><span class="std std-ref">File CircularQueue.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DebugUtils.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-debugutils-hpp"><span class="std std-ref">File DebugUtils.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-dummybatchproducer-hpp"><span class="std std-ref">File DummyBatchProducer.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_ErrorUtils.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-errorutils-h"><span class="std std-ref">File ErrorUtils.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuEvent.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-gpuevent-h"><span class="std std-ref">File GpuEvent.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-gpupointer-h"><span class="std std-ref">File GpuPointer.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-gpustream-h"><span class="std std-ref">File GpuStream.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-gpuutils-h"><span class="std std-ref">File GpuUtils.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-ioutils-h"><span class="std std-ref">File IOUtils.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Logger.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-logger-h"><span class="std std-ref">File Logger.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-mathutils-hpp"><span class="std std-ref">File MathUtils.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-memoryunitsparser-h"><span class="std std-ref">File MemoryUnitsParser.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUtils.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-memoryutils-h"><span class="std std-ref">File MemoryUtils.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-omplock-h"><span class="std std-ref">File OmpLock.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-pinnedvector-h"><span class="std std-ref">File PinnedVector.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_RNGUtils.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-rngutils-hpp"><span class="std std-ref">File RNGUtils.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-semaphore-h"><span class="std std-ref">File Semaphore.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-sharedbatchesproducer-hpp"><span class="std std-ref">File SharedBatchesProducer.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-stdutils-hpp"><span class="std std-ref">File StdUtils.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-testutils-hpp"><span class="std std-ref">File TestUtils.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-tools-typedefinitions-h"><span class="std std-ref">File TypeDefinitions.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><a class="reference internal" href="dir__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels.html#dir-home-runner-work-sbwt-search-sbwt-search-src-utilitykernels"><span class="std std-ref">Directory UtilityKernels</span></a></dt><dd><ul>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_GetBoolFromBitVector_test.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-utilitykernels-getboolfrombitvector-test-h"><span class="std std-ref">File GetBoolFromBitVector_test.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-utilitykernels-rank-test-h"><span class="std std-ref">File Rank_test.h</span></a></p></li>
+<li><p><a class="reference internal" href="file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_VariableLengthIntegerIndex_test.h.html#file-home-runner-work-sbwt-search-sbwt-search-src-utilitykernels-variablelengthintegerindex-test-h"><span class="std std-ref">File VariableLengthIntegerIndex_test.h</span></a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="full-api">
+<h2>Full API<a class="headerlink" href="#full-api" title="Permalink to this headline"></a></h2>
+<section id="namespaces">
+<h3>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_benchmark_utils.html">Namespace benchmark_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_benchmark_utils.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_bit_utils.html">Namespace bit_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_bit_utils.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_bit_utils.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_design_utils.html">Namespace design_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_design_utils.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_error_utils.html">Namespace error_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_error_utils.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_gpu_utils.html">Namespace gpu_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_gpu_utils.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_gpu_utils.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_io_utils.html">Namespace io_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_io_utils.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_log_utils.html">Namespace log_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_log_utils.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_math_utils.html">Namespace math_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_math_utils.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_memory_utils.html">Namespace memory_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_memory_utils.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_rng_utils.html">Namespace rng_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_rng_utils.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_sbwt_search.html">Namespace sbwt_search</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_sbwt_search.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_sbwt_search.html#enums">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_sbwt_search.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_sbwt_search.html#typedefs">Typedefs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_sbwt_search.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_std.html">Namespace std</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_std_utils.html">Namespace std_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_std_utils.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_structure_utils.html">Namespace structure_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_structure_utils.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_test_utils.html">Namespace test_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_test_utils.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="namespace_test_utils.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_threading_utils.html">Namespace threading_utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_threading_utils.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="namespace_units_parser.html">Namespace units_parser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="namespace_units_parser.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="classes-and-structs">
+<h3>Classes and Structs<a class="headerlink" href="#classes-and-structs" title="Permalink to this headline"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classdesign__utils_1_1SharedBatchesProducer.html">Template Class SharedBatchesProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classdesign__utils_1_1SharedBatchesProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classdesign__utils_1_1SharedBatchesProducer.html#derived-types">Derived Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classdesign__utils_1_1SharedBatchesProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classgpu__utils_1_1GpuEvent.html">Class GpuEvent</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classgpu__utils_1_1GpuEvent.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classgpu__utils_1_1GpuPointer.html">Template Class GpuPointer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classgpu__utils_1_1GpuPointer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classgpu__utils_1_1GpuStream.html">Class GpuStream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classgpu__utils_1_1GpuStream.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classgpu__utils_1_1PinnedVector.html">Template Class PinnedVector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classgpu__utils_1_1PinnedVector.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classio__utils_1_1ThrowingIfstream.html">Class ThrowingIfstream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classio__utils_1_1ThrowingIfstream.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classio__utils_1_1ThrowingIfstream.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classio__utils_1_1ThrowingIfstream.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classio__utils_1_1ThrowingOfstream.html">Class ThrowingOfstream</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classio__utils_1_1ThrowingOfstream.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classio__utils_1_1ThrowingOfstream.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classio__utils_1_1ThrowingOfstream.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classlog__utils_1_1Logger.html">Class Logger</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classlog__utils_1_1Logger.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ArgumentParser.html">Class ArgumentParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ArgumentParser.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1ArgumentParser.html#derived-types">Derived Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ArgumentParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html">Class AsciiContinuousColorResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousColorResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html">Class AsciiContinuousIndexResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1AsciiContinuousIndexResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1AsciiIndexFileParser.html">Class AsciiIndexFileParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1AsciiIndexFileParser.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1AsciiIndexFileParser.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1AsciiIndexFileParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html">Class BinaryContinuousColorResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousColorResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html">Class BinaryContinuousIndexResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BinaryContinuousIndexResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1BinaryIndexFileParser.html">Class BinaryIndexFileParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BinaryIndexFileParser.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1BinaryIndexFileParser.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BinaryIndexFileParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1BitSeqBatch.html">Class BitSeqBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BitSeqBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1BitsProducer.html">Class BitsProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BitsProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1BitsProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BitsProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html">Class BoolContinuousIndexResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1BoolContinuousIndexResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1CharToBits.html">Class CharToBits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1CharToBits.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ColorIndexBuilder.html">Class ColorIndexBuilder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ColorIndexBuilder.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ColorsBatch.html">Class ColorsBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ColorsBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ColorSearchArgumentParser.html">Class ColorSearchArgumentParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ColorSearchArgumentParser.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1ColorSearchArgumentParser.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ColorSearchArgumentParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ColorSearcher.html">Class ColorSearcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ColorSearcher.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ColorSearchMain.html">Class ColorSearchMain</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ColorSearchMain.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1ColorSearchMain.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ColorSearchMain.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorResultsPrinter.html">Template Class ContinuousColorResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorSearcher.html">Class ContinuousColorSearcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorSearcher.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorSearcher.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousColorSearcher.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexFileParser.html">Class ContinuousIndexFileParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexFileParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexResultsPrinter.html">Template Class ContinuousIndexResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexSearcher.html">Class ContinuousIndexSearcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexSearcher.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexSearcher.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousIndexSearcher.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousPositionsBuilder.html">Class ContinuousPositionsBuilder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousPositionsBuilder.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1ContinuousPositionsBuilder.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousPositionsBuilder.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousSeqToBitsConverter.html">Class ContinuousSeqToBitsConverter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousSeqToBitsConverter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ContinuousSequenceFileParser.html">Class ContinuousSequenceFileParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ContinuousSequenceFileParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1CpuColorIndexContainer.html">Class CpuColorIndexContainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1CpuColorIndexContainer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1CpuSbwtContainer.html">Class CpuSbwtContainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1CpuSbwtContainer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1CpuSbwtContainer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1CpuSbwtContainer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1CsvContinuousColorResultsPrinter.html">Class CsvContinuousColorResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1CsvContinuousColorResultsPrinter.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1CsvContinuousColorResultsPrinter.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1CsvContinuousColorResultsPrinter.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1FilenamesParser.html">Class FilenamesParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1FilenamesParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1FilesizeLoadBalancer.html">Class FilesizeLoadBalancer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1FilesizeLoadBalancer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1GpuColorIndexContainer.html">Class GpuColorIndexContainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1GpuColorIndexContainer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1GpuSbwtContainer.html">Class GpuSbwtContainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1GpuSbwtContainer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1GpuSbwtContainer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1GpuSbwtContainer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IndexesBatch.html">Class IndexesBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexesBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IndexesBatchProducer.html">Class IndexesBatchProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexesBatchProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1IndexesBatchProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexesBatchProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IndexFileParser.html">Class IndexFileParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexFileParser.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1IndexFileParser.html#derived-types">Derived Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexFileParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IndexSearchArgumentParser.html">Class IndexSearchArgumentParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexSearchArgumentParser.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1IndexSearchArgumentParser.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexSearchArgumentParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IndexSearcher.html">Class IndexSearcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexSearcher.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IndexSearchMain.html">Class IndexSearchMain</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexSearchMain.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1IndexSearchMain.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IndexSearchMain.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IntervalBatch.html">Class IntervalBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IntervalBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1IntervalBatchProducer.html">Class IntervalBatchProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IntervalBatchProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1IntervalBatchProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1IntervalBatchProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsBatch.html">Class InvalidCharsBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsProducer.html">Class InvalidCharsProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1InvalidCharsProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1Main.html">Class Main</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1Main.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1Main.html#derived-types">Derived Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1Main.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1Poppy.html">Class Poppy</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1Poppy.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1PoppyBuilder.html">Class PoppyBuilder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1PoppyBuilder.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1PositionsBatch.html">Class PositionsBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1PositionsBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1PositionsBuilder.html">Class PositionsBuilder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1PositionsBuilder.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1Presearcher.html">Class Presearcher</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1Presearcher.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1ResultsBatch.html">Class ResultsBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1ResultsBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1SbwtBuilder.html">Class SbwtBuilder</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1SbwtBuilder.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1SbwtContainer.html">Class SbwtContainer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1SbwtContainer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1SbwtContainer.html#derived-types">Derived Types</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1SbwtContainer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatch.html">Class SeqStatisticsBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatchProducer.html">Class SeqStatisticsBatchProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatchProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatchProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1SeqStatisticsBatchProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatch.html">Class StringBreakBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatchProducer.html">Class StringBreakBatchProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatchProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatchProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1StringBreakBatchProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatch.html">Class StringSequenceBatch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatch.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatchProducer.html">Class StringSequenceBatchProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatchProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatchProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classsbwt__search_1_1StringSequenceBatchProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classstructure__utils_1_1CircularBuffer.html">Template Class CircularBuffer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classstructure__utils_1_1CircularBuffer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classstructure__utils_1_1CircularQueue.html">Template Class CircularQueue</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classstructure__utils_1_1CircularQueue.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classtest__utils_1_1DummyBatchProducer.html">Template Class DummyBatchProducer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classtest__utils_1_1DummyBatchProducer.html#inheritance-relationships">Inheritance Relationships</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="classtest__utils_1_1DummyBatchProducer.html#base-type">Base Type</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="classtest__utils_1_1DummyBatchProducer.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classthreading__utils_1_1OmpLock.html">Class OmpLock</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classthreading__utils_1_1OmpLock.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classthreading__utils_1_1Semaphore.html">Class Semaphore</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classthreading__utils_1_1Semaphore.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="classunits__parser_1_1MemoryUnitsParser.html">Class MemoryUnitsParser</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="classunits__parser_1_1MemoryUnitsParser.html#class-documentation">Class Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="enums">
+<h3>Enums<a class="headerlink" href="#enums" title="Permalink to this headline"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="enum_SbwtContainer_8h_1a82ce2e4d2f9e33cdea30a70049a3fcfe.html">Enum ACGT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enum_SbwtContainer_8h_1a82ce2e4d2f9e33cdea30a70049a3fcfe.html#enum-documentation">Enum Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec.html">Function bit_utils::_get_set_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_ErrorUtils_8h_1a135754c79536f40c1ba89374f70764cc.html">Function error_utils::_throw_uninitialised</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_ErrorUtils_8h_1a135754c79536f40c1ba89374f70764cc.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f.html">Function gpu_utils::get_free_gpu_memory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_MathUtils_8hpp_1a7aa310486c40ef60f8670c5ee8d6834a.html">Function math_utils::bits_to_gB</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_MathUtils_8hpp_1a7aa310486c40ef60f8670c5ee8d6834a.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_MathUtils_8hpp_1acd3dd187141f060d3f668e46ddd5b031.html">Template Function math_utils::divide_and_ceil</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_MathUtils_8hpp_1acd3dd187141f060d3f668e46ddd5b031.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_MathUtils_8hpp_1ad70360805c3fdf6a7e2f77b67aa5ec8b.html">Template Function math_utils::divide_and_round</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_MathUtils_8hpp_1ad70360805c3fdf6a7e2f77b67aa5ec8b.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_MathUtils_8hpp_1ad99dc9679530f3f98711c3e2509daf8c.html">Function math_utils::gB_to_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_MathUtils_8hpp_1ad99dc9679530f3f98711c3e2509daf8c.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_MathUtils_8hpp_1ab462ecf04def5ea064d6998a5187fbb2.html">Template Function math_utils::round_down</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_MathUtils_8hpp_1ab462ecf04def5ea064d6998a5187fbb2.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_MathUtils_8hpp_1a57b39ffa901081cf3760a80e345a13b6.html">Template Function math_utils::round_up</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_MathUtils_8hpp_1a57b39ffa901081cf3760a80e345a13b6.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_MemoryUtils_8h_1aa9dae2e89db35eb54749351bfc95ee30.html">Function memory_utils::get_total_system_memory</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_MemoryUtils_8h_1aa9dae2e89db35eb54749351bfc95ee30.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_DebugUtils_8hpp_1a5ec4da283c6224b1eddcb991f366815a.html">Template Function print</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_DebugUtils_8hpp_1a5ec4da283c6224b1eddcb991f366815a.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_RNGUtils_8hpp_1ae61e7824f6aebbe5f31c8f4b8bf4b19c.html">Template Function rng_utils::get_uniform_int_generator</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_RNGUtils_8hpp_1ae61e7824f6aebbe5f31c8f4b8bf4b19c.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_GetBoolFromBitVector__test_8h_1a56f5d8cef0e8aebcd60c28dcf5c73d87.html">Function sbwt_search::get_bool_from_bit_vector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_GetBoolFromBitVector__test_8h_1a56f5d8cef0e8aebcd60c28dcf5c73d87.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299.html">Function sbwt_search::get_rank</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_VariableLengthIntegerIndex__test_8h_1a68db2b67fdca238d7ea7d9e93cb48862.html">Function sbwt_search::get_variable_length_int_index</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_VariableLengthIntegerIndex__test_8h_1a68db2b67fdca238d7ea7d9e93cb48862.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424.html">Function sbwt_search::write_fake_binary_results_to_file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_StdUtils_8hpp_1ab19a8dafe77baa346b4faacf94910259.html">Template Function std_utils::copy_advance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_StdUtils_8hpp_1ab19a8dafe77baa346b4faacf94910259.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_StdUtils_8hpp_1afdd23b2e5d5d538e82d3a76fe092e596.html">Template Function std_utils::split_vector</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_StdUtils_8hpp_1afdd23b2e5d5d538e82d3a76fe092e596.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_TestUtils_8hpp_1aec7931b7f47602618965112c55719147.html">Template Function test_utils::assert_arrays_equals</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_TestUtils_8hpp_1aec7931b7f47602618965112c55719147.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_TestUtils_8hpp_1afc467ccdf2c6a0a3c0063a95ef950af7.html">Template Function test_utils::assert_vectors_equal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_TestUtils_8hpp_1afc467ccdf2c6a0a3c0063a95ef950af7.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_TestUtils_8hpp_1a20313e3dee8281a27883abd56befc1e0.html">Function test_utils::to_char_vec</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_TestUtils_8hpp_1a20313e3dee8281a27883abd56befc1e0.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function_TestUtils_8hpp_1a08036f93ddd4f87ffd52058f05396e24.html">Template Function test_utils::to_u64s</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function_TestUtils_8hpp_1a08036f93ddd4f87ffd52058f05396e24.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="variables">
+<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a3539a78d9115de442ea3d98ad18770f7.html">Variable benchmark_utils::TIME_IT_END_TIME</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a3539a78d9115de442ea3d98ad18770f7.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a5edd72773534aa85e34512678cbf5cc3.html">Variable benchmark_utils::TIME_IT_START_TIME</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a5edd72773534aa85e34512678cbf5cc3.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a142193fdf593aa7211221a018df2328f.html">Variable benchmark_utils::TIME_IT_TOTAL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_BenchmarkUtils_8hpp_1a142193fdf593aa7211221a018df2328f.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b.html">Variable bit_utils::set_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33.html">Variable bit_utils::ten_1s</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_BitDefinitions_8h_1a7065f53c73f6d51f1fca4a593a1ea870.html">Variable bit_utils::thirty_1s</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_BitDefinitions_8h_1a7065f53c73f6d51f1fca4a593a1ea870.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_BitDefinitions_8h_1a9aae8b89133af5dc92acf753870cd6a3.html">Variable bit_utils::two_1s</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_BitDefinitions_8h_1a9aae8b89133af5dc92acf753870cd6a3.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_TypeDefinitions_8h_1a93436ed122c10bfeb8c885ea85d6c7c6.html">Variable bits_in_byte</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_TypeDefinitions_8h_1a93436ed122c10bfeb8c885ea85d6c7c6.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_TypeDefinitions_8h_1a0afa205b69ed107ba739ebb3d53504e0.html">Variable max_chars_in_u64</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_TypeDefinitions_8h_1a0afa205b69ed107ba739ebb3d53504e0.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a.html">Variable sbwt_search::basicblock_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_SbwtContainer_8h_1a8de8dcd3628550aed5f24e7b74b8b84d.html">Variable sbwt_search::cmap_size</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_SbwtContainer_8h_1a8de8dcd3628550aed5f24e7b74b8b84d.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a427cad7fed6538fefd42f623ae33008a.html">Variable sbwt_search::gpu_warp_size</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a427cad7fed6538fefd42f623ae33008a.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412.html">Variable sbwt_search::hyperblock_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c.html">Variable sbwt_search::invalid_char_to_bits_value</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_Poppy_8h_1a6ab78996b008aa3d3b5816a85d837d1d.html">Variable sbwt_search::layer_1_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_Poppy_8h_1a6ab78996b008aa3d3b5816a85d837d1d.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_Poppy_8h_1a8cbab7d04bb295d78fe17452045ddc07.html">Variable sbwt_search::layer_2_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_Poppy_8h_1a8cbab7d04bb295d78fe17452045ddc07.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a.html">Variable sbwt_search::num_ascii_characters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c.html">Variable sbwt_search::pad</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a87288ec90579454822c04ce173d06e36.html">Variable sbwt_search::presearch_letters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a87288ec90579454822c04ce173d06e36.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9.html">Variable sbwt_search::sixteen_kB</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_GlobalDefinitions_8h_1af361dd3ffbcd191cfdc312bfd64eefa8.html">Variable sbwt_search::superblock_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_GlobalDefinitions_8h_1af361dd3ffbcd191cfdc312bfd64eefa8.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a967c8556fd9d51942dfe64d59cccc260.html">Variable sbwt_search::threads_per_block</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_GlobalDefinitions_8h_1a967c8556fd9d51942dfe64d59cccc260.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="variable_TypeDefinitions_8h_1af8bccad6bcfbf028adeac76fac203899.html">Variable u64_bits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="variable_TypeDefinitions_8h_1af8bccad6bcfbf028adeac76fac203899.html#variable-documentation">Variable Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="defines">
+<h3>Defines<a class="headerlink" href="#defines" title="Permalink to this headline"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="define_GpuUtils_8h_1a4eb22c89929e9e4ea34590e1e5356d6a.html">Define GPU_CHECK</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="define_GpuUtils_8h_1a4eb22c89929e9e4ea34590e1e5356d6a.html#define-documentation">Define Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="define_ErrorUtils_8h_1aa63be6a8da3f95704f040e9c92c28248.html">Define throw_uninitialised</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="define_ErrorUtils_8h_1aa63be6a8da3f95704f040e9c92c28248.html#define-documentation">Define Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="define_BenchmarkUtils_8hpp_1adadc8eb1d96857f385a393c78c6c1cd8.html">Define TIME_IT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="define_BenchmarkUtils_8hpp_1adadc8eb1d96857f385a393c78c6c1cd8.html#define-documentation">Define Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="typedefs">
+<h3>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline"></a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_TypeDefinitions_8h_1aec41e5f8e4b7aef2540e84268692fa84.html">Typedef i32</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_TypeDefinitions_8h_1aec41e5f8e4b7aef2540e84268692fa84.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a86025ec3a0bc201ca893caac2cb2acbd.html">Typedef i64</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a86025ec3a0bc201ca893caac2cb2acbd.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a196513547113c3f96a078ee3e658a6ef.html">Typedef i8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a196513547113c3f96a078ee3e658a6ef.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9.html">Typedef sbwt_search::ColorResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e.html">Typedef sbwt_search::IndexResultsPrinter</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a70c1fcc1a4e96af8f6580f708657cd41.html">Typedef u32</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a70c1fcc1a4e96af8f6580f708657cd41.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a1af9f95651e921615e75917a6dd1b574.html">Typedef u64</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a1af9f95651e921615e75917a6dd1b574.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a987e4d6cf789cb59dbb390728271e4d6.html">Typedef u8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="typedef_TypeDefinitions_8h_1a987e4d6cf789cb59dbb390728271e4d6.html#typedef-documentation">Typedef Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../Documents/FileDocumentation.html" class="btn btn-neutral float-left" title="File Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="namespace_benchmark_utils.html" class="btn btn-neutral float-right" title="Namespace benchmark_utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Daniel Cauchi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+.. _exhale_define_BenchmarkUtils_8hpp_1adadc8eb1d96857f385a393c78c6c1cd8:
+
+Define TIME_IT
+==============
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: TIME_IT
+   :project: SBWT Search

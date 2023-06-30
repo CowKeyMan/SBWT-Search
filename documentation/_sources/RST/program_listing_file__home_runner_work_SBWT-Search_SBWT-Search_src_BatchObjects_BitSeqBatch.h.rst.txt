@@ -1,0 +1,31 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h:
+
+Program Listing for File BitSeqBatch.h
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/BitSeqBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef BIT_SEQ_BATCH_H
+   #define BIT_SEQ_BATCH_H
+   
+   #include "Tools/PinnedVector.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::PinnedVector;
+   
+   class BitSeqBatch {
+   public:
+     PinnedVector<u64> bit_seq;
+     explicit BitSeqBatch(u64 bit_seq_size): bit_seq(bit_seq_size) {}
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

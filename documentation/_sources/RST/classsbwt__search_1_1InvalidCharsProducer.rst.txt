@@ -1,0 +1,26 @@
+.. _exhale_class_classsbwt__search_1_1InvalidCharsProducer:
+
+Class InvalidCharsProducer
+==========================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_InvalidCharsProducer.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public design_utils::SharedBatchesProducer< InvalidCharsBatch >`` (:ref:`exhale_class_classdesign__utils_1_1SharedBatchesProducer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::InvalidCharsProducer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

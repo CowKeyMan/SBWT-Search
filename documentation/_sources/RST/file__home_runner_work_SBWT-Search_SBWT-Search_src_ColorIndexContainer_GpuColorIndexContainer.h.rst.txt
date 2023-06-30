@@ -1,0 +1,77 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h:
+
+File GpuColorIndexContainer.h
+=============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorIndexContainer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+A container which holds items related to the color sets in the gpu. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorIndexContainer/GpuColorIndexContainer.h``)
+-----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Poppy/Poppy.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h`)
+
+- ``Tools/GpuPointer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``memory``
+
+- ``sdsl/int_vector.hpp``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_CpuColorIndexContainer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1GpuColorIndexContainer`
+

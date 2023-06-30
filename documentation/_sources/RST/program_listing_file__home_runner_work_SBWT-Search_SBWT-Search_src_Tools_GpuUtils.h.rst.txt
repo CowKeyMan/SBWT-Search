@@ -1,0 +1,42 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h:
+
+Program Listing for File GpuUtils.h
+===================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/GpuUtils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef GPU_UTILS_H
+   #define GPU_UTILS_H
+   
+   #include <sstream>
+   #include <stdexcept>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace gpu_utils {
+   
+   // This is kept as a macro instead of converting it to a modern c++ constexpr
+   // because otherwise __FILE__ and __LINE__ will not work as intended, ie to
+   // report where the error is
+   // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)
+   #define GPU_CHECK(code_block)                                              \
+     {                                                                        \
+       auto code = code_block;                                                \
+       if (code != hipSuccess) {                                              \
+         std::stringstream ss;                                                \
+         ss << "GPUassert: " << hipGetErrorString(code) << " at " << __FILE__ \
+            << ":" << __LINE__ << '\n';                                       \
+         throw std::runtime_error(ss.str());                                  \
+       }                                                                      \
+     }
+   
+   auto get_free_gpu_memory() -> u64;
+   
+   }  // namespace gpu_utils
+   
+   #endif

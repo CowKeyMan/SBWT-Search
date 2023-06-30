@@ -1,0 +1,59 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_RNGUtils.hpp:
+
+File RNGUtils.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Utilities for random number generation. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/RNGUtils.hpp``)
+---------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_RNGUtils.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``functional``
+
+- ``random``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_rng_utils`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_RNGUtils_8hpp_1ae61e7824f6aebbe5f31c8f4b8bf4b19c`
+

@@ -1,0 +1,27 @@
+.. _exhale_class_classsbwt__search_1_1SbwtContainer:
+
+Class SbwtContainer
+===================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public sbwt_search::CpuSbwtContainer`` (:ref:`exhale_class_classsbwt__search_1_1CpuSbwtContainer`)
+- ``public sbwt_search::GpuSbwtContainer`` (:ref:`exhale_class_classsbwt__search_1_1GpuSbwtContainer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::SbwtContainer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

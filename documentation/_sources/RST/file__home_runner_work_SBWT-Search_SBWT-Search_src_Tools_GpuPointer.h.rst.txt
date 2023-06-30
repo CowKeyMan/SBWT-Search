@@ -1,0 +1,79 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h:
+
+File GpuPointer.h
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Class to abstract copying to and from the GPU. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/GpuPointer.h``)
+---------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/GpuStream.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``cstdint``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_GpuSbwtContainer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_GetBoolFromBitVector_test.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_VariableLengthIntegerIndex_test.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_gpu_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classgpu__utils_1_1GpuPointer`
+

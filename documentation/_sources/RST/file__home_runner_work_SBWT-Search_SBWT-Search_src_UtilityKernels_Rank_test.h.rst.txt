@@ -1,0 +1,59 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h:
+
+File Rank_test.h
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/UtilityKernels``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Header for functions used in testing the device rank function. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/UtilityKernels/Rank_test.h``)
+-----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/GpuPointer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299`
+

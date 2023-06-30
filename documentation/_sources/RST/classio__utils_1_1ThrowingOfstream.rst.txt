@@ -1,0 +1,26 @@
+.. _exhale_class_classio__utils_1_1ThrowingOfstream:
+
+Class ThrowingOfstream
+======================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public ofstream``
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: io_utils::ThrowingOfstream
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

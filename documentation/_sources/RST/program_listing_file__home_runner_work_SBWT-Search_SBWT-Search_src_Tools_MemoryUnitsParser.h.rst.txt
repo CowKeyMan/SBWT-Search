@@ -1,0 +1,39 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h:
+
+Program Listing for File MemoryUnitsParser.h
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/MemoryUnitsParser.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef MEMORY_UNITS_PARSER_H
+   #define MEMORY_UNITS_PARSER_H
+   
+   #include <cctype>
+   #include <regex>
+   #include <string>
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace units_parser {
+   
+   using std::pair;
+   using std::regex;
+   using std::string;
+   using std::vector;
+   
+   class MemoryUnitsParser {
+     static auto units_to_multiplier() -> const vector<pair<regex, u64>>;
+   
+   public:
+     static auto convert(const string &s) -> u64;
+   };
+   
+   }  // namespace units_parser
+   
+   #endif

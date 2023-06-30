@@ -1,0 +1,14 @@
+.. _exhale_typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9:
+
+Typedef sbwt_search::ColorResultsPrinter
+========================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sbwt_search::ColorResultsPrinter
+   :project: SBWT Search

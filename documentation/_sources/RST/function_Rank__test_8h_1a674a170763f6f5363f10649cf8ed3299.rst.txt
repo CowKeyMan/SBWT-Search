@@ -1,0 +1,14 @@
+.. _exhale_function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299:
+
+Function sbwt_search::get_rank
+==============================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: sbwt_search::get_rank(const GpuPointer<u64>&, const GpuPointer<u64>&, const GpuPointer<u64>&, u64)
+   :project: SBWT Search

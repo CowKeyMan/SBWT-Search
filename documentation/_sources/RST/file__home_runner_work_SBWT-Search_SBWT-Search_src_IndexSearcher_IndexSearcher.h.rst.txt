@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_IndexSearcher.h:
+
+File IndexSearcher.h
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexSearcher``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Class for searching the SBWT index. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexSearcher/IndexSearcher.h``)
+--------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_IndexSearcher.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``SbwtContainer/GpuSbwtContainer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_GpuSbwtContainer.h`)
+
+- ``Tools/GpuEvent.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuEvent.h`)
+
+- ``Tools/GpuStream.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h`)
+
+- ``Tools/PinnedVector.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h`)
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_ContinuousIndexSearcher.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexSearcher`
+

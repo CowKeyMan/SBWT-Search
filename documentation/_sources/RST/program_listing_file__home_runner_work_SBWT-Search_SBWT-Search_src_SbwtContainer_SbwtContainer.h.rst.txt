@@ -1,0 +1,42 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h:
+
+Program Listing for File SbwtContainer.h
+========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SbwtContainer/SbwtContainer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef SBWT_CONTAINER_H
+   #define SBWT_CONTAINER_H
+   
+   #include <cstddef>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   enum class ACGT { A = 0, C = 1, G = 2, T = 3 };
+   const u64 cmap_size = 5;
+   
+   class SbwtContainer {
+   private:
+     u64 num_bits;
+     u64 bit_vector_size;
+     u64 kmer_size;
+   
+   protected:
+     SbwtContainer(u64 num_bits_, u64 bit_vector_size_, u64 kmer_size_);
+   
+   public:
+     [[nodiscard]] auto get_bit_vector_size() const -> u64;
+     [[nodiscard]] auto get_num_bits() const -> u64;
+     [[nodiscard]] auto get_kmer_size() const -> u64;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

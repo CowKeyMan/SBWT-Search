@@ -1,0 +1,14 @@
+.. _exhale_variable_Poppy_8h_1a8cbab7d04bb295d78fe17452045ddc07:
+
+Variable sbwt_search::layer_2_bits
+==================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::layer_2_bits
+   :project: SBWT Search

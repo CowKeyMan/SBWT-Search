@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h:
+
+File AsciiContinuousIndexResultsPrinter.h
+=========================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Inherits ContinuousIndexResultsPrinter and prints out ascii values. Indexes are printed as their space separated ASCII values, with a newline character separating the reads. Not-found values are printed as '-1' and invalid values are printed as '-2'. When calculating memory reservations for this class, we use the max_index to see how many characters we really need per index, rather than the maximum needed for the maximum u64. This saves us a lot of space. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter/AsciiContinuousIndexResultsPrinter.h``)
+-----------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1AsciiContinuousIndexResultsPrinter`
+

@@ -1,0 +1,58 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder_SbwtBuilder.h:
+
+Program Listing for File SbwtBuilder.h
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder_SbwtBuilder.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SbwtBuilder/SbwtBuilder.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef SBWT_BUILDER_H
+   #define SBWT_BUILDER_H
+   
+   #include <istream>
+   #include <memory>
+   #include <string>
+   #include <tuple>
+   #include <vector>
+   
+   #include "SbwtContainer/CpuSbwtContainer.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::istream;
+   using std::string;
+   using std::tuple;
+   using std::unique_ptr;
+   using std::vector;
+   
+   class SbwtBuilder {
+   private:
+     string dbg_filename;
+     string colors_filename;
+   
+   public:
+     explicit SbwtBuilder(string sbwt_filename, string colors_filename = "");
+     auto get_cpu_sbwt() -> unique_ptr<CpuSbwtContainer>;
+   
+   private:
+     auto get_dbg_components()
+       -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>, u64, u64, u64>;
+     auto skip_unecessary_dbg_components(istream &in_stream) -> void;
+     auto read_k(istream &in_stream, u64 bit_vector_bytes) -> u64;
+     auto get_dbg_bitvectors(
+       u64 bit_vector_bytes, u64 vectors_start_position, u64 num_bits
+     ) -> tuple<vector<vector<u64>>, vector<Poppy>, vector<u64>>;
+     auto get_colors_components() -> vector<u64>;
+     auto skip_bits_vector(istream &stream) -> void;
+     auto skip_bytes_vector(istream &stream) -> void;
+     auto get_key_kmer_marks() -> vector<u64>;
+     auto skip_unecessary_colors_components(istream &in_stream) -> void;
+   };
+   
+   }  // namespace sbwt_search
+   #endif

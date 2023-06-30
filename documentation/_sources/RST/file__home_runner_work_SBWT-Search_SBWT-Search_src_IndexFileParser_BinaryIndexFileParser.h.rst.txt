@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_BinaryIndexFileParser.h:
+
+File BinaryIndexFileParser.h
+============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Index file parser for binary files. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser/BinaryIndexFileParser.h``)
+------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_BinaryIndexFileParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``IndexFileParser/IndexFileParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`)
+
+- ``Tools/IOUtils.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h`)
+
+- ``memory``
+
+- ``sstream``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1BinaryIndexFileParser`
+

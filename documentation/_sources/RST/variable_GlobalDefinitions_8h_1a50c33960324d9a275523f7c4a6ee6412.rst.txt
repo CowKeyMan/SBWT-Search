@@ -1,0 +1,14 @@
+.. _exhale_variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412:
+
+Variable sbwt_search::hyperblock_bits
+=====================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::hyperblock_bits
+   :project: SBWT Search

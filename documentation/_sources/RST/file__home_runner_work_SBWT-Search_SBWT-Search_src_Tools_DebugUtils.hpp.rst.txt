@@ -1,0 +1,61 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DebugUtils.hpp:
+
+File DebugUtils.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Utilities for debugging code. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/DebugUtils.hpp``)
+-----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DebugUtils.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``climits``
+
+- ``iostream``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_std`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_DebugUtils_8hpp_1a5ec4da283c6224b1eddcb991f366815a`
+

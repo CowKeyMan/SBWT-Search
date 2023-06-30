@@ -1,0 +1,14 @@
+.. _exhale_typedef_TypeDefinitions_8h_1a1af9f95651e921615e75917a6dd1b574:
+
+Typedef u64
+===========
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: u64
+   :project: SBWT Search

@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_CsvContinuousColorResultsPrinter.h:
+
+File CsvContinuousColorResultsPrinter.h
+=======================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorResultsPrinter``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Outputs csv results. Color indexes are ordered and space separated, and each seq is placed on a new line. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorResultsPrinter/CsvContinuousColorResultsPrinter.h``)
+---------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_CsvContinuousColorResultsPrinter.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``ColorResultsPrinter/ContinuousColorResultsPrinter.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1CsvContinuousColorResultsPrinter`
+

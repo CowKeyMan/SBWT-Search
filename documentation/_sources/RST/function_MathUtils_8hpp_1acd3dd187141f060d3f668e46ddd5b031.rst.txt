@@ -1,0 +1,14 @@
+.. _exhale_function_MathUtils_8hpp_1acd3dd187141f060d3f668e46ddd5b031:
+
+Template Function math_utils::divide_and_ceil
+=============================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: math_utils::divide_and_ceil(Real1, Real2)
+   :project: SBWT Search

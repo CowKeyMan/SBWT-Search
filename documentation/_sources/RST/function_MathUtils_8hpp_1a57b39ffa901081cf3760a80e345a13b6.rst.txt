@@ -1,0 +1,14 @@
+.. _exhale_function_MathUtils_8hpp_1a57b39ffa901081cf3760a80e345a13b6:
+
+Template Function math_utils::round_up
+======================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: math_utils::round_up(const UnsignedNumber, const UnsignedNumber)
+   :project: SBWT Search

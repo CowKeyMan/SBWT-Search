@@ -1,0 +1,17 @@
+.. _exhale_class_classunits__parser_1_1MemoryUnitsParser:
+
+Class MemoryUnitsParser
+=======================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: units_parser::MemoryUnitsParser
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

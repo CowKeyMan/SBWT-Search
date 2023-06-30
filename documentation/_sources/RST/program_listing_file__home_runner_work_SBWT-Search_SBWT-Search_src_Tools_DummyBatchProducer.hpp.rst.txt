@@ -1,0 +1,62 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp:
+
+Program Listing for File DummyBatchProducer.hpp
+===============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/DummyBatchProducer.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef DUMMY_BATCH_PRODUCER_HPP
+   #define DUMMY_BATCH_PRODUCER_HPP
+   
+   #include <memory>
+   #include <vector>
+   
+   #include "Tools/SharedBatchesProducer.hpp"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace test_utils {
+   
+   using design_utils::SharedBatchesProducer;
+   using std::make_shared;
+   using std::shared_ptr;
+   using std::vector;
+   
+   template <class T>
+   class DummyBatchProducer: public SharedBatchesProducer<T> {
+     vector<shared_ptr<T>> batches;
+     u64 counter = 0;
+   
+   public:
+     explicit DummyBatchProducer(const vector<shared_ptr<T>> &batches_):
+         batches(batches_), SharedBatchesProducer<T>(batches_.size() + 1) {
+       this->initialise_batches();
+       this->read_and_generate();
+     }
+     explicit DummyBatchProducer(const vector<T> &batches_):
+         SharedBatchesProducer<T>(batches_.size() + 1) {
+       this->initialise_batches();
+       for (auto b : batches_) { batches.push_back(make_shared<T>(b)); }
+       this->read_and_generate();
+     }
+   
+     auto get_default_value() -> shared_ptr<T> override {
+       return make_shared<T>();
+     }
+   
+     auto continue_read_condition() -> bool override {
+       return !(counter == batches.size());
+     }
+     auto generate() -> void override {
+       this->get_batches().current_write() = batches[counter];
+       counter++;
+     }
+   };
+   
+   }  // namespace test_utils
+   
+   #endif

@@ -1,0 +1,17 @@
+.. _exhale_class_classsbwt__search_1_1Poppy:
+
+Class Poppy
+===========
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::Poppy
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

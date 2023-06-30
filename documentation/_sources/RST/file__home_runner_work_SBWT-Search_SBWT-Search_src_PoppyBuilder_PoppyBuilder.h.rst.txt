@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h:
+
+File PoppyBuilder.h
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/PoppyBuilder``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+| Module responsible for building the rank index of the SBWT file | Assumptions made: | * basicblock_bits is a multiple of 64 | * superblock_bits is a multiple of basicblock_bits | * hyperblock_bits is a multiple of hyperblock_bits 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/PoppyBuilder/PoppyBuilder.h``)
+------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Poppy/Poppy.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``cstddef``
+
+- ``span``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1PoppyBuilder`
+

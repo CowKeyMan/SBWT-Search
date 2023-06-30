@@ -1,0 +1,52 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h:
+
+Program Listing for File PinnedVector.h
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/PinnedVector.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef PINNED_VECTOR_H
+   #define PINNED_VECTOR_H
+   
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace gpu_utils {
+   
+   using std::vector;
+   
+   template <class T>
+   class PinnedVector {
+     T *ptr;
+     u64 bytes;
+     u64 num_elems = 0;
+   
+   public:
+     explicit PinnedVector(u64 size);
+     PinnedVector(PinnedVector &) = delete;
+     PinnedVector(PinnedVector &&) = delete;
+     auto operator=(PinnedVector &) = delete;
+     auto operator=(PinnedVector &&) = delete;
+   
+     auto data() const -> T *;
+     auto operator[](u64 n) -> T &;
+     auto operator[](u64 n) const -> const T &;
+     auto push_back(const T &elem) -> void;
+     [[nodiscard]] auto size() const -> u64;
+     auto resize(u64 n) -> void;
+     [[nodiscard]] auto empty() const -> bool;
+     auto back() -> T &;
+     auto to_vector() -> vector<T> { return vector<T>(ptr, ptr + num_elems); }
+   
+     ~PinnedVector();
+   };
+   
+   }  // namespace gpu_utils
+   
+   #endif

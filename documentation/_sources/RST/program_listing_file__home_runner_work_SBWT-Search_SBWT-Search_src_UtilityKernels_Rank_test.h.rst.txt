@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h:
+
+Program Listing for File Rank_test.h
+====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/UtilityKernels/Rank_test.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef RANK_TEST_H
+   #define RANK_TEST_H
+   
+   #include "Tools/GpuPointer.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::GpuPointer;
+   
+   auto get_rank(
+     const GpuPointer<u64> &bit_vector,
+     const GpuPointer<u64> &poppy_layer_0,
+     const GpuPointer<u64> &poppy_layer_1_2,
+     u64 index
+   ) -> u64;
+   
+   }  // namespace sbwt_search
+   
+   #endif

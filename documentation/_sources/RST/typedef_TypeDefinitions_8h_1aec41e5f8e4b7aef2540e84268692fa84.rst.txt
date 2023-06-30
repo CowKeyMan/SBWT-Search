@@ -1,0 +1,14 @@
+.. _exhale_typedef_TypeDefinitions_8h_1aec41e5f8e4b7aef2540e84268692fa84:
+
+Typedef i32
+===========
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: i32
+   :project: SBWT Search

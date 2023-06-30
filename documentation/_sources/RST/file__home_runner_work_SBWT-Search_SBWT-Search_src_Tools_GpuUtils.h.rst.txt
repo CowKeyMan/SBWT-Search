@@ -1,0 +1,68 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h:
+
+File GpuUtils.h
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains GPU commonly used functions and tools. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/GpuUtils.h``)
+-------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``sstream``
+
+- ``stdexcept``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_gpu_utils`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_GpuUtils_8h_1a4eb22c89929e9e4ea34590e1e5356d6a`
+

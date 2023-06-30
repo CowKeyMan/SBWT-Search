@@ -1,0 +1,14 @@
+.. _exhale_variable_BenchmarkUtils_8hpp_1a5edd72773534aa85e34512678cbf5cc3:
+
+Variable benchmark_utils::TIME_IT_START_TIME
+============================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: benchmark_utils::TIME_IT_START_TIME
+   :project: SBWT Search

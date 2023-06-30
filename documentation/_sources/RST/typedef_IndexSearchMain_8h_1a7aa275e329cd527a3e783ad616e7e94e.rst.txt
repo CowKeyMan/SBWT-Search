@@ -1,0 +1,14 @@
+.. _exhale_typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e:
+
+Typedef sbwt_search::IndexResultsPrinter
+========================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: sbwt_search::IndexResultsPrinter
+   :project: SBWT Search

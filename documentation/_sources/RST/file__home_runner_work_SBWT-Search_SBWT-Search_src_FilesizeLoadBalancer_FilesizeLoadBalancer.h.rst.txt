@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer_FilesizeLoadBalancer.h:
+
+File FilesizeLoadBalancer.h
+===========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/FilesizeLoadBalancer``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Takes in a list of files and a number N. N determines how many partitions (streams) we want for the files. The vector of files is then split into N buckets of approximately equal size. This is known as the multiway partitioning problem and more information about it can be found here: https://en.wikipedia.org/wiki/Multiway_number_partitioning. In our implementation, we use the greedy algorithm due to its simplicity and speed, and it comes close to a bound of 4/3 of the optimal solution. This method is also called the longest processing time first algorithm and more information can be found here: https://en.wikipedia.org/wiki/Longest-processing-time-first_scheduling. Other methods were attempted but they were too slow, especially as N increases. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/FilesizeLoadBalancer/FilesizeLoadBalancer.h``)
+----------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer_FilesizeLoadBalancer.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``map`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h`)
+
+- ``string``
+
+- ``utility``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1FilesizeLoadBalancer`
+

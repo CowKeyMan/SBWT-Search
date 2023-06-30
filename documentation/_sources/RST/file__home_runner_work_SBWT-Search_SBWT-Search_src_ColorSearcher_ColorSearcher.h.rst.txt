@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h:
+
+File ColorSearcher.h
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorSearcher``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Offloads color searching and memory copies to the gpu, given the indexes. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorSearcher/ColorSearcher.h``)
+--------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``ColorIndexContainer/GpuColorIndexContainer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h`)
+
+- ``Tools/GpuEvent.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuEvent.h`)
+
+- ``Tools/GpuStream.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h`)
+
+- ``Tools/PinnedVector.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h`)
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorSearcher`
+

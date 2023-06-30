@@ -1,0 +1,14 @@
+.. _exhale_variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9:
+
+Variable sbwt_search::sixteen_kB
+================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::sixteen_kB
+   :project: SBWT Search

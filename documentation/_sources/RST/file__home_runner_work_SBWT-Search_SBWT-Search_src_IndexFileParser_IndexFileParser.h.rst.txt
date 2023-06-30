@@ -1,0 +1,88 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h:
+
+File IndexFileParser.h
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Parent template class for reading the list of integers provided by the indexing function. Provides a padded list of integers per seq and another list of indexes to indicate where each seq starts in our list of integers. Note: these classes expect the input to have the version number as the first item, and then the contents later. The format encoded in the file's header is read by another part of the code. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser/IndexFileParser.h``)
+------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``BatchObjects/IndexesBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h`)
+
+- ``BatchObjects/SeqStatisticsBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h`)
+
+- ``Tools/IOUtils.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``fstream``
+
+- ``memory``
+
+- ``zlib.h``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_AsciiIndexFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_BinaryIndexFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_ContinuousIndexFileParser.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexFileParser`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c`
+
+- :ref:`exhale_variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9`
+

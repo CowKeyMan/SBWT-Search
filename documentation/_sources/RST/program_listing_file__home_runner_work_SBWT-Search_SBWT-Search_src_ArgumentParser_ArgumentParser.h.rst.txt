@@ -1,0 +1,58 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h:
+
+Program Listing for File ArgumentParser.h
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ArgumentParser/ArgumentParser.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef ARGUMENT_PARSER_H
+   #define ARGUMENT_PARSER_H
+   
+   #include <memory>
+   #include <string>
+   #include <vector>
+   
+   #include "cxxopts.hpp"
+   
+   namespace sbwt_search {
+   
+   using cxxopts::Options;
+   using cxxopts::ParseResult;
+   using cxxopts::value;
+   using std::string;
+   using std::unique_ptr;
+   using std::vector;
+   
+   class ArgumentParser {
+   private:
+     cxxopts::Options options;
+     cxxopts::ParseResult args = {};
+   
+   public:
+     auto parse_arguments(int argc, char **argv) -> ParseResult;
+   
+     ArgumentParser(ArgumentParser &) = delete;
+     ArgumentParser(ArgumentParser &&) = delete;
+     auto operator=(ArgumentParser &) = delete;
+     auto operator=(ArgumentParser &&) = delete;
+     virtual ~ArgumentParser() = default;
+   
+   protected:
+     ArgumentParser(const string &program_name, const string &program_description);
+     auto initialise_args(int argc, char **argv) -> void;
+     [[nodiscard]] auto get_args() const -> const cxxopts::ParseResult &;
+     auto get_options() -> cxxopts::Options &;
+     virtual auto get_required_options() const -> vector<string> = 0;
+   
+   private:
+     auto is_required_all_provided(ParseResult &args) -> bool;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

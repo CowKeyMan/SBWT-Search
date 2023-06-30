@@ -1,0 +1,17 @@
+.. _exhale_class_classsbwt__search_1_1CpuColorIndexContainer:
+
+Class CpuColorIndexContainer
+============================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_CpuColorIndexContainer.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::CpuColorIndexContainer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

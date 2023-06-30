@@ -1,0 +1,84 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h:
+
+File ColorSearchMain.h
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Main>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Main``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+The main function for searching for the colors. The 'color' mode of the main executable. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Main/ColorSearchMain.h``)
+-------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``ArgumentParser/ColorSearchArgumentParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ColorSearchArgumentParser.h`)
+
+- ``ColorIndexContainer/GpuColorIndexContainer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h`)
+
+- ``ColorResultsPrinter/AsciiContinuousColorResultsPrinter.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_AsciiContinuousColorResultsPrinter.h`)
+
+- ``ColorResultsPrinter/BinaryContinuousColorResultsPrinter.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_BinaryContinuousColorResultsPrinter.h`)
+
+- ``ColorResultsPrinter/CsvContinuousColorResultsPrinter.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_CsvContinuousColorResultsPrinter.h`)
+
+- ``ColorSearcher/ContinuousColorSearcher.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h`)
+
+- ``IndexFileParser/ContinuousIndexFileParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_ContinuousIndexFileParser.h`)
+
+- ``Main/Main.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h`)
+
+- ``memory``
+
+- ``string``
+
+- ``variant``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorSearchMain`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9`
+
