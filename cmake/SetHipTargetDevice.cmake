@@ -63,7 +63,7 @@ if(${HIP_TARGET_DEVICE} STREQUAL "cpu")
     FetchContent_Declare(
     hipcpu
     QUIET
-    GIT_REPOSITORY       https://github.com/CowKeyMan/HIP-CPU.git
+    GIT_REPOSITORY       https://github.com/ROCm/HIP-CPU.git
     GIT_TAG              e112c935057434897bb12d9ab3910380a8bd5f58
     GIT_SHALLOW          TRUE
   )
