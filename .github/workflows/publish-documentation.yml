@@ -15,16 +15,10 @@ on:
 jobs:
 
   build_documentation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout the master branch
         uses: actions/checkout@v3
-
-      - name: Set up GCC
-        uses: egor-tensin/setup-gcc@v2
-        with:
-          version: latest
-          platform: x64
 
       - name: Install CUDA compiler
         uses: Jimver/cuda-toolkit@v0.2.30
