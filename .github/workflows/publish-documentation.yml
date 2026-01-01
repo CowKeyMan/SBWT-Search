@@ -52,7 +52,9 @@ jobs:
         run: sh ./scripts/test/test.sh
 
       - name: Free up space on device
-        run: sudo apt-get remove cuda-toolkit && sudo apt clean
+        run: |
+          sudo apt remove cuda-11-7 -y
+          sudo apt clean -y
 
 
       - name: Build Thesis
