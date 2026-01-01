@@ -64,7 +64,7 @@ if(${HIP_TARGET_DEVICE} STREQUAL "cpu")
     hipcpu
     QUIET
     GIT_REPOSITORY       https://github.com/CowKeyMan/HIP-CPU.git
-    GIT_TAG              92dd08ef2a735c4e8c230ead8f7e413eae99ed3f
+    GIT_TAG              e112c935057434897bb12d9ab3910380a8bd5f58
     GIT_SHALLOW          TRUE
   )
   FetchContent_MakeAvailable(hipcpu)
