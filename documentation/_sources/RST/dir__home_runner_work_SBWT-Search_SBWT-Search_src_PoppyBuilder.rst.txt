@@ -1,0 +1,21 @@
+.. _dir__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder:
+
+
+Directory PoppyBuilder
+======================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src>` (``/home/runner/work/SBWT-Search/SBWT-Search/src``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+*Directory path:* ``/home/runner/work/SBWT-Search/SBWT-Search/src/PoppyBuilder``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h`
+
+

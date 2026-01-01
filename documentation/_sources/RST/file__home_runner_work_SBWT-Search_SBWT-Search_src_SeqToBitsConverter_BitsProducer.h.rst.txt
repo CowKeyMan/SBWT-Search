@@ -1,0 +1,73 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h:
+
+File BitsProducer.h
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SeqToBitsConverter``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Transforms a list of ACTG characters into their 2-bit equivalent and packs them into a u64 bitvector. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/SeqToBitsConverter/BitsProducer.h``)
+------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``BatchObjects/BitSeqBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h`)
+
+- ``Tools/MathUtils.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``algorithm``
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_ContinuousSeqToBitsConverter.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1BitsProducer`
+

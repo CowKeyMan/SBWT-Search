@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DebugUtils.hpp:
+
+Program Listing for File DebugUtils.hpp
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DebugUtils.hpp>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/DebugUtils.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef DEBUG_UTILS_HPP
+   #define DEBUG_UTILS_HPP
+   
+   #include <climits>
+   #include <iostream>
+   #include <vector>
+   
+   using namespace std;
+   
+   template <class T>
+   void print(const vector<T> &v, u64 max = ULLONG_MAX) {
+     u64 counter = 0;
+     for (auto &x : v) {
+       cout << x << ' ';
+       if (counter++ >= max) { break; };
+     }
+     cout << endl;
+   }
+   
+   #endif

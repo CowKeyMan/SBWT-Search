@@ -1,0 +1,17 @@
+.. _exhale_class_classgpu__utils_1_1GpuEvent:
+
+Class GpuEvent
+==============
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuEvent.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: gpu_utils::GpuEvent
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

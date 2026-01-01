@@ -1,0 +1,190 @@
+
+.. _namespace_sbwt_search:
+
+Namespace sbwt_search
+=====================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ArgumentParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1AsciiContinuousColorResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1AsciiContinuousIndexResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1AsciiIndexFileParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1BinaryContinuousColorResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1BinaryContinuousIndexResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1BinaryIndexFileParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1BitSeqBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1BitsProducer`
+
+- :ref:`exhale_class_classsbwt__search_1_1BoolContinuousIndexResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1CharToBits`
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorIndexBuilder`
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorsBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorSearchArgumentParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorSearcher`
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorSearchMain`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousColorResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousColorSearcher`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousIndexFileParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousIndexResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousIndexSearcher`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousPositionsBuilder`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousSeqToBitsConverter`
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousSequenceFileParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1CpuColorIndexContainer`
+
+- :ref:`exhale_class_classsbwt__search_1_1CpuSbwtContainer`
+
+- :ref:`exhale_class_classsbwt__search_1_1CsvContinuousColorResultsPrinter`
+
+- :ref:`exhale_class_classsbwt__search_1_1FilenamesParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1FilesizeLoadBalancer`
+
+- :ref:`exhale_class_classsbwt__search_1_1GpuColorIndexContainer`
+
+- :ref:`exhale_class_classsbwt__search_1_1GpuSbwtContainer`
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexesBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexesBatchProducer`
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexFileParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexSearchArgumentParser`
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexSearcher`
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexSearchMain`
+
+- :ref:`exhale_class_classsbwt__search_1_1IntervalBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1IntervalBatchProducer`
+
+- :ref:`exhale_class_classsbwt__search_1_1InvalidCharsBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1InvalidCharsProducer`
+
+- :ref:`exhale_class_classsbwt__search_1_1Main`
+
+- :ref:`exhale_class_classsbwt__search_1_1Poppy`
+
+- :ref:`exhale_class_classsbwt__search_1_1PoppyBuilder`
+
+- :ref:`exhale_class_classsbwt__search_1_1PositionsBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1PositionsBuilder`
+
+- :ref:`exhale_class_classsbwt__search_1_1Presearcher`
+
+- :ref:`exhale_class_classsbwt__search_1_1ResultsBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1SbwtBuilder`
+
+- :ref:`exhale_class_classsbwt__search_1_1SbwtContainer`
+
+- :ref:`exhale_class_classsbwt__search_1_1SeqStatisticsBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1SeqStatisticsBatchProducer`
+
+- :ref:`exhale_class_classsbwt__search_1_1StringBreakBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1StringBreakBatchProducer`
+
+- :ref:`exhale_class_classsbwt__search_1_1StringSequenceBatch`
+
+- :ref:`exhale_class_classsbwt__search_1_1StringSequenceBatchProducer`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_SbwtContainer_8h_1a82ce2e4d2f9e33cdea30a70049a3fcfe`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_GetBoolFromBitVector__test_8h_1a56f5d8cef0e8aebcd60c28dcf5c73d87`
+
+- :ref:`exhale_function_Rank__test_8h_1a674a170763f6f5363f10649cf8ed3299`
+
+- :ref:`exhale_function_VariableLengthIntegerIndex__test_8h_1a68db2b67fdca238d7ea7d9e93cb48862`
+
+- :ref:`exhale_function_IndexFileParserTestUtils_8h_1a7e31d76b35c00621a0467f1449055424`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_ColorSearchMain_8h_1a10a665969decc2ebf549f45db3902ac9`
+
+- :ref:`exhale_typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a0c885ad01102270a3fdab955d75c043a`
+
+- :ref:`exhale_variable_SbwtContainer_8h_1a8de8dcd3628550aed5f24e7b74b8b84d`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a427cad7fed6538fefd42f623ae33008a`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a50c33960324d9a275523f7c4a6ee6412`
+
+- :ref:`exhale_variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c`
+
+- :ref:`exhale_variable_Poppy_8h_1a6ab78996b008aa3d3b5816a85d837d1d`
+
+- :ref:`exhale_variable_Poppy_8h_1a8cbab7d04bb295d78fe17452045ddc07`
+
+- :ref:`exhale_variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a`
+
+- :ref:`exhale_variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a87288ec90579454822c04ce173d06e36`
+
+- :ref:`exhale_variable_IndexFileParser_8h_1ab3b9b845a028a761a49f3a69ea0f9da9`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1af361dd3ffbcd191cfdc312bfd64eefa8`
+
+- :ref:`exhale_variable_GlobalDefinitions_8h_1a967c8556fd9d51942dfe64d59cccc260`

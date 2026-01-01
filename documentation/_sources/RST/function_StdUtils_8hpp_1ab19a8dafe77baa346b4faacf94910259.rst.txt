@@ -1,0 +1,14 @@
+.. _exhale_function_StdUtils_8hpp_1ab19a8dafe77baa346b4faacf94910259:
+
+Template Function std_utils::copy_advance
+=========================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: std_utils::copy_advance(Iterator, u64)
+   :project: SBWT Search

@@ -1,0 +1,17 @@
+.. _exhale_class_classgpu__utils_1_1GpuPointer:
+
+Template Class GpuPointer
+=========================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: gpu_utils::GpuPointer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

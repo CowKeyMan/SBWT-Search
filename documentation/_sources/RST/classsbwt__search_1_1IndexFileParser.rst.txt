@@ -1,0 +1,27 @@
+.. _exhale_class_classsbwt__search_1_1IndexFileParser:
+
+Class IndexFileParser
+=====================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public sbwt_search::AsciiIndexFileParser`` (:ref:`exhale_class_classsbwt__search_1_1AsciiIndexFileParser`)
+- ``public sbwt_search::BinaryIndexFileParser`` (:ref:`exhale_class_classsbwt__search_1_1BinaryIndexFileParser`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::IndexFileParser
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

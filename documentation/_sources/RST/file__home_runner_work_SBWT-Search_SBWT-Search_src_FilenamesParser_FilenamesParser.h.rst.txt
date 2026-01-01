@@ -1,0 +1,59 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser_FilenamesParser.h:
+
+File FilenamesParser.h
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/FilenamesParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Takes the input and output user input and outputs if the files are a direct input or if they are a series of files. They are considered a series of files if the extension of the file is '.list'. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/FilenamesParser/FilenamesParser.h``)
+------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser_FilenamesParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``string``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1FilenamesParser`
+

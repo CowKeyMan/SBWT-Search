@@ -1,0 +1,33 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_RNGUtils.hpp:
+
+Program Listing for File RNGUtils.hpp
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_RNGUtils.hpp>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/RNGUtils.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef R_N_G_UTILS_HPP
+   #define R_N_G_UTILS_HPP
+   
+   #include <functional>
+   #include <random>
+   
+   namespace rng_utils {
+   
+   using std::bind;
+   using std::mt19937;
+   using std::uniform_int_distribution;
+   
+   template <class T>
+   auto get_uniform_int_generator(T min_value, T max_value, int seed = 0) {
+     // Both min and max included
+     return bind(uniform_int_distribution<T>(min_value, max_value), mt19937(seed));
+   }
+   
+   }  // namespace rng_utils
+   
+   #endif

@@ -1,0 +1,31 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_InvalidCharsBatch.h:
+
+Program Listing for File InvalidCharsBatch.h
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_InvalidCharsBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/InvalidCharsBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef INVALID_CHARS_BATCH_H
+   #define INVALID_CHARS_BATCH_H
+   
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::vector;
+   
+   class InvalidCharsBatch {
+   public:
+     vector<char> invalid_chars;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

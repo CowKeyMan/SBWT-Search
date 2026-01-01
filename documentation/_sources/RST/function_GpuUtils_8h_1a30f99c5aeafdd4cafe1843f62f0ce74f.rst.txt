@@ -1,0 +1,14 @@
+.. _exhale_function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f:
+
+Function gpu_utils::get_free_gpu_memory
+=======================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: gpu_utils::get_free_gpu_memory()
+   :project: SBWT Search

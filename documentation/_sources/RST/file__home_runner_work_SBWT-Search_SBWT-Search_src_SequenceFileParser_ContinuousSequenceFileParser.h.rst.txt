@@ -1,0 +1,81 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h:
+
+File ContinuousSequenceFileParser.h
+===================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Continuously reads sequences from a file or multiple files into a buffer. Then it can serve these sequences to its consumers. The reading is done in such a way that a single batch can contain characters from multiple lines. kseqpp_REad is used for parsing the files and getting the list of where each line break is. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser/ContinuousSequenceFileParser.h``)
+----------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``SequenceFileParser/IntervalBatchProducer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h`)
+
+- ``SequenceFileParser/StringBreakBatchProducer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringBreakBatchProducer.h`)
+
+- ``SequenceFileParser/StringSequenceBatchProducer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``algorithm``
+
+- ``kseqpp_read.hpp``
+
+- ``memory``
+
+- ``string``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ContinuousSequenceFileParser`
+

@@ -1,0 +1,49 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer_FilesizeLoadBalancer.h:
+
+Program Listing for File FilesizeLoadBalancer.h
+===============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer_FilesizeLoadBalancer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/FilesizeLoadBalancer/FilesizeLoadBalancer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef FILESIZE_LOAD_BALANCER_H
+   #define FILESIZE_LOAD_BALANCER_H
+   
+   #include <map>
+   #include <string>
+   #include <utility>
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::map;
+   using std::pair;
+   using std::string;
+   using std::vector;
+   
+   class FilesizeLoadBalancer {
+   private:
+     vector<string> in_files, out_files;
+     map<u64, vector<pair<string, string>>> size_to_files;
+   
+   public:
+     FilesizeLoadBalancer(
+       const vector<string> &in_files_, const vector<string> &out_files_
+     );
+     auto partition(u64 partitions)
+       -> pair<vector<vector<string>>, vector<vector<string>>>;
+   
+   private:
+     auto populate_size_to_files() -> void;
+     auto get_smallest_partition_index(vector<u64> &partition_sizes) -> u64;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

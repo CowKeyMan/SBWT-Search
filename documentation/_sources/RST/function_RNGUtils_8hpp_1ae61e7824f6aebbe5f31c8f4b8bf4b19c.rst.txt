@@ -1,0 +1,14 @@
+.. _exhale_function_RNGUtils_8hpp_1ae61e7824f6aebbe5f31c8f4b8bf4b19c:
+
+Template Function rng_utils::get_uniform_int_generator
+======================================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_RNGUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: rng_utils::get_uniform_int_generator(T, T, int)
+   :project: SBWT Search

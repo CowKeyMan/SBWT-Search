@@ -1,0 +1,14 @@
+.. _exhale_variable_IndexFileParser_8h_1a22c23056fd48c48da78d414b1f55344c:
+
+Variable sbwt_search::pad
+=========================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::pad
+   :project: SBWT Search

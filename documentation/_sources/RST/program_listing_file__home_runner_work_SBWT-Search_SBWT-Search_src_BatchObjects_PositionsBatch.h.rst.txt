@@ -1,0 +1,33 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h:
+
+Program Listing for File PositionsBatch.h
+=========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/PositionsBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef POSITIONS_BATCH_H
+   #define POSITIONS_BATCH_H
+   
+   #include <vector>
+   
+   #include "Tools/PinnedVector.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::PinnedVector;
+   
+   class PositionsBatch {
+   public:
+     PinnedVector<u64> positions;
+     explicit PositionsBatch(u64 positions_size): positions(positions_size) {}
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

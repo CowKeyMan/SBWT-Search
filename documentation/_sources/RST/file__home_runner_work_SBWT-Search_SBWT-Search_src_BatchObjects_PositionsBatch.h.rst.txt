@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h:
+
+File PositionsBatch.h
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Has data created by the positions builder, which is a list of valid positions within a string sequence where the SBWT should search. A valid sequence is one where the string length is equal to the k-mer size. For example, given the string ABCDE and FGHIJ, and k-mer size 3, positions 0, 1, 2 are valid positions, but position 3, which is the k-mer starting at D, is not valid. Hence, our final position list will be: [0, 1, 2, 5, 6, 7]. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/PositionsBatch.h``)
+--------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/PinnedVector.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_ContinuousIndexSearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1PositionsBatch`
+

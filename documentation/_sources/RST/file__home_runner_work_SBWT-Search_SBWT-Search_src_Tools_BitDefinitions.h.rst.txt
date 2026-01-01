@@ -1,0 +1,72 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h:
+
+File BitDefinitions.h
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains definitions for some useful commonly used bit related items. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/BitDefinitions.h``)
+-------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``array``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_bit_utils`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b`
+
+- :ref:`exhale_variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33`
+
+- :ref:`exhale_variable_BitDefinitions_8h_1a7065f53c73f6d51f1fca4a593a1ea870`
+
+- :ref:`exhale_variable_BitDefinitions_8h_1a9aae8b89133af5dc92acf753870cd6a3`
+

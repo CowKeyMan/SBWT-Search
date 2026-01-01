@@ -1,0 +1,26 @@
+.. _exhale_class_classtest__utils_1_1DummyBatchProducer:
+
+Template Class DummyBatchProducer
+=================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public design_utils::SharedBatchesProducer< T >`` (:ref:`exhale_class_classdesign__utils_1_1SharedBatchesProducer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: test_utils::DummyBatchProducer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

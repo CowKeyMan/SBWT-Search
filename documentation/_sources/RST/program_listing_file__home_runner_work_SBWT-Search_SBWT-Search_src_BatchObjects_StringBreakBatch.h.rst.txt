@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h:
+
+Program Listing for File StringBreakBatch.h
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/StringBreakBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef STRING_BREAK_BATCH_H
+   #define STRING_BREAK_BATCH_H
+   
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::vector;
+   
+   class StringBreakBatch {
+   public:
+     const vector<u64> *chars_before_newline;
+     u64 string_size;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

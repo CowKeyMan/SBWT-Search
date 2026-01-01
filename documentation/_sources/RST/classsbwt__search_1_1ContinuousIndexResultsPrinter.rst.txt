@@ -1,0 +1,17 @@
+.. _exhale_class_classsbwt__search_1_1ContinuousIndexResultsPrinter:
+
+Template Class ContinuousIndexResultsPrinter
+============================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::ContinuousIndexResultsPrinter
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

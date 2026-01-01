@@ -1,0 +1,29 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h:
+
+Program Listing for File GlobalDefinitions.h
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Global/GlobalDefinitions.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef GLOBAL_DEFINITIONS_H
+   #define GLOBAL_DEFINITIONS_H
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   constexpr const u64 hyperblock_bits = 1ULL << 32ULL;
+   constexpr const u64 superblock_bits = 1024;
+   constexpr const u64 basicblock_bits = 256;
+   constexpr const u64 presearch_letters = 12;
+   constexpr const u64 threads_per_block = 1024;
+   constexpr const u64 gpu_warp_size = 32;
+   
+   }  // namespace sbwt_search
+   
+   #endif

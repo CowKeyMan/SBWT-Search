@@ -1,0 +1,14 @@
+.. _exhale_typedef_TypeDefinitions_8h_1a987e4d6cf789cb59dbb390728271e4d6:
+
+Typedef u8
+==========
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: u8
+   :project: SBWT Search

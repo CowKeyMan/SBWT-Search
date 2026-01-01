@@ -1,0 +1,14 @@
+.. _exhale_function_MemoryUtils_8h_1aa9dae2e89db35eb54749351bfc95ee30:
+
+Function memory_utils::get_total_system_memory
+==============================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUtils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: memory_utils::get_total_system_memory()
+   :project: SBWT Search

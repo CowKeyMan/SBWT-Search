@@ -1,0 +1,92 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h:
+
+File IndexSearchMain.h
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Main>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Main``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+The main function for searching the index. The 'index' mode of the main executable. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Main/IndexSearchMain.h``)
+-------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``ArgumentParser/IndexSearchArgumentParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_IndexSearchArgumentParser.h`)
+
+- ``IndexResultsPrinter/AsciiContinuousIndexResultsPrinter.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h`)
+
+- ``IndexResultsPrinter/BinaryContinuousIndexResultsPrinter.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BinaryContinuousIndexResultsPrinter.h`)
+
+- ``IndexResultsPrinter/BoolContinuousIndexResultsPrinter.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BoolContinuousIndexResultsPrinter.h`)
+
+- ``IndexSearcher/ContinuousIndexSearcher.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_ContinuousIndexSearcher.h`)
+
+- ``Main/Main.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h`)
+
+- ``PositionsBuilder/ContinuousPositionsBuilder.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h`)
+
+- ``SbwtContainer/GpuSbwtContainer.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_GpuSbwtContainer.h`)
+
+- ``SeqToBitsConverter/ContinuousSeqToBitsConverter.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_ContinuousSeqToBitsConverter.h`)
+
+- ``SequenceFileParser/ContinuousSequenceFileParser.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h`)
+
+- ``memory``
+
+- ``string``
+
+- ``tuple``
+
+- ``variant``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexSearchMain`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_IndexSearchMain_8h_1a7aa275e329cd527a3e783ad616e7e94e`
+

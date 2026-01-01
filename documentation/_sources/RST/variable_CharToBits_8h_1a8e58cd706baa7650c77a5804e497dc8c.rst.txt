@@ -1,0 +1,14 @@
+.. _exhale_variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c:
+
+Variable sbwt_search::invalid_char_to_bits_value
+================================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_CharToBits.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::invalid_char_to_bits_value
+   :project: SBWT Search

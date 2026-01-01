@@ -1,0 +1,14 @@
+.. _exhale_function_TestUtils_8hpp_1afc467ccdf2c6a0a3c0063a95ef950af7:
+
+Template Function test_utils::assert_vectors_equal
+==================================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: test_utils::assert_vectors_equal(const vector<T>&, const vector<T>&, const string&, int)
+   :project: SBWT Search

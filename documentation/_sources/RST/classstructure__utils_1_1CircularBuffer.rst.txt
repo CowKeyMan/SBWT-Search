@@ -1,0 +1,17 @@
+.. _exhale_class_classstructure__utils_1_1CircularBuffer:
+
+Template Class CircularBuffer
+=============================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularBuffer.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: structure_utils::CircularBuffer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

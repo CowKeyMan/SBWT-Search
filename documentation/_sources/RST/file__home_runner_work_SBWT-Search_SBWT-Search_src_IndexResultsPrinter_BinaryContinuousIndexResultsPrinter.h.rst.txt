@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BinaryContinuousIndexResultsPrinter.h:
+
+File BinaryContinuousIndexResultsPrinter.h
+==========================================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Inherits ContinuousIndexResultsPrinter and prints out binary values. Not-found characters are reprented with a max_u64, invalids with a max_u64-1 and newlines with a max_u64-2. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter/BinaryContinuousIndexResultsPrinter.h``)
+------------------------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BinaryContinuousIndexResultsPrinter.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1BinaryContinuousIndexResultsPrinter`
+

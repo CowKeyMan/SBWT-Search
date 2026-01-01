@@ -1,0 +1,83 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp:
+
+File MathUtils.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+A collection of utility scripts to extend math functionality. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/MathUtils.hpp``)
+----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``cmath``
+
+- ``type_traits``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_math_utils`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_MathUtils_8hpp_1a7aa310486c40ef60f8670c5ee8d6834a`
+
+- :ref:`exhale_function_MathUtils_8hpp_1acd3dd187141f060d3f668e46ddd5b031`
+
+- :ref:`exhale_function_MathUtils_8hpp_1ad70360805c3fdf6a7e2f77b67aa5ec8b`
+
+- :ref:`exhale_function_MathUtils_8hpp_1ad99dc9679530f3f98711c3e2509daf8c`
+
+- :ref:`exhale_function_MathUtils_8hpp_1ab462ecf04def5ea064d6998a5187fbb2`
+
+- :ref:`exhale_function_MathUtils_8hpp_1a57b39ffa901081cf3760a80e345a13b6`
+

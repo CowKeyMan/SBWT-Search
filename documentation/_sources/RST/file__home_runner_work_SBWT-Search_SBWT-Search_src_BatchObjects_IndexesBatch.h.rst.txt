@@ -1,0 +1,67 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h:
+
+File IndexesBatch.h
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains the indexes of the search function which are output to disk in the 'index' phase. These are warped, meaning that the sequences are padded to the multiple of the next warp_size. Warp intervals tell us at which warp the current sequence starts and ends. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/IndexesBatch.h``)
+------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/PinnedVector.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1IndexesBatch`
+

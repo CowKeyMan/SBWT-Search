@@ -1,0 +1,67 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h:
+
+File IntervalBatch.h
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Data class for the intervals. The chars_before_newline is a vector which gives the number of characters that a string contains, before the new one ends. newlines_before_newfile is a vector which tells us how many newlines we need before we need to start considering the next lines or sequences as originating from a new file. Note: the last character of both vectores will always be the max value (ULLONG_MAX), and both vectors are cumulative. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/IntervalBatch.h``)
+-------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1IntervalBatch`
+

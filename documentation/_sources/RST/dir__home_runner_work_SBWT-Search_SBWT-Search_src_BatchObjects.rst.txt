@@ -1,0 +1,30 @@
+.. _dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects:
+
+
+Directory BatchObjects
+======================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src>` (``/home/runner/work/SBWT-Search/SBWT-Search/src``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+*Directory path:* ``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_InvalidCharsBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringSequenceBatch.h`
+
+

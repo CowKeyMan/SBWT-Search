@@ -1,0 +1,14 @@
+.. _exhale_variable_BitDefinitions_8h_1a6363cc8ba8054f864ae0c854dbe2060b:
+
+Variable bit_utils::set_bits
+============================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: bit_utils::set_bits
+   :project: SBWT Search

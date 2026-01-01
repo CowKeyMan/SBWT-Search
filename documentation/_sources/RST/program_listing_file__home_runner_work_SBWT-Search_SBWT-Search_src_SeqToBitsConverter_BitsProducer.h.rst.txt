@@ -1,0 +1,51 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h:
+
+Program Listing for File BitsProducer.h
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SeqToBitsConverter/BitsProducer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef BITS_PRODUCER_H
+   #define BITS_PRODUCER_H
+   
+   #include <algorithm>
+   #include <memory>
+   
+   #include "BatchObjects/BitSeqBatch.h"
+   #include "Tools/MathUtils.hpp"
+   #include "Tools/SharedBatchesProducer.hpp"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   class ContinuousSeqToBitsConverter;
+   
+   using design_utils::SharedBatchesProducer;
+   using math_utils::round_up;
+   using std::fill;
+   using std::make_shared;
+   using std::shared_ptr;
+   
+   class BitsProducer: public SharedBatchesProducer<BitSeqBatch> {
+     friend ContinuousSeqToBitsConverter;
+     u64 max_chars_per_batch;
+   
+   public:
+     BitsProducer(u64 max_chars_per_batch_, u64 max_batches);
+   
+     auto static get_bits_per_element() -> u64;
+   
+   private:
+     auto get_default_value() -> shared_ptr<BitSeqBatch> override;
+     auto start_new_batch(u64 num_chars) -> void;
+     auto set(u64 index, u64 value) -> void;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

@@ -1,0 +1,63 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h:
+
+Program Listing for File AsciiContinuousIndexResultsPrinter.h
+=============================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexResultsPrinter/AsciiContinuousIndexResultsPrinter.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef ASCII_CONTINUOUS_INDEX_RESULTS_PRINTER_H
+   #define ASCII_CONTINUOUS_INDEX_RESULTS_PRINTER_H
+   
+   #include "IndexResultsPrinter/ContinuousIndexResultsPrinter.hpp"
+   
+   namespace sbwt_search {
+   
+   class AsciiContinuousIndexResultsPrinter:
+       public ContinuousIndexResultsPrinter<
+         AsciiContinuousIndexResultsPrinter,
+         char> {
+     using Base
+       = ContinuousIndexResultsPrinter<AsciiContinuousIndexResultsPrinter, char>;
+     friend Base;
+   
+   public:
+     AsciiContinuousIndexResultsPrinter(
+       u64 stream_id,
+       shared_ptr<SharedBatchesProducer<ResultsBatch>> results_producer,
+       shared_ptr<SharedBatchesProducer<IntervalBatch>> interval_producer,
+       shared_ptr<SharedBatchesProducer<InvalidCharsBatch>> invalid_chars_producer,
+       vector<string> filenames_,
+       u64 kmer_size,
+       u64 threads,
+       u64 max_chars_per_batch,
+       u64 max_seqs_per_batch,
+       bool write_headers,
+       u64 max_index
+     );
+   
+     static auto get_bits_per_element(u64 max_index) -> u64;
+   
+   protected:
+     auto do_get_extension() -> string;
+     auto do_get_format() -> string;
+     auto do_get_version() -> string;
+   
+     [[nodiscard]] auto do_with_result(vector<char>::iterator buffer, u64 result)
+       -> u64;
+     [[nodiscard]] auto do_with_not_found(vector<char>::iterator buffer) const
+       -> u64;
+     [[nodiscard]] auto do_with_invalid(vector<char>::iterator buffer) const
+       -> u64;
+     [[nodiscard]] auto do_with_space(vector<char>::iterator buffer) const -> u64;
+     [[nodiscard]] auto do_with_newline(vector<char>::iterator buffer) const
+       -> u64;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

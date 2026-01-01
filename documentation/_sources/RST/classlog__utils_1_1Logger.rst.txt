@@ -1,0 +1,17 @@
+.. _exhale_class_classlog__utils_1_1Logger:
+
+Class Logger
+============
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Logger.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: log_utils::Logger
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

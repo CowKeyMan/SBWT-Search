@@ -1,0 +1,20 @@
+
+.. _namespace_design_utils:
+
+Namespace design_utils
+======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classdesign__utils_1_1SharedBatchesProducer`

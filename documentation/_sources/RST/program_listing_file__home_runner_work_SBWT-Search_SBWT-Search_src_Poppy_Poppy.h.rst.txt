@@ -1,0 +1,36 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h:
+
+Program Listing for File Poppy.h
+================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Poppy/Poppy.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef POPPY_H
+   #define POPPY_H
+   
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::vector;
+   
+   const u64 layer_1_bits = 32;
+   const u64 layer_2_bits = 10;
+   
+   class Poppy {
+   public:
+     vector<u64> layer_0;
+     vector<u64> layer_1_2;
+     u64 total_1s = static_cast<u64>(-1);
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

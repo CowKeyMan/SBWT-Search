@@ -1,0 +1,26 @@
+.. _exhale_class_classsbwt__search_1_1IntervalBatchProducer:
+
+Class IntervalBatchProducer
+===========================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public design_utils::SharedBatchesProducer< IntervalBatch >`` (:ref:`exhale_class_classdesign__utils_1_1SharedBatchesProducer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::IntervalBatchProducer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,24 @@
+.. _dir__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser:
+
+
+Directory SequenceFileParser
+============================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src>` (``/home/runner/work/SBWT-Search/SBWT-Search/src``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+*Directory path:* ``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser``
+
+
+Files
+-----
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringBreakBatchProducer.h`
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h`
+
+

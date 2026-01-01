@@ -1,0 +1,22 @@
+
+.. _namespace_io_utils:
+
+Namespace io_utils
+==================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classio__utils_1_1ThrowingIfstream`
+
+- :ref:`exhale_class_classio__utils_1_1ThrowingOfstream`

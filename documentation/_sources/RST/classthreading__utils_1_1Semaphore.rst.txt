@@ -1,0 +1,17 @@
+.. _exhale_class_classthreading__utils_1_1Semaphore:
+
+Class Semaphore
+===============
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: threading_utils::Semaphore
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

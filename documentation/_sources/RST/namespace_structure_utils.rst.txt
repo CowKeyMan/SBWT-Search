@@ -1,0 +1,22 @@
+
+.. _namespace_structure_utils:
+
+Namespace structure_utils
+=========================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classstructure__utils_1_1CircularBuffer`
+
+- :ref:`exhale_class_classstructure__utils_1_1CircularQueue`

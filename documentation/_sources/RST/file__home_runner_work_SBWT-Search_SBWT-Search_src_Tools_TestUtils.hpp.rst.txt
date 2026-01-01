@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp:
+
+File TestUtils.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains functions to make testing functions cleaner. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/TestUtils.hpp``)
+----------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``gtest/gtest.h``
+
+- ``span``
+
+- ``string``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_test_utils`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_TestUtils_8hpp_1aec7931b7f47602618965112c55719147`
+
+- :ref:`exhale_function_TestUtils_8hpp_1afc467ccdf2c6a0a3c0063a95ef950af7`
+
+- :ref:`exhale_function_TestUtils_8hpp_1a20313e3dee8281a27883abd56befc1e0`
+
+- :ref:`exhale_function_TestUtils_8hpp_1a08036f93ddd4f87ffd52058f05396e24`
+

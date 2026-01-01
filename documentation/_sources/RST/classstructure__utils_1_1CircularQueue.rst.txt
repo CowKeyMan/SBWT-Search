@@ -1,0 +1,17 @@
+.. _exhale_class_classstructure__utils_1_1CircularQueue:
+
+Template Class CircularQueue
+============================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularQueue.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: structure_utils::CircularQueue
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

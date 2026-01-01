@@ -1,0 +1,81 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h:
+
+File IOUtils.h
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains utilities to ease interacting with IO streams such as check if a file exists. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/IOUtils.h``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``bit``
+
+- ``fstream``
+
+- ``string``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder_ColorIndexBuilder.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_AsciiIndexFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_BinaryIndexFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_io_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classio__utils_1_1ThrowingIfstream`
+
+- :ref:`exhale_class_classio__utils_1_1ThrowingOfstream`
+

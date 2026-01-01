@@ -1,0 +1,17 @@
+.. _exhale_class_classsbwt__search_1_1SbwtBuilder:
+
+Class SbwtBuilder
+=================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder_SbwtBuilder.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::SbwtBuilder
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,14 @@
+.. _exhale_typedef_TypeDefinitions_8h_1a86025ec3a0bc201ca893caac2cb2acbd:
+
+Typedef i64
+===========
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: i64
+   :project: SBWT Search

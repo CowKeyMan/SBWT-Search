@@ -1,0 +1,71 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h:
+
+File ArgumentParser.h
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ArgumentParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Parent class for argument parsers which take command line arguments and parses them into usable data structures. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/ArgumentParser/ArgumentParser.h``)
+----------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cxxopts.hpp``
+
+- ``memory``
+
+- ``string``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ColorSearchArgumentParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_IndexSearchArgumentParser.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ArgumentParser`
+

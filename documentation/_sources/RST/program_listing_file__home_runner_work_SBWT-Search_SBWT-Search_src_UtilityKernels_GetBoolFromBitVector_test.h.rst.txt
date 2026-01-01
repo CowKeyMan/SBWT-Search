@@ -1,0 +1,28 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_GetBoolFromBitVector_test.h:
+
+Program Listing for File GetBoolFromBitVector_test.h
+====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_GetBoolFromBitVector_test.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/UtilityKernels/GetBoolFromBitVector_test.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef GET_BOOL_FROM_BIT_VECTOR_TEST_H
+   #define GET_BOOL_FROM_BIT_VECTOR_TEST_H
+   
+   #include "Tools/GpuPointer.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::GpuPointer;
+   
+   auto get_bool_from_bit_vector(const GpuPointer<u64> &bit_vector, u64 index)
+     -> bool;
+   
+   }  // namespace sbwt_search
+   
+   #endif

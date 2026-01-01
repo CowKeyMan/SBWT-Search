@@ -1,0 +1,14 @@
+.. _exhale_function_BitDefinitions_8h_1afe03ca970f040124caf1d8a2692646ec:
+
+Function bit_utils::_get_set_bits
+=================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: bit_utils::_get_set_bits()
+   :project: SBWT Search

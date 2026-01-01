@@ -1,0 +1,14 @@
+.. _exhale_variable_BitDefinitions_8h_1ab39f79fcbdfe3379fcf899019e1b6e33:
+
+Variable bit_utils::ten_1s
+==========================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: bit_utils::ten_1s
+   :project: SBWT Search

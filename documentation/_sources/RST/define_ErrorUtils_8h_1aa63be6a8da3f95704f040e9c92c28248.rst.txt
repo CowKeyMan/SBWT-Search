@@ -1,0 +1,14 @@
+.. _exhale_define_ErrorUtils_8h_1aa63be6a8da3f95704f040e9c92c28248:
+
+Define throw_uninitialised
+==========================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_ErrorUtils.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: throw_uninitialised
+   :project: SBWT Search

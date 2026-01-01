@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h:
+
+File SeqStatisticsBatch.h
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Stores statistics about each sequence of indexes. These include how many ids were actually found within this seq, how many were invalid and how many were not found. Each of these are vectors, since a single batch can have many seqs. A seq may be split between 2 batches, so we also also store a boolean if the first seq of this batch should be joined with the last seq of the previous batch. We also have a colored_seq_id, which is useful since we do not store '0' colors for warps and seqs without colors, so we keep a cumulative id here for the colors id, where the colors are stored in a separate batch object. The seqs_before_new_file stores how many sequences we need to process before we need to start considering the next sequences as part of the next file. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/SeqStatisticsBatch.h``)
+------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1SeqStatisticsBatch`
+

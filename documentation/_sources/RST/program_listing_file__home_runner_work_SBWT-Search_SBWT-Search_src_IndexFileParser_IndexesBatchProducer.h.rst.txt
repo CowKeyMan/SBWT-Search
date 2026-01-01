@@ -1,0 +1,49 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h:
+
+Program Listing for File IndexesBatchProducer.h
+===============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/IndexFileParser/IndexesBatchProducer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef INDEXES_BATCH_PRODUCER_H
+   #define INDEXES_BATCH_PRODUCER_H
+   
+   #include <memory>
+   
+   #include "BatchObjects/IndexesBatch.h"
+   #include "Tools/SharedBatchesProducer.hpp"
+   
+   namespace sbwt_search {
+   
+   using design_utils::SharedBatchesProducer;
+   using std::shared_ptr;
+   
+   class ContinuousIndexFileParser;
+   
+   class IndexesBatchProducer: public SharedBatchesProducer<IndexesBatch> {
+     friend ContinuousIndexFileParser;
+   
+   private:
+     u64 max_indexes_per_batch;
+     u64 max_seqs_per_batch;
+   
+   public:
+     IndexesBatchProducer(
+       u64 max_seqs_per_batch_, u64 max_indexes_per_batch_, u64 max_batches
+     );
+   
+     auto static get_bits_per_element() -> u64;
+     auto static get_bits_per_seq() -> u64;
+   
+   private:
+     auto get_default_value() -> shared_ptr<IndexesBatch> override;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

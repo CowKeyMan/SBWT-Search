@@ -1,0 +1,42 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h:
+
+Program Listing for File Presearcher.h
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Presearcher/Presearcher.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef PRESEARCHER_H
+   #define PRESEARCHER_H
+   
+   #include <memory>
+   
+   #include "SbwtContainer/GpuSbwtContainer.h"
+   #include "Tools/GpuPointer.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::shared_ptr;
+   
+   class Presearcher {
+   private:
+     shared_ptr<GpuSbwtContainer> container;
+   
+   public:
+     explicit Presearcher(shared_ptr<GpuSbwtContainer> container_);
+     auto launch_presearch_kernel(
+       unique_ptr<GpuPointer<u64>> &presearch_left,
+       unique_ptr<GpuPointer<u64>> &presearch_right,
+       u64 blocks_per_grid
+     ) -> void;
+     auto presearch() -> void;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

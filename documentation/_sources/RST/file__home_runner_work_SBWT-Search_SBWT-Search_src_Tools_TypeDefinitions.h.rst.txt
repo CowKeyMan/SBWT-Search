@@ -1,0 +1,181 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h:
+
+File TypeDefinitions.h
+======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains type definitions created for convenience. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/TypeDefinitions.h``)
+--------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cstdint``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ColorSearchArgumentParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_InvalidCharsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringSequenceBatch.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_CpuColorIndexContainer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_AsciiContinuousColorResultsPrinter.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_BinaryContinuousColorResultsPrinter.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_CsvContinuousColorResultsPrinter.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer_FilesizeLoadBalancer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BinaryContinuousIndexResultsPrinter.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_PositionsBuilder.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder_SbwtBuilder.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_CpuSbwtContainer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_CharToBits.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_InvalidCharsProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularBuffer.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularQueue.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUtils.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_GetBoolFromBitVector_test.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_VariableLengthIntegerIndex_test.h`
+
+
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_TypeDefinitions_8h_1aec41e5f8e4b7aef2540e84268692fa84`
+
+- :ref:`exhale_typedef_TypeDefinitions_8h_1a86025ec3a0bc201ca893caac2cb2acbd`
+
+- :ref:`exhale_typedef_TypeDefinitions_8h_1a196513547113c3f96a078ee3e658a6ef`
+
+- :ref:`exhale_typedef_TypeDefinitions_8h_1a70c1fcc1a4e96af8f6580f708657cd41`
+
+- :ref:`exhale_typedef_TypeDefinitions_8h_1a1af9f95651e921615e75917a6dd1b574`
+
+- :ref:`exhale_typedef_TypeDefinitions_8h_1a987e4d6cf789cb59dbb390728271e4d6`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_TypeDefinitions_8h_1a93436ed122c10bfeb8c885ea85d6c7c6`
+
+- :ref:`exhale_variable_TypeDefinitions_8h_1a0afa205b69ed107ba739ebb3d53504e0`
+
+- :ref:`exhale_variable_TypeDefinitions_8h_1af8bccad6bcfbf028adeac76fac203899`
+

@@ -1,0 +1,69 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h:
+
+File IntervalBatchProducer.h
+============================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Builds the IntervalBatch, which tells where one sequence ends and another begins, and how many sequences are there before we need to start a new file. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/SequenceFileParser/IntervalBatchProducer.h``)
+---------------------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``BatchObjects/IntervalBatch.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h`)
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``memory``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1IntervalBatchProducer`
+

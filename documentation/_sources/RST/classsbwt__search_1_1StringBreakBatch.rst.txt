@@ -1,0 +1,17 @@
+.. _exhale_class_classsbwt__search_1_1StringBreakBatch:
+
+Class StringBreakBatch
+======================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::StringBreakBatch
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

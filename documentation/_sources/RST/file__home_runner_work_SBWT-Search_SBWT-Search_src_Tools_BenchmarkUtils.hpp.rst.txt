@@ -1,0 +1,68 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp:
+
+File BenchmarkUtils.hpp
+=======================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+A collection of utility scripts used for benchmarking. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/BenchmarkUtils.hpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``chrono``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_benchmark_utils`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_BenchmarkUtils_8hpp_1adadc8eb1d96857f385a393c78c6c1cd8`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_BenchmarkUtils_8hpp_1a3539a78d9115de442ea3d98ad18770f7`
+
+- :ref:`exhale_variable_BenchmarkUtils_8hpp_1a5edd72773534aa85e34512678cbf5cc3`
+
+- :ref:`exhale_variable_BenchmarkUtils_8hpp_1a142193fdf593aa7211221a018df2328f`
+

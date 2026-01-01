@@ -1,0 +1,49 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_InvalidCharsProducer.h:
+
+Program Listing for File InvalidCharsProducer.h
+===============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_InvalidCharsProducer.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SeqToBitsConverter/InvalidCharsProducer.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef INVALID_CHARS_PRODUCER_H
+   #define INVALID_CHARS_PRODUCER_H
+   
+   #include <memory>
+   
+   #include "BatchObjects/InvalidCharsBatch.h"
+   #include "Tools/SharedBatchesProducer.hpp"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   class ContinuousSeqToBitsConverter;
+   
+   using design_utils::SharedBatchesProducer;
+   using std::shared_ptr;
+   
+   class InvalidCharsProducer: public SharedBatchesProducer<InvalidCharsBatch> {
+     friend ContinuousSeqToBitsConverter;
+     u64 kmer_size;
+     u64 max_chars_per_batch;
+   
+   public:
+     InvalidCharsProducer(
+       u64 kmer_size_, u64 max_chars_per_batch_, u64 max_batches
+     );
+   
+     auto static get_bits_per_element() -> u64;
+   
+   private:
+     auto get_default_value() -> shared_ptr<InvalidCharsBatch> override;
+     auto start_new_batch(u64 num_chars) -> void;
+     auto set(u64 index) -> void;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

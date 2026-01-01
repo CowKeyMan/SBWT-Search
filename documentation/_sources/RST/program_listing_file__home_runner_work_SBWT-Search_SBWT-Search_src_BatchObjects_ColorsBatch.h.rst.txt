@@ -1,0 +1,31 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h:
+
+Program Listing for File ColorsBatch.h
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/ColorsBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef COLORS_BATCH_H
+   #define COLORS_BATCH_H
+   
+   #include "Tools/PinnedVector.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using gpu_utils::PinnedVector;
+   
+   class ColorsBatch {
+   public:
+     PinnedVector<u64> colors;
+     explicit ColorsBatch(u64 colors_size): colors(colors_size) {}
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

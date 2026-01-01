@@ -1,0 +1,32 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringSequenceBatch.h:
+
+Program Listing for File StringSequenceBatch.h
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringSequenceBatch.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/StringSequenceBatch.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef STRING_SEQUENCE_BATCH_H
+   #define STRING_SEQUENCE_BATCH_H
+   
+   #include <string>
+   #include <vector>
+   
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::vector;
+   
+   class StringSequenceBatch {
+   public:
+     const vector<char> *seq;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

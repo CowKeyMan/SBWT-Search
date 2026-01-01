@@ -1,0 +1,26 @@
+.. _exhale_class_classsbwt__search_1_1SeqStatisticsBatchProducer:
+
+Class SeqStatisticsBatchProducer
+================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public design_utils::SharedBatchesProducer< SeqStatisticsBatch >`` (:ref:`exhale_class_classdesign__utils_1_1SharedBatchesProducer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::SeqStatisticsBatchProducer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

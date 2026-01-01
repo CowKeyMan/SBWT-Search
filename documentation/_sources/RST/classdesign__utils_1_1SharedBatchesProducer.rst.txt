@@ -1,0 +1,36 @@
+.. _exhale_class_classdesign__utils_1_1SharedBatchesProducer:
+
+Template Class SharedBatchesProducer
+====================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public sbwt_search::BitsProducer`` (:ref:`exhale_class_classsbwt__search_1_1BitsProducer`)
+- ``public sbwt_search::ContinuousColorSearcher`` (:ref:`exhale_class_classsbwt__search_1_1ContinuousColorSearcher`)
+- ``public sbwt_search::ContinuousIndexSearcher`` (:ref:`exhale_class_classsbwt__search_1_1ContinuousIndexSearcher`)
+- ``public sbwt_search::ContinuousPositionsBuilder`` (:ref:`exhale_class_classsbwt__search_1_1ContinuousPositionsBuilder`)
+- ``public sbwt_search::IndexesBatchProducer`` (:ref:`exhale_class_classsbwt__search_1_1IndexesBatchProducer`)
+- ``public sbwt_search::IntervalBatchProducer`` (:ref:`exhale_class_classsbwt__search_1_1IntervalBatchProducer`)
+- ``public sbwt_search::InvalidCharsProducer`` (:ref:`exhale_class_classsbwt__search_1_1InvalidCharsProducer`)
+- ``public sbwt_search::SeqStatisticsBatchProducer`` (:ref:`exhale_class_classsbwt__search_1_1SeqStatisticsBatchProducer`)
+- ``public sbwt_search::StringBreakBatchProducer`` (:ref:`exhale_class_classsbwt__search_1_1StringBreakBatchProducer`)
+- ``public sbwt_search::StringSequenceBatchProducer`` (:ref:`exhale_class_classsbwt__search_1_1StringSequenceBatchProducer`)
+- ``public test_utils::DummyBatchProducer< T >`` (:ref:`exhale_class_classtest__utils_1_1DummyBatchProducer`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: design_utils::SharedBatchesProducer
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

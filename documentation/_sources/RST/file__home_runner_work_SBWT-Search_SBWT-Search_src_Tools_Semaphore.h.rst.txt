@@ -1,0 +1,65 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h:
+
+File Semaphore.h
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+A C++ implementation for counted semaphores using standard library mutex and condition variables. Credit for class base: http://www.cs.umd.edu/~shankar/412-Notes/10x-countingSemUsingBinarySem.pdf. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/Semaphore.h``)
+--------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/OmpLock.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_threading_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classthreading__utils_1_1Semaphore`
+

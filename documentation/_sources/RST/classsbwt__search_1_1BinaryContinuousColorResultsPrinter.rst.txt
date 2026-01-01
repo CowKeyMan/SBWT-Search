@@ -1,0 +1,26 @@
+.. _exhale_class_classsbwt__search_1_1BinaryContinuousColorResultsPrinter:
+
+Class BinaryContinuousColorResultsPrinter
+=========================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_BinaryContinuousColorResultsPrinter.h`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public sbwt_search::ContinuousColorResultsPrinter< BinaryContinuousColorResultsPrinter, u64 >`` (:ref:`exhale_class_classsbwt__search_1_1ContinuousColorResultsPrinter`)
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::BinaryContinuousColorResultsPrinter
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

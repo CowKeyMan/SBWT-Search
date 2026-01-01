@@ -1,0 +1,14 @@
+.. _exhale_variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a:
+
+Variable sbwt_search::num_ascii_characters
+==========================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_CharToBits.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: sbwt_search::num_ascii_characters
+   :project: SBWT Search

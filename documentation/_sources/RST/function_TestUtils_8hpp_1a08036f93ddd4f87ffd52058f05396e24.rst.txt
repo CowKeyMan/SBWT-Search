@@ -1,0 +1,14 @@
+.. _exhale_function_TestUtils_8hpp_1a08036f93ddd4f87ffd52058f05396e24:
+
+Template Function test_utils::to_u64s
+=====================================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: test_utils::to_u64s(const vector<vector<Source>>&)
+   :project: SBWT Search

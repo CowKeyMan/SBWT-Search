@@ -1,0 +1,42 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp:
+
+Program Listing for File BenchmarkUtils.hpp
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/BenchmarkUtils.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef BENCHMARK_UTILS_HPP
+   #define BENCHMARK_UTILS_HPP
+   
+   #include <chrono>
+   
+   namespace benchmark_utils {
+   
+   using std::chrono::duration_cast;
+   using std::chrono::high_resolution_clock;
+   using std::chrono::milliseconds;
+   using std::chrono::time_point;
+   
+   // NOLINTBEGIN
+   
+   // Macro for timing objects. The result is stored in TIME_IT_TOTAL
+   time_point<high_resolution_clock> TIME_IT_START_TIME, TIME_IT_END_TIME;
+   milliseconds::rep TIME_IT_TOTAL;
+   #define TIME_IT(...)                                                     \
+     TIME_IT_START_TIME = high_resolution_clock::now();                     \
+     __VA_ARGS__;                                                           \
+     TIME_IT_END_TIME = high_resolution_clock::now();                       \
+     TIME_IT_TOTAL                                                          \
+       = duration_cast<milliseconds>(TIME_IT_END_TIME - TIME_IT_START_TIME) \
+           .count();
+   
+   // NOLINTEND
+   
+   }  // namespace benchmark_utils
+   
+   #endif

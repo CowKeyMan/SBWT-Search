@@ -1,0 +1,63 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp:
+
+File DummyBatchProducer.hpp
+===========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Inheriting from the SharedBatchesProducer, this class sequentially produces the batches it was given in its constructor. Useful for testing. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/Tools/DummyBatchProducer.hpp``)
+-------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/SharedBatchesProducer.hpp`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``memory``
+
+- ``vector``
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_test_utils`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classtest__utils_1_1DummyBatchProducer`
+

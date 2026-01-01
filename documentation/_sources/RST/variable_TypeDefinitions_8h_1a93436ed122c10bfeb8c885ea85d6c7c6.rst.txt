@@ -1,0 +1,14 @@
+.. _exhale_variable_TypeDefinitions_8h_1a93436ed122c10bfeb8c885ea85d6c7c6:
+
+Variable bits_in_byte
+=====================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: bits_in_byte
+   :project: SBWT Search

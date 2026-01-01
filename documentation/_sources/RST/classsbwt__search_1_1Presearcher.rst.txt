@@ -1,0 +1,17 @@
+.. _exhale_class_classsbwt__search_1_1Presearcher:
+
+Class Presearcher
+=================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: sbwt_search::Presearcher
+   :project: SBWT Search
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,52 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h:
+
+Program Listing for File PoppyBuilder.h
+=======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/PoppyBuilder/PoppyBuilder.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef POPPY_BUILDER_H
+   #define POPPY_BUILDER_H
+   
+   #include <cstddef>
+   #include <span>
+   #include <vector>
+   
+   #include "Poppy/Poppy.h"
+   #include "Tools/TypeDefinitions.h"
+   
+   namespace sbwt_search {
+   
+   using std::span;
+   
+   using std::vector;
+   
+   class PoppyBuilder {
+   private:
+     span<u64> bits_vector;
+     Poppy poppy;
+     vector<u64> layer_2_temps = vector<u64>(3, 0);
+     u64 layer_2_temps_index = 0;
+     u64 layer_0_count = 0, layer_1_count = 0, layer_2_count = 0;
+     u64 num_bits;
+   
+   public:
+     explicit PoppyBuilder(span<u64> bits_vector, u64 num_bits_);
+   
+     auto get_poppy() -> Poppy;
+   
+   private:
+     auto do_divisble_by_superblock(u64 bits, Poppy &poppy) -> void;
+     auto do_divisble_by_hyperlock(Poppy &poppy) -> void;
+     auto do_divisible_by_basicblock(Poppy &poppy) -> void;
+     auto add_layer_1_2(Poppy &poppy) -> void;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

@@ -1,0 +1,14 @@
+.. _exhale_define_GpuUtils_8h_1a4eb22c89929e9e4ea34590e1e5356d6a:
+
+Define GPU_CHECK
+================
+
+- Defined in :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: GPU_CHECK
+   :project: SBWT Search

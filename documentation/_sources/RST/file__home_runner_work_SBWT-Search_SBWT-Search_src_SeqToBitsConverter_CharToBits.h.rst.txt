@@ -1,0 +1,76 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_CharToBits.h:
+
+File CharToBits.h
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/SeqToBitsConverter``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Contains mapping functions which map the characters ACGT to their corresponding bit value. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/SeqToBitsConverter/CharToBits.h``)
+----------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_CharToBits.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+- ``array``
+
+- ``vector``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_ContinuousSeqToBitsConverter.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1CharToBits`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_CharToBits_8h_1a8e58cd706baa7650c77a5804e497dc8c`
+
+- :ref:`exhale_variable_CharToBits_8h_1ad4f25f434f2a5fe86b78d593224c841a`
+

@@ -1,0 +1,38 @@
+
+.. _program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder_ColorIndexBuilder.h:
+
+Program Listing for File ColorIndexBuilder.h
+============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder_ColorIndexBuilder.h>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/ColorIndexBuilder/ColorIndexBuilder.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef COLOR_INDEX_BUILDER_H
+   #define COLOR_INDEX_BUILDER_H
+   
+   #include <string>
+   
+   #include "ColorIndexContainer/CpuColorIndexContainer.h"
+   #include "Tools/IOUtils.h"
+   
+   namespace sbwt_search {
+   
+   using io_utils::ThrowingIfstream;
+   using std::string;
+   
+   class ColorIndexBuilder {
+   private:
+     ThrowingIfstream in_stream;
+   
+   public:
+     explicit ColorIndexBuilder(const string &filename);
+   
+     auto get_cpu_color_index_container() -> CpuColorIndexContainer;
+   };
+   
+   }  // namespace sbwt_search
+   
+   #endif

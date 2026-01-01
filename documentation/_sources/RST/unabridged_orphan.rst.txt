@@ -1,0 +1,558 @@
+:orphan:
+
+
+Full API
+========
+
+Directories
+***********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_Global.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_Main.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_Tools.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels.rst
+
+Files
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ArgumentParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_AsciiContinuousColorResultsPrinter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_AsciiContinuousIndexResultsPrinter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_AsciiIndexFileParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BenchmarkUtils.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_BinaryContinuousColorResultsPrinter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BinaryContinuousIndexResultsPrinter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_BinaryIndexFileParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_BitDefinitions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_BitSeqBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_BitsProducer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_BoolContinuousIndexResultsPrinter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_CharToBits.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularBuffer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_CircularQueue.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexBuilder_ColorIndexBuilder.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_ColorSearchArgumentParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ColorSearcher.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_ColorSearchMain.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_ContinuousIndexFileParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexResultsPrinter_ContinuousIndexResultsPrinter.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_ContinuousIndexSearcher.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_ContinuousPositionsBuilder.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_ContinuousSeqToBitsConverter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_ContinuousSequenceFileParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_CpuColorIndexContainer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_CpuSbwtContainer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_CsvContinuousColorResultsPrinter.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DebugUtils.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_DummyBatchProducer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_ErrorUtils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_FilenamesParser_FilenamesParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_FilesizeLoadBalancer_FilesizeLoadBalancer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_GetBoolFromBitVector_test.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Global_GlobalDefinitions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorIndexContainer_GpuColorIndexContainer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuEvent.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuPointer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_GpuSbwtContainer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuStream.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_GpuUtils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IndexesBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexesBatchProducer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_IndexFileParserTestUtils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_ArgumentParser_IndexSearchArgumentParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexSearcher_IndexSearcher.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_IndexSearchMain.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_IntervalBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_IntervalBatchProducer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_InvalidCharsBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SeqToBitsConverter_InvalidCharsProducer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_IOUtils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Logger.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Main_Main.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MathUtils.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUnitsParser.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_MemoryUtils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_OmpLock.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Poppy_Poppy.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_PoppyBuilder_PoppyBuilder.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_PositionsBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_PositionsBuilder_PositionsBuilder.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Presearcher_Presearcher.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_Rank_test.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ResultsBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_RNGUtils.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtBuilder_SbwtBuilder.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SbwtContainer_SbwtContainer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_Semaphore.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_SeqStatisticsBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_IndexFileParser_SeqStatisticsBatchProducer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_SharedBatchesProducer.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_StdUtils.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringBreakBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringBreakBatchProducer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_StringSequenceBatch.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_SequenceFileParser_StringSequenceBatchProducer.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TestUtils.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_runner_work_SBWT-Search_SBWT-Search_src_UtilityKernels_VariableLengthIntegerIndex_test.h.rst

@@ -1,0 +1,67 @@
+
+.. _file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h:
+
+File ColorsBatch.h
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects>` (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+
+Stores the colors contiguously for each colored sequence. A colored sequence means that the sequence has found_idxs > 0. 
+
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/runner/work/SBWT-Search/SBWT-Search/src/BatchObjects/ColorsBatch.h``)
+-----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_runner_work_SBWT-Search_SBWT-Search_src_BatchObjects_ColorsBatch.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``Tools/PinnedVector.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_PinnedVector.h`)
+
+- ``Tools/TypeDefinitions.h`` (:ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_Tools_TypeDefinitions.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorResultsPrinter_ContinuousColorResultsPrinter.hpp`
+
+- :ref:`file__home_runner_work_SBWT-Search_SBWT-Search_src_ColorSearcher_ContinuousColorSearcher.h`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_sbwt_search`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classsbwt__search_1_1ColorsBatch`
+

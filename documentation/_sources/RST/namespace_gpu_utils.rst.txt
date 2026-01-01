@@ -1,0 +1,33 @@
+
+.. _namespace_gpu_utils:
+
+Namespace gpu_utils
+===================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classgpu__utils_1_1GpuEvent`
+
+- :ref:`exhale_class_classgpu__utils_1_1GpuPointer`
+
+- :ref:`exhale_class_classgpu__utils_1_1GpuStream`
+
+- :ref:`exhale_class_classgpu__utils_1_1PinnedVector`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_GpuUtils_8h_1a30f99c5aeafdd4cafe1843f62f0ce74f`
